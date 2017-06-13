@@ -14,10 +14,16 @@
 
 <style lang="scss">
   @import './styles/common';
+  @import './styles/mixin';
   .router-fade-enter-active, .router-fade-leave-active {
     transition: opacity .3s;
 	}
 	.router-fade-enter, .router-fade-leave-active {
     opacity: 0;
 	}
+  #app {
+    background-color: $main-background;
+    width: 100%;
+    height: 100%;
+  }
 </style>

@@ -6,6 +6,8 @@
     <div class="box">
       <span>Hello World</span>
     </div>
+    <mt-button type="primary"
+               @click="goFolder()">primary</mt-button>
   </section>
 </template>
 
@@ -16,6 +18,11 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    goFolder () {
+      this.$router.push({path: '/folders'})
     }
   },
   computed: {

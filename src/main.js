@@ -3,7 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Mint from 'mint-ui'
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
 import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
 // import './config/rem'
@@ -15,7 +16,7 @@ if ('addEventListener' in document) {
   }, false)
 }
 
-Vue.use(Mint)
+Vue.use(MintUI)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
