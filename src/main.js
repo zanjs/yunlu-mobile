@@ -6,6 +6,14 @@ import router from './router'
 import Mint from 'mint-ui'
 import 'font-awesome/css/font-awesome.min.css'
 import store from './vuex/store'
+// import './config/rem'
+import FastClick from 'fastclick'
+
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function () {
+    FastClick.attach(document.body)
+  }, false)
+}
 
 Vue.use(Mint)
 Vue.config.productionTip = false
