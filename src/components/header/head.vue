@@ -1,13 +1,17 @@
 <template>
-  <header id="head-top">
-    <section class="head_goback" v-if="goBack" @click="$router.go(-1)">
-      <i class="fa fa-backward"></i>
+  <header class="head-product">
+    <div class="left"
+         @click="$router.go(-1)">
+      <i class="iconfont icon-fanhui"></i>
+    </div>
+    <section class="right">
+      <div>
+        <i class="iconfont icon-gouwuche"></i>
+      </div>
+      <div class="icon">
+        <i class="iconfont icon-fenlei"></i>
+      </div>
     </section>
-    <section class="title"
-             v-if="headTitle">
-      <span class="title-text">{{headTitle}}</span>
-    </section>
-    <slot name="report"></slot>
   </header>
 </template>
 
@@ -16,13 +20,13 @@
     data () {
       return {}
     },
+    name: 'ProductHeader',
     methods: {
 
     },
     mounted () {
 
     },
-    props: ['headTitle', 'goBack'],
     computed: {
 
     }
@@ -32,12 +36,35 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  #head-top {
-    background-color: $green;
+  .head-product {
+    background-color: transparent;
     width: 100%;
     @include px2rem(height, 88px);
-    @include px2rem(padding-left, 30px);
-    @include px2rem(padding-right, 30px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(border-radius, 35px);
+      @include px2rem(width, 70px);
+      @include px2rem(height, 70px);
+      background-color: rgba(0, 0, 0, 0.45);
+      color: $white;
+    }
+    .left {
+      @include pm2rem(margin, 0px, 0px, 0px, 20px);
+    }
+    .right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @include pm2rem(margin, 0px, 18px, 0px, 20px);
+      .icon {
+        @include pm2rem(margin, 0px, 0px, 0px, 28px);
+      }
+    }
   }
 
   .title {

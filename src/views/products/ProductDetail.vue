@@ -1,8 +1,6 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
-               fixed
-               class="header">
+    <product-header>
       <router-link to="/" slot="left">
         <mt-button>
           <i class="iconfont icon-zhuye"/>
@@ -13,14 +11,18 @@
         <i class="iconfont icon-jubao"/>
         投诉
       </mt-button>
-    </mt-header>
+    </product-header>
   </section>
 </template>
 
 <script>
+  import ProductHeader from '../../components/header/head'
   export default {
     data () {
       return {}
+    },
+    components: {
+      ProductHeader
     },
     methods: {
 
