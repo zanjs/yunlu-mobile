@@ -7,7 +7,13 @@
       <span>Hello World</span>
     </div>
     <mt-button type="primary"
-               @click="goFolder()">primary</mt-button>
+               @click="goRoute('/space')">
+               私人空间
+    </mt-button>
+    <mt-button type="primary"
+               @click="goRoute('/folders')">
+               私人空间文件夹
+    </mt-button>
   </section>
 </template>
 
@@ -21,8 +27,8 @@ export default {
     }
   },
   methods: {
-    goFolder () {
-      this.$router.push({path: '/folders'})
+    goRoute (str) {
+      this.$router.push({path: str})
     }
   },
   computed: {

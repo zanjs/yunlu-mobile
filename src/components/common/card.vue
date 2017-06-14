@@ -11,22 +11,22 @@
     </div>
     <div class="icons">
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-dianhua dianhua"></i>
       </div>
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-youxiang youxiang"></i>
       </div>
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-dingwei dingwei"></i>
       </div>
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-weixin weixin"></i>
       </div>
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-weibo weibo"></i>
       </div>
       <div>
-        <i class="fa fa-home"></i>
+        <i class="iconfont icon-qq qq"></i>
       </div>
     </div>
   </section>
@@ -74,7 +74,25 @@
       align-items: center;
       border-top: 1px solid #d1d1d1;
       i {
-        @include font-dpr(34px);
+        @include font-dpr(26px);
+      }
+      .dianhua {
+        color: #4C8DE7;
+      }
+      .youxiang {
+        color: #4C8DE7;
+      }
+      .dingwei {
+        color: #F66F65;
+      }
+      .weixin {
+        color: #76A9EB;
+      }
+      .weibo {
+        color: #C54FDE;
+      }
+      .qq {
+        color: #F9B000;
       }
     }
   }

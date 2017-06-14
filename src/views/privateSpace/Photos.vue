@@ -8,27 +8,20 @@
       </router-link>
       <mt-button icon="more"
                  slot="right"
-                 class="button-text">投诉</mt-button>
+                 class="button-text">
+      </mt-button>
     </mt-header>
-    <div class="card-container">
-      <card/>
-    </div>
-    <div class="album-comtainer">
-      <album/>
+    <div class="photos-comtainer">
     </div>
   </section>
 </template>
 
 <script>
-  import Card from '../../components/common/card'
-  import Album from '../../components/common/album'
   export default {
     data () {
       return {}
     },
     components: {
-      Card,
-      Album
     },
     methods: {},
     mountd: {
@@ -51,12 +44,5 @@
     .button-text {
       @include font-dpr(15px);
     }
-  }
-  .card-container {
-    @include pm2rem(padding, 8px, 22px, 0px, 22px);
-    @include px2rem(margin-top, 88px);
-  }
-  .album-comtainer {
-    @include pm2rem(padding, 24px, 22px, 0px, 22px);
   }
 </style>

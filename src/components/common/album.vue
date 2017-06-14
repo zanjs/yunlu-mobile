@@ -1,10 +1,10 @@
 <template>
   <section class="container">
     <div v-for="(item, index) in albumList"
-        :key="index"
-        class="album">
+         :key="index"
+         class="album">
       <img :src="item.cover"
-          class="cover"/>
+           class="cover"/>
       <div class="label">
         <span class="text">{{item.title}}</span>
         <span class="count">{{item.count}}</span>

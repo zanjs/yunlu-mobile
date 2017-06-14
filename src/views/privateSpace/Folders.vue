@@ -4,14 +4,24 @@
                fixed
                class="header">
       <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
+        <mt-button>
+          <i class="iconfont icon-zhuye"/>
+        </mt-button>
       </router-link>
-      <mt-button icon="more"
-                 slot="right"
-                 class="button-text">投诉</mt-button>
+      <mt-button slot="right"
+                 class="button-text">
+        <i class="iconfont icon-jubao"/>
+        投诉
+      </mt-button>
     </mt-header>
     <div class="card-container">
       <card/>
+    </div>
+    <div class="rope">
+      <img src="../../assets/shengzi@2x.png"
+           class="left"/>
+      <img src="../../assets/shengzi@2x.png"
+           class="right"/>
     </div>
     <div class="album-comtainer">
       <album/>
@@ -43,6 +53,7 @@
   .header {
     background-color: $green;
     @include px2rem(height, 88px);
+    @include pm2rem(padding, 0px, 30px, 0px, 30px);
     @include font-dpr(17px);
     position: fixed;
     h1 {
@@ -51,12 +62,28 @@
     .button-text {
       @include font-dpr(15px);
     }
+    i {
+      @include font-dpr(20px);
+    }
   }
   .card-container {
     @include pm2rem(padding, 8px, 22px, 0px, 22px);
     @include px2rem(margin-top, 88px);
   }
+  .rope {
+    position: absolute;
+    @include pm2rem(padding, 0px, 50px, 0px, 60px);
+    left: 0;
+    right: 0;
+    @include px2rem(top, 396px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      @include px2rem(width, 30px);
+    }
+  }
   .album-comtainer {
-    @include pm2rem(padding, 26px, 22px, 0px, 22px);
+    @include pm2rem(padding, 24px, 22px, 0px, 22px);
   }
 </style>
