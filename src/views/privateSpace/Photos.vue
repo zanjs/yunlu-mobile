@@ -4,12 +4,15 @@
                fixed
                class="header">
       <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
+        <mt-button>
+          <i class="iconfont icon-fanhui"/>
+        </mt-button>
       </router-link>
-      <mt-button icon="more"
-                 slot="right"
-                 class="button-text">
-      </mt-button>
+      <router-link to="/" slot="right">
+        <mt-button>
+          <i class="iconfont icon-zhuye"/>
+        </mt-button>
+      </router-link>
     </mt-header>
     <div class="photos-comtainer">
     </div>
