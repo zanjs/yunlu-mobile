@@ -43,6 +43,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 999;
     div {
       display: flex;
       justify-content: center;
