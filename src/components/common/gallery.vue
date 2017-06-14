@@ -5,21 +5,22 @@
            :key="index"
            :src="item.cover"
            class="photo"
-           @click="showPreview = true"/>
+           @click="showFullScreenPreview(index)"/>
     </div>
     <template>
-      <swiper v-show="showPreview"
+      <span v-if="showPreview"
+            v-bind:class="{'slide-out-bck-center': cssAnimation, 'slide-in-fwd-center': !cssAnimation}"
+            class="page-nav">{{currentIndex}}/{{dataSource.length}}</span>
+      <swiper v-if="showPreview"
               :options="swiperOption"
-              ref="mySwiper"
-              v-bind:class="{'slide-out-bck-center': cssAnimation}"
+              v-bind:class="{'slide-out-bck-center': cssAnimation, 'slide-in-fwd-center': !cssAnimation}"
               class="full-screen-swiper">
         <!-- slides -->
         <swiper-slide class="swiper-zoom-container full-screen-bg"
-                      v-for="item in dataSource"
+                      v-for="(item, index) in dataSource"
                       :key="item.cover">
           <img :src="item.cover"
-              alt=""
-              class="big-photo">
+               alt="">
         </swiper-slide>
       </swiper>
     </template>
@@ -32,10 +33,9 @@
       return {
         showPreview: false,
         cssAnimation: false,
+        currentIndex: 1,
         swiperOption: {
-          // notNextTick是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
-          notNextTick: true,
-          // swiper configs 所有的配置同swiper官方api配置
+          notNextTick: false,
           autoplay: 0,
           direction: 'horizontal',
           grabCursor: true,
@@ -54,12 +54,16 @@
           height: window.innerHeight,
           width: window.innerWidth,
           touchAngle: 45,
+          initialSlide: 0,
           onTouchMoveOpposite: () => {
             this.cssAnimation = true
             setTimeout(() => {
               this.showPreview = false
               this.cssAnimation = false
             }, 500)
+          },
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
           }
         }
       }
@@ -71,10 +75,10 @@
     name: 'Gallery',
     props: ['dataSource'],
     methods: {
-    },
-    computed: {
-      swiper () {
-        return this.$refs.mySwiper.swiper
+      showFullScreenPreview (index) {
+        this.currentIndex = index + 1
+        this.swiperOption.initialSlide = index
+        this.showPreview = true
       }
     }
   }
@@ -94,6 +98,14 @@
       @include pm2rem(margin, 0px, 8px, 10px, 0px)
     }
   }
+  .page-nav {
+    position: absolute;
+    @include px2rem(top, 38px);
+    @include px2rem(left, 52px);
+    color: white;
+    z-index: 1000;
+    @include font-dpr(20px);
+  }
   .full-screen-swiper {
     position: absolute;
     top: 0;
@@ -106,9 +118,39 @@
     background-color: #000;
   }
 
+  .slide-in-fwd-center {
+    -webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
   .slide-out-bck-center {
     -webkit-animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
             animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+
+  @-webkit-keyframes slide-in-fwd-center {
+    0% {
+      -webkit-transform: translateZ(-1400px);
+              transform: translateZ(-1400px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-fwd-center {
+    0% {
+      -webkit-transform: translateZ(-1400px);
+              transform: translateZ(-1400px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
   }
 
   @-webkit-keyframes slide-out-bck-center {
