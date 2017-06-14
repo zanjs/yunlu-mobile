@@ -2,6 +2,8 @@ $green: #52CAA7;
 $white: #FFF;
 $main-background: #FAFAFA;
 
+$base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的不同而变化*/
+
 /*定位全屏*/
 @mixin allcover{
 	position:absolute;
@@ -63,8 +65,13 @@ $main-background: #FAFAFA;
 }
 
 /*px2rem 设计稿px转rem*/
-@mixin px2rem($property,$px){
-  #{$property}: $px / 37.5px * 1rem;
+@mixin px2rem($property, $px-values){
+  #{$property}: $px-values / $base-fonts-default * 1rem;
+}
+
+/*pm2rem padding margin px转rem(0也要带单位)*/
+@mixin pm2rem($property, $top, $right, $down, $left){
+  #{$property}: $top/$base-fonts-default *1rem $right/$base-fonts-default *1rem $down/$base-fonts-default *1rem $left/$base-fonts-default *1rem;
 }
 
 /*font-dpr 设计稿字体根据dpr缩放*/

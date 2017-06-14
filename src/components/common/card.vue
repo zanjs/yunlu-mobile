@@ -50,17 +50,16 @@
   .card {
     border: 1px solid #D1D1D1;
     background: $white;
-    @include px2rem(padding-top, 12px);
+    @include px2rem(padding-top, 24px);
     .user-info {
       display: flex;
-      @include px2rem(padding-left, 13px);
-      @include px2rem(padding-bottom, 15px);
+      @include pm2rem(padding, 0px, 0px, 30px, 26px);
       img {
-        @include px2rem(width, 78px);
-        @include px2rem(height, 78px);
+        @include px2rem(width, 156px);
+        @include px2rem(height, 156px);
       }
       .content {
-        @include px2rem(margin-left, 13px);
+        @include px2rem(margin-left, 26px);
         p {
           @include font-dpr(17px);
         }
@@ -69,9 +68,8 @@
 
     .icons {
       display: flex;
-      @include px2rem(height, 50px);
-      @include px2rem(padding-left, 25px);
-      @include px2rem(padding-right, 25px);
+      @include px2rem(height, 100px);
+      @include pm2rem(padding, 0px, 50px, 0px, 50px);
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid #d1d1d1;

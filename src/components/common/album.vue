@@ -63,35 +63,33 @@
   @import '../../styles/mixin';
 
   .container {
-    @include px2rem(padding-left, 13px);
-    @include px2rem(padding-right, 13px);
-    @include px2rem(padding-top, 13px);
+    @include pm2rem(padding, 26px, 26px, 0px, 26px);
     border: 1px solid #D1D1D1;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     .album {
       position: relative;
-      @include px2rem(margin-bottom, 13px);
+      @include px2rem(margin-bottom, 26px);
       .cover {
-        @include px2rem(width, 156px);
-        @include px2rem(height, 180px);
+        @include px2rem(width, 312px);
+        @include px2rem(height, 360px);
       }
       .label {
         position: absolute;
         bottom: 0;
         width: 100%;
         background-color: rgba(0,0,0,.5);
-        @include px2rem(height, 28.5px);
+        @include px2rem(height, 57px);
         display: flex;
         align-items: center;
         justify-content: space-between;
         color: $white;
         .text {
-          @include px2rem(padding-left, 13px);
+          @include px2rem(padding-left, 26px);
         }
         .count {
-          @include px2rem(width, 35px);
+          @include px2rem(width, 70px);
           background-color: $green;
           height: 100%;
           display: flex;

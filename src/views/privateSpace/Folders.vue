@@ -42,7 +42,7 @@
 
   .header {
     background-color: $green;
-    @include px2rem(height, 44px);
+    @include px2rem(height, 88px);
     @include font-dpr(17px);
     position: fixed;
     h1 {
@@ -53,14 +53,10 @@
     }
   }
   .card-container {
-    @include px2rem(padding-left, 11px);
-    @include px2rem(padding-right, 11px);
-    @include px2rem(padding-top, 4px);
-    @include px2rem(margin-top, 44px);
+    @include pm2rem(padding, 8px, 22px, 0px, 22px);
+    @include px2rem(margin-top, 88px);
   }
   .album-comtainer {
-    @include px2rem(padding-left, 11px);
-    @include px2rem(padding-right, 11px);
-    @include px2rem(padding-top, 13px);
+    @include pm2rem(padding, 26px, 22px, 0px, 22px);
   }
 </style>

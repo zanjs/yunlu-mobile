@@ -42,7 +42,7 @@ export default {
   }
 
   .hello {
-    @include px2rem(height, 40px);
+    @include px2rem(height, 80px);
     text-align: center;
     span {
       @include font-dpr(20px);
@@ -51,10 +51,8 @@ export default {
 
   .box {
     background-color: pink;
-    // width: 10rem;
-    // height: 4rem;
-    @include px2rem(height, 200px);
-    @include px2rem(width, 375px);
+    @include px2rem(height, 400px);
+    width: 100%;
     text-align: center;
     span {
       @include font-dpr(20px);
