@@ -74,22 +74,22 @@
       align-items: center;
       border-top: 1px solid #d1d1d1;
       i {
-        @include font-dpr(26px);
+        @include font-dpr(24px);
       }
       .dianhua {
-        color: #4C8DE7;
+        color: #31C27C;
       }
       .youxiang {
         color: #4C8DE7;
       }
       .dingwei {
-        color: #F66F65;
+        color: #F75544;
       }
       .weixin {
-        color: #76A9EB;
+        color: #2EB6FC;
       }
       .weibo {
-        color: #C54FDE;
+        color: #D52EFF;
       }
       .qq {
         color: #F9B000;
