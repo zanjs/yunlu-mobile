@@ -86,6 +86,7 @@
     methods: {
       albumClick (id) {
         console.log(id)
+        this.$router.push({path: '/photos'})
       }
     },
     mountd: {
