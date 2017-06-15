@@ -82,7 +82,8 @@
             </div>
             <p class="content line2 link">
               万福矿业
-              <i class="iconfont icon-guanlian"/>
+              <i class="iconfont icon-guanlian"
+                 @click.prevent="openPopup()"/>
             </p>
           </div>
         </mt-tab-container-item>
@@ -157,6 +158,41 @@
                     v-model="sheetVisible"
                     class="product-actionsheet">
     </mt-actionsheet>
+    <section v-if="popUp"
+             class="product-popup-dialog"
+             v-bind:class="{'slide-in-fwd-center': cssAnimation, 'slide-out-bck-center': !cssAnimation}">
+      <div class="main">
+        <div class="title">
+          <span>购销渠道关系认证成功</span>
+        </div>
+        <div class="content">
+          <div class="item">
+            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+            <div class="info">
+              <p>宜州市万福石业有限公司</p>
+              <div>
+                <span>矿主</span>
+                <span>广西&middot;河池</span>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+            <div class="info">
+              <p>宜州市万福石业有限公司</p>
+              <div>
+                <span>矿主</span>
+                <span>广西&middot;河池</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"
+             @click="closePopup()">
+          <span>取消</span>
+        </div>
+      </div>
+    </section>
   </section>
 </template>
 
@@ -169,6 +205,7 @@
         currentIndex: 1,
         morePrice: false,
         cssAnimation: false,
+        popUp: false,
         actions: [
           {
             name: '发送给微信好友',
@@ -228,7 +265,37 @@
           this.morePrice = !this.morePrice
           this.cssAnimation = true
         }
+      },
+      openPopup () {
+        this.popUp = true
+        this.cssAnimation = true
+      },
+      closePopup () {
+        this.cssAnimation = false
+        this.allowTouchMove()
+        setTimeout(() => {
+          this.popUp = false
+        }, 400)
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.popUp) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.popUp) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
       }
+    },
+    mounted () {
+      this.stopTouchMove()
     }
   }
 </script>
@@ -406,9 +473,137 @@
     }
   }
 
+  .product-popup-dialog {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 1001;
+    top: 0;
+    .main {
+      position: absolute;
+      @include px2rem(width, 562px);
+      @include px2rem(top, 200px);
+      position: absolute;
+	    left: 50%;
+      -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    }
+    .title {
+      background-color: #52CAA7;
+      color: $white;
+      @include font-dpr(16px);
+      @include px2rem(height, 80px);
+      text-align: center;
+      @include px2rem(line-height, 80px);
+    }
+    .content {
+      background-color: $white;
+      @include px2rem(min-height, 500px);
+      .item {
+        border-bottom: 1px solid #D1D1D1;
+        @include px2rem(height, 108px);
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        @include pm2rem(padding, 20px, 12px, 20px, 12px);
+        img {
+          @include px2rem(width, 70px);
+          @include px2rem(height, 70px);
+          @include px2rem(margin-right, 22px);
+        }
+        .info {
+          div {
+            line-height: 1;
+          }
+          p {
+            @include font-dpr(13px);
+            line-height: 1;
+            color: #595959;
+            @include px2rem(margin-bottom, 20px);
+          }
+          span {
+            @include font-dpr(12px);
+            @include px2rem(margin-right, 50px);
+            color: #A6A6A6;
+          }
+        }
+      }
+    }
+    .footer {
+      @include px2rem(height, 80px);
+      background-color: $white;
+      @include px2rem(line-height, 80px);
+      text-align: center;
+      @include font-dpr(16px);
+      color: #595959;
+    }
+  }
+
+  .slide-in-fwd-center {
+    -webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  .slide-out-bck-center {
+    -webkit-animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+
+  @-webkit-keyframes slide-in-fwd-center {
+    0% {
+      -webkit-transform: translateZ(-1400px);
+              transform: translateZ(-1400px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-fwd-center {
+    0% {
+      -webkit-transform: translateZ(-1400px);
+              transform: translateZ(-1400px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes slide-out-bck-center {
+    0% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(-1100px);
+              transform: translateZ(-1100px);
+      opacity: 0;
+    }
+  }
+  @keyframes slide-out-bck-center {
+    0% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(-1100px);
+              transform: translateZ(-1100px);
+      opacity: 0;
+    }
+  }
+
   .more-price-show {animation:fadeInDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
 
   .more-price-hide {animation:fadeOutUp 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
+
   @keyframes fadeInDown {
     from {
       opacity: 0;
