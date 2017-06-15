@@ -98,3 +98,28 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
     font-size: $font-size * 4;
   }
 }
+
+/*line-heigth 设计稿行高根据dpr缩放*/
+@mixin line-height($line-height){
+    line-height: $line-height;
+
+  [data-dpr="2"] & {
+    line-height: $line-height * 2;
+  }
+  /* for mx3*/
+  [data-dpr="2.5"] & {
+    line-height: $line-height * 2.5;
+  }
+  /* for 小米note*/
+  [data-dpr="2.75"] & {
+    line-height: $line-height * 2.5;
+  }
+  /* for common Android Phone*/
+  [data-dpr="3"] & {
+    line-height: $line-height * 3;
+  }
+  /* for 三星note4*/
+  [data-dpr="4"] & {
+    line-height: $line-height * 4;
+  }
+}
