@@ -19,9 +19,17 @@
           <span class="number">1999</span>
           <span class="unit">元</span>
         </div>
-        <div>
+        <div @click="expandMorePrice()">
           <span class="more">更多价格</span>
-          <i class="iconfont icon-gengduo more-icon"/>
+          <div class="icon-box"
+               v-bind:class="{'rotate-90-cw': cssAnimation, 'rotate-90-ccw': !cssAnimation}">
+            <i class="iconfont icon-gengduo more-icon"/>
+          </div>
+        </div>
+        <div v-show="morePrice"
+             class="more-price"
+             v-bind:class="{'more-price-show': cssAnimation, 'more-price-hide': !cssAnimation}">
+          <span>定制</span>
         </div>
       </div>
       <div class="inventory">
@@ -112,17 +120,43 @@
       </mt-tab-container>
     </section>
     <section class="company-info">
-        <div class="img">
-          <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+      <div class="company-img">
+        <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+      </div>
+      <div class="company-content">
+        <span class="title">武汉天辰石业有限公司</span>
+        <div class="info">
+          <span>石矿主</span>
+          <span>182件商品</span>
         </div>
-        <div class="company-content">
-          <span class="title">武汉天辰石业有限公司</span>
-          <div class="info">
-            <span>石矿主</span>
-            <span>182件商品</span>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
+    <section class="product-tab-bar">
+      <div class="btn-box"
+           @click="share()">
+        <i class="iconfont icon-fenxiang"/>
+        <span>分享</span>
+      </div>
+      <div class="btn-box">
+        <i class="iconfont icon-shoucang1"/>
+        <span>收藏</span>
+      </div>
+      <div class="btn-box">
+        <i class="iconfont icon-kefu"/>
+        <span>客服</span>
+      </div>
+      <div class="btn-box btn-shopping-car">
+        <i class="iconfont icon-gouwuche"/>
+        <span>加入购物车</span>
+      </div>
+      <div class="btn-box btn-buy">
+        <span>立即购买</span>
+      </div>
+    </section>
+    <mt-actionsheet :actions="actions"
+                    v-model="sheetVisible"
+                    class="product-actionsheet">
+    </mt-actionsheet>
   </section>
 </template>
 
@@ -133,6 +167,27 @@
       return {
         selected: '1',
         currentIndex: 1,
+        morePrice: false,
+        cssAnimation: false,
+        actions: [
+          {
+            name: '发送给微信好友',
+            method: ''
+          }, {
+            name: '分享到微信朋友圈',
+            method: ''
+          }, {
+            name: '分享到QQ空间',
+            method: ''
+          }, {
+            name: '分享到QQ',
+            method: ''
+          }, {
+            name: '分享到新浪微博',
+            method: ''
+          }
+        ],
+        sheetVisible: false,
         imgList: [
           {
             id: 1,
@@ -159,6 +214,20 @@
       },
       handleChange (index) {
         this.currentIndex = index + 1
+      },
+      share () {
+        this.sheetVisible = true
+      },
+      expandMorePrice () {
+        if (this.morePrice) {
+          this.cssAnimation = false
+          setTimeout(() => {
+            this.morePrice = !this.morePrice
+          }, 400)
+        } else {
+          this.morePrice = !this.morePrice
+          this.cssAnimation = true
+        }
       }
     }
   }
@@ -197,6 +266,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
       @include pm2rem(padding, 0px, 70px, 0px, 0px);
       .number {
         color: #FF0000;
@@ -210,9 +280,24 @@
         color: #000;
         @include font-dpr(14px);
       }
+      .icon-box {
+        display: inline-block;
+      }
       .more-icon {
         color: #52CAA7;
         @include font-dpr(15px);
+      }
+      .more-price {
+        position: absolute;
+        @include px2rem(right, 70px);
+        @include px2rem(width, 150px);
+        @include px2rem(top, 60px);
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        text-align: center;
+        color: #FF0000;
+        background-color: $white;
+        border: 1px solid #D1D1D1;
+        @include font-dpr(16px);
       }
     }
     .inventory {
@@ -253,9 +338,11 @@
     border-top: 1px solid #D1D1D1;
     background-color: $white;
     display: -webkit-box;
-    .img {
-      @include pm2rem(padding, 2px, 0px, 0px, 0px);
+    .company-img {
       @include px2rem(margin-right, 24px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     img {
       @include px2rem(width, 82px);
@@ -266,19 +353,137 @@
       .title {
         @include font-dpr(16px);
         color: #000;
-        line-height: 1;
+        // line-height: 1;
       }
       .info {
-        @include pm2rem(padding, 28px, 50px, 0px, 0px);
-      }
-      span {
-        @include font-dpr(14px);
-        color: #535252;
-        line-height: 1;
-        @include px2rem(margin-right, 50px);
+        @include pm2rem(margin, 28px, 0px, 0px, 0px);
+        span {
+          @include font-dpr(14px);
+          color: #535252;
+          // line-height: 1;
+          @include px2rem(margin-right, 50px);
+        }
       }
     }
   }
+
+  .product-tab-bar {
+    @include px2rem(height, 97px);
+    display: -webkit-box;
+    background-color: $white;
+    .btn-box {
+      border-top: 1px solid #D1D1D1;
+      border-bottom: 1px solid #D1D1D1;
+      width: 17.6%;
+      border-right: 1px solid #D1D1D1;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      i {
+        @include font-dpr(17px);
+      }
+      span {
+        @include font-dpr(12px);
+        color: #595959;
+      }
+    }
+    .btn-shopping-car {
+      width: 23.6%;
+      i {
+        @include font-dpr(18px);
+      }
+    }
+    .btn-buy {
+      width: 23.6%;
+      background: linear-gradient(to bottom right, #FB713A , #FB511F);
+      border: none;
+      span {
+        @include font-dpr(14px);
+        color: $white;
+      }
+    }
+  }
+
+  .more-price-show {animation:fadeInDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
+
+  .more-price-hide {animation:fadeOutUp 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+
+  .rotate-90-cw {
+    -webkit-animation: rotate-90-cw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: rotate-90-cw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  .rotate-90-ccw {
+    -webkit-animation: rotate-90-ccw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: rotate-90-ccw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  @-webkit-keyframes rotate-90-cw {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(90deg);
+              transform: rotate(90deg);
+    }
+  }
+  @keyframes rotate-90-cw {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(90deg);
+              transform: rotate(90deg);
+    }
+  }
+
+  @-webkit-keyframes rotate-90-ccw {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+    }
+  }
+  @keyframes rotate-90-ccw {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+    }
+  }
+
 </style>
 
 <style lang="scss">
@@ -344,6 +549,25 @@
     }
     .last {
       border-bottom: none;
+    }
+  }
+  .product-actionsheet {
+    background-color: transparent;
+    @include px2rem(margin-bottom, 12px);
+    .mint-actionsheet-list {
+      @include pm2rem(padding, 0px, 41px, 0px, 41px);
+    }
+    .mint-actionsheet-button {
+      @include pm2rem(margin, 28px, 41px, 0px, 41px);
+      @include px2rem(border-radius, 10px);
+      width: auto;
+      color:#004BBD;
+    }
+    .mint-actionsheet-listitem {
+      color: #004BBD;
+      @include font-dpr(16px);
+      @include px2rem(height, 98px);
+      @include px2rem(line-height, 98px);
     }
   }
 </style>
