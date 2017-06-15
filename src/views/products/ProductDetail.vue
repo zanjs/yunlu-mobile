@@ -377,7 +377,7 @@
     border-bottom: 1px solid #DEDEDE;
   }
   .company-info {
-    @include px2rem(margin-top, 22px);
+    @include pm2rem(margin, 22px, 0px, 100px, 0px);
     @include pm2rem(padding, 24px, 24px, 24px, 24px);
     border-top: 1px solid #D1D1D1;
     background-color: $white;
@@ -394,17 +394,16 @@
     }
     .company-content {
       height: auto;
+      line-height: 1;
       .title {
         @include font-dpr(16px);
         color: #000;
-        // line-height: 1;
       }
       .info {
         @include pm2rem(margin, 28px, 0px, 0px, 0px);
         span {
           @include font-dpr(14px);
           color: #535252;
-          // line-height: 1;
           @include px2rem(margin-right, 50px);
         }
       }
@@ -415,6 +414,10 @@
     @include px2rem(height, 97px);
     display: -webkit-box;
     background-color: $white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     .btn-box {
       border-top: 1px solid #D1D1D1;
       border-bottom: 1px solid #D1D1D1;
@@ -716,7 +719,7 @@
       }
       .content {
         @include font-dpr(13px);
-        @include line-height(33px);
+        @include line-height(31px);
         @include pm2rem(padding, 10px, 54px, 0px, 24px);
         overflow: hidden;
         text-overflow: ellipsis;
