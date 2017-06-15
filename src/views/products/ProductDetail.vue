@@ -75,6 +75,10 @@
     @include px2rem(height, 634px);
     @include pm2rem(margin, 0px, 0px, 0px, 0px);
     position: relative;
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
   .page-nav {
     position: absolute;
@@ -84,7 +88,6 @@
     @include font-dpr(16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
     background-color: rgba(0, 0, 0, .5);
-    display: inline-block;
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
