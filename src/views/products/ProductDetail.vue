@@ -88,35 +88,12 @@
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="3"
-                               class="productdetail-product-item">
-          <div class="row-item">
-            <div class="title-container">
-              <div class="dot"></div>
-              <span class="title">技术全面</span>
-            </div>
-            <p class="content line2">
-              企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成;企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成
-            </p>
-          </div>
-          <div class="row-item">
-            <div class="title-container">
-              <div class="dot"></div>
-              <span class="title">高端定制</span>
-            </div>
-            <p class="content line2">
-              全网高端定制品牌，专业设计师、工程师银行软件开发，P2P软件开发和运维经验
-            </p>
-          </div>
-          <div class="row-item last">
-            <div class="title-container">
-              <div class="dot"></div>
-              <span class="title">荒料来源</span>
-            </div>
-            <p class="content line2 link">
-              万福矿业
-              <i class="iconfont icon-guanlian"/>
-            </p>
-          </div>
+                               class="productdetail-product-tags">
+          <div class="tag">厂区外景及办公室内景</div>
+          <div class="tag">厂区外景及办公室内景</div>
+          <div class="tag">厂区外景及办公室内景</div>
+          <div class="tag">厂区外景及办公室内景</div>
+          <div class="tag">厂区外景及办公室内景</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
@@ -464,12 +441,29 @@
     }
     .btn-buy {
       width: 23.6%;
-      background: linear-gradient(to bottom right, #FB713A , #FB511F);
+      background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
       border: none;
       span {
         @include font-dpr(14px);
         color: $white;
+        @include px2rem(line-height, 97px);
       }
+    }
+  }
+
+  .productdetail-product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    @include pm2rem(padding, 20px, 0px, 0px, 20px);
+    background-color: $white;
+    .tag {
+      @include px2rem(border-radius, 7px);
+      border: 1px solid #ACACAC;
+      @include pm2rem(padding, 10px, 20px, 10px, 20px);
+      @include pm2rem(margin, 0px, 20px, 20px, 0px);
+      line-height: 1;
+      @include font-dpr(14px);
+      color: #595959;
     }
   }
 
@@ -500,6 +494,7 @@
     .content {
       background-color: $white;
       @include px2rem(min-height, 500px);
+      border-bottom: 1px solid #D1D1D1;
       .item {
         border-bottom: 1px solid #D1D1D1;
         @include px2rem(height, 108px);
@@ -750,7 +745,16 @@
     background-color: transparent;
     @include px2rem(margin-bottom, 12px);
     .mint-actionsheet-list {
-      @include pm2rem(padding, 0px, 41px, 0px, 41px);
+      @include pm2rem(margin, 0px, 41px, 0px, 41px);
+      @include px2rem(border-radius, 10px);
+      & li:first-child {
+        @include px2rem(border-top-left-radius, 10px);
+        @include px2rem(border-top-right-radius, 10px);
+      }
+      & li:last-child {
+        @include px2rem(border-bottom-left-radius, 10px);
+        @include px2rem(border-bottom-right-radius, 10px);
+      }
     }
     .mint-actionsheet-button {
       @include pm2rem(margin, 28px, 41px, 0px, 41px);
