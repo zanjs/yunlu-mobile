@@ -82,9 +82,9 @@
       @include px2rem(padding-bottom, 20px);
     }
     .textarea-container {
-      @include pm2rem(padding, 30px, 30px, 30px, 30px);
+      @include pm2rem(padding, 30px, 30px, 170px, 30px);
       background-color: #FAFAFA;
-      @include px2rem(margin-bottom, 140px);
+      @include px2rem(margin-bottom, -140px);
       .textarea {
         @include px2rem(height, 300px);
         border: none;
