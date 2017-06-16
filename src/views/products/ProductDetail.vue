@@ -62,29 +62,29 @@
               <div class="dot"></div>
               <span class="title">技术全面</span>
             </div>
-            <p class="content line2">
+            <div class="content line2">
               企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成;企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成
-            </p>
+            </div>
           </div>
           <div class="row-item">
             <div class="title-container">
               <div class="dot"></div>
               <span class="title">高端定制</span>
             </div>
-            <p class="content line2">
+            <div class="content line2">
               全网高端定制品牌，专业设计师、工程师银行软件开发，P2P软件开发和运维经验
-            </p>
+            </div>
           </div>
-          <div class="row-item last">
+          <div class="row-item">
             <div class="title-container">
               <div class="dot"></div>
               <span class="title">荒料来源</span>
             </div>
-            <p class="content line2 link">
+            <div class="content line2 link last">
               万福矿业
               <i class="iconfont icon-guanlian"
                  @click.prevent="openPopup()"/>
-            </p>
+            </div>
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="3"
@@ -382,15 +382,13 @@
     border-top: 1px solid #D1D1D1;
     background-color: $white;
     display: -webkit-box;
+    line-height: 1;
     .company-img {
-      @include px2rem(margin-right, 24px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    img {
-      @include px2rem(width, 82px);
-      @include px2rem(height, 82px);
+      @include pm2rem(padding, 2px, 24px, 0px, 0px);
+      img {
+        @include px2rem(width, 82px);
+        @include px2rem(height, 82px);
+      }
     }
     .company-content {
       height: auto;
@@ -698,29 +696,17 @@
     }
   }
   .productdetail-product-item {
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
+    @include pm2rem(padding, 0px, 30px, 0px, 0px);
     background-color: $white;
+    line-height: 1;
     .row-item {
-      border-bottom: 1px solid #DEDEDE;
-      @include pm2rem(padding, 20px, 0px, 10px, 2px);
-      .title-container {
-        .dot {
-          @include px2rem(width, 16px);
-          @include px2rem(height, 16px);
-          @include px2rem(border-radius, 8px);
-          @include px2rem(margin-right, 6px);
-          background-color: #ACACAC;
-          display: inline-block;
-        }
-        .title {
-          @include font-dpr(15px);
-          line-height: 1;
-        }
-      }
+      @include pm2rem(padding, 30px, 0px, 0px, 32px);
+      line-height: 1;
       .content {
         @include font-dpr(13px);
         @include line-height(31px);
-        @include pm2rem(padding, 10px, 54px, 0px, 24px);
+        @include pm2rem(padding, 15px, 54px, 8px, 24px);
+        border-bottom: 1px solid #DEDEDE;
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
@@ -734,14 +720,28 @@
         }
       }
       .line2 {
-        -webkit-line-clamp: 2
+        -webkit-line-clamp: 2;
       }
       .link {
         @include px2rem(height, 66px);
       }
+      .last {
+        border-bottom: none;
+      }
     }
-    .last {
-      border-bottom: none;
+    .title-container {
+      .dot {
+        @include px2rem(width, 16px);
+        @include px2rem(height, 16px);
+        @include px2rem(border-radius, 8px);
+        @include px2rem(margin-right, 6px);
+        background-color: #ACACAC;
+        display: inline-block;
+      }
+      .title {
+        @include font-dpr(15px);
+        line-height: 1;
+      }
     }
   }
   .product-actionsheet {
