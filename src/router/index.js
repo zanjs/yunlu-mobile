@@ -6,6 +6,9 @@ import Folders from '../views/privateSpace/Folders'
 import Photos from '../views/privateSpace/Photos'
 import ProductDetail from '../views/products/ProductDetail'
 import Report from '../views/report/Report'
+import PersonCarte from '../views/carte/PersonCarte'
+import EnterpriseCarte from '../views/carte/EnterpriseCarte'
+import ComityCarte from '../views/carte/ComityCarte'
 
 Vue.use(Router)
 
@@ -30,6 +33,15 @@ export default new Router({
     }, {
       path: '/report',
       component: Report
+    }, {
+      path: '/personcarte',
+      component: PersonCarte
+    }, {
+      path: '/enterprisecarte',
+      component: EnterpriseCarte
+    }, {
+      path: '/comitycarte',
+      component: ComityCarte
     }
   ]
 })
