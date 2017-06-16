@@ -9,6 +9,7 @@
         </mt-button>
       </router-link>
       <mt-button slot="right"
+                 @click="goReport()"
                  class="button-text">
         <i class="iconfont icon-jubao"/>
         投诉
@@ -87,6 +88,9 @@
       albumClick (id) {
         console.log(id)
         this.$router.push({path: '/photos'})
+      },
+      goReport () {
+        this.$router.push({path: '/report'})
       }
     },
     mountd: {

@@ -174,7 +174,7 @@
 </template>
 
 <script>
-  import ProductHeader from '../../components/header/head'
+  import ProductHeader from '../../components/header/Head'
   export default {
     data () {
       return {

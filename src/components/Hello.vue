@@ -27,13 +27,13 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/enterprisecarte')">
+               @click="goRoute('/comitycarte')">
                协会名片
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/comitycarte')">
+               @click="goRoute('/enterprisecarte')">
                企业名片
     </mt-button>
   </section>

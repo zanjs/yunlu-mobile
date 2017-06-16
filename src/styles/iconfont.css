@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1497519265444'); /* IE9*/
-  src: url('iconfont.eot?t=1497519265444#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1497519265444') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1497519265444') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1497519265444#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1497594112948'); /* IE9*/
+  src: url('iconfont.eot?t=1497594112948#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1497594112948') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1497594112948') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1497594112948#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -56,4 +56,58 @@
 .icon-xuanzhong:before { content: "\e625"; }
 
 .icon-weixuanzhong:before { content: "\e626"; }
+
+.icon-dianhua1:before { content: "\e627"; }
+
+.icon-wangluo:before { content: "\e628"; }
+
+.icon-sousuo:before { content: "\e629"; }
+
+.icon-liebiao:before { content: "\e62a"; }
+
+.icon-liebiao1:before { content: "\e62b"; }
+
+.icon-icon-test:before { content: "\e62c"; }
+
+.icon-icon-test1:before { content: "\e62d"; }
+
+.icon-v:before { content: "\e62e"; }
+
+.icon-V:before { content: "\e62f"; }
+
+.icon-v1:before { content: "\e630"; }
+
+.icon-v2:before { content: "\e631"; }
+
+.icon-v3:before { content: "\e632"; }
+
+.icon-D:before { content: "\e633"; }
+
+.icon-D1:before { content: "\e634"; }
+
+.icon-D2:before { content: "\e635"; }
+
+.icon-J:before { content: "\e636"; }
+
+.icon-J1:before { content: "\e637"; }
+
+.icon-D3:before { content: "\e638"; }
+
+.icon-D4:before { content: "\e639"; }
+
+.icon-J2:before { content: "\e63a"; }
+
+.icon-J3:before { content: "\e63b"; }
+
+.icon-J4:before { content: "\e63c"; }
+
+.icon-Z:before { content: "\e63d"; }
+
+.icon-Z1:before { content: "\e63e"; }
+
+.icon-Z2:before { content: "\e63f"; }
+
+.icon-Z3:before { content: "\e640"; }
+
+.icon-Z4:before { content: "\e641"; }
 

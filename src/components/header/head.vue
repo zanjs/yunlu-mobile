@@ -124,8 +124,8 @@
   .drop-menu-arrow {
     position: absolute;
     background-color: transparent;
-    @include px2rem(top, 78px);
-    @include px2rem(right, 36px);
+    @include px2rem(top, 80px);
+    @include px2rem(right, 40px);
     width: 0;
     height: 0;
     @include px2rem(border-left-width, 14px);
@@ -156,6 +156,7 @@
         border-bottom: 1px solid $white;
         @include pm2rem(padding, 0px, 0px, 0px, 34px);
         @include px2rem(line-height, 96px);
+        @include font-dpr(15px);
         color: $white;
         i {
           @include px2rem(margin-right, 16px);

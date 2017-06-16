@@ -9,6 +9,7 @@
         </mt-button>
       </router-link>
       <mt-button slot="right"
+                 @click="goReport()"
                  class="button-text">
         <i class="iconfont icon-jubao"/>
         投诉
@@ -23,11 +24,25 @@
       <img src="../../assets/shengzi@2x.png"
            class="right"/>
     </div>
+    <div class="carte-container">
+      <a class="item">
+        <span>华瑞石业</span>
+        <i class="iconfont icon-fanhui"/>
+      </a>
+      <a class="item">
+        <span>舌尖上的中国</span>
+        <i class="iconfont icon-fanhui"/>
+      </a>
+      <a class="item">
+        <span>读书</span>
+        <i class="iconfont icon-fanhui"/>
+      </a>
+    </div>
   </section>
 </template>
 
 <script>
-  import Card from '../../components/common/card'
+  import Card from '../../components/common/Card'
   export default {
     data () {
       return {}
@@ -36,7 +51,9 @@
       Card
     },
     methods: {
-
+      goReport () {
+        this.$router.push({path: '/report'})
+      }
     }
   }
 </script>
@@ -75,6 +92,42 @@
     align-items: center;
     img {
       @include px2rem(width, 30px);
+    }
+  }
+  .carte-container {
+    background-color: $white;
+    @include pm2rem(padding, 0px, 22px, 0px, 22px);
+    @include pm2rem(margin, 20px, 0px, 30px, 0px);
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #D1D1D1;
+      border-left: 1px solid #D1D1D1;
+      border-right: 1px solid #D1D1D1;
+      box-sizing: border-box;
+      @include px2rem(height, 94px);
+      @include pm2rem(padding, 0px, 40px, 0px, 40px);
+      i {
+        color: #52CAA7;
+        @include font-dpr(17px);
+        border: none;
+        transform: rotate(180deg);
+      }
+      span {
+        border: none;
+        @include font-dpr(17px);
+        color: #595959;
+      }
+    }
+    a {
+      text-decoration: none;
+    }
+    a:active {
+      background-color: #F2F2F2;
+    }
+    & :last-child{
+      border-bottom: 1px solid #D1D1D1;
     }
   }
 </style>
