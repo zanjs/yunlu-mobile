@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import Card from '../../components/common/card'
-  import Album from '../../components/common/album'
+  import Card from '../../components/common/Card'
+  import Album from '../../components/common/Album'
   export default {
     data () {
       return {

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import Gallery from '../../components/common/gallery'
+  import Gallery from '../../components/common/Gallery'
   export default {
     data () {
       return {

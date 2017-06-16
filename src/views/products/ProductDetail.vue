@@ -288,6 +288,7 @@
       width: 100%;
       height: auto;
     }
+
   }
   .page-nav {
     position: absolute;
@@ -680,6 +681,16 @@
 <style lang="scss">
   @import '../../styles/mixin';
   /*覆盖mint-ui中nav-bar组件默认样式，故不用scoped*/
+
+  .swipe {
+    .mint-swipe-indicator {
+      opacity: .5;
+    }
+    .is-active {
+      opacity: 1;
+    }
+  }
+
   .nav-bar {
     .mint-tab-item-label {
       @include font-dpr(15px);
