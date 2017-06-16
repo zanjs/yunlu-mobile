@@ -10,12 +10,12 @@
         <div class="text"
              @click="changeOrder()">价格</div>
         <div class="order-icon">
-          <div class="icon-box up">
-            <i class="iconfont icon-gengduo"
+          <div class="icon-box">
+            <i class="iconfont icon-shang"
                v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"/>
           </div>
-          <div class="icon-box down">
-            <i class="iconfont icon-gengduo"
+          <div class="icon-box">
+            <i class="iconfont icon-xia"
                v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"/>
           </div>
         </div>
@@ -165,16 +165,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .up {
-      transform: rotate(-90deg);
-      @include pm2rem(margin, 0px, 0px, -2px, 3px);
-      color: #52CAA7;
-    }
-    .down {
-      transform: rotate(90deg);
-      @include pm2rem(margin, -2px, 0px, 0px, 0px);
-      color: #A6A6A6;
     }
     .icon-actinve {
       color: #52CAA7;
