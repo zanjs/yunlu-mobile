@@ -29,7 +29,8 @@
           <i class="iconfont icon-fujin"/>
           <span>搜附近</span>
         </div>
-        <div class="item">
+        <div class="item"
+             @click="goReport()">
           <i class="iconfont icon-jubao"/>
           <span>举报Ta</span>
         </div>
@@ -54,13 +55,16 @@
       },
       addTouch () {
         let self = this
-        document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
+        document.getElementById('fullscreen-cover').addEventListener('touchmove', (e) => {
           e.preventDefault()
           this.cssAnimation = false
           setTimeout(() => {
             self.showMenu = false
           }, 400)
         })
+      },
+      goReport () {
+        this.$router.push({path: '/report'})
       }
     },
     mounted () {
@@ -146,6 +150,7 @@
       @include px2rem(top, 104px);
       @include px2rem(right, 16px);
       background-color: rgba(0, 0, 0, .5);
+      z-index: 9999;
       .item {
         @include px2rem(height, 96px);
         border-bottom: 1px solid $white;

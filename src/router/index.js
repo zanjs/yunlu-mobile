@@ -5,6 +5,7 @@ import Space from '../views/privateSpace/Space'
 import Folders from '../views/privateSpace/Folders'
 import Photos from '../views/privateSpace/Photos'
 import ProductDetail from '../views/products/ProductDetail'
+import Report from '../views/report/Report'
 
 Vue.use(Router)
 
@@ -26,6 +27,9 @@ export default new Router({
     }, {
       path: '/productdetail',
       component: ProductDetail
+    }, {
+      path: '/report',
+      component: Report
     }
   ]
 })
