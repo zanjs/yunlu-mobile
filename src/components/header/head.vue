@@ -55,7 +55,6 @@
       addTouch () {
         let self = this
         document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
-          console.log('222')
           e.preventDefault()
           this.cssAnimation = false
           setTimeout(() => {
