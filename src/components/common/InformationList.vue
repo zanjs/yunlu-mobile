@@ -14,11 +14,11 @@
         <div class="order-icon">
           <div class="icon-box">
             <i class="iconfont icon-shang"
-               v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"/>
+               v-bind:class="{'icon-actinve': orderUp2, 'icon-inactive': !orderUp2}"/>
           </div>
           <div class="icon-box">
             <i class="iconfont icon-xia"
-               v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"/>
+               v-bind:class="{'icon-actinve': !orderUp2, 'icon-inactive': orderUp2}"/>
           </div>
         </div>
       </div>
@@ -38,7 +38,6 @@
           <img :src="item.url"/>
           <div class="cover">
             <span class="name">{{item.name}}</span>
-            <span class="money">&yen; ：{{item.money}}</span>
           </div>
         </div>
       </div>
@@ -64,9 +63,9 @@
     data () {
       return {
         thumbnails: true,
-        orderUp: true,
-        // showBar: false, // 显示顶部搜索框
-        // cssAnimation: false,
+        orderUp2: true,
+        // showBar2: false, // 显示顶部搜索框
+        // cssAnimation2: false,
         imgList: [
           {
             id: 1,
@@ -128,19 +127,19 @@
         this.thumbnails = !this.thumbnails
       },
       changeOrder () {
-        this.orderUp = !this.orderUp
+        this.orderUp2 = !this.orderUp2
         document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
       }
       // showSearchBar () {
-      //   // 开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
+      //   // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
       //   showBack(status => {
-      //     this.cssAnimation = status
+      //     this.cssAnimation2 = status
       //     if (!status) {
       //       setTimeout(() => {
-      //         this.showBar = status
+      //         this.showBar2 = status
       //       }, 510)
       //     } else {
-      //       this.showBar = status
+      //       this.showBar2 = status
       //     }
       //   }, parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36)
       // }
@@ -303,13 +302,13 @@
   }
 
   .slide-in-top {
-    -webkit-animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    -webkit-animation: slide-in-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: slide-in-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   }
 
   .slide-out-top {
-    -webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-            animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    -webkit-animation: slide-out-top .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            animation: slide-out-top .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
   }
 
   .fade-in-top {
@@ -421,4 +420,5 @@
       opacity: 0;
     }
   }
+
 </style>

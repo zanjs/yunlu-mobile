@@ -20,11 +20,24 @@
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
-        <div class="left">产品</div>
-        <div class="right">资讯</div>
+        <div class="left"
+             v-bind:class="{'active': showProduct}"
+             @click.prevent="tabClick(0)">产品</div>
+        <div class="right"
+             v-bind:class="{'active': !showProduct}"
+             @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <product-list/>
+        <div>
+          <product-list :show-bar="showBar"
+                        :css-animation="cssAnimation"
+                        :show="showProduct"/>
+        </div>
+        <div>
+          <information-list :show-bar="showBar"
+                            :css-animation="cssAnimation"
+                            :show="!showProduct"/>
+        </div>
       </div>
     </div>
   </section>
@@ -33,19 +46,46 @@
 <script>
   import EnterpriseCard from '../../components/common/EnterpriseCard'
   import ProductList from '../../components/common/ProductList'
+  import InformationList from '../../components/common/InformationList'
+  import { showBack } from '../../config/mUtils'
   export default {
     data () {
-      return {}
+      return {
+        showProduct: true,
+        showBar: false,
+        cssAnimation: false
+      }
     },
     components: {
       EnterpriseCard,
-      ProductList
+      ProductList,
+      InformationList
     },
     methods: {
       goReport () {
         document.body.scrollTop = 0
         this.$router.push({path: '/report'})
+      },
+      tabClick (val) {
+        this.showProduct = val === 0
+      },
+      showSearchBar () {
+        // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
+        let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
+        showBack(status => {
+          this.cssAnimation = status
+          if (!status) {
+            setTimeout(() => {
+              this.showBar = status
+            }, 510)
+          } else {
+            this.showBar = status
+          }
+        }, height)
       }
+    },
+    mounted () {
+      this.showSearchBar()
     }
   }
 </script>
@@ -77,6 +117,7 @@
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);
     background-color: $white;
+    color: #52CAA7;
     .tab-bar {
       @include px2rem(height, 84px);
       @include pm2rem(padding, 0px, 22px, 0px, 22px);
@@ -93,13 +134,15 @@
       .left {
         @include px2rem(border-top-left-radius, 14px);
         @include px2rem(border-bottom-left-radius, 14px);
+        color: #52CAA7;
+      }
+      .active {
         background-color: #52CAA7;
         color: $white;
       }
       .right {
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
-        color: #52CAA7;
       }
     }
   }

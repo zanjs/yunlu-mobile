@@ -32,11 +32,11 @@ export const showBack = (callback, height) => {
   let requestFram
   let oldScrollTop
   this.callback = callback
-  this.height = height
 
   document.addEventListener('scroll', () => {
     showBackFun()
   }, false)
+
   document.addEventListener('touchstart', () => {
     showBackFun()
   }, { passive: true })
@@ -64,10 +64,11 @@ export const showBack = (callback, height) => {
 
   // 判断是否达到目标点
   const showBackFun = () => {
-    if (document.body.scrollTop > this.height) {
-      this.callback(true)
+    let self = this
+    if (document.body.scrollTop > height) {
+      self.callback(true)
     } else {
-      this.callback(false)
+      self.callback(false)
     }
   }
 }
