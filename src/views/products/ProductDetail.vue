@@ -249,7 +249,7 @@
       },
       closePopup () {
         this.cssAnimation = false
-        this.allowTouchMove()
+        // this.allowTouchMove()
         setTimeout(() => {
           this.popUp = false
         }, 400)
@@ -261,15 +261,15 @@
             e.preventDefault() // 最关键的一句，禁止浏览器默认行为
           }
         })
-      },
-      allowTouchMove () {
-        let self = this
-        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.popUp) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
-          }
-        })
       }
+      // allowTouchMove () {
+      //   let self = this
+      //   document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+      //     if (self.popUp) {
+      //       e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+      //     }
+      //   })
+      // }
     },
     mounted () {
       this.stopTouchMove()

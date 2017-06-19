@@ -12,6 +12,7 @@
            class="gallery">
         <div v-for="(item, index) in imgList"
              :key="index"
+             @click.stop="handleClick(item)"
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
@@ -100,6 +101,12 @@
     methods: {
       swithList () {
         this.thumbnails = !this.thumbnails
+      },
+      scrollToTop () {
+        document.body.scrollTop = 0
+      },
+      handleClick (item) {
+        this.$emit('click', item)
       }
     },
     mounted () {
@@ -163,10 +170,10 @@
         left: 0;
         right: 0;
         background-color: rgba(0, 0, 0, .5);
-        @include px2rem(height, 56px);
+        @include px2rem(height, 50px);
         display: flex;
-        flex-direction: column;
         justify-content: center;
+        align-items: center;
         color: $white;
         @include pm2rem(padding, 0px, 00px, 0px, 20px);
         @include font-dpr(13px);

@@ -78,8 +78,7 @@
     }
   }
   .card-container {
-    @include pm2rem(padding, 8px, 22px, 0px, 22px);
-    @include px2rem(margin-top, 88px);
+    @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .rope {
     position: absolute;

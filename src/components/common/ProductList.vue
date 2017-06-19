@@ -34,6 +34,7 @@
            class="gallery">
         <div v-for="(item, index) in imgList"
              :key="index"
+             @click.stop="handleClick(item)"
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
@@ -47,7 +48,8 @@
          class="gallery-list">
       <div v-for="(item, index) in imgList"
            :key="index"
-          class="item">
+           @click.stop="handleClick(item)"
+           class="item">
         <img :src="item.url"/>
         <div class="content">
           <span class="name">{{item.name}}</span>
@@ -126,7 +128,17 @@
       },
       changeOrder () {
         this.orderUp = !this.orderUp
+        this.scrollToBar()
+      },
+      scrollToBar () {
         document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
+      },
+      scrollToTop () {
+        document.body.scrollTop = 0
+      },
+      handleClick (item) {
+        this.scrollToTop()
+        this.$emit('click', item.id)
       }
     },
     mounted () {

@@ -30,11 +30,20 @@
       <div class="tab-container">
         <product-list :show-bar="showBar"
                       :css-animation="showProduct && cssAnimation"
-                      :show="showProduct"/>
+                      :show="showProduct"
+                      @click="goProductDetail"/>
         <information-list :show-bar="showInfoBar"
                           :css-animation="!showProduct && cssAnimationInfo"
-                          :show="!showProduct"/>
+                          :show="!showProduct"
+                          @click="viewBigImg"/>
       </div>
+    </div>
+    <div>
+      <view-big-img :data-source="infoImg"
+                    :index="currentIndex"
+                    :show-preview="showFullScreenPreview"
+                    :css-animation="cssAnimationViewer"
+                    @close="closeImgViewer"/>
     </div>
   </section>
 </template>
@@ -44,6 +53,7 @@
   import ProductList from '../../components/common/ProductList'
   import InformationList from '../../components/common/InformationList'
   import { showBack } from '../../config/mUtils'
+  import ViewBigImg from '../../components/common/ViewBigImg'
   export default {
     data () {
       return {
@@ -51,13 +61,71 @@
         showBar: false,
         cssAnimation: false,
         cssAnimationInfo: false,
-        showInfoBar: false
+        cssAnimationViewer: false,
+        showInfoBar: false,
+        currentIndex: 0,
+        showFullScreenPreview: false,
+        infoImg: [],
+        infoImgList: [
+          {
+            id: 1,
+            name: '黄龙云平板',
+            money: '1800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1799',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1500',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '定制',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '2800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 1,
+            name: '黄龙云平板',
+            money: '1800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1799',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1500',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '定制',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '2800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }
+        ]
       }
     },
     components: {
       EnterpriseCard,
       ProductList,
-      InformationList
+      InformationList,
+      ViewBigImg
     },
     methods: {
       goReport () {
@@ -97,10 +165,35 @@
             }
           }
         }, elementId, height)
+      },
+      goProductDetail (id) {
+        this.$router.push({path: '/productdetail'})
+      },
+      viewBigImg (index) {
+        console.log(index)
+        this.infoImg.push(index)
+        this.showFullScreenPreview = true
+      },
+      closeImgViewer () {
+        this.cssAnimationViewer = true
+        setTimeout(() => {
+          this.infoImg = []
+          this.showFullScreenPreview = false
+          this.cssAnimationViewer = false
+        }, 500)
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showFullScreenPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
       }
     },
     mounted () {
       this.showSearchBar()
+      this.stopTouchMove()
     }
   }
 </script>
