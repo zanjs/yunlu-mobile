@@ -33,7 +33,7 @@
            class="img-box">
         <img :src="item.url"/>
         <div class="cover">
-          <spam class="name">{{item.name}}</spam>
+          <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.money}}</span>
         </div>
       </div>

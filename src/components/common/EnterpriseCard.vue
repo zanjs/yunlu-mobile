@@ -5,7 +5,9 @@
       <div class="content">
         <p>胖胖的小丸子</p>
         <div>
-          <span>个人简介</span>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-D3"></use>
+          </svg>
         </div>
       </div>
     </div>
