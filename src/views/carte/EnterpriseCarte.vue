@@ -28,16 +28,12 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <div>
-          <product-list :show-bar="showBar"
-                        :css-animation="cssAnimation"
-                        :show="showProduct"/>
-        </div>
-        <div>
-          <information-list :show-bar="showBar"
-                            :css-animation="cssAnimation"
-                            :show="!showProduct"/>
-        </div>
+        <product-list :show-bar="showBar"
+                      :css-animation="showProduct && cssAnimation"
+                      :show="showProduct"/>
+        <information-list :show-bar="showInfoBar"
+                          :css-animation="!showProduct && cssAnimationInfo"
+                          :show="!showProduct"/>
       </div>
     </div>
   </section>
@@ -53,7 +49,9 @@
       return {
         showProduct: true,
         showBar: false,
-        cssAnimation: false
+        cssAnimation: false,
+        cssAnimationInfo: false,
+        showInfoBar: false
       }
     },
     components: {
@@ -68,20 +66,37 @@
       },
       tabClick (val) {
         this.showProduct = val === 0
+        this.showSearchBar()
       },
       showSearchBar () {
         // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
         let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        showBack(status => {
-          this.cssAnimation = status
-          if (!status) {
-            setTimeout(() => {
-              this.showBar = status
-            }, 510)
+        let elementId = 'productList'
+        if (!this.showProduct) {
+          height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
+          elementId = 'informationList'
+        }
+        showBack((id, status) => {
+          if (id === 'informationList') {
+            this.cssAnimationInfo = status
+            if (!status) {
+              setTimeout(() => {
+                this.showInfoBar = status
+              }, 510)
+            } else {
+              this.showInfoBar = status
+            }
           } else {
-            this.showBar = status
+            this.cssAnimation = status
+            if (!status) {
+              setTimeout(() => {
+                this.showBar = status
+              }, 510)
+            } else {
+              this.showBar = status
+            }
           }
-        }, height)
+        }, elementId, height)
       }
     },
     mounted () {

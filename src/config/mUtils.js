@@ -28,29 +28,23 @@ export const removeStore = name => {
 /**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点
  */
-export const showBack = (callback, height) => {
+export const showBack = (callback, elementId, height) => {
   let requestFram
   let oldScrollTop
   this.callback = callback
 
-  document.addEventListener('scroll', () => {
-    showBackFun()
-  }, false)
-
-  document.addEventListener('touchstart', () => {
-    showBackFun()
-  }, { passive: true })
-
-  document.addEventListener('touchmove', () => {
-    showBackFun()
-  }, { passive: true })
-
-  document.addEventListener('touchend', () => {
-    oldScrollTop = document.body.scrollTop
-    moveEnd()
-  }, { passive: true })
+  // 判断是否达到目标点
+  const showBackFun = () => {
+    let self = this
+    if (document.body.scrollTop > height) {
+      self.callback(elementId, true)
+    } else {
+      self.callback(elementId, false)
+    }
+  }
 
   const moveEnd = () => {
+    oldScrollTop = document.body.scrollTop
     requestFram = requestAnimationFrame(() => {
       if (document.body.scrollTop !== oldScrollTop) {
         oldScrollTop = document.body.scrollTop
@@ -62,13 +56,11 @@ export const showBack = (callback, height) => {
     })
   }
 
-  // 判断是否达到目标点
-  const showBackFun = () => {
-    let self = this
-    if (document.body.scrollTop > height) {
-      self.callback(true)
-    } else {
-      self.callback(false)
-    }
-  }
+  document.addEventListener('scroll', showBackFun, false)
+
+  document.addEventListener('touchstart', showBackFun, { passive: true, once: true })
+
+  document.addEventListener('touchmove', showBackFun, { passive: true, once: true })
+
+  document.addEventListener('touchend', moveEnd, { passive: true, once: true })
 }

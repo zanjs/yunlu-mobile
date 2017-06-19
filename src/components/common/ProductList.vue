@@ -59,14 +59,11 @@
 </template>
 
 <script>
-  // import { showBack } from '../../config/mUtils'
   export default {
     data () {
       return {
         thumbnails: true,
         orderUp: true,
-        // showBar: false, // 显示顶部搜索框
-        // cssAnimation: false,
         imgList: [
           {
             id: 1,
@@ -131,22 +128,8 @@
         this.orderUp = !this.orderUp
         document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
       }
-      // showSearchBar () {
-      //   // 开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
-      //   showBack(status => {
-      //     this.cssAnimation = status
-      //     if (!status) {
-      //       setTimeout(() => {
-      //         this.showBar = status
-      //       }, 510)
-      //     } else {
-      //       this.showBar = status
-      //     }
-      //   }, parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36)
-      // }
     },
     mounted () {
-      // this.showSearchBar()
     }
   }
 </script>

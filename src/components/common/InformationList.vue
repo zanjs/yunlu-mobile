@@ -1,32 +1,10 @@
 <template>
-  <section id="productList">
+  <section id="informationList">
     <div class="search-container"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
       <input type="text"
-             placeholder="搜索产品"/>
+             placeholder="搜索资讯"/>
       <i class="iconfont icon-sousuo"/>
-    </div>
-    <div class="option-bar"
-         v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
-      <div class="item">
-        <div class="text"
-             @click="changeOrder()">价格</div>
-        <div class="order-icon">
-          <div class="icon-box">
-            <i class="iconfont icon-shang"
-               v-bind:class="{'icon-actinve': orderUp2, 'icon-inactive': !orderUp2}"/>
-          </div>
-          <div class="icon-box">
-            <i class="iconfont icon-xia"
-               v-bind:class="{'icon-actinve': !orderUp2, 'icon-inactive': orderUp2}"/>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <i class="iconfont"
-           v-bind:class="{'icon-liebiao': thumbnails, 'icon-liebiao1': !thumbnails}"
-           @click="swithList()"/>
-      </div>
     </div>
     <div v-show="show && thumbnails"
          class="gallery-container">
@@ -58,14 +36,11 @@
 </template>
 
 <script>
-  // import { showBack } from '../../config/mUtils'
   export default {
     data () {
       return {
         thumbnails: true,
         orderUp2: true,
-        // showBar2: false, // 显示顶部搜索框
-        // cssAnimation2: false,
         imgList: [
           {
             id: 1,
@@ -125,24 +100,7 @@
     methods: {
       swithList () {
         this.thumbnails = !this.thumbnails
-      },
-      changeOrder () {
-        this.orderUp2 = !this.orderUp2
-        document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
       }
-      // showSearchBar () {
-      //   // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
-      //   showBack(status => {
-      //     this.cssAnimation2 = status
-      //     if (!status) {
-      //       setTimeout(() => {
-      //         this.showBar2 = status
-      //       }, 510)
-      //     } else {
-      //       this.showBar2 = status
-      //     }
-      //   }, parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36)
-      // }
     },
     mounted () {
       // this.showSearchBar()
@@ -183,56 +141,6 @@
       @include px2rem(top, 16px);
     }
   }
-  .option-bar {
-    @include px2rem(height, 74px);
-    border-top: 1px solid #D1D1D1;
-    border-bottom: 1px solid #D1D1D1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    @include px2rem(top, 170px);
-    left: 0;
-    right: 0;
-    background-color: $white;
-    z-index: 1001;
-    .item {
-      height: inherit;
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-      .order-icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        i {
-          @include font-dpr(12px);
-          line-height: 1;
-        }
-      }
-      .text {
-        @include font-dpr(16px);
-        line-height: 1;
-        @include px2rem(padding-right, 50px);
-        @include px2rem(margin-right, -40px);
-      }
-    }
-    .icon-box {
-      @include px2rem(width, 24px);
-      @include px2rem(height, 24px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .icon-actinve {
-      color: #52CAA7;
-    }
-    .icon-inactive {
-      color: #A6A6A6;
-    }
-  }
   .gallery-container {
     display: block;
   }
@@ -255,7 +163,7 @@
         left: 0;
         right: 0;
         background-color: rgba(0, 0, 0, .5);
-        @include px2rem(height, 90px);
+        @include px2rem(height, 56px);
         display: flex;
         flex-direction: column;
         justify-content: center;
