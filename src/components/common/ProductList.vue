@@ -63,7 +63,7 @@
   export default {
     data () {
       return {
-        thumbnails: false,
+        thumbnails: true,
         orderUp: true,
         showBar: false, // 显示顶部搜索框
         cssAnimation: false,
@@ -141,7 +141,7 @@
           } else {
             this.showBar = status
           }
-        }, 140)
+        }, parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36)
       }
     },
     mounted () {
