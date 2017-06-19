@@ -6,8 +6,21 @@
         <p>胖胖的小丸子</p>
         <div>
           <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-v2"></use>
+          </svg>
+          <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-D3"></use>
           </svg>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-J"></use>
+          </svg>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-Z4"></use>
+          </svg>
+        </div>
+        <div class="address-container">
+          <span class="address">湖北&middot;武汉</span>
+          <span class="tag">石矿主</span>
         </div>
       </div>
     </div>
@@ -64,6 +77,29 @@
         @include px2rem(margin-left, 26px);
         p {
           @include font-dpr(17px);
+          line-height: 1;
+        }
+        svg {
+          @include font-dpr(20px);
+          @include pm2rem(margin, 30px, 16px, 30px, 0px);
+        }
+        .address-container {
+          .address {
+            @include font-dpr(13px);
+            color: #F75544;
+            @include px2rem(margin-right, 40px);
+          }
+          .tag {
+            @include px2rem(height, 50px);
+            @include px2rem(width, 120px);
+            @include px2rem(border-radius, 10px);
+            background-color: #52CAA7;
+            color: $white;
+            @include font-dpr(13px);
+            display: inline-block;
+            @include px2rem(line-height, 50px);
+            text-align: center;
+          }
         }
       }
     }
