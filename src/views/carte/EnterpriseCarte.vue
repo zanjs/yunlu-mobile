@@ -43,6 +43,7 @@
     },
     methods: {
       goReport () {
+        document.body.scrollTop = 0
         this.$router.push({path: '/report'})
       }
     }
@@ -58,6 +59,7 @@
     @include pm2rem(padding, 0px, 30px, 0px, 30px);
     @include font-dpr(17px);
     position: fixed;
+    z-index: 1002 !important;
     h1 {
       @include font-dpr(17px);
     }

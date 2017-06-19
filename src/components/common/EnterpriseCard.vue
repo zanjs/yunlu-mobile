@@ -90,14 +90,14 @@
             @include px2rem(margin-right, 40px);
           }
           .tag {
-            @include px2rem(height, 50px);
-            @include px2rem(width, 120px);
+            @include px2rem(height, 40px);
+            @include pm2rem(padding, 0px, 10px, 0px, 10px);
             @include px2rem(border-radius, 10px);
             background-color: #52CAA7;
             color: $white;
-            @include font-dpr(13px);
+            @include font-dpr(12px);
             display: inline-block;
-            @include px2rem(line-height, 50px);
+            @include px2rem(line-height, 42px);
             text-align: center;
           }
         }

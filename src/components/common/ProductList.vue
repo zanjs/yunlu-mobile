@@ -1,11 +1,13 @@
 <template>
-  <section>
-    <div class="search-container">
+  <section id="productList">
+    <div class="search-container"
+         v-bind:class="{'slide-in-top': cssAnimation, 'slide-out-top': !cssAnimation}">
       <input type="text"
              placeholder="搜索产品"/>
       <i class="iconfont icon-sousuo"/>
     </div>
-    <div class="option-bar">
+    <div class="option-bar"
+         v-bind:class="{'slide-in-top': cssAnimation, 'slide-out-top': !cssAnimation}">
       <div class="item">
         <div class="text"
              @click="changeOrder()">价格</div>
@@ -27,14 +29,17 @@
       </div>
     </div>
     <div v-show="thumbnails"
-         class="gallery">
-      <div v-for="(item, index) in imgList"
-           :key="index"
-           class="img-box">
-        <img :src="item.url"/>
-        <div class="cover">
-          <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.money}}</span>
+         class="gallery-container">
+      <div v-show="thumbnails"
+           class="gallery">
+        <div v-for="(item, index) in imgList"
+             :key="index"
+             class="img-box">
+          <img :src="item.url"/>
+          <div class="cover">
+            <span class="name">{{item.name}}</span>
+            <span class="money">&yen; ：{{item.money}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -54,13 +59,41 @@
 </template>
 
 <script>
+  import { showBack } from '../../config/mUtils'
   export default {
     data () {
       return {
         thumbnails: false,
         orderUp: true,
+        showBar: false, // 显示顶部搜索框
+        cssAnimation: false,
         imgList: [
           {
+            id: 1,
+            name: '黄龙云平板',
+            money: '1800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1799',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '1500',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '定制',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
+            id: 2,
+            name: '黄龙云平板',
+            money: '2800',
+            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
+          }, {
             id: 1,
             name: '黄龙云平板',
             money: '1800',
@@ -95,7 +128,24 @@
       },
       changeOrder () {
         this.orderUp = !this.orderUp
+        document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
+      },
+      showSearchBar () {
+        // 开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
+        showBack(status => {
+          this.cssAnimation = status
+          if (!status) {
+            setTimeout(() => {
+              this.showBar = status
+            }, 510)
+          } else {
+            this.showBar = status
+          }
+        }, 140)
       }
+    },
+    mounted () {
+      this.showSearchBar()
     }
   }
 </script>
@@ -106,7 +156,11 @@
   .search-container {
     background-color: $white;
     @include pm2rem(padding, 12px, 32px, 12px, 32px);
-    position: relative;
+    position: fixed;
+    @include px2rem(top, 88px);
+    left: 0;
+    right: 0;
+    z-index: 1001;
     input {
       background-color: #EDEDED;
       width: 100%;
@@ -136,6 +190,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    @include px2rem(top, 170px);
+    left: 0;
+    right: 0;
+    background-color: $white;
+    z-index: 1001;
     .item {
       height: inherit;
       display: flex;
@@ -172,6 +232,9 @@
     .icon-inactive {
       color: #A6A6A6;
     }
+  }
+  .gallery-container {
+    display: block;
   }
   .gallery {
     @include pm2rem(padding, 16px, 2px, 0px, 30px);
@@ -235,6 +298,66 @@
           @include font-dpr(13px);
         }
       }
+    }
+  }
+
+  .slide-in-top {
+    -webkit-animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  .slide-out-top {
+    -webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+
+  @-webkit-keyframes slide-in-top {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-top {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes slide-out-top {
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
+    }
+  }
+  @keyframes slide-out-top {
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+      opacity: 0;
     }
   }
 </style>
