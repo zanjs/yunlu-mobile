@@ -16,7 +16,7 @@
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <enterprise-card/>
+      <enterprise-card @click="goEnterpriseDetail"/>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
@@ -168,6 +168,10 @@
       },
       goProductDetail (id) {
         this.$router.push({path: '/productdetail'})
+      },
+      goEnterpriseDetail (id) {
+        console.log(id)
+        this.$router.push({path: '/enterprisedetail'})
       },
       viewBigImg (index) {
         console.log(index)

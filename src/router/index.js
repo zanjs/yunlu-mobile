@@ -9,6 +9,7 @@ import Report from '../views/report/Report'
 import PersonCarte from '../views/carte/PersonCarte'
 import EnterpriseCarte from '../views/carte/EnterpriseCarte'
 import ComityCarte from '../views/carte/ComityCarte'
+import EnterpriseDetail from '../views/carte/EnterpriseDetail'
 
 Vue.use(Router)
 
@@ -42,6 +43,9 @@ export default new Router({
     }, {
       path: '/comitycarte',
       component: ComityCarte
+    }, {
+      path: '/enterprisedetail',
+      component: EnterpriseDetail
     }
   ]
 })

@@ -121,6 +121,7 @@
   .search-container {
     background-color: $white;
     @include pm2rem(padding, 12px, 32px, 12px, 32px);
+    box-shadow: 0px 6px 20px rgba(185, 179, 179, 0.5);
     position: fixed;
     @include px2rem(top, 88px);
     left: 0;

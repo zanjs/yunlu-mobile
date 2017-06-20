@@ -1,6 +1,7 @@
 <template>
   <section class="card">
-    <div class="user-info">
+    <div class="user-info"
+         @click.stop="handleClick">
       <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
       <div class="content">
         <p>胖胖的小丸子</p>
@@ -52,7 +53,12 @@
     data () {
       return {}
     },
-    methods: {},
+    methods: {
+      handleClick () {
+        // 模拟企业Id
+        this.$emit('click', 1)
+      }
+    },
     mountd: {
 
     }
