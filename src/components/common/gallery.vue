@@ -103,7 +103,7 @@
     @include px2rem(top, 38px);
     @include px2rem(left, 52px);
     color: white;
-    z-index: 1000;
+    z-index: 1003;
     @include font-dpr(20px);
   }
   .full-screen-swiper {
@@ -112,7 +112,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 999;
+    z-index: 1002;
   }
   .full-screen-bg {
     background-color: #000;
