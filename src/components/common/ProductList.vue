@@ -121,7 +121,7 @@
         ]
       }
     },
-    props: ['showBar', 'cssAnimation', 'show'],
+    props: ['showBarProduct', 'cssAnimation', 'show'],
     methods: {
       swithList () {
         this.thumbnails = !this.thumbnails
