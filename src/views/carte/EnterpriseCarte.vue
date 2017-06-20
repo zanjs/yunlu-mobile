@@ -28,12 +28,12 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <product-list :show-bar="showBar"
-                      :css-animation="showProduct && cssAnimation"
+        <product-list :show-bar="showBarProduct"
+                      :css-animation="showProduct && cssAnimationProduct"
                       :show="showProduct"
                       @click="goProductDetail"/>
-        <information-list :show-bar="showInfoBar"
-                          :css-animation="!showProduct && cssAnimationInfo"
+        <information-list :show-bar="showBar"
+                          :css-animation="!showProduct && cssAnimation"
                           :show="!showProduct"
                           @click="viewBigImg"/>
       </div>
@@ -54,15 +54,16 @@
   import InformationList from '../../components/common/InformationList'
   import { showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
+  // import { mapGetters, mapActions } from 'vuex'
   export default {
     data () {
       return {
         showProduct: true,
         showBar: false,
         cssAnimation: false,
-        cssAnimationInfo: false,
+        cssAnimationProduct: false,
         cssAnimationViewer: false,
-        showInfoBar: false,
+        showBarProduct: false,
         currentIndex: 0,
         showFullScreenPreview: false,
         infoImg: [],
@@ -128,6 +129,18 @@
       ViewBigImg
     },
     methods: {
+      getEnterpriseCarte () {
+        this.$store.dispatch('commonAction', {
+          url: '/shares/card',
+          method: 'get',
+          params: {
+            p: 'bzZvdIHDj-ksWOBuFb-NSWN-M_RjwfJxREI9JDnMBJGXqYFmlTasXVXpu0AiGNEXLjNJf0jzvCkwsDa_zOhy8w=='
+          },
+          target: this,
+          resolve: () => {},
+          reject: (err) => this.failedTipFn(err)
+        })
+      },
       goReport () {
         document.body.scrollTop = 0
         this.$router.push({path: '/report'})
@@ -145,14 +158,14 @@
           elementId = 'informationList'
         }
         showBack((id, status) => {
-          if (id === 'informationList') {
-            this.cssAnimationInfo = status
+          if (id === 'productList') {
+            this.cssAnimationProduct = status
             if (!status) {
               setTimeout(() => {
-                this.showInfoBar = status
+                this.showBarProduct = status
               }, 510)
             } else {
-              this.showInfoBar = status
+              this.showBar = status
             }
           } else {
             this.cssAnimation = status
@@ -202,7 +215,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../styles/mixin';
 
   .header {

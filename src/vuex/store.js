@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as types from './mutation-types'
 import api from '../api/api'
+import { Indicator } from 'mint-ui'
 
 Vue.use(Vuex)
 
@@ -23,10 +24,12 @@ const actions = {
 const mutations = {
   [types.FETCH_BEGIN] (state) {
     state.pageLoading = true
+    Indicator.open()
   },
 
   [types.FETCH_SUCCESS] (state, {params, res}) {
     state.pageLoading = false
+    Indicator.close()
     if (res.data.success) {
       params.resolve(state, res)
     } else {
@@ -36,6 +39,7 @@ const mutations = {
 
   [types.FETCH_FAILED] (state, {params, err}) {
     state.pageLoading = false
+    Indicator.close()
   }
 }
 
