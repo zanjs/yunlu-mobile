@@ -107,6 +107,7 @@
     @include px2rem(height, 88px);
     @include pm2rem(padding, 0px, 30px, 0px, 30px);
     @include font-dpr(17px);
+    z-index: 1002 !important;
     position: fixed;
     h1 {
       @include font-dpr(17px);
@@ -119,8 +120,7 @@
     }
   }
   .card-container {
-    @include pm2rem(padding, 8px, 22px, 0px, 22px);
-    @include px2rem(margin-top, 88px);
+    @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .rope {
     position: absolute;

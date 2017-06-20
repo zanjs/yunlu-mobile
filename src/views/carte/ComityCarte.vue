@@ -9,6 +9,7 @@
         </mt-button>
       </router-link>
       <mt-button slot="right"
+                 @click="goReport()"
                  class="button-text">
         <i class="iconfont icon-jubao"/>
         投诉
@@ -44,6 +45,9 @@
         <enterprise-list :data-source="enterpriseList"
                          :show="activeIndex === 2"
                          :css-animation="activeIndex === 2 && cssAnimation"/>
+        <person-list :data-source="personList"
+                     :show="activeIndex === 3"
+                    :css-animation="activeIndex === 3 && cssAnimation"/>
       </div>
     </div>
   </section>
@@ -54,6 +58,7 @@
   import ProductList from '../../components/common/ProductList'
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
+  import PersonList from '../..//components/common/PersonList'
   import { showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   export default {
@@ -215,6 +220,49 @@
             province: '湖北',
             city: '武汉'
           }
+        ],
+        personList: [
+          {
+            id: 1,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 2,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 3,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 4,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 5,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 6,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 7,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 8,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 9,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }, {
+            id: 10,
+            name: '张三',
+            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
+          }
         ]
       }
     },
@@ -223,6 +271,7 @@
       ProductList,
       InformationList,
       EnterpriseList,
+      PersonList,
       ViewBigImg
     },
     methods: {

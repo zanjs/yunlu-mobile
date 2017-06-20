@@ -66,6 +66,7 @@
     @include px2rem(height, 88px);
     @include pm2rem(padding, 0px, 30px, 0px, 30px);
     @include font-dpr(17px);
+    z-index: 1002 !important;
     position: fixed;
     h1 {
       @include font-dpr(17px);
