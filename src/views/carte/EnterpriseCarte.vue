@@ -131,10 +131,13 @@
     methods: {
       getEnterpriseCarte () {
         this.$store.dispatch('commonAction', {
-          url: '/shares/card',
+          url: '/products',
           method: 'get',
           params: {
-            p: 'bzZvdIHDj-ksWOBuFb-NSWN-M_RjwfJxREI9JDnMBJGXqYFmlTasXVXpu0AiGNEXLjNJf0jzvCkwsDa_zOhy8w=='
+            team_id: 3089,
+            page: 1,
+            per_page: 10,
+            sort: ''
           },
           target: this,
           resolve: () => {},
@@ -209,6 +212,7 @@
       }
     },
     mounted () {
+      this.getEnterpriseCarte()
       this.showSearchBar()
       this.stopTouchMove()
     }

@@ -6,7 +6,7 @@ export default {
     return axios.request({
       url: params.url,
       method: params.method,
-      baseURL: `${URL_DEV}/api/admin/`,
+      baseURL: `${URL_DEV}/api/v1/`,
       params: params.params || {},
       data: {
         ...(params.data || {})
