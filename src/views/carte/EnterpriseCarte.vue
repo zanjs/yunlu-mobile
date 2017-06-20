@@ -168,7 +168,7 @@
                 this.showBarProduct = status
               }, 510)
             } else {
-              this.showBar = status
+              this.showBarProduct = status
             }
           } else {
             this.cssAnimation = status
