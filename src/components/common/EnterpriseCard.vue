@@ -5,9 +5,9 @@
       <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
       <div class="content">
         <p>胖胖的小丸子</p>
-        <div>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-v2"></use>
+        <div class="icon-container">
+          <svg class="icon big" aria-hidden="true">
+            <use xlink:href="#icon-v4"></use>
           </svg>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-D3"></use>
@@ -84,6 +84,14 @@
         p {
           @include font-dpr(17px);
           line-height: 1;
+        }
+        .icon-container {
+          display: flex;
+          justify-content: center;
+          align-items: center
+        }
+        .big {
+          @include font-dpr(25px);
         }
         svg {
           @include font-dpr(20px);

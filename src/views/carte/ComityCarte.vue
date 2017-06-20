@@ -373,6 +373,7 @@
       .right {
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
+        border-left: none;
       }
     }
   }
