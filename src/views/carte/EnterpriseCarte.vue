@@ -30,13 +30,11 @@
       </div>
       <div class="tab-container">
         <product-list
-          :show-bar="showBarProduct"
           :store="products"
           :css-animation="showProduct && cssAnimationProduct"
           :show="showProduct"
           @click="goProductDetail"/>
         <information-list
-          :show-bar="showBar"
           :css-animation="!showProduct && cssAnimation"
           :show="!showProduct"
           @click="viewBigImg"/>
@@ -65,11 +63,9 @@
     data () {
       return {
         showProduct: true,
-        showBar: false,
         cssAnimation: false,
         cssAnimationProduct: false,
         cssAnimationViewer: false,
-        showBarProduct: false,
         currentIndex: 0,
         showFullScreenPreview: false,
         productsThumbnailsIds: [],
@@ -163,12 +159,19 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.products = [...state.products, ...res.data.products]
-            // this.productsThumbnailsIds = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products))
+            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
           },
           reject: () => {}
         })
+      },
+      handleProducts (arr, arr2) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          let index = arr2.findIndex(item => item.id === arr[i].file_id)
+          let tmpObj = {...arr[i], file_url: arr2[index].url, file_thumb_urls: arr2[index].thumb_urls[0]}
+          tmpArr.push(tmpObj)
+        }
+        return tmpArr
       },
       handleProductThumbnails (arr) {
         let tmpArr = []
@@ -177,7 +180,7 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids) {
+      getFilesPublisheds (ids, products) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -191,6 +194,7 @@
           resolve: (state, res) => {
             Indicator.close()
             state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+            state.products = [...state.products, ...this.handleProducts(products, state.productsThumbnails)]
           },
           reject: () => {}
         })

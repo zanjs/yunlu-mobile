@@ -36,7 +36,7 @@
              :key="index"
              @click.stop="handleClick(item)"
              class="img-box">
-          <img :src="item.url"/>
+          <img :src="item.file_url"/>
           <div class="cover">
             <span class="name">{{item.name}}</span>
             <span class="money">&yen; ：{{item.prices[0].money}}</span>
@@ -46,14 +46,14 @@
     </div>
     <div v-show="show && !thumbnails"
          class="gallery-list">
-      <div v-for="(item, index) in imgList"
+      <div v-for="(item, index) in store"
            :key="index"
            @click.stop="handleClick(item)"
            class="item">
-        <img :src="item.url"/>
+        <img :src="item.file_thumb_urls"/>
         <div class="content">
           <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.money}}</span>
+          <span class="money">&yen; ：{{item.prices[0].money}}</span>
         </div>
       </div>
     </div>
@@ -121,7 +121,7 @@
         ]
       }
     },
-    props: ['showBarProduct', 'cssAnimation', 'show', 'store'],
+    props: ['cssAnimation', 'show', 'store'],
     methods: {
       swithList () {
         this.thumbnails = !this.thumbnails
@@ -298,16 +298,6 @@
     }
   }
 
-  .slide-in-top {
-    -webkit-animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  .slide-out-top {
-    -webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-            animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-  }
-
   .fade-in-top {
     -webkit-animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
             animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
@@ -316,56 +306,6 @@
   .fade-out-top {
     -webkit-animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
             animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  @-webkit-keyframes slide-in-top {
-    0% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  @keyframes slide-in-top {
-    0% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes slide-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-  }
-  @keyframes slide-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
   }
 
   @-webkit-keyframes fade-in-top {

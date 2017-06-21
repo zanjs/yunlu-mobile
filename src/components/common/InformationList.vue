@@ -83,7 +83,7 @@
         ]
       }
     },
-    props: ['showBar', 'cssAnimation', 'show'],
+    props: ['cssAnimation', 'show'],
     methods: {
       scrollToTop () {
         document.body.scrollTop = 0
@@ -116,10 +116,9 @@
       @include px2rem(border-radius, 14px);
       color: #C2C2C2;
       @include font-dpr(14px);
-      @include px2rem(line-height, 98px); // 这里input 的line-height要大于height,input中的文字才能垂直居中
+      @include line-height(28px);
       @include px2rem(height, 58px);
       text-align: center;
-      vertical-align: middle;
       border: none;
     }
     ::-webkit-input-placeholder{
@@ -164,16 +163,6 @@
     }
   }
 
-  .slide-in-top {
-    -webkit-animation: slide-in-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: slide-in-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  .slide-out-top {
-    -webkit-animation: slide-out-top .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-            animation: slide-out-top .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-  }
-
   .fade-in-top {
     -webkit-animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
             animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
@@ -182,56 +171,6 @@
   .fade-out-top {
     -webkit-animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
             animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  @-webkit-keyframes slide-in-top {
-    0% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  @keyframes slide-in-top {
-    0% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes slide-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
-  }
-  @keyframes slide-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-1000px);
-              transform: translateY(-1000px);
-      opacity: 0;
-    }
   }
 
   @-webkit-keyframes fade-in-top {
