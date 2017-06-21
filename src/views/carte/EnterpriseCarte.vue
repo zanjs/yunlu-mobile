@@ -16,7 +16,8 @@
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <enterprise-card @click="goEnterpriseDetail"/>
+      <enterprise-card :store="teams"
+                       @click="goEnterpriseDetail"/>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
@@ -28,22 +29,26 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <product-list :show-bar="showBarProduct"
-                      :css-animation="showProduct && cssAnimationProduct"
-                      :show="showProduct"
-                      @click="goProductDetail"/>
-        <information-list :show-bar="showBar"
-                          :css-animation="!showProduct && cssAnimation"
-                          :show="!showProduct"
-                          @click="viewBigImg"/>
+        <product-list
+          :show-bar="showBarProduct"
+          :store="products"
+          :css-animation="showProduct && cssAnimationProduct"
+          :show="showProduct"
+          @click="goProductDetail"/>
+        <information-list
+          :show-bar="showBar"
+          :css-animation="!showProduct && cssAnimation"
+          :show="!showProduct"
+          @click="viewBigImg"/>
       </div>
     </div>
     <div>
-      <view-big-img :data-source="infoImg"
-                    :index="currentIndex"
-                    :show-preview="showFullScreenPreview"
-                    :css-animation="cssAnimationViewer"
-                    @close="closeImgViewer"/>
+      <view-big-img
+        :data-source="infoImg"
+        :index="currentIndex"
+        :show-preview="showFullScreenPreview"
+        :css-animation="cssAnimationViewer"
+        @close="closeImgViewer"/>
     </div>
   </section>
 </template>
@@ -54,7 +59,8 @@
   import InformationList from '../../components/common/InformationList'
   import { showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
-  // import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters } from 'vuex'
+  import { Indicator } from 'mint-ui'
   export default {
     data () {
       return {
@@ -66,6 +72,7 @@
         showBarProduct: false,
         currentIndex: 0,
         showFullScreenPreview: false,
+        productsThumbnailsIds: [],
         infoImg: [],
         infoImgList: [
           {
@@ -129,19 +136,63 @@
       ViewBigImg
     },
     methods: {
-      getEnterpriseCarte () {
+      getEnterpriseDetail () {
+        this.$store.dispatch('commonAction', {
+          url: '/links/teams',
+          method: 'get',
+          params: {
+            ids: 3089 // 生产环境的一个企业
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.teams = res.data.teams[0]
+            this.getProducts()
+          },
+          reject: () => {}
+        })
+      },
+      getProducts () {
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
           params: {
-            team_id: 3089,
+            team_id: 3089, // 生产环境的一个企业
             page: 1,
             per_page: 10,
             sort: ''
           },
           target: this,
-          resolve: () => {},
-          reject: (err) => this.failedTipFn(err)
+          resolve: (state, res) => {
+            state.products = [...state.products, ...res.data.products]
+            // this.productsThumbnailsIds = this.handleProductThumbnails(res.data.products)
+            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products))
+          },
+          reject: () => {}
+        })
+      },
+      handleProductThumbnails (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          tmpArr.push(arr[i].file_id)
+        }
+        return tmpArr
+      },
+      getFilesPublisheds (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'product',
+            team_id: 3089,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+          },
+          reject: () => {}
         })
       },
       goReport () {
@@ -212,9 +263,18 @@
       }
     },
     mounted () {
-      this.getEnterpriseCarte()
+      Indicator.open()
+      this.getEnterpriseDetail()
       this.showSearchBar()
       this.stopTouchMove()
+    },
+    computed: {
+      ...mapGetters([
+        'teams',
+        'loadSuccess',
+        'products',
+        'productsThumbnails'
+      ])
     }
   }
 </script>

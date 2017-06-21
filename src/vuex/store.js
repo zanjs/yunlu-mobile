@@ -2,16 +2,23 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as types from './mutation-types'
 import api from '../api/api'
-import { Indicator } from 'mint-ui'
 
 Vue.use(Vuex)
 
 const state = {
-  pageLoading: false
+  pageLoading: false,
+  loadSuccess: false,
+  teams: null,
+  products: [],
+  productsThumbnails: []
 }
 
 const getters = {
-  pageLoading: state => state.pageLoading
+  pageLoading: state => state.pageLoading,
+  loadSuccess: state => state.loadSuccess,
+  teams: state => state.teams,
+  products: state => state.products,
+  productsThumbnails: state => state.productsThumbnails
 }
 
 const actions = {
@@ -24,22 +31,24 @@ const actions = {
 const mutations = {
   [types.FETCH_BEGIN] (state) {
     state.pageLoading = true
-    Indicator.open()
+    state.loadSuccess = false
   },
 
   [types.FETCH_SUCCESS] (state, {params, res}) {
     state.pageLoading = false
-    Indicator.close()
-    if (res.data.success) {
+    if (res.data) {
+      state.loadSuccess = true
       params.resolve(state, res)
     } else {
-      params.reject(state, res.data.msg)
+      state.loadSuccess = false
+      params.reject(state, res)
     }
   },
 
   [types.FETCH_FAILED] (state, {params, err}) {
     state.pageLoading = false
-    Indicator.close()
+    state.loadSuccess = false
+    params.reject(state, err)
   }
 }
 

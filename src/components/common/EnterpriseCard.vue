@@ -2,9 +2,15 @@
   <section class="card">
     <div class="user-info"
          @click.stop="handleClick">
-      <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+      <img
+        v-if="store && store.logo"
+        :src="store.logo"/>
+      <img
+        v-else
+        src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
       <div class="content">
-        <p>胖胖的小丸子</p>
+        <p v-if="store && store.name">{{store.name}}</p>
+        <p v-else>张三</p>
         <div class="icon-container">
           <svg class="icon big" aria-hidden="true">
             <use xlink:href="#icon-v4"></use>
@@ -20,30 +26,58 @@
           </svg>
         </div>
         <div class="address-container">
-          <span class="address">湖北&middot;武汉</span>
-          <span class="tag">石矿主</span>
+          <span
+            class="address"
+            v-if="store && store.provice_name && store.city_name">{{store.provice_name}}&middot;{{store.city_name}}</span>
+          <span
+            v-else
+            class="address">湖北省&middot;武汉市</span>
+          <span
+            v-if="store && store.service.name"
+            class="tag">{{store.service.name}}</span>
+          <span
+            v-else
+            class="tag">暂无数据</span>
         </div>
       </div>
     </div>
     <div class="icons">
-      <div>
+      <a
+        v-if="store && store.mobile"
+        :href="'tel:' + store.mobile"
+        class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
-      </div>
-      <div>
+      </a>
+      <a
+        v-if="store && store.email"
+        @click="handleIconClick((store.mobile))"
+        class="icon-box">
         <i class="iconfont icon-youxiang youxiang"></i>
-      </div>
-      <div>
+      </a>
+      <a
+        v-if="store && store.longitude && store.latitude"
+        @click="handleIconClick({longitude: store.longitude, latitude: store.latitude})"
+        class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
-      </div>
-      <div>
+      </a>
+      <a
+        v-if="store && store.qq"
+        @click="handleIconClick(store.qq)"
+        class="icon-box">
         <i class="iconfont icon-weixin weixin"></i>
-      </div>
-      <div>
+      </a>
+      <a
+        v-if="store && store.qq"
+        @click="handleIconClick(store.qq)"
+        class="icon-box">
         <i class="iconfont icon-weibo weibo"></i>
-      </div>
-      <div>
+      </a>
+      <a
+        v-if="store && store.qq"
+        @click="handleIconClick(store.qq)"
+        class="icon-box">
         <i class="iconfont icon-qq qq"></i>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -53,10 +87,18 @@
     data () {
       return {}
     },
+    props: {
+      store: {
+        required: true
+      }
+    },
     methods: {
       handleClick () {
         // 模拟企业Id
-        this.$emit('click', 1)
+        this.$emit('click', this.store)
+      },
+      handleIconClick (obj) {
+        this.$emit('', obj)
       }
     },
     mountd: {
@@ -87,7 +129,6 @@
         }
         .icon-container {
           display: flex;
-          justify-content: center;
           align-items: center
         }
         .big {
@@ -121,10 +162,18 @@
     .icons {
       display: flex;
       @include px2rem(height, 100px);
-      @include pm2rem(padding, 0px, 50px, 0px, 50px);
-      justify-content: space-between;
+      @include pm2rem(padding, 0px, 27px, 0px, 27px);
+      justify-content: flex-start;
       align-items: center;
       border-top: 1px solid #d1d1d1;
+      a {
+        text-decoration: none;
+        @include px2rem(width, 108px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: inherit;
+      }
       i {
         @include font-dpr(24px);
       }

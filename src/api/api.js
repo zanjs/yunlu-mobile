@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {URL_DEV, REQUEST_TIME_OUT} from '../constants/constant'
+import Qs from 'Qs'
 
 export default {
   commonRequest (params, resolve, reject) {
@@ -8,6 +9,9 @@ export default {
       method: params.method,
       baseURL: `${URL_DEV}/api/v1/`,
       params: params.params || {},
+      paramsSerializer: function (params) {
+        return Qs.stringify(params, {arrayFormat: 'brackets'})
+      },
       data: {
         ...(params.data || {})
       },

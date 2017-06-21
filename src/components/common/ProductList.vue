@@ -32,14 +32,14 @@
          class="gallery-container">
       <div v-show="thumbnails"
            class="gallery">
-        <div v-for="(item, index) in imgList"
+        <div v-for="(item, index) in store"
              :key="index"
              @click.stop="handleClick(item)"
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
             <span class="name">{{item.name}}</span>
-            <span class="money">&yen; ：{{item.money}}</span>
+            <span class="money">&yen; ：{{item.prices[0].money}}</span>
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
         ]
       }
     },
-    props: ['showBarProduct', 'cssAnimation', 'show'],
+    props: ['showBarProduct', 'cssAnimation', 'show', 'store'],
     methods: {
       swithList () {
         this.thumbnails = !this.thumbnails

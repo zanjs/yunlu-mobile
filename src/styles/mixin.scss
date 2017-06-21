@@ -87,7 +87,7 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
   }
   /* for 小米note*/
   [data-dpr="2.75"] & {
-    font-size: $font-size * 2.5;
+    font-size: $font-size * 2.75;
   }
   /* for common Android Phone*/
   [data-dpr="3"] & {
@@ -112,7 +112,7 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
   }
   /* for 小米note*/
   [data-dpr="2.75"] & {
-    line-height: $line-height * 2.5;
+    line-height: $line-height * 2.75;
   }
   /* for common Android Phone*/
   [data-dpr="3"] & {

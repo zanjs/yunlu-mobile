@@ -3,7 +3,7 @@
 // import Vue from 'vue'
 
 const state = {
-
+  teams: null
 }
 
 export default{

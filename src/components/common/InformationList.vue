@@ -6,9 +6,9 @@
              placeholder="搜索资讯"/>
       <i class="iconfont icon-sousuo"/>
     </div>
-    <div v-show="show && thumbnails"
+    <div v-show="show"
          class="gallery-container">
-      <div v-show="thumbnails"
+      <div v-show="show"
            class="gallery">
         <div v-for="(item, index) in imgList"
              :key="index"
@@ -16,20 +16,8 @@
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
-            <span class="name">{{item.name}}</span>
+            {{item.name}}
           </div>
-        </div>
-      </div>
-    </div>
-    <div v-show="show && !thumbnails"
-         class="gallery-list">
-      <div v-for="(item, index) in imgList"
-           :key="index"
-          class="item">
-        <img :src="item.url"/>
-        <div class="content">
-          <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.money}}</span>
         </div>
       </div>
     </div>
@@ -40,8 +28,6 @@
   export default {
     data () {
       return {
-        thumbnails: true,
-        orderUp2: true,
         imgList: [
           {
             id: 1,
@@ -99,9 +85,6 @@
     },
     props: ['showBar', 'cssAnimation', 'show'],
     methods: {
-      swithList () {
-        this.thumbnails = !this.thumbnails
-      },
       scrollToTop () {
         document.body.scrollTop = 0
       },
@@ -174,45 +157,9 @@
         @include px2rem(height, 50px);
         display: flex;
         justify-content: center;
-        align-items: center;
         color: $white;
-        @include pm2rem(padding, 0px, 00px, 0px, 20px);
         @include font-dpr(13px);
-        .money {
-          font-weight: bold;
-        }
-      }
-    }
-  }
-  .gallery-list {
-    background-color: $white;
-    .item {
-      // @include px2rem(height, 140px);
-      border-bottom: 1px solid #D1D1D1;
-      @include pm2rem(padding, 10px, 10px, 10px, 10px);
-      display: flex;
-      align-items: center;
-      img {
-        @include px2rem(width, 118px);
-        @include px2rem(height, 118px);
-        @include px2rem(margin-right, 30px);
-      }
-      .content {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        .name {
-          @include font-dpr(15px);
-          color: #595959;
-          @include px2rem(margin-bottom, 22px);
-          line-height: 1;
-        }
-        .money {
-          font-weight: bold;
-          line-height: 1;
-          color: #F75544;
-          @include font-dpr(13px);
-        }
+        @include line-height(26px);
       }
     }
   }
