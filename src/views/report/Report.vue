@@ -151,6 +151,11 @@
         text-decoration: none;
       }
     }
-
+    .mint-checkbox-core::after {
+      @include px2rem(top, 8px);
+      @include px2rem(left, 16px);
+      @include px2rem(width, 8px);
+      @include px2rem(height, 16px);
+    }
   }
 </style>
