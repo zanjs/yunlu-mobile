@@ -616,7 +616,7 @@
         p {
           text-align: center;
           @include font-dpr(15px);
-          font-weight: 300;
+        //  font-weight: 300;
         }
 
       }
