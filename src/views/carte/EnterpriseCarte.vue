@@ -63,7 +63,7 @@
   export default {
     data () {
       return {
-        teamId: 6600,
+        teamId: 3089,
         showProduct: true,
         cssAnimation: false,
         cssAnimationProduct: false,

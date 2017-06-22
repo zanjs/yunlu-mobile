@@ -66,51 +66,62 @@
                         class="nav-bar-container">
         <mt-tab-container-item id="1"
                                class="prodcutdetail-price-item">
-          <!--<span v-if="currentPriceProperties && currentPriceProperties.length > 0"
-                v-for="(item, index) in currentPriceProperties"
-                :key="index"
-                class="row-item">{{item.key}} : {{item.value}}</span>-->
-          <div class="no-price">该产品暂无价格参数</div>
+          <template v-if="currentPriceProperties && currentPriceProperties.length > 0">
+            <span v-for="(item, index) in currentPriceProperties"
+                  :key="index"
+                  class="row-item">{{item.key}} : {{item.value}}</span>
+
+          </template>
+          <div v-else
+               class="no-price">该产品暂无价格参数</div>
         </mt-tab-container-item>
         <mt-tab-container-item id="2"
                                class="productdetail-product-item">
-          <div v-if="productDetail && (productDetail.goods_type !== 'StoneMaterial' || productDetail.goods_type !== 'Medicament')"
-               v-for="(item, index) in productDetail.properties"
+          <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
+            <div v-for="(item, index) in productDetail.properties"
                :key="index"
                class="row-item">
             <div v-for="(i, indexI) in item.children"
                  :key="indexI"
                  class="title-container">
               <div class="dot"></div>
-              <span class="title">{{i.name}} : {{i.value}}</span>
+                <span class="title">{{i.name}} : {{i.value}}</span>
+              </div>
             </div>
-          </div>
-          <div v-else
-
-               class="row-item">
-
-          </div>
+          </template>
+          <template v-else>
+            <div v-if="productDetail && productDetail.goods_type === 'StoneMaterial'"
+                 class="no-product-args">
+              这里待完成
+            </div>
+            <div v-else
+                 class="no-product-args">
+              该产品暂无产品参数
+            </div>
+          </template>
         </mt-tab-container-item>
         <mt-tab-container-item id="3"
                                class="productdetail-product-tags">
-          <div v-if="archives && archives.length > 0"
-               v-for="(item, index) in archives"
+          <template v-if="archives && archives.length > 0">
+            <div v-for="(item, index) in archives"
                :key="index"
                @click="viewArchives(item)"
                class="tag">{{item.name}}</div>
-          <div class="no-info">该产品暂无关联信息</div>
+          </template>
+          <div v-else
+               class="no-info">该产品暂无关联信息</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
     <section class="company-info">
       <div class="company-img">
-        <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+        <img :src="teams.logo"/>
       </div>
       <div class="company-content">
-        <span class="title">武汉天辰石业有限公司</span>
+        <span class="title">{{teams.name}}</span>
         <div class="info">
-          <span>石矿主</span>
-          <span>182件商品</span>
+          <span>{{teams.service.name}}</span>
+          <span>{{teams.products_count}}件商品</span>
         </div>
       </div>
     </section>
@@ -263,7 +274,8 @@
             state.allPriceProperties = res.data.properties
             this.currentPrice = state.productDetail.prices[0]
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
-            Indicator.close()
+            this.getProductArchives()
+            // Indicator.close()
           },
           reject: () => {
             Indicator.close()
@@ -397,7 +409,8 @@
         'productDetail',
         'productDetailFiles',
         'allPriceProperties',
-        'archives'
+        'archives',
+        'teams'
       ])
     }
   }
@@ -890,7 +903,7 @@
       }
     }
     .title-container {
-      @include pm2rem(padding, 20px, 0px, 20px, 0px);
+      // @include pm2rem(padding, 20px, 0px, 20px, 0px);
       .dot {
         @include px2rem(width, 16px);
         @include px2rem(height, 16px);
@@ -901,8 +914,18 @@
       }
       .title {
         @include font-dpr(15px);
-        line-height: 1;
+        @include line-height(30px);
+        // line-height: 1;
       }
+    }
+    .no-product-args {
+      @include pm2rem(padding, 40px, 0px, 40px, 0px);
+      @include pm2rem(margin, 0px, 0px, 0px, 0px);
+      text-align: center;
+      width: 100%;
+      line-height: 1;
+      @include font-dpr(20px);
+      color: #A6A6A6;
     }
   }
   .product-actionsheet {

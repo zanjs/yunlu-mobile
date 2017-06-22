@@ -109,7 +109,7 @@
         @include px2rem(margin-bottom,46);
         @include  px2rem(width,610);
         @include  px2rem(height,80);
-        @include font-dpr(16);
+        @include font-dpr(16px);
         color: $white;
         background: $green ;
       }
