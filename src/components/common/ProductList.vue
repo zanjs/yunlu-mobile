@@ -3,8 +3,10 @@
     <div class="search-container"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
       <input type="text"
+             v-model="searchParams"
              placeholder="搜索产品"/>
-      <i class="iconfont icon-sousuo"/>
+      <i class="iconfont icon-sousuo"
+         @click.stop="handleSearch"/>
     </div>
     <div class="option-bar"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
@@ -14,11 +16,11 @@
         <div class="order-icon">
           <div class="icon-box">
             <i class="iconfont icon-shang"
-               v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"/>
+               v-bind:class="{'icon-actinve': orderUp > 0, 'icon-inactive': orderUp < 0}"/>
           </div>
           <div class="icon-box">
             <i class="iconfont icon-xia"
-               v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"/>
+               v-bind:class="{'icon-actinve': orderUp < 0, 'icon-inactive': orderUp > 0}"/>
           </div>
         </div>
       </div>
@@ -65,60 +67,8 @@
     data () {
       return {
         thumbnails: true,
-        orderUp: true,
-        imgList: [
-          {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }
-        ]
+        orderUp: 1, // 正数按照最低价升序，负数按照最低价降序(默认1为最低价)
+        searchParams: ''
       }
     },
     props: ['cssAnimation', 'show', 'store'],
@@ -127,8 +77,9 @@
         this.thumbnails = !this.thumbnails
       },
       changeOrder () {
-        this.orderUp = !this.orderUp
+        this.orderUp = 0 - this.orderUp
         this.scrollToBar()
+        this.$emit('orderChange', this.searchParams, this.orderUp)
       },
       scrollToBar () {
         document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
@@ -139,6 +90,11 @@
       handleClick (item) {
         this.scrollToTop()
         this.$emit('click', item.id)
+      },
+      handleSearch () {
+        console.log('111')
+        this.scrollToBar()
+        this.$emit('search', this.searchParams, this.orderUp)
       }
     },
     mounted () {
@@ -157,16 +113,18 @@
     left: 0;
     right: 0;
     z-index: 1001;
+    border: none;
+    box-sizing: border-box;
     input {
       background-color: #EDEDED;
       width: 100%;
       @include px2rem(border-radius, 14px);
       color: #C2C2C2;
       @include font-dpr(14px);
-      @include px2rem(line-height, 98px); // 这里input 的line-height要大于height,input中的文字才能垂直居中
+      @include px2rem(line-height, 58px);
       @include px2rem(height, 58px);
-      text-align: center;
       vertical-align: middle;
+      text-align: center;
       border: none;
     }
     ::-webkit-input-placeholder{
@@ -188,7 +146,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    @include px2rem(top, 170px);
+    @include px2rem(top, 169px);
     left: 0;
     right: 0;
     background-color: $white;

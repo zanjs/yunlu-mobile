@@ -34,20 +34,25 @@
              @click.prevent="tabClick(3)">个人会员</div>
       </div>
       <div class="tab-container">
-        <product-list :show-bar="showBarProduct"
-                      :css-animation="activeIndex === 0 && cssAnimationProduct"
-                      :show="activeIndex === 0"
-                      @click="goProductDetail"/>
-        <information-list :show-bar="showBar"
-                          :css-animation="activeIndex === 1 && cssAnimation"
-                          :show="activeIndex === 1"
-                          @click="viewBigImg"/>
-        <enterprise-list :data-source="enterpriseList"
-                         :show="activeIndex === 2"
-                         :css-animation="activeIndex === 2 && cssAnimation"/>
-        <person-list :data-source="personList"
-                     :show="activeIndex === 3"
-                    :css-animation="activeIndex === 3 && cssAnimation"/>
+        <product-list
+          :store="products"
+          :show-bar="showBarProduct"
+          :css-animation="activeIndex === 0 && cssAnimationProduct"
+          :show="activeIndex === 0"
+          @click="goProductDetail"/>
+        <information-list
+          :show-bar="showBar"
+          :css-animation="activeIndex === 1 && cssAnimation"
+          :show="activeIndex === 1"
+          @click="viewBigImg"/>
+        <enterprise-list
+          :data-source="enterpriseList"
+          :show="activeIndex === 2"
+          :css-animation="activeIndex === 2 && cssAnimation"/>
+        <person-list
+          :data-source="personList"
+          :show="activeIndex === 3"
+          :css-animation="activeIndex === 3 && cssAnimation"/>
       </div>
     </div>
   </section>
@@ -61,6 +66,8 @@
   import PersonList from '../..//components/common/PersonList'
   import { showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
+  import { mapGetters } from 'vuex'
+  import { Indicator } from 'mint-ui'
   export default {
     data () {
       return {
@@ -73,6 +80,7 @@
         showBar: false,
         currentIndex: 0,
         showFullScreenPreview: false,
+        productsThumbnailsIds: [],
         infoImg: [],
         infoImgList: [
           {
@@ -275,6 +283,58 @@
       ViewBigImg
     },
     methods: {
+      getProducts () {
+        this.$store.dispatch('commonAction', {
+          url: '/products',
+          method: 'get',
+          params: {
+            team_id: 3089, // 生产环境的一个企业
+            page: 1,
+            per_page: 10,
+            sort: ''
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
+          },
+          reject: () => {}
+        })
+      },
+      handleProducts (arr, arr2) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          let index = arr2.findIndex(item => item.id === arr[i].file_id)
+          let tmpObj = {...arr[i], file_url: arr2[index].url, file_thumb_urls: arr2[index].thumb_urls[0]}
+          tmpArr.push(tmpObj)
+        }
+        return tmpArr
+      },
+      handleProductThumbnails (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          tmpArr.push(arr[i].file_id)
+        }
+        return tmpArr
+      },
+      getFilesPublisheds (ids, products) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'product',
+            team_id: 3089,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+            state.products = [...state.products, ...this.handleProducts(products, state.productsThumbnails)]
+          },
+          reject: () => {}
+        })
+      },
       goReport () {
         document.body.scrollTop = 0
         this.$router.push({path: '/report'})
@@ -358,6 +418,14 @@
     mounted () {
       this.showSearchBar()
       this.stopTouchMove()
+    },
+    computed: {
+      ...mapGetters([
+        'teams',
+        'loadSuccess',
+        'products',
+        'productsThumbnails'
+      ])
     }
   }
 </script>

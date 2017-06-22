@@ -31,6 +31,8 @@
       <div class="tab-container">
         <product-list
           :store="products"
+          @search="getProducts"
+          @order-change="getProducts"
           :css-animation="showProduct && cssAnimationProduct"
           :show="showProduct"
           @click="goProductDetail"/>
@@ -62,6 +64,7 @@
   export default {
     data () {
       return {
+        teamId: 3089,
         showProduct: true,
         cssAnimation: false,
         cssAnimationProduct: false,
@@ -137,7 +140,7 @@
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: 3089 // 生产环境的一个企业
+            ids: this.teamId // 生产环境的一个企业
           },
           target: this,
           resolve: (state, res) => {
@@ -147,15 +150,16 @@
           reject: () => {}
         })
       },
-      getProducts () {
+      getProducts (q = '', order = 1) {
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
           params: {
-            team_id: 3089, // 生产环境的一个企业
+            team_id: this.teamId, // 生产环境的一个企业
             page: 1,
             per_page: 10,
-            sort: ''
+            sort: order,
+            q: q
           },
           target: this,
           resolve: (state, res) => {
@@ -186,15 +190,15 @@
           method: 'get',
           params: {
             type: 'product',
-            team_id: 3089,
+            team_id: this.teamId,
             thumbs: ['general'],
             ids: ids
           },
           target: this,
           resolve: (state, res) => {
             Indicator.close()
-            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-            state.products = [...state.products, ...this.handleProducts(products, state.productsThumbnails)]
+            state.productsThumbnails = res.data.files
+            state.products = this.handleProducts(products, state.productsThumbnails)
           },
           reject: () => {}
         })
@@ -304,8 +308,7 @@
     }
   }
   .card-container {
-    @include pm2rem(padding, 8px, 22px, 0px, 22px);
-    @include px2rem(margin-top, 88px);
+    @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);

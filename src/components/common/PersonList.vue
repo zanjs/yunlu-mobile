@@ -50,7 +50,7 @@
       @include px2rem(border-radius, 14px);
       color: #C2C2C2;
       @include font-dpr(14px);
-      @include px2rem(line-height, 98px); // 这里input 的line-height要大于height,input中的文字才能垂直居中
+      @include px2rem(line-height, 58px);
       @include px2rem(height, 58px);
       text-align: center;
       vertical-align: middle;
