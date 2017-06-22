@@ -66,13 +66,9 @@
                         class="nav-bar-container">
         <mt-tab-container-item id="1"
                                class="prodcutdetail-price-item">
-          <span class="row-item">发货地址 : 武汉</span>
-          <span class="row-item">物流 : 公路运输</span>
-          <span class="row-item">单位 : 平方</span>
-          <span class="row-item">发货周期 : 3天</span>
-          <span class="row-item">包装方式 : 木箱包装</span>
-          <span class="row-item">产品登记 : B级</span>
-          <span class="row-item">产品类型 : 半成品</span>
+          <span v-for="(item, index) in currentPriceProperties"
+                :key="index"
+                class="row-item">{{item.key}} : {{item.value}}</span>
         </mt-tab-container-item>
         <mt-tab-container-item id="2"
                                class="productdetail-product-item">
@@ -185,6 +181,8 @@
         productId: '',
         morePrice: false,
         cssAnimation: false,
+        currentPrice: {},
+        currentPriceProperties: [],
         popUp: false,
         actions: [
           {
@@ -244,6 +242,39 @@
           }
         })
       },
+      getAllPriceProperties (categoryId) {
+        this.$store.dispatch('commonAction', {
+          url: '/price_properties',
+          method: 'get',
+          params: {
+            category_id: categoryId
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.allPriceProperties = res.data.properties
+            this.currentPrice = state.productDetail.prices[0]
+            this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
+            console.log(this.currentPriceProperties)
+            Indicator.close()
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      handlePricePropertyes (price, priceProperties) {
+        console.log(price, priceProperties)
+        let tmpArr = []
+        for (let j = 0; j < price.properties.length; j++) {
+          let key = Object.keys(price.properties[j])[0]
+          let index = priceProperties.findIndex(item => item.aliaz === key)
+          if (index > -1) {
+            tmpArr.push({key: priceProperties[index].name, value: price.properties[j][key]})
+          }
+        }
+        console.log(tmpArr)
+        return tmpArr
+      },
       handleProductFiles (arr) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
@@ -263,10 +294,12 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.productDetailFiles = res.data.files
+            this.getAllPriceProperties(state.productDetail.category_id)
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       handleProducts (arr, arr2) {
@@ -299,7 +332,9 @@
         }
       },
       changePrice (item) {
-        console.log(item)
+        this.currentPrice = item
+        this.expandMorePrice()
+        this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.$store.state.allPriceProperties)
       },
       openPopup () {
         this.popUp = true
@@ -337,7 +372,8 @@
     computed: {
       ...mapGetters([
         'productDetail',
-        'productDetailFiles'
+        'productDetailFiles',
+        'allPriceProperties'
       ])
     }
   }
