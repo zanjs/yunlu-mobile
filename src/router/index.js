@@ -23,36 +23,47 @@ export default new Router({
       component: Hello
     }, {
       path: '/space',
+      name: 'Space',
       component: Space
     }, {
       path: '/folders',
+      name: 'Folders',
       component: Folders
     }, {
       path: '/photos',
+      name: 'Photos',
       component: Photos
     }, {
       path: '/productdetail',
+      name: 'ProductDetail',
       component: ProductDetail
     }, {
       path: '/report',
+      name: 'Report',
       component: Report
     }, {
       path: '/personcarte',
+      name: 'PersonCarte',
       component: PersonCarte
     }, {
       path: '/enterprisecarte',
+      name: 'EnterpriseCarte',
       component: EnterpriseCarte
     }, {
       path: '/comitycarte',
+      name: 'ComityCarte',
       component: ComityCarte
     }, {
       path: '/enterprisedetail',
+      name: 'EnterpriseDetail',
       component: EnterpriseDetail
     }, {
       path: '/login',
+      name: 'Login',
       component: Login
     }, {
       path: '/regist',
+      name: 'Regist',
       component: Regist
     }
   ]

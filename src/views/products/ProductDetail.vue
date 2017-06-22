@@ -4,20 +4,30 @@
     <div class="swipe">
       <mt-swipe :auto="0"
                 @change="handleChange">
-        <mt-swipe-item v-for="(item, index) in imgList"
+        <mt-swipe-item v-for="(item, index) in productDetailFiles"
                        :key="index">
           <img :src="item.url"
                @click="viewFullScreenPic(item.id)"/>
         </mt-swipe-item>
       </mt-swipe>
-      <span class="page-nav">{{currentIndex}}/{{imgList.length}}</span>
+      <span v-if="productDetailFiles && productDetailFiles.length"
+            class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
+      <span v-else
+            class="page-nav">0/0</span>
     </div>
     <section class="info-container">
-      <div class="name">黑金沙大理石</div>
+      <div v-if="productDetail && productDetail.name"
+           class="name">{{productDetail.name}}</div>
+      <div v-else
+           class="name">*****</div>
       <div class="money">
         <div>
-          <span class="number">1999</span>
-          <span class="unit">元</span>
+          <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+                class="number">{{productDetail.prices[0].money}}</span>
+          <span v-else
+                class="number">0.00</span>
+          <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
+                class="unit">元</span>
         </div>
         <div @click="expandMorePrice()">
           <span class="more">更多价格</span>
@@ -29,11 +39,20 @@
         <div v-show="morePrice"
              class="more-price"
              v-bind:class="{'more-price-show': cssAnimation, 'more-price-hide': !cssAnimation}">
-          <span>定制</span>
+          <p v-for="(item, index) in productDetail.prices"
+             :key="item.id"
+             @click="changePrice(item)">
+            {{item.money}}
+          </p>
         </div>
       </div>
-      <div class="inventory">
-        库存 ：10000
+      <div v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+           class="inventory">
+        库存 ：{{productDetail.prices[0].amount}}
+      </div>
+      <div v-else
+           class="inventory">
+        库存 ：0
       </div>
     </section>
     <section>
@@ -57,33 +76,14 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2"
                                class="productdetail-product-item">
-          <div class="row-item">
-            <div class="title-container">
+          <div v-for="(item, index) in productDetail.properties"
+               :key="index"
+               class="row-item">
+            <div v-for="(i, indexI) in item.children"
+                 :key="indexI"
+                 class="title-container">
               <div class="dot"></div>
-              <span class="title">技术全面</span>
-            </div>
-            <div class="content line2">
-              企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成;企业网站、营销网站、平台网站；行业应用软件、软硬件系统集成
-            </div>
-          </div>
-          <div class="row-item">
-            <div class="title-container">
-              <div class="dot"></div>
-              <span class="title">高端定制</span>
-            </div>
-            <div class="content line2">
-              全网高端定制品牌，专业设计师、工程师银行软件开发，P2P软件开发和运维经验
-            </div>
-          </div>
-          <div class="row-item">
-            <div class="title-container">
-              <div class="dot"></div>
-              <span class="title">荒料来源</span>
-            </div>
-            <div class="content line2 link last">
-              万福矿业
-              <i class="iconfont icon-guanlian"
-                 @click.prevent="openPopup()"/>
+              <span class="title">{{i.name}} : {{i.value}}</span>
             </div>
           </div>
         </mt-tab-container-item>
@@ -175,11 +175,14 @@
 
 <script>
   import ProductHeader from '../../components/header/Head'
+  import { mapGetters } from 'vuex'
+  import { Indicator } from 'mint-ui'
   export default {
     data () {
       return {
         selected: '1',
         currentIndex: 1,
+        productId: '',
         morePrice: false,
         cssAnimation: false,
         popUp: false,
@@ -223,6 +226,58 @@
       ProductHeader
     },
     methods: {
+      getProductDetail () {
+        this.$store.dispatch('commonAction', {
+          url: `/products/${this.$route.params.id}`,
+          method: 'get',
+          params: {
+            id: this.$route.params.id
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.productDetail = res.data.products
+            this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files)
+            Indicator.close()
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      handleProductFiles (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          tmpArr.push(arr[i].file_id)
+        }
+        return tmpArr
+      },
+      getFilesPublisheds (ids, files) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'product',
+            team_id: this.$route.params.teamId,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.productDetailFiles = res.data.files
+          },
+          reject: () => {}
+        })
+      },
+      handleProducts (arr, arr2) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          let index = arr2.findIndex(item => item.id === arr[i].file_id)
+          let tmpObj = {...arr[i], file_url: arr2[index].url, file_thumb_urls: arr2[index].thumb_urls[0]}
+          tmpArr.push(tmpObj)
+        }
+        return tmpArr
+      },
       viewFullScreenPic (id) {
         console.log(id)
       },
@@ -242,6 +297,9 @@
           this.morePrice = !this.morePrice
           this.cssAnimation = true
         }
+      },
+      changePrice (item) {
+        console.log(item)
       },
       openPopup () {
         this.popUp = true
@@ -272,7 +330,15 @@
       // }
     },
     mounted () {
+      Indicator.open()
       this.stopTouchMove()
+      this.getProductDetail()
+    },
+    computed: {
+      ...mapGetters([
+        'productDetail',
+        'productDetailFiles'
+      ])
     }
   }
 </script>
@@ -335,14 +401,19 @@
       .more-price {
         position: absolute;
         @include px2rem(right, 70px);
-        @include px2rem(width, 150px);
+        @include px2rem(width, 180px);
         @include px2rem(top, 60px);
-        @include pm2rem(padding, 4px, 10px, 4px, 10px);
         text-align: center;
         color: #FF0000;
         background-color: $white;
-        border: 1px solid #D1D1D1;
         @include font-dpr(16px);
+        border-top: 1px solid #D1D1D1;
+        p {
+          border: 1px solid #D1D1D1;
+          border-top: none;
+          box-sizing: border-box;
+          @include pm2rem(padding, 8px, 10px, 8px, 10px);
+        }
       }
     }
     .inventory {
@@ -711,7 +782,7 @@
     background-color: $white;
     line-height: 1;
     .row-item {
-      @include pm2rem(padding, 30px, 0px, 0px, 32px);
+      @include pm2rem(padding, 0px, 0px, 0px, 32px);
       line-height: 1;
       .content {
         @include font-dpr(13px);
@@ -741,6 +812,7 @@
       }
     }
     .title-container {
+      @include pm2rem(padding, 20px, 0px, 20px, 0px);
       .dot {
         @include px2rem(width, 16px);
         @include px2rem(height, 16px);

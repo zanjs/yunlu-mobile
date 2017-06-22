@@ -10,7 +10,9 @@ const state = {
   loadSuccess: false,
   teams: null,
   products: [],
-  productsThumbnails: []
+  productsThumbnails: [],
+  productDetail: {},
+  productDetailFiles: []
 }
 
 const getters = {
@@ -18,7 +20,9 @@ const getters = {
   loadSuccess: state => state.loadSuccess,
   teams: state => state.teams,
   products: state => state.products,
-  productsThumbnails: state => state.productsThumbnails
+  productsThumbnails: state => state.productsThumbnails,
+  productDetail: state => state.productDetail,
+  productDetailFiles: state => state.productDetailFiles
 }
 
 const actions = {

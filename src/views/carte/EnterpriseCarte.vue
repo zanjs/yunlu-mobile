@@ -5,7 +5,7 @@
                class="header">
       <router-link to="/" slot="left">
         <mt-button>
-          <i class="iconfont icon-zhuye"/>
+          <i class="iconfont icon-fanhui"/>
         </mt-button>
       </router-link>
       <mt-button slot="right"
@@ -63,7 +63,7 @@
   export default {
     data () {
       return {
-        teamId: 3089,
+        teamId: 6642,
         showProduct: true,
         cssAnimation: false,
         cssAnimationProduct: false,
@@ -241,7 +241,7 @@
         }, elementId, height)
       },
       goProductDetail (id) {
-        this.$router.push({path: '/productdetail'})
+        this.$router.push({name: 'ProductDetail', params: {id: id, teamId: this.teamId}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
