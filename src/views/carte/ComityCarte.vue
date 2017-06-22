@@ -49,11 +49,13 @@
           :show="activeIndex === 1"
           @click="viewBigImg"/>
         <enterprise-list
-          :data-source="enterpriseList"
+          :store="enterpriseMembers"
+          @click="goEnterpriseCarte"
           :show="activeIndex === 2"
           :css-animation="activeIndex === 2 && cssAnimation"/>
         <person-list
-          :data-source="personList"
+          :store="personMembers"
+          @click="goPersonCarte"
           :show="activeIndex === 3"
           :css-animation="activeIndex === 3 && cssAnimation"/>
       </div>
@@ -75,6 +77,7 @@
     data () {
       return {
         teamId: 6756,
+        token: 'fbdec44fa55088fd863ce47c778b1ddc',
         activeIndex: 0,
         showProduct: true,
         showBarProduct: false,
@@ -85,197 +88,7 @@
         currentIndex: 0,
         showFullScreenPreview: false,
         productsThumbnailsIds: [],
-        infoImg: [],
-        infoImgList: [
-          {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }
-        ],
-        enterpriseList: [
-          {
-            id: 1,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 2,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 3,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 4,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 5,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 6,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 7,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 8,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 9,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 10,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 11,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 12,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }, {
-            id: 13,
-            name: '武汉云庐数据有限公司',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-            type: '其他',
-            province: '湖北',
-            city: '武汉'
-          }
-        ],
-        personList: [
-          {
-            id: 1,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 2,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 3,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 4,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 5,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 6,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 7,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 8,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 9,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }, {
-            id: 10,
-            name: '张三',
-            url: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg'
-          }
-        ]
+        infoImg: []
       }
     },
     components: {
@@ -351,9 +164,59 @@
             Indicator.close()
             state.productsThumbnails = res.data.files
             state.products = this.handleProducts(products, state.productsThumbnails)
+            this.getEnterpriseList()
           },
           reject: () => {}
         })
+      },
+      getEnterpriseList () {
+        this.$store.dispatch('commonAction', {
+          url: `/team/${this.teamId}/guilds`,
+          method: 'get',
+          params: {
+            team_id: this.teamId,
+            states: ['joined'],
+            page: 1,
+            per_page: 10,
+            q: ''
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.enterpriseMembers = res.data.members
+            this.getPersonList()
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      getPersonList () {
+        this.$store.dispatch('commonAction', {
+          url: `/team/${this.teamId}/members`,
+          method: 'get',
+          params: {
+            team_id: this.teamId,
+            token: this.token,
+            states: ['accepted'],
+            page: 1,
+            per_page: 20,
+            q: ''
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.personMembers = res.data.preps
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      goEnterpriseCarte (id) {
+        this.$router.push({name: 'EnterpriseCarte', params: {id: id}})
+      },
+      goPersonCarte (id) {
+        this.$router.push({name: 'PersonCarte', params: {id: id}})
       },
       goReport () {
         document.body.scrollTop = 0
@@ -446,7 +309,9 @@
         'teams',
         'loadSuccess',
         'products',
-        'productsThumbnails'
+        'productsThumbnails',
+        'enterpriseMembers',
+        'personMembers'
       ])
     }
   }
@@ -473,8 +338,7 @@
     }
   }
   .card-container {
-    @include pm2rem(padding, 8px, 22px, 0px, 22px);
-    @include px2rem(margin-top, 88px);
+    @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);

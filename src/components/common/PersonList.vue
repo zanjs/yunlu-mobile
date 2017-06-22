@@ -8,11 +8,12 @@
     </div>
     <div v-show="show"
          class="list-container">
-      <a v-for="(item, index) in dataSource"
-           :key="index"
-           class="item">
-        <img :src="item.url"/>
-        <p>{{item.name}}</p>
+      <a v-for="(item, index) in store"
+         :key="index"
+         @click="handleClick(item.user.id)"
+         class="item">
+        <img :src="item.user.avatar_url"/>
+        <p>{{item.user.name}}</p>
       </a>
     </div>
   </section>
@@ -25,9 +26,11 @@
 
       }
     },
-    props: ['show', 'dataSource', 'cssAnimation'],
+    props: ['show', 'store', 'cssAnimation'],
     methods: {
-
+      handleClick (id) {
+        this.$emit('click', id)
+      }
     }
   }
 </script>

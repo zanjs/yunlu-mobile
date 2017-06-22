@@ -8,15 +8,16 @@
     </div>
     <div v-show="show"
          class="list-container">
-      <div v-for="(item, index) in dataSource"
+      <div v-for="(item, index) in store"
            :key="index"
+           @click="handleClick(item.organization.id)"
            class="item">
-        <img :src="item.url"/>
+        <img :src="item.organization.logo"/>
         <div class="content">
-          <p>{{item.name}}</p>
+          <p>{{item.organization.name}}</p>
           <div>
-            <span class="type">{{item.type}}</span>
-            <span class="address">{{item.province}}&middot;{{item.city}}</span>
+            <span class="type">{{item.organization.service_name}}</span>
+            <span class="address">{{item.organization.zone_name}}</span>
           </div>
         </div>
       </div>
@@ -28,12 +29,13 @@
   export default {
     data () {
       return {
-
       }
     },
-    props: ['show', 'dataSource', 'cssAnimation'],
+    props: ['show', 'store', 'cssAnimation'],
     methods: {
-
+      handleClick (id) {
+        this.$emit('click', id)
+      }
     },
     mounted () {
 
@@ -89,6 +91,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        flex: 1;
         p {
           @include font-dpr(15px);
           line-height: 1;
@@ -97,10 +100,15 @@
         div {
           line-height: 1;
           @include font-dpr(13px);
+          display: flex
+        }
+        .type {
+          flex: 1;
         }
         .address {
           color: #F75544;
-          @include px2rem(margin-left, 30px);
+          flex: 1;
+          // @include px2rem(margin-left, 30px);
         }
       }
     }

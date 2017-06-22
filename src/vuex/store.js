@@ -16,7 +16,9 @@ const state = {
   allPriceProperties: [],
   archives: [],
   enterpriseDocuments: [], // 公司档分类概况
-  enterpriseInfoFiles: [] // 公司资讯
+  enterpriseInfoFiles: [], // 公司资讯
+  enterpriseMembers: [], // 协会下的企业会员
+  personMembers: [] // 协会下的个人会员
 }
 
 const getters = {
@@ -30,7 +32,9 @@ const getters = {
   allPriceProperties: state => state.allPriceProperties,
   archives: state => state.archives,
   enterpriseDocuments: state => state.enterpriseDocuments,
-  enterpriseInfoFiles: state => state.enterpriseInfoFiles
+  enterpriseInfoFiles: state => state.enterpriseInfoFiles,
+  enterpriseMembers: state => state.enterpriseMembers,
+  personMembers: state => state.personMembers
 }
 
 const actions = {
