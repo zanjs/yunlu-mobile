@@ -44,23 +44,23 @@
           <input type="text" placeholder="请输入11位手机号码"/>
         </div>
         <div class="row-item">
-         <input type="button" @click="showUnlocking" value="提交"/>
+          <input type="button" @click="showUnlocking" value="提交"/>
         </div>
 
       </mt-tab-container-item>
     </mt-tab-container>
-    <section v-if="unlocking" class="unlock-box">
+    <section v-if="leftTime > 0" class="unlock-box">
       <div class="main ">
         <div class="title">
           <span>提醒</span>
         </div>
         <div class="content">
           <div class="item"><p>登录请求已发送,请等待授权...</p></div>
-          <div class="item"><p>倒计时</p></div>
-        </div>
-        <div class="footer">
-          <mt-button>取消</mt-button><mt-button>申请主控设备</mt-button>
-        </div>
+          <div class="item"><p>{{ time }}</p></div>
+      </div>
+      <div class="footer">
+        <input type="button" class="box" value="取消"/><input class="box" type="button" value="申请主控设备"/>
+      </div>
       </div>
     </section>
 
@@ -74,22 +74,37 @@
       return {
         selected: '1',
         popupVisible1: false,
-        unlocking: false
+        leftTime: 0,
+        time: ''
       }
     },
     methods: {
-      sendingRequest: function () {
-        console.dir(this)
-      },
-      openConfirm: function () {
-        console.dir(this)
-      },
       showUnlocking: function () {
-        this.unlocking = true
+        this.leftTime = 200
+        let time = setInterval(() => {
+          if (this.leftTime <= 0) {
+            clearInterval(time)
+          }
+          this.timeDown()
+        }, 1000)
+      },
+      timeDown: function () {
+        this.leftTime = this.leftTime - 1
+        let m = this.formate(parseInt(this.leftTime / 60))
+        let s = this.formate(parseInt(this.leftTime % 60))
+        this.time = `${m}:${s}`
+      },
+      formate (time) {
+        if (time >= 10) {
+          return time
+        } else {
+          return `0${time}`
+        }
       }
 
     },
     mounted () {
+
     }
   }
 </script>
@@ -564,13 +579,14 @@
     }
   }
 
-  .unlock-box{
+  .unlock-box {
     position: fixed;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, .5);
     z-index: 1001;
     top: 0;
+
     .main {
       position: absolute;
       @include px2rem(width, 562px);
@@ -583,42 +599,26 @@
     .title {
       background-color: #52CAA7;
       color: $white;
-      @include font-dpr(16px);
       @include px2rem(height, 80px);
       text-align: center;
       @include px2rem(line-height, 80px);
+      @include font-dpr(16px);
+
     }
     .content {
       background-color: $white;
       border-bottom: 1px solid #D1D1D1;
       .item {
         @include px2rem(height, 108px);
-        display: flex;
         align-items: center;
         box-sizing: border-box;
         @include pm2rem(padding, 20px, 12px, 20px, 12px);
-        img {
-          @include px2rem(width, 70px);
-          @include px2rem(height, 70px);
-          @include px2rem(margin-right, 22px);
+        p {
+          text-align: center;
+          @include font-dpr(15px);
+          font-weight: 300;
         }
-        .info {
-          div {
-            line-height: 1;
-          }
-          p {
-            margin: 0 auto;
-            @include font-dpr(13px);
-            line-height: 1;
-            color: #595959;
-            @include px2rem(margin-bottom, 20px);
-          }
-          span {
-            @include font-dpr(12px);
-            @include px2rem(margin-right, 50px);
-            color: #A6A6A6;
-          }
-        }
+
       }
     }
     .footer {
@@ -628,6 +628,14 @@
       text-align: center;
       @include font-dpr(16px);
       color: #595959;
+      .box {
+        border-right: 1px solid #d1d1d1;
+        width: 50%;
+        height: 100%;
+        box-sizing: border-box;
+        background-color: $white;
+        border-width: 1px;
+      }
     }
   }
 
