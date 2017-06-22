@@ -43,14 +43,14 @@
     </div>
     <div class="icons">
       <a
-        v-if="store && store.mobile"
-        :href="'tel:' + store.mobile"
+        v-if="store && store.phone"
+        :href="'tel:' + store.phone"
         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
       <a
         v-if="store && store.email"
-        @click="handleIconClick((store.mobile))"
+        @click="handleIconClick((store.email))"
         class="icon-box">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
@@ -87,15 +87,12 @@
     data () {
       return {}
     },
-    props: {
-      store: {
-        required: true
-      }
-    },
+    props: ['store'],
     methods: {
-      handleClick () {
+      handleClick (e) {
+        console.log(e)
         // 模拟企业Id
-        this.$emit('click', this.store)
+        this.$emit('click')
       },
       handleIconClick (obj) {
         this.$emit('', obj)

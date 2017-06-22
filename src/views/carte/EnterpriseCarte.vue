@@ -32,7 +32,6 @@
         <product-list
           :store="products"
           @search="getProducts"
-          @order-change="getProducts"
           :css-animation="showProduct && cssAnimationProduct"
           :show="showProduct"
           @click="goProductDetail"/>

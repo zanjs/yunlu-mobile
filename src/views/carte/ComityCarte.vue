@@ -16,7 +16,9 @@
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <enterprise-card @click="goEnterpriseDetail"/>
+      <enterprise-card
+        :store="teams"
+        @click="goEnterpriseDetail"/>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
@@ -37,6 +39,7 @@
         <product-list
           :store="products"
           :show-bar="showBarProduct"
+          @search="getProducts"
           :css-animation="activeIndex === 0 && cssAnimationProduct"
           :show="activeIndex === 0"
           @click="goProductDetail"/>
@@ -71,6 +74,7 @@
   export default {
     data () {
       return {
+        teamId: 6756,
         activeIndex: 0,
         showProduct: true,
         showBarProduct: false,
@@ -283,15 +287,31 @@
       ViewBigImg
     },
     methods: {
-      getProducts () {
+      getEnterpriseDetail () {
+        this.$store.dispatch('commonAction', {
+          url: '/links/teams',
+          method: 'get',
+          params: {
+            ids: this.teamId // 生产环境的一个企业
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.teams = res.data.teams[0]
+            this.getProducts()
+          },
+          reject: () => {}
+        })
+      },
+      getProducts (q = '', order = 1) {
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
           params: {
-            team_id: 3089, // 生产环境的一个企业
+            team_id: this.teamId, // 生产环境的一个企业
             page: 1,
             per_page: 10,
-            sort: ''
+            sort: order,
+            q: q
           },
           target: this,
           resolve: (state, res) => {
@@ -322,15 +342,15 @@
           method: 'get',
           params: {
             type: 'product',
-            team_id: 3089,
+            team_id: this.teamId,
             thumbs: ['general'],
             ids: ids
           },
           target: this,
           resolve: (state, res) => {
             Indicator.close()
-            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-            state.products = [...state.products, ...this.handleProducts(products, state.productsThumbnails)]
+            state.productsThumbnails = res.data.files
+            state.products = this.handleProducts(products, state.productsThumbnails)
           },
           reject: () => {}
         })
@@ -416,6 +436,8 @@
       }
     },
     mounted () {
+      Indicator.open()
+      this.getEnterpriseDetail()
       this.showSearchBar()
       this.stopTouchMove()
     },

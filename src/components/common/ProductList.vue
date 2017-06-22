@@ -79,10 +79,10 @@
       changeOrder () {
         this.orderUp = 0 - this.orderUp
         this.scrollToBar()
-        this.$emit('orderChange', this.searchParams, this.orderUp)
+        this.$emit('search', this.searchParams, this.orderUp)
       },
       scrollToBar () {
-        document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36 + 1
+        document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 160 / 36
       },
       scrollToTop () {
         document.body.scrollTop = 0
@@ -92,7 +92,6 @@
         this.$emit('click', item.id)
       },
       handleSearch () {
-        console.log('111')
         this.scrollToBar()
         this.$emit('search', this.searchParams, this.orderUp)
       }
