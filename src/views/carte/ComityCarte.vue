@@ -346,7 +346,7 @@
         }, elementId, height)
       },
       goProductDetail (id) {
-        this.$router.push({path: '/productdetail'})
+        this.$router.push({name: 'ProductDetail', params: {id: id}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
