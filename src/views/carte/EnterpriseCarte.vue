@@ -3,11 +3,11 @@
     <mt-header title="名片"
                fixed
                class="header">
-      <router-link to="/" slot="left">
-        <mt-button>
-          <i class="iconfont icon-fanhui"/>
-        </mt-button>
-      </router-link>
+      <mt-button slot="left"
+                 @click="goBack()"
+                 class="button-text">
+        <i class="iconfont icon-fanhui "/>
+      </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
@@ -65,6 +65,7 @@
     data () {
       return {
         teamId: 3089,
+        hasSearch: false,
         showProduct: true,
         cssAnimation: false,
         cssAnimationProduct: false,
@@ -109,6 +110,7 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.hasSearch = q !== ''
             this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
           },
           reject: () => {}
@@ -222,6 +224,13 @@
           },
           reject: () => {}
         })
+      },
+      goBack () {
+        if (this.hasSearch) {
+          this.getProducts()
+        } else {
+          this.$router.go(-1)
+        }
       },
       goReport () {
         document.body.scrollTop = 0

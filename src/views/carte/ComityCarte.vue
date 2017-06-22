@@ -1,13 +1,13 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
+    <mt-header title="名片"
                fixed
                class="header">
-      <router-link to="/" slot="left">
-        <mt-button>
-          <i class="iconfont icon-zhuye"/>
-        </mt-button>
-      </router-link>
+      <mt-button slot="left"
+                 @click="goBack()"
+                 class="button-text">
+        <i class="iconfont icon-fanhui "/>
+      </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
@@ -79,6 +79,7 @@
       return {
         teamId: 6756,
         token: 'fbdec44fa55088fd863ce47c778b1ddc',
+        hasSearch: false,
         activeIndex: 0,
         showProduct: true,
         showBarProduct: false,
@@ -129,6 +130,7 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.hasSearch = q !== ''
             this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
           },
           reject: () => {}
@@ -162,12 +164,13 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.productsThumbnails = res.data.files
             state.products = this.handleProducts(products, state.productsThumbnails)
             this.getEnterpriseDocument()
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       getInformation (ids) {
@@ -293,6 +296,13 @@
       },
       goPersonCarte (id) {
         this.$router.push({name: 'PersonCarte', params: {id: id}})
+      },
+      goBack () {
+        if (this.hasSearch) {
+          this.getProducts()
+        } else {
+          this.$router.go(-1)
+        }
       },
       goReport () {
         document.body.scrollTop = 0
