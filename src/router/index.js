@@ -10,6 +10,8 @@ import PersonCarte from '../views/carte/PersonCarte'
 import EnterpriseCarte from '../views/carte/EnterpriseCarte'
 import ComityCarte from '../views/carte/ComityCarte'
 import EnterpriseDetail from '../views/carte/EnterpriseDetail'
+import Login from '../views/user/Login'
+import Regist from '../views/user/Regist'
 
 Vue.use(Router)
 
@@ -46,6 +48,12 @@ export default new Router({
     }, {
       path: '/enterprisedetail',
       component: EnterpriseDetail
+    }, {
+      path: '/login',
+      component: Login
+    }, {
+      path: '/regist',
+      component: Regist
     }
   ]
 })
