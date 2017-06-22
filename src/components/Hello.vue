@@ -15,12 +15,6 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/productdetail')">
-               商品详情
-    </mt-button>
-    <mt-button type="primary"
-               size="large"
-               class="btn-block"
                @click="goRoute('/personcarte')">
                个人名片
     </mt-button>
