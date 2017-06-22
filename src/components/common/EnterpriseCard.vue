@@ -2,12 +2,12 @@
   <section class="card">
     <div class="user-info"
          @click.stop="handleClick">
-      <img
-        v-if="store && store.logo"
-        :src="store.logo"/>
-      <img
-        v-else
-        src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+      <div class="img-container">
+        <img v-if="store && store.logo"
+             :src="store.logo"/>
+        <img v-else
+             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+      </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
         <p v-else>张三</p>
@@ -113,16 +113,30 @@
     @include px2rem(padding-top, 40px);
     .user-info {
       display: flex;
-      @include pm2rem(padding, 0px, 0px, 40px, 26px);
-      img {
+      @include pm2rem(padding, 0px, 26px, 40px, 26px);
+      .img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         @include px2rem(width, 180px);
         @include px2rem(height, 180px);
+        img {
+          @include px2rem(max-width, 180px);
+          @include px2rem(max-height, 180px);
+          width: 100%;
+          height: 100%;
+        }
       }
       .content {
+        flex: 1;
         @include px2rem(margin-left, 26px);
+        @include px2rem(width, 448px);
         p {
           @include font-dpr(17px);
           line-height: 1;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
         .icon-container {
           display: flex;

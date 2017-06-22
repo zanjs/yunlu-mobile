@@ -13,7 +13,8 @@ const state = {
   productsThumbnails: [],
   productDetail: {},
   productDetailFiles: [],
-  allPriceProperties: []
+  allPriceProperties: [],
+  archives: []
 }
 
 const getters = {
@@ -24,7 +25,8 @@ const getters = {
   productsThumbnails: state => state.productsThumbnails,
   productDetail: state => state.productDetail,
   productDetailFiles: state => state.productDetailFiles,
-  allPriceProperties: state => state.allPriceProperties
+  allPriceProperties: state => state.allPriceProperties,
+  archives: state => state.archives
 }
 
 const actions = {

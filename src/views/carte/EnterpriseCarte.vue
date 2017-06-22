@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
+    <mt-header title="名片"
                fixed
                class="header">
       <router-link to="/" slot="left">
@@ -63,7 +63,7 @@
   export default {
     data () {
       return {
-        teamId: 6642,
+        teamId: 6600,
         showProduct: true,
         cssAnimation: false,
         cssAnimationProduct: false,

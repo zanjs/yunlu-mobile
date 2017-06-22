@@ -66,13 +66,16 @@
                         class="nav-bar-container">
         <mt-tab-container-item id="1"
                                class="prodcutdetail-price-item">
-          <span v-for="(item, index) in currentPriceProperties"
+          <!--<span v-if="currentPriceProperties && currentPriceProperties.length > 0"
+                v-for="(item, index) in currentPriceProperties"
                 :key="index"
-                class="row-item">{{item.key}} : {{item.value}}</span>
+                class="row-item">{{item.key}} : {{item.value}}</span>-->
+          <div class="no-price">该产品暂无价格参数</div>
         </mt-tab-container-item>
         <mt-tab-container-item id="2"
                                class="productdetail-product-item">
-          <div v-for="(item, index) in productDetail.properties"
+          <div v-if="productDetail && (productDetail.goods_type !== 'StoneMaterial' || productDetail.goods_type !== 'Medicament')"
+               v-for="(item, index) in productDetail.properties"
                :key="index"
                class="row-item">
             <div v-for="(i, indexI) in item.children"
@@ -82,14 +85,20 @@
               <span class="title">{{i.name}} : {{i.value}}</span>
             </div>
           </div>
+          <div v-else
+
+               class="row-item">
+
+          </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="3"
                                class="productdetail-product-tags">
-          <div class="tag">厂区外景及办公室内景</div>
-          <div class="tag">厂区外景及办公室内景</div>
-          <div class="tag">厂区外景及办公室内景</div>
-          <div class="tag">厂区外景及办公室内景</div>
-          <div class="tag">厂区外景及办公室内景</div>
+          <div v-if="archives && archives.length > 0"
+               v-for="(item, index) in archives"
+               :key="index"
+               @click="viewArchives(item)"
+               class="tag">{{item.name}}</div>
+          <div class="no-info">该产品暂无关联信息</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
@@ -254,7 +263,6 @@
             state.allPriceProperties = res.data.properties
             this.currentPrice = state.productDetail.prices[0]
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
-            console.log(this.currentPriceProperties)
             Indicator.close()
           },
           reject: () => {
@@ -263,7 +271,6 @@
         })
       },
       handlePricePropertyes (price, priceProperties) {
-        console.log(price, priceProperties)
         let tmpArr = []
         for (let j = 0; j < price.properties.length; j++) {
           let key = Object.keys(price.properties[j])[0]
@@ -272,7 +279,6 @@
             tmpArr.push({key: priceProperties[index].name, value: price.properties[j][key]})
           }
         }
-        console.log(tmpArr)
         return tmpArr
       },
       handleProductFiles (arr) {
@@ -296,6 +302,20 @@
           resolve: (state, res) => {
             state.productDetailFiles = res.data.files
             this.getAllPriceProperties(state.productDetail.category_id)
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      getProductArchives () {
+        this.$store.dispatch('commonAction', {
+          url: `/products/${this.$route.params.id}/archives`,
+          method: 'get',
+          params: {},
+          target: this,
+          resolve: (state, res) => {
+            state.archives = res.data.archives
           },
           reject: () => {
             Indicator.close()
@@ -336,6 +356,9 @@
         this.expandMorePrice()
         this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.$store.state.allPriceProperties)
       },
+      viewArchives (item) {
+        console.log(item)
+      },
       openPopup () {
         this.popUp = true
         this.cssAnimation = true
@@ -373,7 +396,8 @@
       ...mapGetters([
         'productDetail',
         'productDetailFiles',
-        'allPriceProperties'
+        'allPriceProperties',
+        'archives'
       ])
     }
   }
@@ -387,8 +411,8 @@
     @include pm2rem(margin, 0px, 0px, 0px, 0px);
     position: relative;
     img {
-      width: 100%;
-      height: auto;
+      @include px2rem(min-width, 750px);
+      @include px2rem(min-height, 634px);
     }
 
   }
@@ -573,6 +597,15 @@
       line-height: 1;
       @include font-dpr(14px);
       color: #595959;
+    }
+    .no-info {
+      @include pm2rem(padding, 20px, 0px, 40px, 0px);
+      @include pm2rem(margin, 0px, 0px, 0px, -20px);
+      text-align: center;
+      width: 100%;
+      line-height: 1;
+      @include font-dpr(20px);
+      color: #A6A6A6;
     }
   }
 
@@ -811,6 +844,15 @@
       @include pm2rem(margin, 0px, 0px, 36px, 0px);
       @include font-dpr(14px);
       color: #595959;
+    }
+    .no-price {
+      @include pm2rem(padding, 4px, 0px, 40px, 0px);
+      @include pm2rem(margin, 0px, 0px, 0px, -38px);
+      @include font-dpr(20px);
+      color: #A6A6A6;
+      text-align: center;
+      line-height: 1;
+      width: 100%;
     }
   }
   .productdetail-product-item {
