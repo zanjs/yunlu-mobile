@@ -115,13 +115,21 @@
     </section>
     <section class="company-info">
       <div class="company-img">
-        <img :src="teams.logo"/>
+        <img v-if="productDetailTeam && productDetailTeam.logo"
+             :src="productDetailTeam.logo"/>
+        <img v-else
+             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
       </div>
       <div class="company-content">
-        <span class="title">{{teams.name}}</span>
+        <span v-if="productDetailTeam && productDetailTeam.company"
+              class="title">{{productDetailTeam.company}}</span>
+        <span v-else
+              class="title">***</span>
         <div class="info">
-          <span>{{teams.service.name}}</span>
-          <span>{{teams.products_count}}件商品</span>
+          <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
+          <span v-else>***</span>
+          <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
+          <span v-else>0件商品</span>
         </div>
       </div>
     </section>
@@ -275,7 +283,6 @@
             this.currentPrice = state.productDetail.prices[0]
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
             this.getProductArchives()
-            // Indicator.close()
           },
           reject: () => {
             Indicator.close()
@@ -328,6 +335,24 @@
           target: this,
           resolve: (state, res) => {
             state.archives = res.data.archives
+            this.getOrganization()
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      getOrganization () {
+        this.$store.dispatch('commonAction', {
+          url: '/links/teams',
+          method: 'get',
+          params: {
+            ids: [this.$route.params.organizationId]
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.productDetailTeam = res.data.teams[0]
+            Indicator.close()
           },
           reject: () => {
             Indicator.close()
@@ -410,7 +435,8 @@
         'productDetailFiles',
         'allPriceProperties',
         'archives',
-        'teams'
+        'teams',
+        'productDetailTeam'
       ])
     }
   }

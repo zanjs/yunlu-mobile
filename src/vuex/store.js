@@ -18,7 +18,8 @@ const state = {
   enterpriseDocuments: [], // 公司档/协会分类概况
   enterpriseInfoFiles: [], // 公司/协会资讯
   enterpriseMembers: [], // 协会下的企业会员
-  personMembers: [] // 协会下的个人会员
+  personMembers: [], // 协会下的个人会员
+  productDetailTeam: [] // 产品详情页下方的所属机构(协会产品所属机构为协会下的企业)
 }
 
 const getters = {
@@ -34,7 +35,8 @@ const getters = {
   enterpriseDocuments: state => state.enterpriseDocuments,
   enterpriseInfoFiles: state => state.enterpriseInfoFiles,
   enterpriseMembers: state => state.enterpriseMembers,
-  personMembers: state => state.personMembers
+  personMembers: state => state.personMembers,
+  productDetailTeam: state => state.productDetailTeam
 }
 
 const actions = {

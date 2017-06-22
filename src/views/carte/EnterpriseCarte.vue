@@ -261,8 +261,8 @@
           }
         }, elementId, height)
       },
-      goProductDetail (id) {
-        this.$router.push({name: 'ProductDetail', params: {id: id, teamId: this.teamId}})
+      goProductDetail (item) {
+        this.$router.push({name: 'ProductDetail', params: {id: item.id, teamId: this.teamId, organizationId: item.organization_id}})
       },
       goEnterpriseDetail (id) {
         console.log(id)

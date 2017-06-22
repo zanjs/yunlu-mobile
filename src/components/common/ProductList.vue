@@ -89,7 +89,7 @@
       },
       handleClick (item) {
         this.scrollToTop()
-        this.$emit('click', item.id)
+        this.$emit('click', item)
       },
       handleSearch () {
         this.scrollToBar()
