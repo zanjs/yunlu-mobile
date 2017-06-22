@@ -16,7 +16,7 @@
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
-            {{item.name | nameFilter}}（{{item.count}}）
+            {{item.cnname}}（{{item.count}}）
           </div>
         </div>
       </div>
@@ -38,26 +38,9 @@
       },
       handleClick (item) {
         this.$emit('click', item)
-      }
-    },
-    filters: {
-      nameFilter (value) {
-        switch (value) {
-          case null:
-            return '其他'
-          case 'Certificate':
-            return '企业身份'
-          case 'Case':
-            return '经典作品'
-          case 'Information':
-            return 'Information'
-          case 'Notification':
-            return 'Notification'
-          case 'SaleCertificate':
-            return 'SaleCertificate'
-          default:
-            return '其他'
-        }
+      },
+      textTranslate (value) {
+
       }
     },
     mounted () {

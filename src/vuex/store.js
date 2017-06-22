@@ -15,8 +15,8 @@ const state = {
   productDetailFiles: [],
   allPriceProperties: [],
   archives: [],
-  enterpriseDocuments: [], // 公司档分类概况
-  enterpriseInfoFiles: [], // 公司资讯
+  enterpriseDocuments: [], // 公司档/协会分类概况
+  enterpriseInfoFiles: [], // 公司/协会资讯
   enterpriseMembers: [], // 协会下的企业会员
   personMembers: [] // 协会下的个人会员
 }

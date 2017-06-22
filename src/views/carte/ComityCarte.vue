@@ -44,6 +44,7 @@
           :show="activeIndex === 0"
           @click="goProductDetail"/>
         <information-list
+          :store="enterpriseInfoFiles"
           :show-bar="showBar"
           :css-animation="activeIndex === 1 && cssAnimation"
           :show="activeIndex === 1"
@@ -164,10 +165,85 @@
             Indicator.close()
             state.productsThumbnails = res.data.files
             state.products = this.handleProducts(products, state.productsThumbnails)
-            this.getEnterpriseList()
+            this.getEnterpriseDocument()
           },
           reject: () => {}
         })
+      },
+      getInformation (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'document',
+            team_id: this.teamId,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
+            this.getEnterpriseList()
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      handleEnterpriseInfoFiles (enterpriseDocuments, files) {
+        for (let i = 0; i < files.length; i++) {
+          let index = enterpriseDocuments.findIndex(item => item.file_id === files[i].id)
+          files[i].name = enterpriseDocuments[index].name
+          files[i].count = enterpriseDocuments[index].count
+          switch (enterpriseDocuments[index].name) {
+            case null:
+              files[i].cnname = '其他'
+              break
+            case 'Certificate':
+              files[i].cnname = '社会身份'
+              break
+            case 'Case':
+              files[i].cnname = '案例'
+              break
+            case 'Information':
+              files[i].cnname = '资讯'
+              break
+            case 'Notification':
+              files[i].cnname = '通知'
+              break
+            case 'SaleCertificate':
+              files[i].cnname = '销售资质'
+              break
+            default:
+              files[i].cnname = '其他'
+              break
+          }
+        }
+        return files
+      },
+      // 获取指定组织已发布的公司档分类概况(协会名片资讯)
+      getEnterpriseDocument () {
+        this.$store.dispatch('commonAction', {
+          url: '/archives/stat/types',
+          method: 'get',
+          params: {
+            team_id: this.teamId
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
+            this.getInformation(this.handleDocumentIds(res.data.types.filter(i => i.file_id !== null)))
+            Indicator.close()
+          },
+          reject: () => {}
+        })
+      },
+      handleDocumentIds (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          tmpArr.push(arr[i].file_id)
+        }
+        return tmpArr
       },
       getEnterpriseList () {
         this.$store.dispatch('commonAction', {
@@ -311,6 +387,8 @@
         'products',
         'productsThumbnails',
         'enterpriseMembers',
+        'enterpriseInfoFiles',
+        'enterpriseDocuments',
         'personMembers'
       ])
     }

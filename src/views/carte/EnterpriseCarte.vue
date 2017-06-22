@@ -71,60 +71,7 @@
         cssAnimationViewer: false,
         currentIndex: 0,
         showFullScreenPreview: false,
-        infoImg: [],
-        infoImgList: [
-          {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }
-        ]
+        infoImg: []
       }
     },
     components: {
@@ -139,7 +86,7 @@
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: this.teamId // 生产环境的一个企业
+            ids: this.teamId
           },
           target: this,
           resolve: (state, res) => {
@@ -154,7 +101,7 @@
           url: '/products',
           method: 'get',
           params: {
-            team_id: this.teamId, // 生产环境的一个企业
+            team_id: this.teamId,
             page: 1,
             per_page: 10,
             sort: order,
@@ -206,9 +153,33 @@
           let index = enterpriseDocuments.findIndex(item => item.file_id === files[i].id)
           files[i].name = enterpriseDocuments[index].name
           files[i].count = enterpriseDocuments[index].count
+          switch (enterpriseDocuments[index].name) {
+            case null:
+              files[i].cnname = '其他'
+              break
+            case 'Certificate':
+              files[i].cnname = '企业身份'
+              break
+            case 'Case':
+              files[i].cnname = '案例'
+              break
+            case 'Information':
+              files[i].cnname = '资讯'
+              break
+            case 'Notification':
+              files[i].cnname = '通知'
+              break
+            case 'SaleCertificate':
+              files[i].cnname = '销售资质'
+              break
+            default:
+              files[i].cnname = '其他'
+              break
+          }
         }
         return files
       },
+      // 获取指定组织已发布的公司档分类概况(公司/企业名片资讯)
       getEnterpriseDocument () {
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
