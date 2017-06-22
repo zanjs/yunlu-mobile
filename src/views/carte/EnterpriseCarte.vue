@@ -36,6 +36,7 @@
           :show="showProduct"
           @click="goProductDetail"/>
         <information-list
+          :store="enterpriseInfoFiles"
           :css-animation="!showProduct && cssAnimation"
           :show="!showProduct"
           @click="viewBigImg"/>
@@ -70,7 +71,6 @@
         cssAnimationViewer: false,
         currentIndex: 0,
         showFullScreenPreview: false,
-        productsThumbnailsIds: [],
         infoImg: [],
         infoImgList: [
           {
@@ -183,6 +183,55 @@
         }
         return tmpArr
       },
+      getInformation (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'document',
+            team_id: this.teamId,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
+          },
+          reject: () => {}
+        })
+      },
+      handleEnterpriseInfoFiles (enterpriseDocuments, files) {
+        for (let i = 0; i < files.length; i++) {
+          let index = enterpriseDocuments.findIndex(item => item.file_id === files[i].id)
+          files[i].name = enterpriseDocuments[index].name
+          files[i].count = enterpriseDocuments[index].count
+        }
+        return files
+      },
+      getEnterpriseDocument () {
+        this.$store.dispatch('commonAction', {
+          url: '/archives/stat/types',
+          method: 'get',
+          params: {
+            team_id: this.teamId
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
+            this.getInformation(this.handleDocumentIds(res.data.types.filter(i => i.file_id !== null)))
+            Indicator.close()
+          },
+          reject: () => {}
+        })
+      },
+      handleDocumentIds (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          tmpArr.push(arr[i].file_id)
+        }
+        return tmpArr
+      },
       getFilesPublisheds (ids, products) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
@@ -198,6 +247,7 @@
             Indicator.close()
             state.productsThumbnails = res.data.files
             state.products = this.handleProducts(products, state.productsThumbnails)
+            this.getEnterpriseDocument()
           },
           reject: () => {}
         })
@@ -280,7 +330,9 @@
         'teams',
         'loadSuccess',
         'products',
-        'productsThumbnails'
+        'productsThumbnails',
+        'enterpriseDocuments',
+        'enterpriseInfoFiles'
       ])
     }
   }

@@ -10,13 +10,13 @@
          class="gallery-container">
       <div v-show="show"
            class="gallery">
-        <div v-for="(item, index) in imgList"
+        <div v-for="(item, index) in store"
              :key="index"
              @click.stop="handleClick(item)"
              class="img-box">
           <img :src="item.url"/>
           <div class="cover">
-            {{item.name}}
+            {{item.name | nameFilter}}（{{item.count}}）
           </div>
         </div>
       </div>
@@ -28,68 +28,36 @@
   export default {
     data () {
       return {
-        imgList: [
-          {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 1,
-            name: '黄龙云平板',
-            money: '1800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1799',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '1500',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '定制',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            name: '黄龙云平板',
-            money: '2800',
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }
-        ]
+
       }
     },
-    props: ['cssAnimation', 'show'],
+    props: ['cssAnimation', 'show', 'store'],
     methods: {
       scrollToTop () {
         document.body.scrollTop = 0
       },
       handleClick (item) {
         this.$emit('click', item)
+      }
+    },
+    filters: {
+      nameFilter (value) {
+        switch (value) {
+          case null:
+            return '其他'
+          case 'Certificate':
+            return '企业身份'
+          case 'Case':
+            return '经典作品'
+          case 'Information':
+            return 'Information'
+          case 'Notification':
+            return 'Notification'
+          case 'SaleCertificate':
+            return 'SaleCertificate'
+          default:
+            return '其他'
+        }
       }
     },
     mounted () {

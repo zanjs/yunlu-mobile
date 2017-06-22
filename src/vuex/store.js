@@ -14,7 +14,9 @@ const state = {
   productDetail: {},
   productDetailFiles: [],
   allPriceProperties: [],
-  archives: []
+  archives: [],
+  enterpriseDocuments: [], // 公司档分类概况
+  enterpriseInfoFiles: [] // 公司资讯
 }
 
 const getters = {
@@ -26,7 +28,9 @@ const getters = {
   productDetail: state => state.productDetail,
   productDetailFiles: state => state.productDetailFiles,
   allPriceProperties: state => state.allPriceProperties,
-  archives: state => state.archives
+  archives: state => state.archives,
+  enterpriseDocuments: state => state.enterpriseDocuments,
+  enterpriseInfoFiles: state => state.enterpriseInfoFiles
 }
 
 const actions = {
