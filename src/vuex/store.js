@@ -8,6 +8,7 @@ Vue.use(Vuex)
 const state = {
   pageLoading: false,
   loadSuccess: false,
+  user: null,
   teams: null,
   products: [],
   productsThumbnails: [],
@@ -25,6 +26,7 @@ const state = {
 const getters = {
   pageLoading: state => state.pageLoading,
   loadSuccess: state => state.loadSuccess,
+  user: state => state.user,
   teams: state => state.teams,
   products: state => state.products,
   productsThumbnails: state => state.productsThumbnails,

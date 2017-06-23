@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="登陆"
+    <mt-header title="注册"
                fixed
                class="header">
       <mt-button slot="left"
@@ -11,23 +11,28 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
-               v-model="mobile"
-               placeholder="输入手机号">
+          <input class="input"
+                 type="text"
+                 v-model="mobile"
+                 placeholder="输入手机号">
       </div>
       <div class="input-container">
-        <input type="password"
+        <input class="input"
+               type="password"
                v-model="password"
-               placeholder="请输入密码">
+               placeholder="请输入短信验证码">
+        <div class="valid-btn-container">
+          <a>获取验证码</a>
+        </div>
       </div>
-      <div class="login-btn">
-        <a @click="login()">
-          登录
+      <div class="next-btn">
+        <a @click="next()">
+          下一步
         </a>
       </div>
       <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
-        <a @click="forgetPassword()">忘记密码?</a>
+        <span>同意</span>
+        <a @click="openProtocol()">《云庐平台服务协议》</a>
       </div>
     </div>
   </section>
@@ -47,6 +52,12 @@
     methods: {
       goBack () {
         this.$router.go(-1)
+      },
+      next () {
+        console.log('next')
+      },
+      countDown () {
+        console.log('2')
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -69,11 +80,8 @@
           }
         })
       },
-      goRegister () {
-        this.$router.push({name: 'Register'})
-      },
-      forgetPassword () {
-        console.log('2')
+      openProtocol () {
+        this.$router.push({name: 'Protocol'})
       }
     },
     mounted () {
@@ -119,7 +127,7 @@
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
       display: flex;
-      input {
+      .input {
         @include px2rem(border-radius, 40px);
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
@@ -129,13 +137,34 @@
         @include px2rem(line-height, 80px);
         border: none;
         background-color: #EFEFEF;
-        flex: 1;
+        width: 100%;
+      }
+      .valid-btn-container {
+        @include px2rem(padding-left, 32px);
+        @include px2rem(width, 228px);
+        a {
+          @include px2rem(width, 228px);
+          display: block;
+          color: #52CAA7;
+          border-color: #52CAA7;
+          @include px2rem(border-width, 3px);
+          @include px2rem(border-radius, 40px);
+          border-style: solid;
+          box-sizing: border-box;
+          @include px2rem(height, 80px);
+          @include px2rem(line-height, 80px);
+          text-align: center;
+        }
+      }
+      a:active {
+        color: rgba(82, 202, 167, .5);
+        border-color: rgba(82, 202, 167, .5);
       }
     }
     ::-webkit-input-placeholder{
       color: #A6A6A6;
     }
-    .login-btn {
+    .next-btn {
       a {
         display: block;
         @include px2rem(width, 610px);
@@ -155,11 +184,13 @@
     }
     .text-btn {
       color: #A6A6A6;
-      @include font-dpr(14px);
-      @include pm2rem(margin, 0px, 54px, 0px, 54px);
+      @include font-dpr(13px);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-content: center;
+      a {
+        color: #52CAA7;
+      }
     }
   }
 </style>

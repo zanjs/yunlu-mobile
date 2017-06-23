@@ -11,7 +11,8 @@ import EnterpriseCarte from '../views/carte/EnterpriseCarte'
 import ComityCarte from '../views/carte/ComityCarte'
 import EnterpriseDetail from '../views/carte/EnterpriseDetail'
 import Login from '../views/user/Login'
-import Regist from '../views/user/Regist'
+import Register from '../views/user/Register'
+import Protocol from '../views/user/Protocol.vue'
 
 Vue.use(Router)
 
@@ -62,9 +63,13 @@ export default new Router({
       name: 'Login',
       component: Login
     }, {
-      path: '/regist',
-      name: 'Regist',
-      component: Regist
+      path: '/register',
+      name: 'Register',
+      component: Register
+    }, {
+      path: '/protocl',
+      name: 'Protocol',
+      component: Protocol
     }
   ]
 })
