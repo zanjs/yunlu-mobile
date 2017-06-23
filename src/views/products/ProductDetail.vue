@@ -77,7 +77,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2"
                                class="productdetail-product-item">
-          <template v-if="productDetail && productDetail.goods_type && productDetail.goods_type !== 'StoneMaterial'">
+          <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
             <div v-for="(item, index) in productDetail.properties"
                  :key="index"
                  class="row-item">
@@ -480,6 +480,7 @@
     img {
       max-width: 100%;
       max-height: 100%;
+      width: inherit;
     }
   }
   .page-nav {
