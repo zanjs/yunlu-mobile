@@ -1,13 +1,13 @@
 <template>
   <section>
-    <product-header/>
+    <product-header></product-header>
     <div class="swipe">
       <mt-swipe :auto="0"
                 @change="handleChange">
         <mt-swipe-item v-for="(item, index) in productDetailFiles"
                        :key="index">
           <img :src="item.url"
-               @click="viewFullScreenPic(item.id)"/>
+               @click="viewFullScreenPic(item.id)">
         </mt-swipe-item>
       </mt-swipe>
       <span v-if="productDetailFiles && productDetailFiles.length"
@@ -33,7 +33,7 @@
           <span class="more">更多价格</span>
           <div class="icon-box"
                v-bind:class="{'rotate-90-cw': cssAnimation, 'rotate-90-ccw': !cssAnimation}">
-            <i class="iconfont icon-gengduo more-icon"/>
+            <i class="iconfont icon-gengduo more-icon"></i>
           </div>
         </div>
         <div v-show="morePrice"
@@ -116,9 +116,9 @@
     <section class="company-info">
       <div class="company-img">
         <img v-if="productDetailTeam && productDetailTeam.logo"
-             :src="productDetailTeam.logo"/>
+             :src="productDetailTeam.logo">
         <img v-else
-             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
       </div>
       <div class="company-content">
         <span v-if="productDetailTeam && productDetailTeam.company"
@@ -136,19 +136,19 @@
     <section class="product-tab-bar">
       <div class="btn-box"
            @click="share()">
-        <i class="iconfont icon-fenxiang"/>
+        <i class="iconfont icon-fenxiang"></i>
         <span>分享</span>
       </div>
       <div class="btn-box">
-        <i class="iconfont icon-shoucang1"/>
+        <i class="iconfont icon-shoucang1"></i>
         <span>收藏</span>
       </div>
       <div class="btn-box">
-        <i class="iconfont icon-kefu"/>
+        <i class="iconfont icon-kefu"></i>
         <span>客服</span>
       </div>
       <div class="btn-box btn-shopping-car">
-        <i class="iconfont icon-gouwuche"/>
+        <i class="iconfont icon-gouwuche"></i>
         <span>加入购物车</span>
       </div>
       <div class="btn-box btn-buy">
@@ -168,7 +168,7 @@
         </div>
         <div class="content">
           <div class="item">
-            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb">
             <div class="info">
               <p>宜州市万福石业有限公司</p>
               <div>
@@ -178,7 +178,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb"/>
+            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb">
             <div class="info">
               <p>宜州市万福石业有限公司</p>
               <div>

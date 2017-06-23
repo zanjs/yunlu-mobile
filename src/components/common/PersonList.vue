@@ -3,8 +3,8 @@
     <div class="search-container"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
       <input type="text"
-             placeholder="搜索个人会员"/>
-      <i class="iconfont icon-sousuo"/>
+             placeholder="搜索个人会员">
+      <i class="iconfont icon-sousuo"></i>
     </div>
     <div v-show="show"
          class="list-container">
@@ -12,7 +12,7 @@
          :key="index"
          @click="handleClick(item.user.id)"
          class="item">
-        <img :src="item.user.avatar_url"/>
+        <img :src="item.user.avatar_url">
         <p>{{item.user.name}}</p>
       </a>
     </div>

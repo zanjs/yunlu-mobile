@@ -5,7 +5,7 @@
                class="header">
       <router-link to="/folders" slot="left">
         <mt-button>
-          <i class="iconfont icon-fanhui"/>
+          <i class="iconfont icon-fanhui"></i>
         </mt-button>
       </router-link>
     </mt-header>
@@ -20,7 +20,7 @@
       <div class="text-title">举例补充说明(可选填)</div>
       <div class="textarea-container">
         <textarea class="textarea"
-                  placeholder="输入文字说明"/>
+                  placeholder="输入文字说明"></textarea>
       </div>
     </div>
     <mt-button type="primary"

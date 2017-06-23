@@ -5,17 +5,17 @@
                class="header">
       <router-link to="/folders" slot="left">
         <mt-button>
-          <i class="iconfont icon-fanhui"/>
+          <i class="iconfont icon-fanhui"></i>
         </mt-button>
       </router-link>
       <router-link to="/" slot="right">
         <mt-button>
-          <i class="iconfont icon-zhuye"/>
+          <i class="iconfont icon-zhuye"></i>
         </mt-button>
       </router-link>
     </mt-header>
     <div class="photos-container">
-      <gallery :data-source="albumList"/>
+      <gallery :data-source="albumList"></gallery>
     </div>
   </section>
 </template>

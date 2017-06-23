@@ -6,18 +6,18 @@
       <mt-button slot="left"
                  @click="goBack()"
                  class="button-text">
-        <i class="iconfont icon-fanhui "/>
+        <i class="iconfont icon-fanhui"></i>
       </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
-        <i class="iconfont icon-jubao"/>
+        <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
     </mt-header>
     <div class="card-container">
       <enterprise-card :store="teams"
-                       @click="goEnterpriseDetail"/>
+                       @click="goEnterpriseDetail"></enterprise-card>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
@@ -34,12 +34,12 @@
           @search="getProducts"
           :css-animation="showProduct && cssAnimationProduct"
           :show="showProduct"
-          @click="goProductDetail"/>
+          @click="goProductDetail"></product-list>
         <information-list
           :store="enterpriseInfoFiles"
           :css-animation="!showProduct && cssAnimation"
           :show="!showProduct"
-          @click="viewBigImg"/>
+          @click="viewBigImg"></information-list>
       </div>
     </div>
     <div>
@@ -48,7 +48,7 @@
         :index="currentIndex"
         :show-preview="showFullScreenPreview"
         :css-animation="cssAnimationViewer"
-        @close="closeImgViewer"/>
+        @close="closeImgViewer"></view-big-img>
     </div>
   </section>
 </template>

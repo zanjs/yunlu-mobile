@@ -5,28 +5,28 @@
                class="header">
       <router-link to="/" slot="left">
         <mt-button>
-          <i class="iconfont icon-zhuye"/>
+          <i class="iconfont icon-zhuye"></i>
         </mt-button>
       </router-link>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
-        <i class="iconfont icon-jubao"/>
+        <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <card/>
+      <card></card>
     </div>
     <div class="rope">
       <img src="../../assets/shengzi@2x.png"
-           class="left"/>
+           class="left">
       <img src="../../assets/shengzi@2x.png"
-           class="right"/>
+           class="right">
     </div>
     <div class="album-comtainer">
       <album :data-source="albumList"
-             @click="albumClick"/>
+             @click="albumClick"></album>
     </div>
   </section>
 </template>

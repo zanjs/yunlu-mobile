@@ -6,7 +6,7 @@
         <img v-if="store && store.logo"
              :src="store.logo"/>
         <img v-else
-             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
       </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>

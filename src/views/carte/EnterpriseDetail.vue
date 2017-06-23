@@ -5,12 +5,12 @@
                class="header">
       <router-link to="/enterprisecarte" slot="left">
         <mt-button>
-          <i class="iconfont icon-fanhui"/>
+          <i class="iconfont icon-fanhui"></i>
         </mt-button>
       </router-link>
       <router-link to="/" slot="right">
         <mt-button>
-          <i class="iconfont icon-zhuye"/>
+          <i class="iconfont icon-zhuye"></i>
         </mt-button>
       </router-link>
     </mt-header>
@@ -19,12 +19,12 @@
         <div class="name-info">
           <p>武汉环球万国石材有限公司</p>
           <div class="rate">
-            <i class="iconfont icon-icon-test1 selected"/>
-            <i class="iconfont icon-icon-test1 selected"/>
-            <i class="iconfont icon-icon-test1 selected"/>
-            <i class="iconfont icon-icon-test1 selected"/>
-            <i class="iconfont icon-icon-test1"/>
-            <i class="iconfont icon-icon-test1"/>
+            <i class="iconfont icon-icon-test1 selected"></i>
+            <i class="iconfont icon-icon-test1 selected"></i>
+            <i class="iconfont icon-icon-test1 selected"></i>
+            <i class="iconfont icon-icon-test1 selected"></i>
+            <i class="iconfont icon-icon-test1"></i>
+            <i class="iconfont icon-icon-test1"></i>
           </div>
           <div class="level">
             <svg class="icon" aria-hidden="true">
@@ -146,8 +146,6 @@
       .label {
         @include px2rem(width, 186px);
         display: inline-block;
-      }
-      .content {
       }
     }
     .link-container {

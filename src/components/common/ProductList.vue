@@ -4,9 +4,9 @@
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
       <input type="text"
              v-model="searchParams"
-             placeholder="搜索产品"/>
+             placeholder="搜索产品">
       <i class="iconfont icon-sousuo"
-         @click.stop="handleSearch"/>
+         @click.stop="handleSearch"></i>
     </div>
     <div class="option-bar"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
@@ -16,18 +16,18 @@
         <div class="order-icon">
           <div class="icon-box">
             <i class="iconfont icon-shang"
-               v-bind:class="{'icon-actinve': orderUp > 0, 'icon-inactive': orderUp < 0}"/>
+               v-bind:class="{'icon-actinve': orderUp > 0, 'icon-inactive': orderUp < 0}"></i>
           </div>
           <div class="icon-box">
             <i class="iconfont icon-xia"
-               v-bind:class="{'icon-actinve': orderUp < 0, 'icon-inactive': orderUp > 0}"/>
+               v-bind:class="{'icon-actinve': orderUp < 0, 'icon-inactive': orderUp > 0}"></i>
           </div>
         </div>
       </div>
       <div class="item">
         <i class="iconfont"
            v-bind:class="{'icon-liebiao': thumbnails, 'icon-liebiao1': !thumbnails}"
-           @click="swithList()"/>
+           @click="swithList()"></i>
       </div>
     </div>
     <div v-show="show && thumbnails"
@@ -38,7 +38,7 @@
              :key="index"
              @click.stop="handleClick(item)"
              class="img-box">
-          <img :src="item.file_url"/>
+          <img :src="item.file_url">
           <div class="cover">
             <span class="name">{{item.name}}</span>
             <span class="money">&yen; ：{{item.prices[0].money}}</span>
@@ -52,7 +52,7 @@
            :key="index"
            @click.stop="handleClick(item)"
            class="item">
-        <img :src="item.file_thumb_urls"/>
+        <img :src="item.file_thumb_urls">
         <div class="content">
           <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.prices[0].money}}</span>

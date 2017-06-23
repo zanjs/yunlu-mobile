@@ -5,37 +5,37 @@
                class="header">
       <router-link to="/" slot="left">
         <mt-button>
-          <i class="iconfont icon-zhuye"/>
+          <i class="iconfont icon-zhuye"></i>
         </mt-button>
       </router-link>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
-        <i class="iconfont icon-jubao"/>
+        <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <card/>
+      <card></card>
     </div>
     <div class="rope">
       <img src="../../assets/shengzi@2x.png"
-           class="left"/>
+           class="left">
       <img src="../../assets/shengzi@2x.png"
-           class="right"/>
+           class="right">
     </div>
     <div class="carte-container">
       <a class="item">
         <span>华瑞石业</span>
-        <i class="iconfont icon-fanhui"/>
+        <i class="iconfont icon-fanhui"></i>
       </a>
       <a class="item">
         <span>舌尖上的中国</span>
-        <i class="iconfont icon-fanhui"/>
+        <i class="iconfont icon-fanhui"></i>
       </a>
       <a class="item">
         <span>读书</span>
-        <i class="iconfont icon-fanhui"/>
+        <i class="iconfont icon-fanhui"></i>
       </a>
     </div>
   </section>

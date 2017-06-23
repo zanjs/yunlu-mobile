@@ -3,8 +3,8 @@
     <div class="search-container"
          v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
       <input type="text"
-             placeholder="搜索资讯"/>
-      <i class="iconfont icon-sousuo"/>
+             placeholder="搜索资讯">
+      <i class="iconfont icon-sousuo"></i>
     </div>
     <div v-show="show"
          class="gallery-container">
@@ -14,7 +14,7 @@
              :key="index"
              @click.stop="handleClick(item)"
              class="img-box">
-          <img :src="item.url"/>
+          <img :src="item.url">
           <div class="cover">
             {{item.cnname}}（{{item.count}}）
           </div>

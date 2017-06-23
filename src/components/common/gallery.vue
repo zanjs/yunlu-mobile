@@ -5,7 +5,7 @@
            :key="index"
            :src="item.cover"
            class="photo"
-           @click="showFullScreenPreview(index)"/>
+           @click="showFullScreenPreview(index)">
     </div>
     <template>
       <span v-if="showPreview"

@@ -5,7 +5,7 @@
          class="album"
          @click="handleClick(item.id)">
       <img :src="item.cover"
-           class="cover"/>
+           class="cover">
       <div class="label">
         <span class="text">{{item.title}}</span>
         <span class="count">{{item.count}}</span>

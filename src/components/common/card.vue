@@ -1,7 +1,7 @@
 <template>
   <section class="card">
     <div class="user-info">
-      <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg"/>
+      <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
       <div class="content">
         <p>胖胖的小丸子</p>
         <div>

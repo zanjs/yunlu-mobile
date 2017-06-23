@@ -22,16 +22,16 @@
              v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
       <div class="menu">
         <div class="item">
-          <i class="iconfont icon-shoucang"/>
+          <i class="iconfont icon-shoucang"></i>
           <span>收藏夹</span>
         </div>
         <div class="item">
-          <i class="iconfont icon-fujin"/>
+          <i class="iconfont icon-fujin"></i>
           <span>搜附近</span>
         </div>
         <div class="item"
              @click="goReport()">
-          <i class="iconfont icon-jubao"/>
+          <i class="iconfont icon-jubao"></i>
           <span>举报Ta</span>
         </div>
       </div>

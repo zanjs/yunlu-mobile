@@ -6,19 +6,19 @@
       <mt-button slot="left"
                  @click="goBack()"
                  class="button-text">
-        <i class="iconfont icon-fanhui "/>
+        <i class="iconfont icon-fanhui"></i>
       </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
-        <i class="iconfont icon-jubao"/>
+        <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
     </mt-header>
     <div class="card-container">
       <enterprise-card
         :store="teams"
-        @click="goEnterpriseDetail"/>
+        @click="goEnterpriseDetail"></enterprise-card>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">
@@ -42,23 +42,23 @@
           @search="getProducts"
           :css-animation="activeIndex === 0 && cssAnimationProduct"
           :show="activeIndex === 0"
-          @click="goProductDetail"/>
+          @click="goProductDetail"></product-list>
         <information-list
           :store="enterpriseInfoFiles"
           :show-bar="showBar"
           :css-animation="activeIndex === 1 && cssAnimation"
           :show="activeIndex === 1"
-          @click="viewBigImg"/>
+          @click="viewBigImg"></information-list>
         <enterprise-list
           :store="enterpriseMembers"
           @click="goEnterpriseCarte"
           :show="activeIndex === 2"
-          :css-animation="activeIndex === 2 && cssAnimation"/>
+          :css-animation="activeIndex === 2 && cssAnimation"></enterprise-list>
         <person-list
           :store="personMembers"
           @click="goPersonCarte"
           :show="activeIndex === 3"
-          :css-animation="activeIndex === 3 && cssAnimation"/>
+          :css-animation="activeIndex === 3 && cssAnimation"></person-list>
       </div>
     </div>
   </section>
