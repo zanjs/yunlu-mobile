@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="登陆"
+    <mt-header title="登录"
                fixed
                class="header">
       <mt-button slot="left"

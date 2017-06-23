@@ -22,7 +22,8 @@
                v-model="password"
                placeholder="请输入短信验证码">
         <div class="valid-btn-container">
-          <a>获取验证码</a>
+          <a @click="countDown()"
+             v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
         </div>
       </div>
       <div class="next-btn">
@@ -42,11 +43,14 @@
   import { mapGetters } from 'vuex'
   import { setStore } from '../../config/mUtils'
   import { Indicator } from 'mint-ui'
+  import { COUNT_DOWN_SECOND } from '../../constants/constant'
   export default {
     data () {
       return {
         mobile: '',
-        password: ''
+        password: '',
+        validBtnText: '获取验证码',
+        disabled: false
       }
     },
     methods: {
@@ -57,7 +61,21 @@
         console.log('next')
       },
       countDown () {
-        console.log('2')
+        if (this.disabled) {
+          return false
+        }
+        let seconds = COUNT_DOWN_SECOND
+        this.interval = setInterval(() => {
+          seconds -= 1
+          if (seconds === 0) {
+            this.disabled = false
+            this.validBtnText = '获取验证码'
+            clearInterval(this.interval)
+          } else {
+            this.disabled = true
+            this.validBtnText = `剩余${seconds}秒`
+          }
+        }, 1000)
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -154,6 +172,15 @@
           @include px2rem(height, 80px);
           @include px2rem(line-height, 80px);
           text-align: center;
+        }
+        .active {
+          color: #A6A6A6;
+          border-color: #DEDEDE;
+          background-color: #DEDEDE;
+        }
+        .normal {
+          color: #52CAA7;
+          border-color: #52CAA7;
         }
       }
       a:active {
