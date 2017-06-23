@@ -10,6 +10,111 @@
       <i class="iconfont icon-geren icon-btn"
          @click="goMine()"></i>
     </div>
+    <div class="option-bars">
+      <img src="../../assets/seeBg.png">
+      <div class="row">
+        <div class="row-item">
+          <div class="icon-box box-1">
+            <i class="iconfont icon-liucheng"></i>
+          </div>
+          <span>流程</span>
+        </div>
+        <div class="row-item">
+          <div class="icon-box box-2">
+            <i class="iconfont icon-huihua"></i>
+          </div>
+          <span>会话</span>
+        </div>
+        <div class="row-item">
+          <div class="icon-box box-3">
+            <i class="iconfont icon-dingdan"></i>
+          </div>
+          <span>订单</span>
+        </div>
+        <div class="row-item">
+          <div class="icon-box box-4">
+            <i class="iconfont icon-shoucang1"></i>
+          </div>
+          <span>收藏</span>
+        </div>
+      </div>
+    </div>
+    <div class="carte-container">
+      <img src="../../assets/seeCardBg.png"
+           class="white-bg">
+      <img src="../../assets/send.png"
+           class="send">
+      <div class="avatar-container">
+        <img src="../../assets/userAvatarSmall.png"
+             class="user-avatar">
+      </div>
+      <p class="user-name">云庐鞋业有限公司</p>
+    </div>
+    <div class="card-container">
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../../assets/enterprise.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -44,6 +149,11 @@
   .search-bar {
     display: flex;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
     img {
       position: fixed;
       top: 0;
@@ -85,6 +195,155 @@
       color: $white;
       z-index: 1000;
       @include pm2rem(margin, 0px, 30px, 0px, 0px);
+    }
+  }
+  .option-bars {
+    position: relative;
+    @include pm2rem(padding, 114px, 0px, 0px, 0px);
+    img {
+      @include px2rem(height, 313px);
+      width: 100%;
+    }
+    .row {
+      display: flex;
+      position: absolute;
+      @include px2rem(top, 114px);
+      left: 0;
+      right: 0;
+      z-index: 1;
+      justify-content: space-between;
+      @include pm2rem(padding, 16px, 55px, 30px, 55px);
+      .row-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        .icon-box {
+          @include px2rem(height, 94px);
+          @include px2rem(width, 94px);
+          @include px2rem(border-radius, 57px);
+          @include pm2rem(margin, 0px, 0px, 16px, 0px);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          i {
+            @include font-dpr(27px);
+            color: $white;
+          }
+        }
+        span {
+          @include font-dpr(14px);
+          color: #246451;
+        }
+        .box-1 {
+          background: linear-gradient(to bottom, #FEBEBE , #EE75C5);
+        }
+        .box-2 {
+          background: linear-gradient(to bottom, #FFDD9C , #FDA698);
+        }
+        .box-3 {
+          background: linear-gradient(to bottom, #ECB1FF , #959DFF);
+        }
+        .box-4 {
+          background: linear-gradient(to bottom, #C6D7FF , #32BBD8);
+        }
+      }
+    }
+  }
+  .carte-container {
+    @include pm2rem(margin, -130px, 0px, 0px, 0px);
+    position: relative;
+    .white-bg {
+      @include px2rem(height, 328px);
+      @include px2rem(width, 658px);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .send {
+      position: absolute;
+      @include px2rem(width, 221px);
+      @include px2rem(height, 78px);
+      left: 50%;
+      transform: translateX(-50%);
+      @include px2rem(bottom, -294px);
+    }
+    .avatar-container {
+      border-color: #9CE7A0;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      @include px2rem(top, 30px);
+      @include px2rem(border-width, 2px);
+      @include px2rem(width, 120px);
+      @include px2rem(height, 120px);
+      @include px2rem(border-radius, 65px);
+      border-style: solid;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .user-avatar {
+        @include px2rem(width, 108px);
+        @include px2rem(height, 108px);
+      }
+    }
+    .user-name {
+      @include font-dpr(16px);
+      color: #595959;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      @include px2rem(top, 160px);
+    }
+  }
+  .card-container {
+    @include px2rem(margin-top, 350px);
+    @include pm2rem(padding, 28px, 26px, 100px, 26px);
+    border-top: 1px solid #DEDEDE;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0px 3px 6px rgba(125, 119, 119, .5);
+      @include px2rem(border-radius, 10px);
+      @include px2rem(margin-bottom, 22px);
+      @include px2rem(width, 340px);
+      @include px2rem(height, 188px);
+      .card-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: inherit;
+        height: inherit;
+      }
+      .content {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        div {
+          @include px2rem(width, 12px);
+          @include px2rem(height, 40px);
+          border: 1px solid $white;
+        }
+        p {
+          color: $white;
+          @include font-dpr(15px);
+          @include px2rem(line-height, 50px);
+        }
+        .left-border {
+          border-right: none;
+        }
+        .right-border {
+          border-left: none;
+        }
+      }
     }
   }
 </style>
