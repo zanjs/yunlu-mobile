@@ -130,7 +130,7 @@
         this.$router.go(-1)
       },
       goMine () {
-        console.log('1')
+        this.$router.push({name: 'Mine'})
       }
     },
     mounted () {

@@ -16,6 +16,7 @@ import Protocol from '../views/user/Protocol'
 import Home from '../views/home/Home'
 import Download from '../views/download/Download'
 import See from '../views/home/See'
+import Mine from '../views/user/Mine'
 
 Vue.use(Router)
 
@@ -88,6 +89,10 @@ export default new Router({
       path: '/download',
       name: 'Download',
       component: Download
+    }, {
+      path: '/mine',
+      name: 'Mine',
+      component: Mine
     }
   ]
 })
