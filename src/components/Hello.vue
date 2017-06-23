@@ -39,8 +39,14 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/regist')">
-      注册
+               @click="goRoute('/download')">
+      下载
+    </mt-button>
+    <mt-button type="primary"
+               size="large"
+               class="btn-block"
+               @click="goRoute('/home')">
+      首页
     </mt-button>
   </section>
 </template>

@@ -12,7 +12,10 @@ import ComityCarte from '../views/carte/ComityCarte'
 import EnterpriseDetail from '../views/carte/EnterpriseDetail'
 import Login from '../views/user/Login'
 import Register from '../views/user/Register'
-import Protocol from '../views/user/Protocol.vue'
+import Protocol from '../views/user/Protocol'
+import Home from '../views/home/Home'
+import Download from '../views/download/Download'
+import See from '../views/home/See'
 
 Vue.use(Router)
 
@@ -70,6 +73,21 @@ export default new Router({
       path: '/protocl',
       name: 'Protocol',
       component: Protocol
+    }, {
+      path: '/home',
+      name: 'Home',
+      component: Home,
+      children: [
+        {
+          path: '/see',
+          component: See,
+          name: 'See'
+        }
+      ]
+    }, {
+      path: '/download',
+      name: 'Download',
+      component: Download
     }
   ]
 })

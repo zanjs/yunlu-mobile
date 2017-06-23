@@ -64,7 +64,7 @@
   export default {
     data () {
       return {
-        teamId: 1299,
+        teamId: 3166,
         hasSearch: false,
         showProduct: true,
         cssAnimation: false,
@@ -113,7 +113,9 @@
             this.hasSearch = q !== ''
             this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       handleProducts (arr, arr2) {

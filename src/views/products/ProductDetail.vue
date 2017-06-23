@@ -2,14 +2,14 @@
   <section>
     <product-header></product-header>
     <div class="swipe">
-      <mt-swipe :auto="0"
-                @change="handleChange">
-        <mt-swipe-item v-for="(item, index) in productDetailFiles"
-                       :key="index">
+      <swiper :options="swiperOption">
+        <swiper-slide v-for="(item, index) in productDetailFiles"
+                      :key="index">
           <img :src="item.url"
                @click="viewFullScreenPic(item.id)">
-        </mt-swipe-item>
-      </mt-swipe>
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
       <span v-if="productDetailFiles && productDetailFiles.length"
             class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
       <span v-else
@@ -79,20 +79,31 @@
                                class="productdetail-product-item">
           <template v-if="productDetail && productDetail.goods_type && productDetail.goods_type !== 'StoneMaterial'">
             <div v-for="(item, index) in productDetail.properties"
-               :key="index"
-               class="row-item">
-            <div v-for="(i, indexI) in item.children"
-                 :key="indexI"
-                 class="title-container">
-              <div class="dot"></div>
+                 :key="index"
+                 class="row-item">
+              <div v-for="(i, indexI) in item.children"
+                   :key="indexI"
+                   class="title-container">
+                <div class="dot"></div>
                 <span class="title">{{i.name}} : {{i.value}}</span>
               </div>
             </div>
           </template>
           <template v-else>
             <div v-if="productDetail && productDetail.goods_type === 'StoneMaterial'"
-                 class="no-product-args">
-              这里待完成
+                 class="row-item">
+              <div class="title-container">
+                <div class="dot"></div>
+                <span class="title">{{productDetail.category_name}}</span>
+              </div>
+              <div class="title-container">
+                <div class="dot"></div>
+                <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
+              </div>
+              <div class="title-container">
+                <div class="dot"></div>
+                <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
+              </div>
             </div>
             <div v-else
                  class="no-product-args">
@@ -201,6 +212,7 @@
   import ProductHeader from '../../components/header/Head'
   import { mapGetters } from 'vuex'
   import { Indicator } from 'mint-ui'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     data () {
       return {
@@ -212,6 +224,10 @@
         currentPrice: {},
         currentPriceProperties: [],
         popUp: false,
+        swiperOption: {
+          pagination: '.swiper-pagination',
+          paginationClickable: true
+        },
         actions: [
           {
             name: '发送给微信好友',
@@ -249,7 +265,9 @@
       }
     },
     components: {
-      ProductHeader
+      ProductHeader,
+      swiper,
+      swiperSlide
     },
     methods: {
       getProductDetail () {
@@ -449,11 +467,20 @@
     @include px2rem(height, 634px);
     @include pm2rem(margin, 0px, 0px, 0px, 0px);
     position: relative;
-    img {
-      @include px2rem(min-width, 750px);
-      @include px2rem(min-height, 634px);
+    overflow: hidden;
+    .swiper-container {
+      height: 100%;
+      width: 100%;
     }
-
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
   .page-nav {
     position: absolute;
@@ -463,6 +490,7 @@
     @include font-dpr(16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
     background-color: rgba(0, 0, 0, .5);
+    z-index: 1002;
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
@@ -862,11 +890,8 @@
   /*覆盖mint-ui中nav-bar组件默认样式，故不用scoped*/
 
   .swipe {
-    .mint-swipe-indicator {
-      opacity: .5;
-    }
-    .is-active {
-      opacity: 1;
+    .swiper-pagination-bullet-active {
+      background-color: $white;
     }
   }
 
