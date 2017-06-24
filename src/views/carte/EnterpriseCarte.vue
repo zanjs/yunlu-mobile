@@ -111,19 +111,28 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
+            let tmppArr = this.handleProductThumbnails(res.data.products)
+            this.getFilesPublisheds(tmppArr, res.data.products)
           },
           reject: () => {
             Indicator.close()
           }
         })
       },
+      // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
-          let index = arr2.findIndex(item => item.id === arr[i].file_id)
-          let tmpObj = {...arr[i], file_url: arr2[index].url, file_thumb_urls: arr2[index].thumb_urls[0]}
-          tmpArr.push(tmpObj)
+          for (let j = 0; j < arr2.length; j++) {
+            if (arr[i].file_id === arr2[j].id) {
+              let tmpObj = {
+                ...arr[i],
+                file_url: arr2[j].url,
+                file_thumb_urls: arr2[j].thumb_urls[0]
+              }
+              tmpArr.push(tmpObj)
+            }
+          }
         }
         return tmpArr
       },
@@ -207,7 +216,7 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, products) {
+      getFilesPublisheds (ids, arr) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -220,11 +229,13 @@
           target: this,
           resolve: (state, res) => {
             Indicator.close()
+            state.products = this.handleProducts(arr, res.data.files)
             state.productsThumbnails = res.data.files
-            state.products = this.handleProducts(products, state.productsThumbnails)
             this.getEnterpriseDocument()
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       goBack () {

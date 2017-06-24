@@ -30,7 +30,7 @@
            @click="swithList()"></i>
       </div>
     </div>
-    <div v-show="show && thumbnails"
+    <div v-if="show && thumbnails"
          class="gallery-container">
       <div v-show="thumbnails"
            class="gallery">
@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div v-show="show && !thumbnails"
+    <div v-if="show && !thumbnails"
          class="gallery-list">
       <div v-for="(item, index) in store"
            :key="index"

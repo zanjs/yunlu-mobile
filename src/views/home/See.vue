@@ -226,6 +226,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          box-shadow: 2px 2px 7px rgba(128, 128, 128, .5);
           i {
             @include font-dpr(27px);
             color: $white;
@@ -234,6 +235,7 @@
         span {
           @include font-dpr(14px);
           color: #246451;
+          text-shadow: 2px 3px 6px rgba(82, 78, 78, .5);
         }
         .box-1 {
           background: linear-gradient(to bottom, #FEBEBE , #EE75C5);
