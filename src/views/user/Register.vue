@@ -133,7 +133,7 @@
   }
 
   .login-container {
-    position: absolute;
+    position: fixed; // 不能用absolute,UC浏览器会白屏
     @include px2rem(top, 96px);
     @include pm2rem(padding, 40px, 0px, 0px, 0px);
     bottom: 0;

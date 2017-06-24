@@ -109,12 +109,12 @@
   }
 
   .login-container {
-    position: absolute;
-    @include px2rem(top, 88px);
-    @include pm2rem(padding, 40px, 0px, 0px, 0px);
+    position: fixed; // 不能用absolute,UC浏览器会白屏
+    @include pm2rem(padding, 128px, 0px, 0px, 0px);
     bottom: 0;
     left: 0;
     right: 0;
+    top: 0;
     background-color: $white;
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
