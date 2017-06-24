@@ -317,13 +317,15 @@
           }
         })
       },
+      // 手机QQ浏览器和UC浏览器不支持array.findIndex语法
       handlePricePropertyes (price, priceProperties) {
         let tmpArr = []
         for (let j = 0; j < price.properties.length; j++) {
-          let key = Object.keys(price.properties[j])[0]
-          let index = priceProperties.findIndex(item => item.aliaz === key)
-          if (index > -1) {
-            tmpArr.push({key: priceProperties[index].name, value: price.properties[j][key]})
+          for (let i = 0; i < priceProperties.length; i++) {
+            let key = Object.keys(price.properties[j])[0]
+            if (priceProperties[j].aliaz === key) {
+              tmpArr.push({key: priceProperties[i].name, value: price.properties[j][key]})
+            }
           }
         }
         return tmpArr
