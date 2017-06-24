@@ -80,7 +80,7 @@
           id="2"
           class="productdetail-product-item">
           <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
-            <template v-if="productDetail.properties[0].children.length > 0">
+            <template v-if="productDetail.properties && productDetail.properties.length > 0 &&  productDetail.properties[0].children.length > 0">
               <div v-for="(item, index) in productDetail.properties"
                    :key="index"
                    class="row-item">
@@ -546,6 +546,7 @@
         background-color: $white;
         @include font-dpr(16px);
         border-top: 1px solid #D1D1D1;
+        z-index: 1002;
         p {
           border: 1px solid #D1D1D1;
           border-top: none;

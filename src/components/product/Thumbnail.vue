@@ -2,9 +2,9 @@
   <section>
     <div class="gallery">
       <div v-for="(item, index) in store"
-            :key="index"
-            @click.stop="handleClick(item)"
-            class="img-box">
+           :key="index"
+           @click.stop="handleClick(item)"
+           class="img-box">
         <img :src="item.file_url">
         <div class="cover">
           <span class="name">{{item.name}}</span>
@@ -19,7 +19,6 @@
 export default {
   data () {
     return {
-
     }
   },
   name: 'ProductThumbnailMode',

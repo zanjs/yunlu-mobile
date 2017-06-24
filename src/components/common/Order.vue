@@ -17,7 +17,7 @@
       </div>
       <div class="item">
         <i class="iconfont"
-           v-bind:class="{'icon-liebiao': showList, 'icon-liebiao1': !showList}"
+           v-bind:class="{'icon-liebiao': !showList, 'icon-liebiao1': showList}"
            @click="swithList(showList)"></i>
       </div>
     </div>

@@ -37,18 +37,26 @@
       </div>
       <div class="tab-container">
         <template v-if="activeIndex === 0">
-          <transition name="fade" mode="out-in">
-            <product-list-mode
-              v-if="showList"
-              :store="products"
-              @click="goProductDetail">
-            </product-list-mode>
-            <product-thumbnail-mode
-              v-else
-              :store="products"
-              @click="goProductDetail">
-            </product-thumbnail-mode>
-          </transition>
+          <mt-loadmore
+              :top-method="loadProductTop"
+              :bottom-method="loadProductBottom"
+              :bottom-pull-text="bottomPullText"
+              :bottom-drop-text="bottomDropText"
+              :auto-fill="false"
+              ref="loadMoreProducts">
+            <transition name="fade" mode="out-in">
+              <product-list-mode
+                v-if="showList"
+                :store="products"
+                @click="goProductDetail">
+              </product-list-mode>
+              <product-thumbnail-mode
+                v-else
+                :store="products"
+                @click="goProductDetail">
+              </product-thumbnail-mode>
+            </transition>
+          </mt-loadmore>
         </template>
         <template v-if="activeIndex === 1">
           <transition name="fade" mode="out-in">
@@ -112,6 +120,17 @@
         hasSearch: false,
         showSearchBar: false,
         placeholder: '搜索产品',
+        productPageIndex: 1,
+        productPageSize: 10,
+        productLoaded: false,
+        enterprisePageIndex: 1,
+        enterprisePageSize: 10,
+        personPageIndex: 1,
+        personPageSize: 10,
+        bottomPullText: '上拉加载更多',
+        bottomDropText: '释放加载',
+        queryParams: '',
+        productOrder: 'price',
         orderUp: true,
         showList: false,
         activeIndex: 0,
@@ -147,16 +166,19 @@
           reject: () => {}
         })
       },
-      getProducts (q = '', order = 1) {
+      getProducts (q = this.queryParams, order = this.productOrder) {
+        this.queryParams = q
+        this.productOrder = order
+        this.productLoaded = false
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
           params: {
             team_id: this.teamId, // 生产环境的一个企业
-            page: 1,
-            per_page: 10,
-            sort: order,
-            q: q
+            page: this.productPageIndex,
+            per_page: this.productPageSize,
+            sort: order || '',
+            q: q || ''
           },
           target: this,
           resolve: (state, res) => {
@@ -190,7 +212,7 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, products) {
+      getFilesPublisheds (ids, arr) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -202,8 +224,15 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.productsThumbnails = res.data.files
-            state.products = this.handleProducts(products, state.productsThumbnails)
+            if (this.productPageIndex === 1) {
+              state.products = this.handleProducts(arr, res.data.files)
+              state.productsThumbnails = res.data.files
+              this.$refs.loadMoreProducts.onTopLoaded()
+            } else {
+              state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
+              state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+              this.$refs.loadMoreProducts.onBottomLoaded()
+            }
             this.getEnterpriseDocument()
           },
           reject: () => {
@@ -280,7 +309,9 @@
             this.getInformation(this.handleDocumentIds(this.arrFilter(res.data.types)))
             Indicator.close()
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       arrFilter (arr) {
@@ -352,14 +383,14 @@
       },
       goBack () {
         if (this.hasSearch) {
-          this.getProducts()
+          this.getProducts('', 'price')
         } else {
           this.$router.go(-1)
         }
       },
       goReport () {
         document.body.scrollTop = 0
-        this.$router.push({path: '/report'})
+        this.$router.push({name: 'Report'})
       },
       tabClick (val) {
         this.activeIndex = val
@@ -410,6 +441,7 @@
         }, height)
       },
       goProductDetail (item) {
+        document.body.scrollTop = 0
         this.$router.push({name: 'ProductDetail', params: {id: item.id, organizationId: item.organization_id}})
       },
       goEnterpriseDetail (id) {
@@ -439,6 +471,20 @@
       },
       showListChange (val) {
         this.showList = val
+      },
+      orderChange (val) {
+        this.orderUp = val
+        this.productOrder = val ? 'price' : '-price'
+        this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
+        this.getProducts(this.queryParams, this.productOrder)
+      },
+      loadProductTop () {
+        this.productPageIndex = 1
+        this.getProducts()
+      },
+      loadProductBottom () {
+        this.productPageIndex += 1
+        this.getProducts()
       }
     },
     mounted () {
