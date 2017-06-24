@@ -6,7 +6,7 @@
       <i class="iconfont icon-fanhui"
          @click="goBack()"></i>
       <div class="content">
-        胖胖的丸子
+        {{currentUser.home_name}}
       </div>
     </div>
     <div class="user-avatar">
@@ -14,20 +14,36 @@
         <img src="../../assets/userAvatarBig.png">
       </div>
     </div>
+    <div class="logout-btn">
+      <a @click="logOut()">
+        退出登录
+      </a>
+    </div>
   </section>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+  import { getStore, removeAllStore } from '../../config/mUtils'
   export default {
     data () {
       return {
-
+        currentUser: getStore('user')
       }
     },
     methods: {
       goBack () {
         this.$router.go(-1)
+      },
+      logOut () {
+        removeAllStore()
+        this.$router.push({name: 'Login', params: {}})
       }
+    },
+    computed: {
+      ...mapGetters([
+        'user'
+      ])
     }
   }
 </script>
@@ -81,5 +97,20 @@
     }
   }
 
+  .logout-btn {
+    @include px2rem(width, 520px);
+    @include px2rem(height,70px);
+    background-color: #52CAA7;
+    color: $white;
+    margin: 0 auto;
+    @include px2rem(margin-top, 22px);
+    text-align: center;
+    @include px2rem(line-height, 70px);
+    @include font-dpr(15px);
+    display: block;
+    a:active {
+      background-color: rgba(82, 202, 167, .5);
+    }
+  }
 </style>
 

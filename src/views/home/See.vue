@@ -58,8 +58,11 @@
         <img src="../../assets/userAvatarSmall.png"
              class="user-avatar">
       </div>
-      <p class="user-name"
+      <p v-if="!hasLogin"
+         class="user-name"
          @click="goLogin()">***</p>
+      <p v-else
+         class="user-name">{{currentUser.home_name}}</p>
     </div>
     <div class="card-container">
       <div class="card">
@@ -135,7 +138,8 @@
   export default {
     data () {
       return {
-        hasLogin: !!getStore('user')
+        hasLogin: !!getStore('user'),
+        currentUser: getStore('user')
       }
     },
     methods: {
