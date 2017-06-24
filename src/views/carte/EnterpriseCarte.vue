@@ -295,20 +295,14 @@
         }
       },
       handleSearchBar () {
-        // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
         let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        let elementId = 'productList'
-        if (!this.showProduct) {
-          height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
-          elementId = 'informationList'
-        }
-        showBack((res) => {
-          if (this.showProduct && res.id === 'productList') {
-            this.showSearchBar = res.show
+        showBack((stauts) => {
+          if (this.activeIndex === 1) {
+            this.showSearchBar = false
           } else {
-            // this.showSearchBar = false
+            this.showSearchBar = stauts
           }
-        }, {id: elementId, height: height})
+        }, height)
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id, teamId: this.teamId, organizationId: item.organization_id}})

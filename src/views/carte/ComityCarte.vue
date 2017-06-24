@@ -399,18 +399,13 @@
       },
       handleSearchBar () {
         let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        let elementId = 'productList'
-        if (!this.activeIndex === 0) {
-          height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
-          elementId = 'informationList'
-        }
-        showBack((res) => {
-          if (this.activeIndex === 0 && res.id === 'productList') {
-            this.showSearchBar = res.show
+        showBack((stauts) => {
+          if (this.activeIndex === 1) {
+            this.showSearchBar = false
           } else {
-            // this.showSearchBar = false
+            this.showSearchBar = stauts
           }
-        }, {id: elementId, height: height})
+        }, height)
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id, organizationId: item.organization_id}})

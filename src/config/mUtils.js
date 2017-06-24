@@ -28,7 +28,7 @@ export const removeStore = name => {
 /**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点
  */
-export const showBack = (callback, obj) => {
+export const showBack = (callback, height) => {
   let requestFram
   let oldScrollTop
   this.callback = callback
@@ -36,18 +36,10 @@ export const showBack = (callback, obj) => {
   // 判断是否达到目标点
   const showBackFun = () => {
     let self = this
-    if (obj.id === 'productList') {
-      if (document.body.scrollTop > obj.height) {
-        self.callback({id: obj.id, show: true})
-      } else {
-        self.callback({id: obj.id, show: false})
-      }
+    if (document.body.scrollTop > height) {
+      self.callback(true)
     } else {
-      if (document.body.scrollTop > obj.height) {
-        self.callback({id: obj.id, show: true})
-      } else {
-        self.callback({id: obj.id, show: false})
-      }
+      self.callback(false)
     }
   }
 
