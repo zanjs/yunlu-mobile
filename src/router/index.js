@@ -23,10 +23,6 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
-    }, {
       path: '/space',
       name: 'Space',
       component: Space
@@ -75,7 +71,7 @@ export default new Router({
       name: 'Protocol',
       component: Protocol
     }, {
-      path: '/home',
+      path: '/',
       name: 'Home',
       component: Home,
       children: [
@@ -93,6 +89,10 @@ export default new Router({
       path: '/mine',
       name: 'Mine',
       component: Mine
+    }, {
+      path: '/hello',
+      name: 'Hello',
+      component: Hello
     }
   ]
 })

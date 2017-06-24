@@ -12,7 +12,7 @@
       </mt-tab-item>
       <mt-tab-item id="wareroom">
         <div class="tab-item"
-             @click="selectTab('Space')">
+             @click="selectTab('Login')">
           <i class="iconfont icon-yunku"></i>
           <span>云库</span>
         </div>
@@ -26,7 +26,7 @@
       </mt-tab-item>
       <mt-tab-item id="space">
         <div class="tab-item"
-             @click="selectTab('Download')">
+             @click="selectTab('Login')">
           <i class="iconfont icon-kongjian"></i>
           <span>空间</span>
         </div>

@@ -2,7 +2,9 @@
  * 存储localStorage
  */
 export const setStore = (name, content) => {
-  if (!name) return
+  if (!name) {
+    return false
+  }
   if (typeof content !== 'string') {
     content = JSON.stringify(content)
   }
@@ -13,8 +15,10 @@ export const setStore = (name, content) => {
  * 获取localStorage
  */
 export const getStore = name => {
-  if (!name) return
-  return window.localStorage.getItem(name)
+  if (!name) {
+    return false
+  }
+  return JSON.parse(window.localStorage.getItem(name))
 }
 
 /**
@@ -23,6 +27,13 @@ export const getStore = name => {
 export const removeStore = name => {
   if (!name) return
   window.localStorage.removeItem(name)
+}
+
+/**
+ * 删除所有的localStorage
+ */
+export const removeAllStore = () => {
+  window.localStorage.clear()
 }
 
 /**

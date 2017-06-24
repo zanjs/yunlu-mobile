@@ -7,31 +7,39 @@
                placeholder="任你搜 任意搜">
         <i class="iconfont icon-sousuo"></i>
       </div>
-      <i class="iconfont icon-geren icon-btn"
+      <i v-if="hasLogin"
+         class="iconfont icon-geren icon-btn"
          @click="goMine()"></i>
+      <p v-else
+         @click="goLogin()"
+         class="icon-btn login-btn">登录|注册</p>
     </div>
     <div class="option-bars">
       <img src="../../assets/seeBg.png">
       <div class="row">
-        <div class="row-item">
+        <div class="row-item"
+             @click="goDownload()">
           <div class="icon-box box-1">
             <i class="iconfont icon-liucheng"></i>
           </div>
           <span>流程</span>
         </div>
-        <div class="row-item">
+        <div class="row-item"
+             @click="goDownload()">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
           <span>会话</span>
         </div>
-        <div class="row-item">
+        <div class="row-item"
+             @click="goDownload()">
           <div class="icon-box box-3">
             <i class="iconfont icon-dingdan"></i>
           </div>
           <span>订单</span>
         </div>
-        <div class="row-item">
+        <div class="row-item"
+             @click="goDownload()">
           <div class="icon-box box-4">
             <i class="iconfont icon-shoucang1"></i>
           </div>
@@ -43,12 +51,15 @@
       <img src="../../assets/seeCardBg.png"
            class="white-bg">
       <img src="../../assets/send.png"
+           @click="goLogin()"
            class="send">
-      <div class="avatar-container">
+      <div class="avatar-container"
+           @click="goLogin()">
         <img src="../../assets/userAvatarSmall.png"
              class="user-avatar">
       </div>
-      <p class="user-name">云庐鞋业有限公司</p>
+      <p class="user-name"
+         @click="goLogin()">***</p>
     </div>
     <div class="card-container">
       <div class="card">
@@ -120,9 +131,11 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import { setStore, getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
+        hasLogin: !!getStore('user')
       }
     },
     methods: {
@@ -131,6 +144,13 @@
       },
       goMine () {
         this.$router.push({name: 'Mine'})
+      },
+      goDownload () {
+        this.$router.push({name: 'Download'})
+      },
+      goLogin () {
+        setStore('beforeLogin', {urlName: 'Home', params: {}})
+        this.$router.push({name: 'Login'})
       }
     },
     mounted () {
@@ -197,6 +217,9 @@
       color: $white;
       z-index: 1000;
       @include pm2rem(margin, 0px, 30px, 0px, 0px);
+    }
+    .login-btn {
+      @include font-dpr(14px);
     }
   }
   .option-bars {
