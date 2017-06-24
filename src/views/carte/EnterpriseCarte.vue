@@ -29,17 +29,25 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <product-list
-          :store="products"
-          @search="getProducts"
-          :css-animation="showProduct && cssAnimationProduct"
-          :show="showProduct"
-          @click="goProductDetail"></product-list>
+        <template v-show="showProduct">
+          <transition name="fade" mode="out-in">
+            <product-list-mode
+              v-if="showList"
+              :store="products"
+              @click="goProductDetail">
+            </product-list-mode>
+            <product-thumbnail-mode
+              v-else
+              :store="products"
+              @click="goProductDetail">
+            </product-thumbnail-mode>
+          </transition>
+        </template>
         <information-list
+          v-show="!showProduct"
           :store="enterpriseInfoFiles"
-          :css-animation="!showProduct && cssAnimation"
-          :show="!showProduct"
-          @click="viewBigImg"></information-list>
+          @click="viewBigImg">
+        </information-list>
       </div>
     </div>
     <div>
@@ -50,26 +58,43 @@
         :css-animation="cssAnimationViewer"
         @close="closeImgViewer"></view-big-img>
     </div>
+    <transition name="fade">
+      <search v-show="showSearchBar"
+              :placeholder="placeholder"
+              @search="search">
+      </search>
+    </transition>
+    <transition name="fade">
+      <order v-show="showSearchBar && showProduct"
+             :order-up="orderUp"
+             :show-list="showList"
+             @switch="showListChange"></order>
+    </transition>
   </section>
 </template>
 
 <script>
   import EnterpriseCard from '../../components/common/EnterpriseCard'
-  import ProductList from '../../components/common/ProductList'
+  import ProductThumbnailMode from '../../components/product/Thumbnail'
+  import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import { showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import { Indicator } from 'mint-ui'
+  import Search from '../../components/common/Search'
+  import Order from '../../components/common/Order'
   export default {
     data () {
       return {
         teamId: 6642,
         hasSearch: false,
         showProduct: true,
-        cssAnimation: false,
-        cssAnimationProduct: false,
+        showSearchBar: false,
+        placeholder: '搜索产品',
         cssAnimationViewer: false,
+        orderUp: true,
+        showList: false,
         currentIndex: 0,
         showFullScreenPreview: false,
         infoImg: []
@@ -77,9 +102,12 @@
     },
     components: {
       EnterpriseCard,
-      ProductList,
+      ProductThumbnailMode,
+      ProductListMode,
       InformationList,
-      ViewBigImg
+      ViewBigImg,
+      Search,
+      Order
     },
     methods: {
       getEnterpriseDetail () {
@@ -251,9 +279,15 @@
       },
       tabClick (val) {
         this.showProduct = val === 0
-        this.showSearchBar()
+        this.placeholder = val === 0 ? '搜索产品' : '搜素资讯'
+        this.handleSearchBar()
       },
-      showSearchBar () {
+      search (res) {
+        if (this.showProduct) {
+          this.getProducts(res)
+        }
+      },
+      handleSearchBar () {
         // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
         let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
         let elementId = 'productList'
@@ -261,27 +295,13 @@
           height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
           elementId = 'informationList'
         }
-        showBack((id, status) => {
-          if (id === 'productList') {
-            this.cssAnimationProduct = status
-            if (!status) {
-              setTimeout(() => {
-                this.showBarProduct = status
-              }, 510)
-            } else {
-              this.showBarProduct = status
-            }
+        showBack((res) => {
+          if (this.showProduct && res.id === 'productList') {
+            this.showSearchBar = res.show
           } else {
-            this.cssAnimation = status
-            if (!status) {
-              setTimeout(() => {
-                this.showBar = status
-              }, 510)
-            } else {
-              this.showBar = status
-            }
+            // this.showSearchBar = false
           }
-        }, elementId, height)
+        }, {id: elementId, height: height})
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id, teamId: this.teamId, organizationId: item.organization_id}})
@@ -310,12 +330,15 @@
             e.preventDefault() // 最关键的一句，禁止浏览器默认行为
           }
         })
+      },
+      showListChange (val) {
+        this.showList = val
       }
     },
     mounted () {
       Indicator.open()
       this.getEnterpriseDetail()
-      this.showSearchBar()
+      this.handleSearchBar()
       this.stopTouchMove()
     },
     computed: {
@@ -385,5 +408,24 @@
         @include px2rem(border-bottom-right-radius, 14px);
       }
     }
+  }
+
+  .fade-enter {
+    opacity: 0;
+  }
+  .fade-enter-to {
+    opacity: 1;
+  }
+  .fade-enter-active {
+    transition: .5s ease-in;
+  }
+  .fade-leave {
+    opacity: 1;
+  }
+  .fade-leave-active {
+    transition: .5s ease-out;
+  }
+  .fade-leave-to {
+    opacity: 0
   }
 </style>

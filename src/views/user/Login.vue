@@ -110,7 +110,7 @@
 
   .login-container {
     position: absolute;
-    @include px2rem(top, 96px);
+    @include px2rem(top, 88px);
     @include pm2rem(padding, 40px, 0px, 0px, 0px);
     bottom: 0;
     left: 0;

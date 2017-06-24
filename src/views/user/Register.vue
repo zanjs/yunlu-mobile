@@ -11,20 +11,18 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-          <input class="input"
-                 type="text"
-                 v-model="mobile"
-                 placeholder="输入手机号">
-      </div>
-      <div class="input-container">
         <input class="input"
-               type="password"
-               v-model="password"
-               placeholder="请输入短信验证码">
-        <div class="valid-btn-container">
-          <a @click="countDown()"
-             v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
-        </div>
+               type="text"
+               v-model="mobile"
+               placeholder="输入手机号">
+      </div>
+      <div class="row-item">
+        <input class="input"
+                type="password"
+                v-model="password"
+                placeholder="请输入短信验证码">
+        <a @click="countDown()"
+           v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
       </div>
       <div class="next-btn">
         <a @click="next()">
@@ -157,35 +155,48 @@
         background-color: #EFEFEF;
         width: 100%;
       }
-      .valid-btn-container {
-        @include px2rem(padding-left, 32px);
+    }
+    .row-item {
+      @include pm2rem(padding, 0px, 55px, 0px, 55px);
+      @include px2rem(height, 80px);
+      .input {
+        float: left;
+        @include px2rem(border-radius, 40px);
+        @include px2rem(height, 80px);
+        @include pm2rem(padding, 0px, 34px, 0px, 34px);
+        color: #A6A6A6;
+        @include font-dpr(14px);
+        @include px2rem(line-height, 80px);
+        border: none;
+        background-color: #EFEFEF;
+        @include px2rem(width, 326px);
+      }
+      a {
+        float: right;
+        display: block;
         @include px2rem(width, 228px);
-        a {
-          @include px2rem(width, 228px);
-          display: block;
-          color: #52CAA7;
-          border-color: #52CAA7;
-          @include px2rem(border-width, 3px);
-          @include px2rem(border-radius, 40px);
-          border-style: solid;
-          box-sizing: border-box;
-          @include px2rem(height, 80px);
-          @include px2rem(line-height, 80px);
-          text-align: center;
-        }
-        .active {
-          color: #A6A6A6;
-          border-color: #DEDEDE;
-          background-color: #DEDEDE;
-        }
-        .normal {
-          color: #52CAA7;
-          border-color: #52CAA7;
-        }
+        color: #52CAA7;
+        border-color: #52CAA7;
+        @include px2rem(border-width, 3px);
+        @include px2rem(border-radius, 40px);
+        border-style: solid;
+        box-sizing: border-box;
+        @include px2rem(height, 80px);
+        @include px2rem(line-height, 80px);
+        text-align: center;
       }
       a:active {
         color: rgba(82, 202, 167, .5);
         border-color: rgba(82, 202, 167, .5);
+      }
+      .active {
+        color: #A6A6A6;
+        border-color: #DEDEDE;
+        background-color: #DEDEDE;
+      }
+      .normal {
+        color: #52CAA7;
+        border-color: #52CAA7;
       }
     }
     ::-webkit-input-placeholder{
@@ -212,9 +223,7 @@
     .text-btn {
       color: #A6A6A6;
       @include font-dpr(13px);
-      display: flex;
-      justify-content: center;
-      align-content: center;
+      text-align: center;
       a {
         color: #52CAA7;
       }

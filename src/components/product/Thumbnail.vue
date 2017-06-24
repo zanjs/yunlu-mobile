@@ -1,13 +1,14 @@
 <template>
-  <section id="informationList">
+  <section>
     <div class="gallery">
       <div v-for="(item, index) in store"
-           :key="index"
-           @click.stop="handleClick(item)"
-           class="img-box">
-        <img :src="item.url">
+            :key="index"
+            @click.stop="handleClick(item)"
+            class="img-box">
+        <img :src="item.file_url">
         <div class="cover">
-          {{item.cnname}}（{{item.count}}）
+          <span class="name">{{item.name}}</span>
+          <span class="money">&yen; ：{{item.prices[0].money}}</span>
         </div>
       </div>
     </div>
@@ -15,21 +16,20 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
+export default {
+  data () {
+    return {
 
-      }
-    },
-    props: ['cssAnimation', 'show', 'store', 'showBar'],
-    methods: {
-      handleClick (item) {
-        this.$emit('click', item)
-      }
-    },
-    mounted () {
+    }
+  },
+  name: 'ProductThumbnailMode',
+  props: ['store'],
+  methods: {
+    handleClick (item) {
+      this.$emit('click', item)
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -54,12 +54,16 @@
         left: 0;
         right: 0;
         background-color: rgba(0, 0, 0, .5);
-        @include px2rem(height, 50px);
+        @include px2rem(height, 90px);
         display: flex;
+        flex-direction: column;
         justify-content: center;
         color: $white;
+        @include pm2rem(padding, 0px, 00px, 0px, 20px);
         @include font-dpr(13px);
-        @include line-height(26px);
+        .money {
+          font-weight: bold;
+        }
       }
     }
   }
