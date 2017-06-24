@@ -64,8 +64,9 @@
       </mt-navbar>
       <mt-tab-container v-model="selected"
                         class="nav-bar-container">
-        <mt-tab-container-item id="1"
-                               class="prodcutdetail-price-item">
+        <mt-tab-container-item
+          id="1"
+          class="prodcutdetail-price-item">
           <template v-if="currentPriceProperties && currentPriceProperties.length > 0">
             <span v-for="(item, index) in currentPriceProperties"
                   :key="index"
@@ -75,19 +76,27 @@
           <div v-else
                class="no-price">该产品暂无价格参数</div>
         </mt-tab-container-item>
-        <mt-tab-container-item id="2"
-                               class="productdetail-product-item">
+        <mt-tab-container-item
+          id="2"
+          class="productdetail-product-item">
           <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
-            <div v-for="(item, index) in productDetail.properties"
-                 :key="index"
-                 class="row-item">
-              <div v-for="(i, indexI) in item.children"
-                   :key="indexI"
-                   class="title-container">
-                <div class="dot"></div>
-                <span class="title">{{i.name}} : {{i.value}}</span>
+            <template v-if="productDetail.properties[0].children.length > 0">
+              <div v-for="(item, index) in productDetail.properties"
+                   :key="index"
+                   class="row-item">
+                <div v-for="(i, indexI) in item.children"
+                     :key="indexI"
+                     class="title-container">
+                  <div class="dot"></div>
+                  <span class="title">{{i.name}} : {{i.value}}</span>
+                </div>
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <div class="no-product-args">
+                该产品暂无产品参数
+              </div>
+            </template>
           </template>
           <template v-else>
             <div v-if="productDetail && productDetail.goods_type === 'StoneMaterial'"
@@ -111,8 +120,9 @@
             </div>
           </template>
         </mt-tab-container-item>
-        <mt-tab-container-item id="3"
-                               class="productdetail-product-tags">
+        <mt-tab-container-item
+          id="3"
+          class="productdetail-product-tags">
           <template v-if="archives && archives.length > 0">
             <div v-for="(item, index) in archives"
                :key="index"

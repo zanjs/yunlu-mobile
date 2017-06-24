@@ -299,7 +299,7 @@
         }
         return tmpArr
       },
-      getEnterpriseList () {
+      getEnterpriseList (q = '') {
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/guilds`,
           method: 'get',
@@ -308,10 +308,11 @@
             states: ['joined'],
             page: 1,
             per_page: 10,
-            q: ''
+            q: q
           },
           target: this,
           resolve: (state, res) => {
+            this.hasSearch = q !== ''
             state.enterpriseMembers = res.data.members
             this.getPersonList()
           },
@@ -320,7 +321,7 @@
           }
         })
       },
-      getPersonList () {
+      getPersonList (q = '') {
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/members`,
           method: 'get',
@@ -330,11 +331,12 @@
             states: ['accepted'],
             page: 1,
             per_page: 20,
-            q: ''
+            q: q
           },
           target: this,
           resolve: (state, res) => {
             Indicator.close()
+            this.hasSearch = q !== ''
             state.personMembers = res.data.preps
           },
           reject: () => {
