@@ -44,7 +44,10 @@
               :bottom-drop-text="bottomDropText"
               :auto-fill="false"
               ref="loadMoreProducts">
-            <transition name="fade" mode="out-in">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
               <product-list-mode
                 v-if="showList"
                 :store="products"
@@ -59,7 +62,10 @@
           </mt-loadmore>
         </template>
         <template v-if="activeIndex === 1">
-          <transition name="fade" mode="out-in">
+          <transition
+            name="fade"
+            :appear="true"
+            mode="out-in">
             <information-list
               :store="enterpriseInfoFiles"
               @click="viewBigImg">
@@ -68,13 +74,16 @@
         </template>
         <template v-if="activeIndex === 2">
           <mt-loadmore
-              :top-method="loadEnterpriseTop"
-              :bottom-method="loadEnterpriseBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreEnterprises">
-            <transition name="fade" mode="out-in">
+            :top-method="loadEnterpriseTop"
+            :bottom-method="loadEnterpriseBottom"
+            :bottom-pull-text="bottomPullText"
+            :bottom-drop-text="bottomDropText"
+            :auto-fill="false"
+            ref="loadMoreEnterprises">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
               <enterprise-list
                 :store="enterpriseMembers"
                 @click="goEnterpriseCarte">
@@ -84,13 +93,16 @@
         </template>
         <template v-if="activeIndex === 3">
           <mt-loadmore
-              :top-method="loadPersonTop"
-              :bottom-method="loadPersonBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMorePeople">
-            <transition name="fade" mode="out-in">
+            :top-method="loadPersonTop"
+            :bottom-method="loadPersonBottom"
+            :bottom-pull-text="bottomPullText"
+            :bottom-drop-text="bottomDropText"
+            :auto-fill="false"
+            ref="loadMorePeople">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
               <person-list
                 :store="personMembers"
                 @click="goPersonCarte">
@@ -141,8 +153,10 @@
         productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
+        hasPullUpEnterprise: false,
         personPageIndex: 1,
         personPageSize: 20,
+        hasPullUpPerson: false,
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         queryParams: '',
@@ -168,6 +182,7 @@
     },
     methods: {
       getEnterpriseDetail () {
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -176,16 +191,20 @@
           },
           target: this,
           resolve: (state, res) => {
+            Indicator.close()
             state.teams = res.data.teams[0]
             this.getProducts()
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       getProducts (q = this.queryParams, order = this.productOrder) {
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
@@ -198,11 +217,15 @@
           },
           target: this,
           resolve: (state, res) => {
+            Indicator.close()
             this.hasSearch = q !== ''
             this.queryParams = ''
-            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products, q)
+            let tmpArr = this.handleProductThumbnails(res.data.products)
+            this.getFilesPublisheds(tmpArr, res.data.products, q)
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       // 手机QQ浏览器不支持array.findIndex方法
@@ -230,6 +253,7 @@
         return tmpArr
       },
       getFilesPublisheds (ids, arr, q) {
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -241,6 +265,7 @@
           },
           target: this,
           resolve: (state, res) => {
+            Indicator.close()
             if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
@@ -314,6 +339,7 @@
       },
       // 获取指定组织已发布的公司档分类概况(协会名片资讯)
       getEnterpriseDocument () {
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
           method: 'get',
@@ -323,22 +349,13 @@
           target: this,
           resolve: (state, res) => {
             state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
-            this.getInformation(this.handleDocumentIds(this.arrFilter(res.data.types)))
+            this.getInformation(this.handleDocumentIds(state.enterpriseDocuments))
             Indicator.close()
           },
           reject: () => {
             Indicator.close()
           }
         })
-      },
-      arrFilter (arr) {
-        let tmpArr = []
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].file_id !== null) {
-            tmpArr.push(arr[i])
-          }
-        }
-        return tmpArr
       },
       handleDocumentIds (arr) {
         let tmpArr = []
@@ -367,10 +384,13 @@
             this.queryParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
               state.enterpriseMembers = res.data.members
-              this.$refs.loadMoreEnterprises.onTopLoaded()
             } else {
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
               this.$refs.loadMoreEnterprises.onBottomLoaded()
+            }
+            if (this.hasPullUpEnterprise) {
+              this.$refs.loadMoreEnterprises.onTopLoaded()
+              this.hasPullUpEnterprise = false
             }
             this.getPersonList()
           },
@@ -400,10 +420,12 @@
             this.queryParams = ''
             if (this.personPageIndex === 1 || q !== '') {
               state.personMembers = res.data.preps
-              this.$refs.loadMorePeople.onTopLoaded()
             } else {
               state.personMembers = [...state.personMembers, ...res.data.preps]
               this.$refs.loadMorePeople.onBottomLoaded()
+            }
+            if (this.hasPullUpPerson) {
+              this.$refs.loadMorePeople.onTopLoaded()
             }
           },
           reject: () => {
@@ -524,6 +546,7 @@
       },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1
+        this.hasPullUpEnterprise = true // 列表数量较少时，下拉刷新需要重置位置
         this.getEnterpriseList()
       },
       loadEnterpriseBottom () {
@@ -532,6 +555,7 @@
       },
       loadPersonTop () {
         this.personPageIndex = 1
+        this.hasPullUpPerson = true // 列表数量较少时，手动重置下拉刷新位置
         this.getPersonList()
       },
       loadPersonBottom () {

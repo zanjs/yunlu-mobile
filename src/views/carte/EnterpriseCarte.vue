@@ -37,7 +37,10 @@
               :bottom-drop-text="bottomDropText"
               :auto-fill="false"
               ref="loadMoreProducts">
-            <transition name="fade" mode="out-in">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
               <product-list-mode
                 v-if="showList"
                 :store="products"
@@ -52,7 +55,10 @@
           </mt-loadmore>
         </template>
         <template v-else>
-          <transition name="fade" mode="out-in">
+          <transition
+            name="fade"
+            :appear="true"
+            mode="out-in">
             <information-list
               :store="enterpriseInfoFiles"
               @click="viewBigImg">

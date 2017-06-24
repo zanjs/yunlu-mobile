@@ -52,7 +52,7 @@
     },
     methods: {
       goReport () {
-        this.$router.push({path: '/report'})
+        this.$router.push({name: 'Report'})
       }
     }
   }
