@@ -12,21 +12,21 @@
       </mt-tab-item>
       <mt-tab-item id="wareroom">
         <div class="tab-item"
-             @click="selectTab('Login')">
+             @click="selectTab('Download')">
           <i class="iconfont icon-yunku"></i>
           <span>云库</span>
         </div>
       </mt-tab-item>
       <mt-tab-item id="people">
         <div class="tab-item"
-             @click="selectTab('Login')">
+             @click="selectTab('Download')">
           <i class="iconfont icon-renmai"></i>
           <span>人脉</span>
         </div>
       </mt-tab-item>
       <mt-tab-item id="space">
         <div class="tab-item"
-             @click="selectTab('Login')">
+             @click="selectTab('Download')">
           <i class="iconfont icon-kongjian"></i>
           <span>空间</span>
         </div>

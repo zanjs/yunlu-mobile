@@ -3,49 +3,49 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/space')">
+               @click="goRoute('Space')">
                私人空间
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/folders')">
+               @click="goRoute('Folders')">
                私人空间文件夹
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/personcarte')">
+               @click="goRoute('PersonCarte')">
                个人名片
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/comitycarte')">
+               @click="goRoute('ComityCarte')">
                协会名片
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/enterprisecarte')">
+               @click="goRoute('EnterpriseCarte')">
                企业名片
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/login')">
+               @click="goRoute('Login')">
       登录注册
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/download')">
+               @click="goRoute('Download')">
       下载
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('/home')">
+               @click="goRoute('Home')">
       首页
     </mt-button>
   </section>
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     goRoute (str) {
-      this.$router.push({path: str})
+      this.$router.push({name: str})
     }
   },
   computed: {

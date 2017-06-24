@@ -51,56 +51,20 @@
       <img src="../../assets/seeCardBg.png"
            class="white-bg">
       <img src="../../assets/send.png"
-           @click="goLogin()"
+           @click="send()"
            class="send">
       <div class="avatar-container"
-           @click="goLogin()">
+           @click="send()">
         <img src="../../assets/userAvatarSmall.png"
              class="user-avatar">
       </div>
       <p v-if="!hasLogin"
          class="user-name"
-         @click="goLogin()">***</p>
+         @click="send()">***</p>
       <p v-else
          class="user-name">{{currentUser.home_name}}</p>
     </div>
     <div class="card-container">
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
       <div class="card">
         <img src="../../assets/enterprise.png"
              class="card-img">
@@ -155,6 +119,13 @@
       goLogin () {
         setStore('beforeLogin', {urlName: 'Home', params: {}})
         this.$router.push({name: 'Login'})
+      },
+      send () {
+        if (this.hasLogin) {
+          this.$router.push({name: 'Hello', params: {}})
+        } else {
+          this.$router.push({name: 'Login', params: {}})
+        }
       }
     },
     mounted () {
