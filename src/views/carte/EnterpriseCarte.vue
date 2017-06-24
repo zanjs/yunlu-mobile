@@ -134,6 +134,7 @@
     },
     methods: {
       getEnterpriseDetail () {
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -142,13 +143,17 @@
           },
           target: this,
           resolve: (state, res) => {
+            Indicator.close()
             state.teams = res.data.teams[0]
             this.getProducts()
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       getProducts (q = this.queryParams, order = this.productOrder) {
+        Indicator.open()
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
@@ -166,8 +171,9 @@
           resolve: (state, res) => {
             this.hasSearch = q !== ''
             this.productLoaded = false
+            this.queryParams = ''
             let tmppArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmppArr, res.data.products)
+            this.getFilesPublisheds(tmppArr, res.data.products, q)
           },
           reject: () => {
             Indicator.close()
@@ -213,7 +219,9 @@
             Indicator.close()
             state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
           },
-          reject: () => {}
+          reject: () => {
+            Indicator.close()
+          }
         })
       },
       // 手机QQ浏览器及UC浏览器不支持array.findIndex方法
@@ -253,6 +261,7 @@
       },
       // 获取指定组织已发布的公司档分类概况(公司/企业名片资讯)
       getEnterpriseDocument () {
+        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
           method: 'get',
@@ -277,7 +286,7 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr) {
+      getFilesPublisheds (ids, arr, q) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -290,7 +299,7 @@
           target: this,
           resolve: (state, res) => {
             Indicator.close()
-            if (this.productPageIndex === 1) {
+            if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
               this.$refs.loadMoreProducts.onTopLoaded()

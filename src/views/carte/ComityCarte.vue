@@ -67,20 +67,36 @@
           </transition>
         </template>
         <template v-if="activeIndex === 2">
-          <transition name="fade" mode="out-in">
-            <enterprise-list
-              :store="enterpriseMembers"
-              @click="goEnterpriseCarte">
-            </enterprise-list>
-          </transition>
+          <mt-loadmore
+              :top-method="loadEnterpriseTop"
+              :bottom-method="loadEnterpriseBottom"
+              :bottom-pull-text="bottomPullText"
+              :bottom-drop-text="bottomDropText"
+              :auto-fill="false"
+              ref="loadMoreEnterprises">
+            <transition name="fade" mode="out-in">
+              <enterprise-list
+                :store="enterpriseMembers"
+                @click="goEnterpriseCarte">
+              </enterprise-list>
+            </transition>
+          </mt-loadmore>
         </template>
         <template v-if="activeIndex === 3">
-          <transition name="fade" mode="out-in">
-            <person-list
-              :store="personMembers"
-              @click="goPersonCarte">
-            </person-list>
-          </transition>
+          <mt-loadmore
+              :top-method="loadPersonTop"
+              :bottom-method="loadPersonBottom"
+              :bottom-pull-text="bottomPullText"
+              :bottom-drop-text="bottomDropText"
+              :auto-fill="false"
+              ref="loadMorePeople">
+            <transition name="fade" mode="out-in">
+              <person-list
+                :store="personMembers"
+                @click="goPersonCarte">
+              </person-list>
+            </transition>
+          </mt-loadmore>
         </template>
       </div>
       <transition name="fade">
@@ -126,7 +142,7 @@
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         personPageIndex: 1,
-        personPageSize: 10,
+        personPageSize: 20,
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         queryParams: '',
@@ -183,7 +199,8 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products)
+            this.queryParams = ''
+            this.getFilesPublisheds(this.handleProductThumbnails(res.data.products), res.data.products, q)
           },
           reject: () => {}
         })
@@ -212,7 +229,7 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr) {
+      getFilesPublisheds (ids, arr, q) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -224,7 +241,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (this.productPageIndex === 1) {
+            if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
               this.$refs.loadMoreProducts.onTopLoaded()
@@ -330,21 +347,31 @@
         }
         return tmpArr
       },
-      getEnterpriseList (q = '') {
+      getEnterpriseList (q = this.queryParams) {
+        Indicator.open()
+        this.queryParams = q
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/guilds`,
           method: 'get',
           params: {
             team_id: this.teamId,
             states: ['joined'],
-            page: 1,
-            per_page: 10,
+            page: this.enterprisePageIndex,
+            per_page: this.enterprisePageSize,
             q: q
           },
           target: this,
           resolve: (state, res) => {
+            Indicator.close()
             this.hasSearch = q !== ''
-            state.enterpriseMembers = res.data.members
+            this.queryParams = ''
+            if (this.enterprisePageIndex === 1 || q !== '') {
+              state.enterpriseMembers = res.data.members
+              this.$refs.loadMoreEnterprises.onTopLoaded()
+            } else {
+              state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
+              this.$refs.loadMoreEnterprises.onBottomLoaded()
+            }
             this.getPersonList()
           },
           reject: () => {
@@ -352,7 +379,9 @@
           }
         })
       },
-      getPersonList (q = '') {
+      getPersonList (q = this.queryParams) {
+        Indicator.open()
+        this.queryParams = q
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/members`,
           method: 'get',
@@ -360,15 +389,22 @@
             team_id: this.teamId,
             token: this.token,
             states: ['accepted'],
-            page: 1,
-            per_page: 20,
+            page: this.personPageIndex,
+            per_page: this.personPageSize,
             q: q
           },
           target: this,
           resolve: (state, res) => {
             Indicator.close()
             this.hasSearch = q !== ''
-            state.personMembers = res.data.preps
+            this.queryParams = ''
+            if (this.personPageIndex === 1 || q !== '') {
+              state.personMembers = res.data.preps
+              this.$refs.loadMorePeople.onTopLoaded()
+            } else {
+              state.personMembers = [...state.personMembers, ...res.data.preps]
+              this.$refs.loadMorePeople.onBottomLoaded()
+            }
           },
           reject: () => {
             Indicator.close()
@@ -485,6 +521,22 @@
       loadProductBottom () {
         this.productPageIndex += 1
         this.getProducts()
+      },
+      loadEnterpriseTop () {
+        this.enterprisePageIndex = 1
+        this.getEnterpriseList()
+      },
+      loadEnterpriseBottom () {
+        this.enterprisePageIndex += 1
+        this.getEnterpriseList()
+      },
+      loadPersonTop () {
+        this.personPageIndex = 1
+        this.getPersonList()
+      },
+      loadPersonBottom () {
+        this.personPageIndex += 1
+        this.getPersonList()
       }
     },
     mounted () {
