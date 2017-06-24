@@ -148,16 +148,18 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 2;
+    z-index: 999;
     img {
       position: fixed;
       top: 0;
       @include px2rem(height, 114px);
       width: 100%;
+      z-index: 999;
     }
     .search-input {
       position: relative;
       flex: 1;
+      z-index: 1000;
       display: flex;
       justify-content: center;
       align-content: center;
