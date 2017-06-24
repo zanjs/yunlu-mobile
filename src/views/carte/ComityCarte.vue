@@ -36,37 +36,65 @@
              @click.prevent="tabClick(3)">个人会员</div>
       </div>
       <div class="tab-container">
-        <product-list
-          :store="products"
-          :show-bar="showBarProduct"
-          @search="getProducts"
-          :css-animation="activeIndex === 0 && cssAnimationProduct"
-          :show="activeIndex === 0"
-          @click="goProductDetail"></product-list>
-        <information-list
-          :store="enterpriseInfoFiles"
-          :show-bar="showBar"
-          :css-animation="activeIndex === 1 && cssAnimation"
-          :show="activeIndex === 1"
-          @click="viewBigImg"></information-list>
-        <enterprise-list
-          :store="enterpriseMembers"
-          @click="goEnterpriseCarte"
-          :show="activeIndex === 2"
-          :css-animation="activeIndex === 2 && cssAnimation"></enterprise-list>
-        <person-list
-          :store="personMembers"
-          @click="goPersonCarte"
-          :show="activeIndex === 3"
-          :css-animation="activeIndex === 3 && cssAnimation"></person-list>
+        <template v-if="activeIndex === 0">
+          <transition name="fade" mode="out-in">
+            <product-list-mode
+              v-if="showList"
+              :store="products"
+              @click="goProductDetail">
+            </product-list-mode>
+            <product-thumbnail-mode
+              v-else
+              :store="products"
+              @click="goProductDetail">
+            </product-thumbnail-mode>
+          </transition>
+        </template>
+        <template v-if="activeIndex === 1">
+          <transition name="fade" mode="out-in">
+            <information-list
+              :store="enterpriseInfoFiles"
+              @click="viewBigImg">
+            </information-list>
+          </transition>
+        </template>
+        <template v-if="activeIndex === 2">
+          <transition name="fade" mode="out-in">
+            <enterprise-list
+              :store="enterpriseMembers"
+              @click="goEnterpriseCarte">
+            </enterprise-list>
+          </transition>
+        </template>
+        <template v-if="activeIndex === 3">
+          <transition name="fade" mode="out-in">
+            <person-list
+              :store="personMembers"
+              @click="goPersonCarte">
+            </person-list>
+          </transition>
+        </template>
       </div>
+      <transition name="fade">
+        <search v-show="showSearchBar"
+                :placeholder="placeholder"
+                @search="search">
+        </search>
+      </transition>
+      <transition name="fade">
+        <order v-show="showSearchBar && activeIndex === 0"
+               :order-up="orderUp"
+               :show-list="showList"
+               @switch="showListChange"></order>
+      </transition>
     </div>
   </section>
 </template>
 
 <script>
   import EnterpriseCard from '../../components/common/EnterpriseCard'
-  import ProductList from '../../components/common/ProductList'
+  import ProductThumbnailMode from '../../components/product/Thumbnail'
+  import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
@@ -74,32 +102,34 @@
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import { Indicator } from 'mint-ui'
+  import Search from '../../components/common/Search'
+  import Order from '../../components/common/Order'
   export default {
     data () {
       return {
         teamId: 6756,
         token: 'fbdec44fa55088fd863ce47c778b1ddc',
         hasSearch: false,
+        showSearchBar: false,
+        placeholder: '搜索产品',
+        orderUp: true,
+        showList: false,
         activeIndex: 0,
-        showProduct: true,
-        showBarProduct: false,
-        cssAnimationProduct: false,
-        cssAnimation: false,
         cssAnimationViewer: false,
-        showBar: false,
-        currentIndex: 0,
         showFullScreenPreview: false,
-        productsThumbnailsIds: [],
         infoImg: []
       }
     },
     components: {
       EnterpriseCard,
-      ProductList,
+      ProductThumbnailMode,
+      ProductListMode,
       InformationList,
       EnterpriseList,
       PersonList,
-      ViewBigImg
+      ViewBigImg,
+      Search,
+      Order
     },
     methods: {
       getEnterpriseDetail () {
@@ -136,12 +166,20 @@
           reject: () => {}
         })
       },
+      // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
-          let index = arr2.findIndex(item => item.id === arr[i].file_id)
-          let tmpObj = {...arr[i], file_url: arr2[index].url, file_thumb_urls: arr2[index].thumb_urls[0]}
-          tmpArr.push(tmpObj)
+          for (let j = 0; j < arr2.length; j++) {
+            if (arr[i].file_id === arr2[j].id) {
+              let tmpObj = {
+                ...arr[i],
+                file_url: arr2[j].url,
+                file_thumb_urls: arr2[j].thumb_urls[0]
+              }
+              tmpArr.push(tmpObj)
+            }
+          }
         }
         return tmpArr
       },
@@ -193,33 +231,37 @@
           }
         })
       },
+      // 手机QQ浏览器及UC浏览器不支持array.findIndex方法
       handleEnterpriseInfoFiles (enterpriseDocuments, files) {
         for (let i = 0; i < files.length; i++) {
-          let index = enterpriseDocuments.findIndex(item => item.file_id === files[i].id)
-          files[i].name = enterpriseDocuments[index].name
-          files[i].count = enterpriseDocuments[index].count
-          switch (enterpriseDocuments[index].name) {
-            case null:
-              files[i].cnname = '其他'
-              break
-            case 'Certificate':
-              files[i].cnname = '社会身份'
-              break
-            case 'Case':
-              files[i].cnname = '案例'
-              break
-            case 'Information':
-              files[i].cnname = '资讯'
-              break
-            case 'Notification':
-              files[i].cnname = '通知'
-              break
-            case 'SaleCertificate':
-              files[i].cnname = '销售资质'
-              break
-            default:
-              files[i].cnname = '其他'
-              break
+          for (let j = 0; j < enterpriseDocuments.length; j++) {
+            if (files[i].id === enterpriseDocuments[j].file_id) {
+              files[i].name = enterpriseDocuments[j].name
+              files[i].count = enterpriseDocuments[j].count
+              switch (enterpriseDocuments[j].name) {
+                case null:
+                  files[i].cnname = '其他'
+                  break
+                case 'Certificate':
+                  files[i].cnname = '社会身份'
+                  break
+                case 'Case':
+                  files[i].cnname = '案例'
+                  break
+                case 'Information':
+                  files[i].cnname = '资讯'
+                  break
+                case 'Notification':
+                  files[i].cnname = '通知'
+                  break
+                case 'SaleCertificate':
+                  files[i].cnname = '销售资质'
+                  break
+                default:
+                  files[i].cnname = '其他'
+                  break
+              }
+            }
           }
         }
         return files
@@ -235,11 +277,20 @@
           target: this,
           resolve: (state, res) => {
             state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
-            this.getInformation(this.handleDocumentIds(res.data.types.filter(i => i.file_id !== null)))
+            this.getInformation(this.handleDocumentIds(this.arrFilter(res.data.types)))
             Indicator.close()
           },
           reject: () => {}
         })
+      },
+      arrFilter (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].file_id !== null) {
+            tmpArr.push(arr[i])
+          }
+        }
+        return tmpArr
       },
       handleDocumentIds (arr) {
         let tmpArr = []
@@ -310,50 +361,56 @@
       },
       tabClick (val) {
         this.activeIndex = val
-        this.showSearchBar()
-      },
-      showSearchBar () {
-        // 开始监听scrollTop的值，达到一定程度后显示返回顶部搜索栏
-        let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        let elementId = 'productList'
-        if (this.activeIndex !== 0) {
-          height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
-        }
-        switch (this.activeIndex) {
+        switch (val) {
+          case 0:
+            this.placeholder = '搜索产品'
+            break
           case 1:
-            elementId = 'informationList'
+            this.placeholder = '搜索资讯'
             break
           case 2:
-            elementId = 'enterpriseList'
+            this.placeholder = '搜索企业会员'
             break
           case 3:
-            elementId = 'personList'
+            this.placeholder = '搜索个人会员'
             break
           default:
-            elementId = 'productList'
+            this.placeholder = '搜索产品'
             break
         }
-        showBack((id, status) => {
-          if (id === 'productList') {
-            this.cssAnimationProduct = status
-            if (!status) {
-              setTimeout(() => {
-                this.showBarProduct = status
-              }, 510)
-            } else {
-              this.showBarProduct = status
-            }
+        this.handleSearchBar()
+      },
+      search (res) {
+        switch (this.activeIndex) {
+          case 0:
+            this.getProducts(res)
+            break
+          case 1:
+            break
+          case 2:
+            this.getEnterpriseList(res)
+            break
+          case 3:
+            this.getPersonList(res)
+            break
+          default:
+            this.getProducts(res)
+        }
+      },
+      handleSearchBar () {
+        let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
+        let elementId = 'productList'
+        if (!this.activeIndex === 0) {
+          height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 190 / 36
+          elementId = 'informationList'
+        }
+        showBack((res) => {
+          if (this.activeIndex === 0 && res.id === 'productList') {
+            this.showSearchBar = res.show
           } else {
-            this.cssAnimation = status
-            if (!status) {
-              setTimeout(() => {
-                this.showBar = status
-              }, 510)
-            } else {
-              this.showBar = status
-            }
+            // this.showSearchBar = false
           }
-        }, elementId, height)
+        }, {id: elementId, height: height})
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id, organizationId: item.organization_id}})
@@ -382,12 +439,15 @@
             e.preventDefault() // 最关键的一句，禁止浏览器默认行为
           }
         })
+      },
+      showListChange (val) {
+        this.showList = val
       }
     },
     mounted () {
       Indicator.open()
       this.getEnterpriseDetail()
-      this.showSearchBar()
+      this.handleSearchBar()
       this.stopTouchMove()
     },
     computed: {
@@ -467,5 +527,23 @@
         border-left: none;
       }
     }
+  }
+  .fade-enter {
+    opacity: 0;
+  }
+  .fade-enter-to {
+    opacity: 1;
+  }
+  .fade-enter-active {
+    transition: .5s ease-in;
+  }
+  .fade-leave {
+    opacity: 1;
+  }
+  .fade-leave-active {
+    transition: .5s ease-out;
+  }
+  .fade-leave-to {
+    opacity: 0
   }
 </style>

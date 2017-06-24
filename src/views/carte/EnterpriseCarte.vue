@@ -29,7 +29,7 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <template v-show="showProduct">
+        <template v-if="showProduct">
           <transition name="fade" mode="out-in">
             <product-list-mode
               v-if="showList"
@@ -43,11 +43,14 @@
             </product-thumbnail-mode>
           </transition>
         </template>
-        <information-list
-          v-show="!showProduct"
-          :store="enterpriseInfoFiles"
-          @click="viewBigImg">
-        </information-list>
+        <template v-else>
+          <transition name="fade" mode="out-in">
+            <information-list
+              :store="enterpriseInfoFiles"
+              @click="viewBigImg">
+            </information-list>
+          </transition>
+        </template>
       </div>
     </div>
     <div>
@@ -189,33 +192,37 @@
           reject: () => {}
         })
       },
+      // 手机QQ浏览器及UC浏览器不支持array.findIndex方法
       handleEnterpriseInfoFiles (enterpriseDocuments, files) {
         for (let i = 0; i < files.length; i++) {
-          let index = enterpriseDocuments.findIndex(item => item.file_id === files[i].id)
-          files[i].name = enterpriseDocuments[index].name
-          files[i].count = enterpriseDocuments[index].count
-          switch (enterpriseDocuments[index].name) {
-            case null:
-              files[i].cnname = '其他'
-              break
-            case 'Certificate':
-              files[i].cnname = '企业身份'
-              break
-            case 'Case':
-              files[i].cnname = '案例'
-              break
-            case 'Information':
-              files[i].cnname = '资讯'
-              break
-            case 'Notification':
-              files[i].cnname = '通知'
-              break
-            case 'SaleCertificate':
-              files[i].cnname = '销售资质'
-              break
-            default:
-              files[i].cnname = '其他'
-              break
+          for (let j = 0; j < enterpriseDocuments.length; j++) {
+            if (files[i].id === enterpriseDocuments[j].file_id) {
+              files[i].name = enterpriseDocuments[j].name
+              files[i].count = enterpriseDocuments[j].count
+              switch (enterpriseDocuments[j].name) {
+                case null:
+                  files[i].cnname = '其他'
+                  break
+                case 'Certificate':
+                  files[i].cnname = '社会身份'
+                  break
+                case 'Case':
+                  files[i].cnname = '案例'
+                  break
+                case 'Information':
+                  files[i].cnname = '资讯'
+                  break
+                case 'Notification':
+                  files[i].cnname = '通知'
+                  break
+                case 'SaleCertificate':
+                  files[i].cnname = '销售资质'
+                  break
+                default:
+                  files[i].cnname = '其他'
+                  break
+              }
+            }
           }
         }
         return files

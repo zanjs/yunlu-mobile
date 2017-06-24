@@ -1,13 +1,6 @@
 <template>
   <section>
-    <div class="search-container"
-         v-bind:class="{'fade-in-top': cssAnimation, 'fade-out-top': !cssAnimation}">
-      <input type="text"
-             placeholder="搜索企业会员">
-      <i class="iconfont icon-sousuo"></i>
-    </div>
-    <div v-show="show"
-         class="list-container">
+    <div class="list-container">
       <div v-for="(item, index) in store"
            :key="index"
            @click="handleClick(item.organization.id)"
@@ -31,7 +24,7 @@
       return {
       }
     },
-    props: ['show', 'store', 'cssAnimation'],
+    props: ['store'],
     methods: {
       handleClick (id) {
         this.$emit('click', id)
@@ -116,64 +109,6 @@
       @include px2rem(width, 118px);
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
-    }
-  }
-  .fade-in-top {
-    -webkit-animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-            animation: fade-in-top .5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-  }
-
-  .fade-out-top {
-    -webkit-animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: fade-out-top .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-  @-webkit-keyframes fade-in-top {
-    0% {
-      -webkit-transform: translateY(-50px);
-              transform: translateY(-50px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  @keyframes fade-in-top {
-    0% {
-      -webkit-transform: translateY(-50px);
-              transform: translateY(-50px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes fade-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-50px);
-              transform: translateY(-50px);
-      opacity: 0;
-    }
-  }
-  @keyframes fade-out-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateY(-50px);
-              transform: translateY(-50px);
-      opacity: 0;
     }
   }
 </style>

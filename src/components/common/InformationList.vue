@@ -21,7 +21,7 @@
 
       }
     },
-    props: ['cssAnimation', 'show', 'store', 'showBar'],
+    props: ['store'],
     methods: {
       handleClick (item) {
         this.$emit('click', item)
