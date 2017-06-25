@@ -228,7 +228,9 @@
       return {
         selected: '1',
         currentIndex: 1,
-        productId: '',
+        teamId: this.$route.params.teamId,
+        productId: this.$route.params.id,
+        organizationId: this.$route.params.organizationId,
         morePrice: false,
         cssAnimation: false,
         currentPrice: {},
@@ -282,10 +284,10 @@
     methods: {
       getProductDetail () {
         this.$store.dispatch('commonAction', {
-          url: `/products/${this.$route.params.id}`,
+          url: `/products/${this.productId}`,
           method: 'get',
           params: {
-            id: this.$route.params.id
+            id: this.productId
           },
           target: this,
           resolve: (state, res) => {
@@ -343,7 +345,7 @@
           method: 'get',
           params: {
             type: 'product',
-            team_id: this.$route.params.teamId,
+            team_id: this.teamId,
             thumbs: ['general'],
             ids: ids
           },
@@ -359,7 +361,7 @@
       },
       getProductArchives () {
         this.$store.dispatch('commonAction', {
-          url: `/products/${this.$route.params.id}/archives`,
+          url: `/products/${this.productId}/archives`,
           method: 'get',
           params: {},
           target: this,
@@ -377,7 +379,7 @@
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: [this.$route.params.organizationId]
+            ids: [this.organizationId]
           },
           target: this,
           resolve: (state, res) => {
@@ -590,8 +592,8 @@
     border-bottom: 1px solid #DEDEDE;
   }
   .company-info {
-    @include pm2rem(margin, 22px, 0px, 100px, 0px);
-    @include pm2rem(padding, 24px, 24px, 24px, 24px);
+    @include pm2rem(margin, 22px, 0px, 0px, 0px);
+    @include pm2rem(padding, 24px, 24px, 124px, 24px);
     border-top: 1px solid #D1D1D1;
     background-color: $white;
     display: -webkit-box;

@@ -66,7 +66,8 @@
          class="user-name">{{currentUser.home_name}}</p>
     </div>
     <div class="card-container">
-      <div class="card">
+      <div class="card"
+           @click="searchEnterprise()">
         <img src="../../assets/enterprise.png"
              class="card-img">
         <div class="content">

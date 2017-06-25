@@ -18,26 +18,32 @@
     <div class="icons">
       <a v-if="store && store.mobiles && store.mobiles.length > 0"
          :href="'tel:' + store.mobiles[0]"
+         class="icon-box"
          @click="handleClick({'action': 'mobile', 'value': store.mobiles})">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
       <a v-if="store && store.email"
+         class="icon-box"
          @click="handleClick({'action': 'email', 'value': store.email})">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
       <a v-if="store && store.address"
+         class="icon-box"
          @click="handleClick({'action': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
       <a v-if="store && store.wechat"
+         class="icon-box"
          @click="handleClick({'action': 'wechat', 'value': store.wechat})">
         <i class="iconfont icon-weixin weixin"></i>
       </a>
       <a v-if="store && store.weibo"
+         class="icon-box"
          @cilck="handleClick({'action': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
       </a>
       <a v-if="store && store.qq"
+         class="icon-box"
          @click="handleClick({'action': 'qq', 'value': store.qq})">
         <i class="iconfont icon-qq qq"></i>
       </a>
@@ -88,9 +94,16 @@
       display: flex;
       @include px2rem(height, 100px);
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
-      justify-content: space-between;
       align-items: center;
       border-top: 1px solid #d1d1d1;
+      a {
+        text-decoration: none;
+        @include px2rem(width, 108px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: inherit;
+      }
       i {
         @include font-dpr(24px);
       }

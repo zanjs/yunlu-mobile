@@ -20,11 +20,17 @@
         :store="userCard"
         @click="cardClick" ></card>
     </div>
-    <div class="rope">
+    <div v-if="clusters && clusters.length > 0"
+         class="rope">
       <img src="../../assets/shengzi@2x.png"
            class="left">
       <img src="../../assets/shengzi@2x.png"
            class="right">
+    </div>
+    <div
+      v-else
+      class="no-carte">
+      <img src="../../assets/noPersonCarte.png">
     </div>
     <div class="carte-container">
       <a
@@ -127,6 +133,12 @@
     align-items: center;
     img {
       @include px2rem(width, 30px);
+    }
+  }
+  .no-carte {
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
   .carte-container {
