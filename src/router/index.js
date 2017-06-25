@@ -18,6 +18,7 @@ import Download from '../views/download/Download'
 import See from '../views/home/See'
 import Mine from '../views/user/Mine'
 import ChangePassword from '../views/user/ChangePassword'
+import SearchEnterprise from '../views/home/SearchEnterprise'
 
 Vue.use(Router)
 
@@ -98,6 +99,10 @@ export default new Router({
       path: '/changepassword',
       name: 'ChangePassword',
       component: ChangePassword
+    }, {
+      path: '/searchenterprise',
+      name: 'SearchEnterprise',
+      component: SearchEnterprise
     }
   ]
 })

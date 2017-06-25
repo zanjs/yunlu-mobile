@@ -2,7 +2,8 @@
   <section>
     <div class="search-bar">
       <img src="../../assets/homePageTopBg.png">
-      <div class="search-input">
+      <div class="search-input"
+           @click="searchEnterprise()">
         <input type="text"
                placeholder="任你搜 任意搜">
         <i class="iconfont icon-sousuo"></i>
@@ -126,6 +127,9 @@
         } else {
           this.$router.push({name: 'Login', params: {}})
         }
+      },
+      searchEnterprise () {
+        this.$router.push({name: 'SearchEnterprise', params: {}})
       }
     },
     mounted () {
