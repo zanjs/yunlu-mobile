@@ -82,7 +82,7 @@
         if (item.organization.service.aliaz === 'association') {
           this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id}})
         } else {
-          this.$router.push({name: 'EnterpriseCarte', params: {id: 1}})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id}})
         }
       },
       goBack () {

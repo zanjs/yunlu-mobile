@@ -16,7 +16,9 @@
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <card></card>
+      <card
+        :store="userCard"
+        @click="cardClick" ></card>
     </div>
     <div class="rope">
       <img src="../../assets/shengzi@2x.png"
@@ -25,16 +27,11 @@
            class="right">
     </div>
     <div class="carte-container">
-      <a class="item">
-        <span>华瑞石业</span>
-        <i class="iconfont icon-fanhui"></i>
-      </a>
-      <a class="item">
-        <span>舌尖上的中国</span>
-        <i class="iconfont icon-fanhui"></i>
-      </a>
-      <a class="item">
-        <span>读书</span>
+      <a
+        v-for="(item, index) in clusters"
+        :key="index"
+        class="item">
+        <span>{{item.name}}</span>
         <i class="iconfont icon-fanhui"></i>
       </a>
     </div>
@@ -43,9 +40,15 @@
 
 <script>
   import Card from '../../components/common/Card'
+  import { Indicator } from 'mint-ui'
+  import { getStore } from '../../config/mUtils'
+  import { mapGetters } from 'vuex'
   export default {
     data () {
-      return {}
+      return {
+        user_id: this.$route.params.id,
+        token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc'
+      }
     },
     components: {
       Card
@@ -53,7 +56,39 @@
     methods: {
       goReport () {
         this.$router.push({name: 'Report'})
+      },
+      getPersonDetail () {
+        Indicator.open()
+        this.$store.dispatch('commonAction', {
+          url: '/business_cards',
+          method: 'get',
+          params: {
+            token: this.token,
+            user_id: this.user_id
+          },
+          target: this,
+          resolve: (state, res) => {
+            Indicator.close()
+            state.userCard = res.data.cards
+            state.clusters = res.data.clusters
+          },
+          reject: () => {
+            Indicator.close()
+          }
+        })
+      },
+      cardClick (obj) {
+        console.log(obj)
       }
+    },
+    mounted () {
+      this.getPersonDetail()
+    },
+    computed: {
+      ...mapGetters([
+        'userCard',
+        'clusters'
+      ])
     }
   }
 </script>

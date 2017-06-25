@@ -134,7 +134,7 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { showBack } from '../../config/mUtils'
+  import { getStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import { Indicator } from 'mint-ui'
@@ -143,8 +143,8 @@
   export default {
     data () {
       return {
-        teamId: 6756,
-        token: 'fbdec44fa55088fd863ce47c778b1ddc',
+        teamId: this.$route.params.teamId || 6756,
+        token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc',
         hasSearch: false,
         showSearchBar: false,
         placeholder: '搜索产品',

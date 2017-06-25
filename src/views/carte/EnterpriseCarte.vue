@@ -105,7 +105,7 @@
   export default {
     data () {
       return {
-        teamId: 6642,
+        teamId: this.$route.params.teamId || 6642,
         hasSearch: false,
         showProduct: true,
         showSearchBar: false,

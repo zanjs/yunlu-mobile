@@ -1,33 +1,46 @@
 <template>
   <section class="card">
     <div class="user-info">
-      <img src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
+      <img
+        v-if="store && store.avatar_url"
+        :src="store.avatar_url">
+      <img
+        v-else
+        src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
       <div class="content">
-        <p>胖胖的小丸子</p>
+        <p v-if="store && store.name">{{store.name}}</p>
+        <p v-else>**</p>
         <div>
           <span>个人简介</span>
         </div>
       </div>
     </div>
     <div class="icons">
-      <div>
+      <a v-if="store && store.mobiles && store.mobiles.length > 0"
+         :href="'tel:' + store.mobiles[0]"
+         @click="handleClick({'action': 'mobile', 'value': store.mobiles})">
         <i class="iconfont icon-dianhua dianhua"></i>
-      </div>
-      <div>
+      </a>
+      <a v-if="store && store.email"
+         @click="handleClick({'action': 'email', 'value': store.email})">
         <i class="iconfont icon-youxiang youxiang"></i>
-      </div>
-      <div>
+      </a>
+      <a v-if="store && store.address"
+         @click="handleClick({'action': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
-      </div>
-      <div>
+      </a>
+      <a v-if="store && store.wechat"
+         @click="handleClick({'action': 'wechat', 'value': store.wechat})">
         <i class="iconfont icon-weixin weixin"></i>
-      </div>
-      <div>
+      </a>
+      <a v-if="store && store.weibo"
+         @cilck="handleClick({'action': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
-      </div>
-      <div>
+      </a>
+      <a v-if="store && store.qq"
+         @click="handleClick({'action': 'qq', 'value': store.qq})">
         <i class="iconfont icon-qq qq"></i>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -37,7 +50,12 @@
     data () {
       return {}
     },
-    methods: {},
+    props: ['store'],
+    methods: {
+      handleClick (obj) {
+        this.$emit('click', obj)
+      }
+    },
     mountd: {
 
     }
