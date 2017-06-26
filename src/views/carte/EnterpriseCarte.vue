@@ -61,19 +61,11 @@
             mode="out-in">
             <information-list
               :store="enterpriseInfoFiles"
-              @click="viewBigImg">
+              @click="openInformationFolders">
             </information-list>
           </transition>
         </template>
       </div>
-    </div>
-    <div>
-      <view-big-img
-        :data-source="infoImg"
-        :index="currentIndex"
-        :show-preview="showFullScreenPreview"
-        :css-animation="cssAnimationViewer"
-        @close="closeImgViewer"></view-big-img>
     </div>
     <transition name="fade">
       <search v-show="showSearchBar"
@@ -109,7 +101,6 @@
         showProduct: true,
         showSearchBar: false,
         placeholder: '搜索产品',
-        cssAnimationViewer: false,
         productPageIndex: 1,
         productPageSize: 10,
         productLoaded: false,
@@ -123,9 +114,7 @@
         orderUp: true,
         productOrder: 'price',
         showList: false,
-        currentIndex: 0,
-        showFullScreenPreview: false,
-        infoImg: []
+        currentIndex: 0
       }
     },
     components: {
@@ -348,26 +337,9 @@
         console.log(id)
         this.$router.push({path: '/enterprisedetail'})
       },
-      viewBigImg (index) {
-        console.log(index)
-        this.infoImg.push(index)
-        this.showFullScreenPreview = true
-      },
-      closeImgViewer () {
-        this.cssAnimationViewer = true
-        setTimeout(() => {
-          this.infoImg = []
-          this.showFullScreenPreview = false
-          this.cssAnimationViewer = false
-        }, 500)
-      },
-      stopTouchMove () {
-        let self = this
-        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showFullScreenPreview) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
-          }
-        })
+      openInformationFolders (item) {
+        setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'})
+        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'}})
       },
       showListChange (val) {
         this.showList = val
@@ -390,7 +362,6 @@
     mounted () {
       this.getEnterpriseDetail()
       this.handleSearchBar()
-      this.stopTouchMove()
     },
     computed: {
       ...mapGetters([

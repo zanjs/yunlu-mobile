@@ -507,8 +507,8 @@
         this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
       },
       openInformationFolders (item) {
-        setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name})
-        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name}})
+        setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}})
       },
       showListChange (val) {
         this.showList = val

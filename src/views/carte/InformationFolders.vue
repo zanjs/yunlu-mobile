@@ -83,7 +83,11 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'ComityCarte'})
+        if (this.$route.params && this.$route.params.backUrl) {
+          this.$router.push({name: this.$route.params.backUrl})
+        } else {
+          this.$router.go(-1)
+        }
       },
       getArchives () {
         this.$store.dispatch('commonAction', {
