@@ -13,18 +13,20 @@
       :placeholder="placeholder"
       @search="getEnterprises">
     </search>
-    <mt-loadmore
+    <div class="list">
+      <mt-loadmore
             :top-method="loadEnterpriseTop"
             :bottom-method="loadEnterpriseBottom"
             :bottom-pull-text="bottomPullText"
             :bottom-drop-text="bottomDropText"
             :auto-fill="false"
             ref="loadMoreEnterprises">
-    <list
-      class="list"
-      :store="allEnterprises"
-      @click="goEnterpriseCarte"></list>
-    </mt-loadmore>
+        <list
+          :store="allEnterprises"
+          @click="goEnterpriseCarte">
+        </list>
+      </mt-loadmore>
+    </div>
   </section>
 </template>
 
@@ -129,6 +131,6 @@
     }
   }
   .list {
-    @include px2rem(padding-top, 170px);
+    @include px2rem(margin-top, 170px);
   }
 </style>

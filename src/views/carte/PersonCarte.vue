@@ -140,9 +140,11 @@
     }
   }
   .no-carte {
+    text-align: center;
+    @include pm2rem(padding, 100px, 20px, 0px, 0px);
     img {
-      width: 100%;
-      height: 100%;
+      width: 60%;
+      height: auto;
     }
   }
   .carte-container {
