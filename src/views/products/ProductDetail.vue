@@ -750,7 +750,10 @@
   .preview-page-nav {
     position: fixed;
     @include px2rem(top, 38px);
-    @include px2rem(left, 130px);
+    @include px2rem(left, 150px);
+    @include pm2rem(padding, 4px, 10px, 4px, 10px);
+    @include px2rem(border-radius, 10px);
+    background-color: rgba(0, 0, 0, .5);
     color: white;
     z-index: 1003;
     @include font-dpr(20px);
@@ -759,6 +762,9 @@
     position: fixed;
     @include px2rem(top, 38px);
     @include px2rem(left, 52px);
+    @include pm2rem(padding, 4px, 10px, 4px, 10px);
+    @include px2rem(border-radius, 10px);
+    background-color: rgba(0, 0, 0, .5);
     color: white;
     z-index: 1003;
     @include font-dpr(30px);

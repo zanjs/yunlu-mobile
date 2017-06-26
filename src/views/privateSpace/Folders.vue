@@ -3,11 +3,11 @@
     <mt-header :title="headerName"
                fixed
                class="header">
-      <router-link to="/" slot="left">
-        <mt-button>
-          <i class="iconfont icon-zhuye"></i>
-        </mt-button>
-      </router-link>
+      <mt-button slot="left"
+                 @click="goBack()"
+                 class="button-text">
+        <i class="iconfont icon-fanhui"></i>
+      </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
@@ -82,6 +82,13 @@
       },
       cardClick (obj) {
         console.log(obj)
+      },
+      goBack () {
+        if (this.$route.params && this.$route.params.backUrl) {
+          this.$router.push({name: this.$route.params.backUrl})
+        } else {
+          this.$router.go(-1)
+        }
       }
     },
     mounted () {
