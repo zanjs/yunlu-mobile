@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="注册"
+    <mt-header title="忘记密码"
                fixed
                class="header">
       <mt-button slot="left"
@@ -17,11 +17,12 @@
                placeholder="输入手机号">
       </div>
       <div class="row-item">
-        <input class="input"
-                type="password"
-                v-model="password"
-                placeholder="请输入短信验证码">
-        <a @click="countDown()"
+        <input
+          class="input"
+          type="text"
+          v-model="code"
+          placeholder="请输入短信验证码">
+        <a @click="getValidCode()"
            v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
       </div>
       <div class="next-btn">
@@ -41,21 +42,42 @@
   import { mapGetters } from 'vuex'
   import { setStore } from '../../config/mUtils'
   import { COUNT_DOWN_SECOND } from '../../constants/constant'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         mobile: '',
-        password: '',
+        code: '',
         validBtnText: '获取验证码',
         disabled: false
       }
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
+        this.$router.go(-1)
       },
       next () {
-        this.$router.push({name: 'RegisterNext'})
+        console.log('next')
+      },
+      getValidCode () {
+        this.$store.dispatch('commonAction', {
+          url: '/check_code',
+          method: 'get',
+          params: {
+            login: this.mobile,
+            code: this.code
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.success) {
+              this.$router.push({name: 'SetNewPassword'})
+            } else {
+              Toast(res.data.msg)
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       countDown () {
         if (this.disabled) {

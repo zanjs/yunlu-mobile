@@ -53,7 +53,7 @@
     data () {
       return {
         user_id: getStore('personCarteParams') ? getStore('personCarteParams').id : this.$route.params.id,
-        token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc'
+        token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
     components: {

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="登录"
+    <mt-header title="设置新密码"
                fixed
                class="header">
       <mt-button slot="left"
@@ -12,22 +12,18 @@
     <div class="login-container">
       <div class="input-container">
         <input type="text"
-               v-model="mobile"
-               placeholder="输入手机号">
+               v-model="password"
+               placeholder="输入至少8位密码">
       </div>
       <div class="input-container">
         <input type="password"
-               v-model="password"
-               placeholder="请输入密码">
+               v-model="password2"
+               placeholder="请再次输入密码">
       </div>
       <div class="login-btn">
         <a @click="login()">
-          登录
+          完成
         </a>
-      </div>
-      <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
-        <a @click="forgetPassword()">忘记密码?</a>
       </div>
     </div>
   </section>
@@ -36,26 +32,28 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore, getStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
-        mobile: '',
-        password: ''
+        password: '',
+        password2: '',
+        token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
     methods: {
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl, params: {}})
-        } else {
-          this.$router.push({name: 'Home'})
-        }
+        this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
       },
       login () {
         this.$store.dispatch('commonAction', {
-          url: '/login',
-          method: 'post',
-          params: {},
+          url: '/password',
+          method: 'put',
+          params: {
+            password: this.password,
+            token: this.token,
+            _method: 'put'
+          },
           data: {
             login: this.mobile,
             password: this.password
@@ -64,22 +62,18 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            let beforeLogin = getStore('beforeLogin')
-            if (beforeLogin) {
-              this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
-            } else {
-              this.$router.push({name: 'Home', params: {}})
-            }
+            let toast = Toast({
+              message: '修改成功',
+              duration: 2000
+            })
+            setTimeout(() => {
+              toast.close()
+              this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
+            }, 2000)
           },
           reject: () => {
           }
         })
-      },
-      goRegister () {
-        this.$router.push({name: 'Register'})
-      },
-      forgetPassword () {
-        this.$router.push({name: 'ForgetPassword'})
       }
     },
     mounted () {
@@ -158,14 +152,6 @@
       a:active {
         background-color: rgba(82, 202, 167, .5);
       }
-    }
-    .text-btn {
-      color: #A6A6A6;
-      @include font-dpr(14px);
-      @include pm2rem(margin, 0px, 54px, 0px, 54px);
-      display: flex;
-      justify-content: space-between;
-      align-content: center;
     }
   }
 </style>

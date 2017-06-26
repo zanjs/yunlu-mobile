@@ -17,6 +17,7 @@ const state = {
   productDetailFiles: [],
   allPriceProperties: [],
   archives: [],
+  informationFolderArchives: [], // 资讯二级文件夹
   enterpriseDocuments: [], // 公司档/协会分类概况
   enterpriseInfoFiles: [], // 公司/协会资讯
   enterpriseMembers: [], // 协会下的企业会员
@@ -38,6 +39,7 @@ const getters = {
   productDetailFiles: state => state.productDetailFiles,
   allPriceProperties: state => state.allPriceProperties,
   archives: state => state.archives,
+  informationFolderArchives: state => state.informationFolderArchives,
   enterpriseDocuments: state => state.enterpriseDocuments,
   enterpriseInfoFiles: state => state.enterpriseInfoFiles,
   enterpriseMembers: state => state.enterpriseMembers,

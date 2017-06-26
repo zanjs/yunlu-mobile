@@ -68,7 +68,7 @@
             mode="out-in">
             <information-list
               :store="enterpriseInfoFiles"
-              @click="viewBigImg">
+              @click="openInformationFolders">
             </information-list>
           </transition>
         </template>
@@ -92,23 +92,33 @@
           </mt-loadmore>
         </template>
         <template v-if="activeIndex === 3">
-          <mt-loadmore
-            :top-method="loadPersonTop"
-            :bottom-method="loadPersonBottom"
-            :bottom-pull-text="bottomPullText"
-            :bottom-drop-text="bottomDropText"
-            :auto-fill="false"
-            ref="loadMorePeople">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
-              <person-list
-                :store="personMembers"
-                @click="goPersonCarte">
-              </person-list>
-            </transition>
-          </mt-loadmore>
+          <template v-if="hasLogin">
+            <mt-loadmore
+              :top-method="loadPersonTop"
+              :bottom-method="loadPersonBottom"
+              :bottom-pull-text="bottomPullText"
+              :bottom-drop-text="bottomDropText"
+              :auto-fill="false"
+              ref="loadMorePeople">
+              <transition
+                name="fade"
+                :appear="true"
+                mode="out-in">
+                <person-list
+                  :store="personMembers"
+                  @click="goPersonCarte">
+                </person-list>
+              </transition>
+            </mt-loadmore>
+          </template>
+          <template v-else>
+            <div class="tips-container">
+              <p>登录后才能查看</p>
+              <div class="login-btn">
+                <a @click="goLogin()">登录</a>
+              </div>
+            </div>
+          </template>
         </template>
       </div>
       <transition name="fade">
@@ -143,7 +153,8 @@
     data () {
       return {
         teamId: getStore('comityCarteParams') ? getStore('comityCarteParams').teamId : this.$route.params.teamId,
-        token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc',
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        hasLogin: !!getStore('user'),
         hasSearch: false,
         showSearchBar: false,
         placeholder: '搜索产品',
@@ -162,10 +173,7 @@
         productOrder: 'price',
         orderUp: true,
         showList: false,
-        activeIndex: 0,
-        cssAnimationViewer: false,
-        showFullScreenPreview: false,
-        infoImg: []
+        activeIndex: 0
       }
     },
     components: {
@@ -376,7 +384,9 @@
               this.$refs.loadMoreEnterprises.onTopLoaded()
               this.hasPullUpEnterprise = false
             }
-            this.getPersonList()
+            if (getStore('user')) {
+              this.getPersonList()
+            }
           },
           reject: () => {
           }
@@ -433,6 +443,9 @@
         setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product'})
         this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
+      goLogin () {
+        this.$router.push({name: 'Login', params: {backUrl: 'ComityCarte'}})
+      },
       tabClick (val) {
         this.activeIndex = val
         switch (val) {
@@ -465,7 +478,9 @@
             this.getEnterpriseList(res)
             break
           case 3:
-            this.getPersonList(res)
+            if (getStore('user')) {
+              this.getPersonList(res)
+            }
             break
           default:
             this.getProducts(res)
@@ -491,26 +506,9 @@
         setStore('enterpriseDetailParams', {id: id})
         this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
       },
-      viewBigImg (index) {
-        console.log(index)
-        this.infoImg.push(index)
-        this.showFullScreenPreview = true
-      },
-      closeImgViewer () {
-        this.cssAnimationViewer = true
-        setTimeout(() => {
-          this.infoImg = []
-          this.showFullScreenPreview = false
-          this.cssAnimationViewer = false
-        }, 500)
-      },
-      stopTouchMove () {
-        let self = this
-        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showFullScreenPreview) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
-          }
-        })
+      openInformationFolders (item) {
+        setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name})
+        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name}})
       },
       showListChange (val) {
         this.showList = val
@@ -541,17 +539,20 @@
       loadPersonTop () {
         this.personPageIndex = 1
         this.hasPullUpPerson = true // 列表数量较少时，手动重置下拉刷新位置
-        this.getPersonList()
+        if (getStore('user')) {
+          this.getPersonList()
+        }
       },
       loadPersonBottom () {
         this.personPageIndex += 1
-        this.getPersonList()
+        if (getStore('user')) {
+          this.getPersonList()
+        }
       }
     },
     mounted () {
       this.getEnterpriseDetail()
       this.handleSearchBar()
-      this.stopTouchMove()
     },
     computed: {
       ...mapGetters([
@@ -628,6 +629,33 @@
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
         border-left: none;
+      }
+    }
+  }
+  .tips-container {
+    background-color: $white;
+    @include pm2rem(padding, 100px, 0px, 100px, 0px);
+     p {
+        color: grey;
+        text-align: center;
+        display: block;
+      }
+    .login-btn {
+      text-align: center;
+      margin: 0 auto;
+      @include px2rem(margin-top,60px);
+      a {
+        color: $white;
+        display: block;
+        margin: 0 auto;
+        @include px2rem(height, 70px);
+        @include px2rem(line-height, 70px);
+        @include font-dpr(13px);
+        background-color: #52CAA7;
+        @include px2rem(width, 550px);
+      }
+      a:active {
+        background-color: rgba(82, 202, 167, .5);
       }
     }
   }

@@ -61,7 +61,7 @@
       </div>
       <p v-if="!hasLogin"
          class="user-name"
-         @click="send()">***</p>
+         @click="send()">张三</p>
       <p v-else
          class="user-name">{{currentUser.home_name}}</p>
     </div>

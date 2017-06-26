@@ -12,12 +12,12 @@
     <div class="login-container">
       <div class="input-container">
         <input type="text"
-               v-model="mobile"
+               v-model="password"
                placeholder="输入至少8位密码">
       </div>
       <div class="input-container">
         <input type="password"
-               v-model="password"
+               v-model="password2"
                placeholder="请再次输入密码">
       </div>
       <div class="login-btn">
@@ -32,24 +32,28 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore, getStore } from '../../config/mUtils'
-  import { Indicator } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
-        mobile: '',
-        password: ''
+        password: '',
+        password2: '',
+        token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Mine', params: {}})
+        this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
       },
       login () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
-          url: '/login',
-          method: 'post',
-          params: {},
+          url: '/password',
+          method: 'put',
+          params: {
+            password: this.password,
+            token: this.token,
+            _method: 'put'
+          },
           data: {
             login: this.mobile,
             password: this.password
@@ -58,24 +62,18 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            Indicator.close()
-            let beforeLogin = getStore('beforeLogin')
-            if (beforeLogin) {
-              this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
-            } else {
-              this.$router.push({name: 'Home', params: {}})
-            }
+            let toast = Toast({
+              message: '修改成功',
+              duration: 2000
+            })
+            setTimeout(() => {
+              toast.close()
+              this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
+            }, 2000)
           },
           reject: () => {
-            Indicator.close()
           }
         })
-      },
-      goRegister () {
-        this.$router.push({name: 'Register'})
-      },
-      forgetPassword () {
-        console.log('2')
       }
     },
     mounted () {

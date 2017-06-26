@@ -19,6 +19,10 @@ import See from '../views/home/See'
 import Mine from '../views/user/Mine'
 import ChangePassword from '../views/user/ChangePassword'
 import SearchEnterprise from '../views/home/SearchEnterprise'
+import ForgetPassword from '../views/user/ForgetPassword'
+import SetNewPassword from '../views/user/SetNewPassword'
+import RegisterNext from '../views/user/RegisterNext'
+import InformationFolders from '../views/carte/InformationFolders'
 
 Vue.use(Router)
 
@@ -103,6 +107,22 @@ export default new Router({
       path: '/searchenterprise',
       name: 'SearchEnterprise',
       component: SearchEnterprise
+    }, {
+      path: '/forgetpassword',
+      name: 'ForgetPassword',
+      component: ForgetPassword
+    }, {
+      path: '/setnewpassword',
+      name: 'SetNewPassword',
+      component: SetNewPassword
+    }, {
+      path: '/registernext',
+      name: 'RegisterNext',
+      component: RegisterNext
+    }, {
+      path: '/informationfolders',
+      name: 'InformationFolders',
+      component: InformationFolders
     }
   ]
 })
