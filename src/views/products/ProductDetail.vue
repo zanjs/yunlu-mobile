@@ -1,7 +1,11 @@
 <template>
   <section>
     <product-header
-      @back="goBack()"></product-header>
+      @back="goBack()"
+      @open-favorites="openFavorites()"
+      @go-report="goReport()"
+      @open-shopping-car="openShoppingCar()"
+      @search-near-by="searchNearBy()"></product-header>
     <div class="swipe">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item, index) in productDetailFiles"
@@ -160,19 +164,25 @@
         <i class="iconfont icon-fenxiang"></i>
         <span>分享</span>
       </div>
-      <div class="btn-box">
-        <i class="iconfont icon-shoucang1"></i>
-        <span>收藏</span>
+      <div class="btn-box"
+           @click="addFavorites()">
+        <i class="iconfont icon-shoucang1"
+           v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
+        <span>{{favoratesText}}</span>
       </div>
-      <div class="btn-box">
+      <div class="btn-box"
+           @click="openIm()">
         <i class="iconfont icon-kefu"></i>
         <span>客服</span>
       </div>
-      <div class="btn-box btn-shopping-car">
-        <i class="iconfont icon-gouwuche1"></i>
-        <span>加入购物车</span>
+      <div class="btn-box btn-shopping-car"
+           @click="addShoppingCar()">
+        <i class="iconfont icon-gouwuche1"
+           v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
+        <span>{{shoppingCarText}}</span>
       </div>
-      <div class="btn-box btn-buy">
+      <div class="btn-box btn-buy"
+           @click="buyNow()">
         <span>立即购买</span>
       </div>
     </section>
@@ -239,7 +249,8 @@
   import ProductHeader from '../../components/header/Head'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, setStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -248,6 +259,11 @@
         teamId: getStore('productDetailParams') ? getStore('productDetailParams').teamId : this.$route.params.teamId,
         productId: getStore('productDetailParams') ? getStore('productDetailParams').productId : this.$route.params.productId,
         organizationId: getStore('productDetailParams') ? getStore('productDetailParams').organizationId : this.$route.params.organizationId,
+        hasLogin: !!getStore('user'),
+        hasAddFavorites: false,
+        hasAddShoppingCar: false,
+        shoppingCarText: '加入购物车',
+        favoratesText: '收藏',
         morePrice: false,
         cssAnimation: false,
         currentPrice: {},
@@ -364,8 +380,16 @@
         for (let j = 0; j < price.properties.length; j++) {
           for (let i = 0; i < priceProperties.length; i++) {
             let key = Object.keys(price.properties[j])[0]
-            if (priceProperties[j].aliaz === key) {
-              tmpArr.push({key: priceProperties[i].name, value: price.properties[j][key]})
+            if (priceProperties[i].aliaz === key) {
+              if (priceProperties[i].options.length > 0) {
+                for (let m = 0; m < priceProperties[i].options.length; m++) {
+                  if (priceProperties[i].options[m].id === price.properties[j][key]) {
+                    tmpArr.push({key: priceProperties[i].name, value: priceProperties[i].options[m].name})
+                  }
+                }
+              } else {
+                tmpArr.push({key: priceProperties[i].name, value: price.properties[j][key]})
+              }
             }
           }
         }
@@ -499,6 +523,58 @@
         } else {
           this.$router.push({name: 'Home'})
         }
+      },
+      addFavorites () {
+        if (this.hasLogin && !this.hasAddFavorites) {
+          this.favoratesText = '已收藏'
+          this.hasAddFavorites = true
+          Toast('收藏成功')
+        } else if (this.hasLogin && this.hasAddFavorites) {
+          this.favoratesText = '收藏'
+          this.hasAddFavorites = false
+          Toast('你已成功取消收藏')
+        } else {
+          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
+          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+        }
+      },
+      openIm () {
+        console.log('正在打开客服会话界面')
+      },
+      openShoppingCar () {
+        Toast('暂未开放')
+      },
+      addShoppingCar () {
+        if (this.hasLogin && !this.hasAddShoppingCar) {
+          this.shoppingCarText = '已加入购物车'
+          this.hasAddShoppingCar = true
+          Toast('加入购物车成功')
+        } else if (this.hasLogin && this.hasAddShoppingCar) {
+          this.shoppingCarText = '加入购物车'
+          this.hasAddShoppingCar = false
+          Toast('你已将该商品移出购物车')
+        } else {
+          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
+          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+        }
+      },
+      buyNow () {
+        if (this.hasLogin) {
+          Toast('暂未开放')
+        } else {
+          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
+          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+        }
+      },
+      openFavorites () {
+        Toast('暂未开放')
+      },
+      searchNearBy () {
+        Toast('暂未开放')
+      },
+      goReprot () {
+        setStore('reportParams', {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'})
+        this.$router.push({name: 'Report', params: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}})
       },
       stopTouchMove () {
         let self = this
@@ -728,6 +804,9 @@
         @include px2rem(line-height, 97px);
       }
     }
+  }
+  .bottom-btn-active {
+    color: #F50E0E;
   }
 
   .productdetail-product-tags {

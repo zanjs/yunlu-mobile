@@ -5,7 +5,8 @@
       <i class="iconfont icon-fanhui"></i>
     </div>
     <section class="right">
-      <div class="icon-box">
+      <div class="icon-box"
+           @click="openShoppingCar()">
         <i class="iconfont icon-gouwuche1"></i>
       </div>
       <div class="icon icon-box"
@@ -20,12 +21,14 @@
              id="fullscreen-cover"
              class="product-drop-menu"
              v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
-      <div class="menu">
+      <div class="menu"
+           @click="goFavorites()">
         <div class="item">
           <i class="iconfont icon-shoucang"></i>
           <span>收藏夹</span>
         </div>
-        <div class="item">
+        <div class="item"
+             @click="searchNearBy()">
           <i class="iconfont icon-fujin"></i>
           <span>搜附近</span>
         </div>
@@ -55,7 +58,7 @@
       },
       addTouch () {
         let self = this
-        document.getElementById('fullscreen-cover').addEventListener('touchmove', (e) => {
+        document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
           e.preventDefault()
           this.cssAnimation = false
           setTimeout(() => {
@@ -63,8 +66,17 @@
           }, 400)
         })
       },
+      goFavorites () {
+        this.$emit('open-favorites')
+      },
+      openShoppingCar () {
+        this.$emit('open-shopping-car')
+      },
+      searchNearBy () {
+        this.$emit('search-near-by')
+      },
       goReport () {
-        this.$router.push({path: '/report'})
+        this.$emit('report')
       },
       goBack () {
         this.$emit('back')
