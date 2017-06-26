@@ -32,13 +32,12 @@
         <div @click="expandMorePrice()">
           <span class="more">更多价格</span>
           <div class="icon-box"
-               v-bind:class="{'rotate-90-cw': cssAnimation, 'rotate-90-ccw': !cssAnimation}">
+               v-bind:class="{'up': morePrice}">
             <i class="iconfont icon-gengduo more-icon"></i>
           </div>
         </div>
         <div v-show="morePrice"
-             class="more-price"
-             v-bind:class="{'more-price-show': cssAnimation, 'more-price-hide': !cssAnimation}">
+             class="more-price">
           <p v-for="(item, index) in productDetail.prices"
              :key="item.id"
              @click="changePrice(item)">
@@ -472,15 +471,7 @@
         this.sheetVisible = true
       },
       expandMorePrice () {
-        if (this.morePrice) {
-          this.cssAnimation = false
-          setTimeout(() => {
-            this.morePrice = !this.morePrice
-          }, 400)
-        } else {
-          this.morePrice = !this.morePrice
-          this.cssAnimation = true
-        }
+        this.morePrice = !this.morePrice
       },
       changePrice (item) {
         this.currentPrice = item
@@ -600,6 +591,9 @@
       .more-icon {
         color: #52CAA7;
         @include font-dpr(15px);
+      }
+      .up {
+        transform: rotate(-90deg);
       }
       .more-price {
         position: absolute;
