@@ -1,6 +1,7 @@
 <template>
   <section>
-    <product-header></product-header>
+    <product-header
+      @back="goBack()"></product-header>
     <div class="swipe">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item, index) in productDetailFiles"
@@ -491,6 +492,13 @@
         setTimeout(() => {
           this.popUp = false
         }, 400)
+      },
+      goBack () {
+        if (this.$route.params && this.$route.params.backUrl) {
+          this.$router.push({name: this.$route.params.backUrl})
+        } else {
+          this.$router.push({name: 'Home'})
+        }
       },
       stopTouchMove () {
         let self = this

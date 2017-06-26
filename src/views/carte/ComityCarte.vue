@@ -435,7 +435,7 @@
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          this.$router.go(-1)
+          this.$router.push({name: 'Home'})
         }
       },
       goReport () {

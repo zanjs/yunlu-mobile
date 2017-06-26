@@ -301,7 +301,11 @@
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          this.$router.go(-1)
+          if (this.$route.params && this.$route.params.backUrl) {
+            this.$router.push({name: this.$route.params.backUrl})
+          } else {
+            this.$router.push({name: 'Home'})
+          }
         }
       },
       goReport () {
@@ -330,12 +334,12 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        setStore('productDetailParams', {productId: item.id, teamId: this.teamId, organizationId: item.organization_id})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id}})
+        setStore('productDetailParams', {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
-        this.$router.push({path: '/enterprisedetail'})
+        this.$router.push({name: 'EnterpriseDetail', params: {backUrl: 'EnterpriseCarte'}})
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'})

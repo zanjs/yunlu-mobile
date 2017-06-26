@@ -1,7 +1,7 @@
 <template>
   <header class="head-product">
     <div class="left icon-box"
-         @click="$router.go(-1)">
+         @click="goBack()">
       <i class="iconfont icon-fanhui"></i>
     </div>
     <section class="right">
@@ -65,6 +65,9 @@
       },
       goReport () {
         this.$router.push({path: '/report'})
+      },
+      goBack () {
+        this.$emit('back')
       }
     },
     mounted () {
