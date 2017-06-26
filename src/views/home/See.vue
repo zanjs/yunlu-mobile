@@ -76,24 +76,6 @@
           <div class="right-border"></div>
         </div>
       </div>
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
-      <div class="card">
-        <img src="../../assets/enterprise.png"
-             class="card-img">
-        <div class="content">
-          <div class="left-border"></div>
-          <p class="name">企业</p>
-          <div class="right-border"></div>
-        </div>
-      </div>
     </div>
   </section>
 </template>
@@ -177,7 +159,7 @@
         width: 100%;
         @include px2rem(border-radius, 40px);
         @include pm2rem(padding, 8px, 20px, 0px, 102px);
-        @include font-dpr(13px);
+        @include font-dpr(14px);
         line-height: 1;
       }
       ::-webkit-input-placeholder{
@@ -233,7 +215,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          box-shadow: 2px 2px 7px rgba(128, 128, 128, .5);
+          box-shadow: 0px 2px 6px rgba(128, 128, 128, .5);
           i {
             @include font-dpr(27px);
             color: $white;
@@ -242,7 +224,6 @@
         span {
           @include font-dpr(14px);
           color: #246451;
-          text-shadow: 2px 3px 6px rgba(82, 78, 78, .5);
         }
         .box-1 {
           background: linear-gradient(to bottom, #FEBEBE , #EE75C5);

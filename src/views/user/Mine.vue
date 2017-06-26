@@ -130,6 +130,7 @@
       position: relative;
       @include px2rem(padding-top, 4px);
       @include font-dpr(20px);
+      line-height: 1;
       color: #2F705D;
       text-align: center;
     }

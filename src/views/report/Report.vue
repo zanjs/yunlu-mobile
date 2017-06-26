@@ -3,40 +3,92 @@
     <mt-header title="投诉"
                fixed
                class="header">
-      <router-link to="/folders" slot="left">
-        <mt-button>
-          <i class="iconfont icon-fanhui"></i>
-        </mt-button>
-      </router-link>
+      <mt-button slot="left"
+                 @click="goBack()"
+                 class="button-text">
+        <i class="iconfont icon-fanhui"></i>
+      </mt-button>
     </mt-header>
     <div class="tips-container">
       <p>举报违法内容，拒绝恶意侵扰</p>
       <p>清洁共同家园，你我一致行动</p>
     </div>
     <div class="report-list">
-      <mt-checklist v-model="value"
-                    :options="['色情', '骚扰', '敏感', '诈骗', '暴力恐怖 违禁品 非法传销', '假冒伪劣', '其他']">
+      <mt-checklist
+        v-model="values"
+        :options="options">
       </mt-checklist>
       <div class="text-title">举例补充说明(可选填)</div>
       <div class="textarea-container">
-        <textarea class="textarea"
-                  placeholder="输入文字说明"></textarea>
+        <textarea
+          class="textarea"
+          placeholder="输入文字说明"></textarea>
       </div>
     </div>
-    <mt-button type="primary"
-               class="report-btn">提交</mt-button>
+    <mt-button
+      type="primary"
+      @click="report()"
+      class="report-btn">提交</mt-button>
   </section>
 </template>
 
 <script>
+  import { getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
-        value: []
+        options: [
+          {
+            label: '色情',
+            value: 1
+          }, {
+            label: '骚扰',
+            value: 2
+          }, {
+            label: '敏感',
+            value: 3
+          }, {
+            label: '诈骗',
+            value: 4
+          }, {
+            label: '暴力恐怖 违禁品 非法传销',
+            value: 5
+          }, {
+            label: '假冒伪劣',
+            value: 6
+          }, {
+            label: '其他',
+            value: 99
+          }
+        ],
+        values: [],
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        resourceId: this.$route.params.resourceId,
+        resourceClass: this.$route.params.resourceClass
       }
     },
     methods: {
-
+      report () {
+        this.$store.dispatch('commonAction', {
+          url: '/reports',
+          method: 'post',
+          params: {
+            ...(this.token ? {token: this.token} : {}),
+            clazz: this.values,
+            resource_id: this.resourceId,
+            resourceClass: this.resourceClass,
+            ...(this.description ? {description: this.description} : {})
+          },
+          target: this,
+          resolve: (state, res) => {
+          },
+          reject: () => {
+          }
+        })
+      },
+      goBack () {
+        this.$router.go(-1)
+      }
     }
   }
 </script>

@@ -1,13 +1,13 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
+    <mt-header title="名片"
                fixed
                class="header">
-      <router-link to="/" slot="left">
-        <mt-button>
-          <i class="iconfont icon-zhuye"></i>
-        </mt-button>
-      </router-link>
+      <mt-button slot="left"
+                 @click="goBack()"
+                 class="button-text">
+        <i class="iconfont icon-fanhui"></i>
+      </mt-button>
       <mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
@@ -36,6 +36,7 @@
       <a
         v-for="(item, index) in clusters"
         :key="index"
+        @click="goCarte(item)"
         class="item">
         <span>{{item.name}}</span>
         <i class="iconfont icon-fanhui"></i>
@@ -46,13 +47,12 @@
 
 <script>
   import Card from '../../components/common/Card'
-  import { Indicator } from 'mint-ui'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, setStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
-        user_id: this.$route.params.id,
+        user_id: getStore('personCarteParams') ? getStore('personCarteParams').id : this.$route.params.id,
         token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc'
       }
     },
@@ -61,10 +61,10 @@
     },
     methods: {
       goReport () {
-        this.$router.push({name: 'Report'})
+        setStore('reportParams', {resourceId: this.$store.state.userCard.id, resourceClass: 'user'})
+        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
       },
       getPersonDetail () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/business_cards',
           method: 'get',
@@ -74,17 +74,21 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
       cardClick (obj) {
         console.log(obj)
+      },
+      goCarte (item) {
+        console.log(item)
+      },
+      goBack () {
+        this.$router.go(-1)
       }
     },
     mounted () {

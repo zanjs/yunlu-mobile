@@ -36,7 +36,6 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore, getStore } from '../../config/mUtils'
-  import { Indicator } from 'mint-ui'
   export default {
     data () {
       return {
@@ -49,7 +48,6 @@
         this.$router.push({name: 'Home', params: {}})
       },
       login () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/login',
           method: 'post',
@@ -62,7 +60,6 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            Indicator.close()
             let beforeLogin = getStore('beforeLogin')
             if (beforeLogin) {
               this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
@@ -71,7 +68,6 @@
             }
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },

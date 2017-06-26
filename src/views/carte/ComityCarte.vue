@@ -134,16 +134,15 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { getStore, showBack } from '../../config/mUtils'
+  import { getStore, setStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
-  import { Indicator } from 'mint-ui'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   export default {
     data () {
       return {
-        teamId: this.$route.params.teamId || 6756,
+        teamId: getStore('comityCarteParams') ? getStore('comityCarteParams').teamId : this.$route.params.teamId,
         token: getStore('user').authentication_token || 'fbdec44fa55088fd863ce47c778b1ddc',
         hasSearch: false,
         showSearchBar: false,
@@ -182,7 +181,6 @@
     },
     methods: {
       getEnterpriseDetail () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -191,12 +189,10 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.teams = res.data.teams[0]
             this.getProducts()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -204,7 +200,6 @@
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
@@ -217,14 +212,12 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             this.hasSearch = q !== ''
             this.queryParams = ''
             let tmpArr = this.handleProductThumbnails(res.data.products)
             this.getFilesPublisheds(tmpArr, res.data.products, q)
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -253,7 +246,6 @@
         return tmpArr
       },
       getFilesPublisheds (ids, arr, q) {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -265,7 +257,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
@@ -278,7 +269,6 @@
             this.getEnterpriseDocument()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -298,7 +288,6 @@
             this.getEnterpriseList()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -339,7 +328,6 @@
       },
       // 获取指定组织已发布的公司档分类概况(协会名片资讯)
       getEnterpriseDocument () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
           method: 'get',
@@ -350,10 +338,8 @@
           resolve: (state, res) => {
             state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
             this.getInformation(this.handleDocumentIds(state.enterpriseDocuments))
-            Indicator.close()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -365,7 +351,6 @@
         return tmpArr
       },
       getEnterpriseList (q = this.queryParams) {
-        Indicator.open()
         this.queryParams = q
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/guilds`,
@@ -379,7 +364,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             this.hasSearch = q !== ''
             this.queryParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
@@ -395,12 +379,10 @@
             this.getPersonList()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
       getPersonList (q = this.queryParams) {
-        Indicator.open()
         this.queryParams = q
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/members`,
@@ -415,7 +397,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             this.hasSearch = q !== ''
             this.queryParams = ''
             if (this.personPageIndex === 1 || q !== '') {
@@ -429,14 +410,15 @@
             }
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
       goEnterpriseCarte (id) {
-        this.$router.push({name: 'EnterpriseCarte', params: {id: id}})
+        setStore('enterpriseCarteParams', {teamId: id})
+        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id}})
       },
       goPersonCarte (id) {
+        setStore('personCarteParams', {id: id})
         this.$router.push({name: 'PersonCarte', params: {id: id}})
       },
       goBack () {
@@ -448,7 +430,8 @@
       },
       goReport () {
         document.body.scrollTop = 0
-        this.$router.push({name: 'Report'})
+        setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product'})
+        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
       tabClick (val) {
         this.activeIndex = val
@@ -500,11 +483,13 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        this.$router.push({name: 'ProductDetail', params: {id: item.id, organizationId: item.organization_id}})
+        setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
-        this.$router.push({path: '/enterprisedetail'})
+        setStore('enterpriseDetailParams', {id: id})
+        this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
       },
       viewBigImg (index) {
         console.log(index)
@@ -564,7 +549,6 @@
       }
     },
     mounted () {
-      Indicator.open()
       this.getEnterpriseDetail()
       this.handleSearchBar()
       this.stopTouchMove()

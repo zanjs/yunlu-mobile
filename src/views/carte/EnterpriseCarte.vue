@@ -96,16 +96,15 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { showBack } from '../../config/mUtils'
+  import { setStore, getStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
-  import { Indicator } from 'mint-ui'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   export default {
     data () {
       return {
-        teamId: this.$route.params.teamId || 6642,
+        teamId: getStore('enterpriseCarteParams') ? getStore('enterpriseCarteParams').teamId : this.$route.params.teamId,
         hasSearch: false,
         showProduct: true,
         showSearchBar: false,
@@ -140,7 +139,6 @@
     },
     methods: {
       getEnterpriseDetail () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -149,17 +147,14 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.teams = res.data.teams[0]
             this.getProducts()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
       getProducts (q = this.queryParams, order = this.productOrder) {
-        Indicator.open()
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
@@ -182,7 +177,6 @@
             this.getFilesPublisheds(tmppArr, res.data.products, q)
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -222,11 +216,9 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -267,7 +259,6 @@
       },
       // 获取指定组织已发布的公司档分类概况(公司/企业名片资讯)
       getEnterpriseDocument () {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
           method: 'get',
@@ -278,10 +269,8 @@
           resolve: (state, res) => {
             state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
             this.getInformation(this.handleDocumentIds(state.enterpriseDocuments))
-            Indicator.close()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -304,7 +293,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            Indicator.close()
             if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
@@ -317,7 +305,6 @@
             this.getEnterpriseDocument()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -354,7 +341,8 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        this.$router.push({name: 'ProductDetail', params: {id: item.id, teamId: this.teamId, organizationId: item.organization_id}})
+        setStore('productDetailParams', {productId: item.id, teamId: this.teamId, organizationId: item.organization_id})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
@@ -400,7 +388,6 @@
       }
     },
     mounted () {
-      Indicator.open()
       this.getEnterpriseDetail()
       this.handleSearchBar()
       this.stopTouchMove()

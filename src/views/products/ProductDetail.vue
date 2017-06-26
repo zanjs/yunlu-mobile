@@ -221,16 +221,16 @@
 <script>
   import ProductHeader from '../../components/header/Head'
   import { mapGetters } from 'vuex'
-  import { Indicator } from 'mint-ui'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import { getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
         selected: '1',
         currentIndex: 1,
-        teamId: this.$route.params.teamId,
-        productId: this.$route.params.id,
-        organizationId: this.$route.params.organizationId,
+        teamId: getStore('productDetailParams') ? getStore('productDetailParams').teamId : this.$route.params.teamId,
+        productId: getStore('productDetailParams') ? getStore('productDetailParams').productId : this.$route.params.productId,
+        organizationId: getStore('productDetailParams') ? getStore('productDetailParams').organizationId : this.$route.params.organizationId,
         morePrice: false,
         cssAnimation: false,
         currentPrice: {},
@@ -293,10 +293,8 @@
           resolve: (state, res) => {
             state.productDetail = res.data.products
             this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files)
-            Indicator.close()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -315,7 +313,6 @@
             this.getProductArchives()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -355,7 +352,6 @@
             this.getAllPriceProperties(state.productDetail.category_id)
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -370,7 +366,6 @@
             this.getOrganization()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -384,10 +379,8 @@
           target: this,
           resolve: (state, res) => {
             state.productDetailTeam = res.data.teams[0]
-            Indicator.close()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
@@ -451,13 +444,12 @@
       //   let self = this
       //   document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
       //     if (self.popUp) {
-      //       e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+      //       e.preventDefault()
       //     }
       //   })
       // }
     },
     mounted () {
-      Indicator.open()
       this.stopTouchMove()
       this.getProductDetail()
     },

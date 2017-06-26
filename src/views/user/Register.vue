@@ -40,7 +40,6 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore } from '../../config/mUtils'
-  import { Indicator } from 'mint-ui'
   import { COUNT_DOWN_SECOND } from '../../constants/constant'
   export default {
     data () {
@@ -88,11 +87,9 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            Indicator.close()
             this.$router.push({name: 'Hello'})
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },

@@ -32,7 +32,7 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
-  import { Indicator } from 'mint-ui'
+  import { setStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -50,7 +50,6 @@
     },
     methods: {
       getEnterprises (q = '') {
-        Indicator.open()
         this.$store.dispatch('commonAction', {
           url: '/enterprises',
           method: 'get',
@@ -71,17 +70,17 @@
               this.$refs.loadMoreEnterprises.onTopLoaded()
               this.hasPullUpEnterprise = false
             }
-            Indicator.close()
           },
           reject: () => {
-            Indicator.close()
           }
         })
       },
       goEnterpriseCarte (item) {
         if (item.organization.service.aliaz === 'association') {
+          setStore('comityCarteParams', {teamId: item.organization.id})
           this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id}})
         } else {
+          setStore('enterpriseCarteParams', {teamId: item.organization.id})
           this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id}})
         }
       },
