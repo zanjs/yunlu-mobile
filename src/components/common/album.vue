@@ -3,11 +3,11 @@
     <div v-for="(item, index) in dataSource"
          :key="index"
          class="album"
-         @click="handleClick(item.id)">
-      <img :src="item.cover"
+         @click="handleClick(item)">
+      <img :src="item.last_photo"
            class="cover">
       <div class="label">
-        <span class="text">{{item.title}}</span>
+        <span class="text">{{item.name}}</span>
         <span class="count">{{item.count}}</span>
       </div>
     </div>
@@ -62,6 +62,9 @@
         color: $white;
         .text {
           @include px2rem(padding-left, 26px);
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .count {
           @include px2rem(width, 70px);

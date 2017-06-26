@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
+    <mt-header :title="headerName"
                fixed
                class="header">
       <router-link to="/folders" slot="left">
@@ -15,16 +15,23 @@
       </router-link>
     </mt-header>
     <div class="photos-container">
-      <gallery :data-source="albumList"></gallery>
+      <gallery :data-source="photos"></gallery>
     </div>
   </section>
 </template>
 
 <script>
   import Gallery from '../../components/common/Gallery'
+  import { getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
+        headerName: getStore('photosParams') ? getStore('photosParams').name : '相册',
+        id: getStore('photosParams') ? getStore('photosParams').id : '',
+        pageIndex: 1,
+        pageSize: 24,
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        photos: [],
         albumList: [{
           id: 1,
           title: '武当三日游',
@@ -71,9 +78,27 @@
     components: {
       Gallery
     },
-    methods: {},
-    mountd: {
-
+    methods: {
+      getPhotos () {
+        this.$store.dispatch('commonAction', {
+          url: `/galleries/${this.id}/photos`,
+          method: 'get',
+          params: {
+            token: this.token,
+            page: this.pageIndex,
+            per_page: this.pageSize
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.photos = res.data.photos
+          },
+          reject: () => {
+          }
+        })
+      }
+    },
+    mounted () {
+      this.getPhotos()
     }
   }
 </script>

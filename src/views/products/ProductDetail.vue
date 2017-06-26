@@ -168,7 +168,7 @@
         <span>客服</span>
       </div>
       <div class="btn-box btn-shopping-car">
-        <i class="iconfont icon-gouwuche"></i>
+        <i class="iconfont icon-gouwuche1"></i>
         <span>加入购物车</span>
       </div>
       <div class="btn-box btn-buy">

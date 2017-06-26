@@ -424,12 +424,12 @@
         })
       },
       goEnterpriseCarte (id) {
-        setStore('enterpriseCarteParams', {teamId: id})
-        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id}})
+        setStore('enterpriseCarteParams', {teamId: id, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id, backUrl: 'ComityCarte'}})
       },
       goPersonCarte (id) {
-        setStore('personCarteParams', {id: id})
-        this.$router.push({name: 'PersonCarte', params: {id: id}})
+        setStore('personCarteParams', {id: id, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'PersonCarte', params: {id: id, backUrl: 'ComityCarte'}})
       },
       goBack () {
         if (this.hasSearch) {
@@ -440,8 +440,8 @@
       },
       goReport () {
         document.body.scrollTop = 0
-        setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product'})
-        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
+        setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'})
+        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}})
       },
       goLogin () {
         this.$router.push({name: 'Login', params: {backUrl: 'ComityCarte'}})
@@ -498,13 +498,13 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id}})
+        setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
       },
       goEnterpriseDetail (id) {
         console.log(id)
-        setStore('enterpriseDetailParams', {id: id})
-        this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
+        setStore('enterpriseDetailParams', {id: id, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'EnterpriseDetail', params: {id: id, backUrl: 'ComityCarte'}})
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})

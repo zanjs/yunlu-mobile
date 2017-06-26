@@ -6,7 +6,7 @@
     </div>
     <section class="right">
       <div class="icon-box">
-        <i class="iconfont icon-gouwuche"></i>
+        <i class="iconfont icon-gouwuche1"></i>
       </div>
       <div class="icon icon-box"
            @click="openDropMenu()">

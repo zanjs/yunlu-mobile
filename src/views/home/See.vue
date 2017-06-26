@@ -35,9 +35,9 @@
         <div class="row-item"
              @click="goDownload()">
           <div class="icon-box box-3">
-            <i class="iconfont icon-dingdan"></i>
+            <i class="iconfont icon-gouwuche1"></i>
           </div>
-          <span>订单</span>
+          <span>购物车</span>
         </div>
         <div class="row-item"
              @click="goDownload()">
@@ -61,7 +61,7 @@
       </div>
       <p v-if="!hasLogin"
          class="user-name"
-         @click="send()">张三</p>
+         @click="send()">胖胖的云庐君</p>
       <p v-else
          class="user-name">{{currentUser.home_name}}</p>
     </div>

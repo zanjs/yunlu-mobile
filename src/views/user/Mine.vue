@@ -83,7 +83,7 @@
       },
       logOut () {
         removeAllStore()
-        this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
+        this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
       },
       changePassword () {
         this.$router.push({name: 'ChangePassword', params: {backUrl: 'Mine'}})

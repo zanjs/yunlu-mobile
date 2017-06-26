@@ -18,7 +18,7 @@
     <div class="card-container">
       <card
         :store="userCard"
-        @click="cardClick" ></card>
+        @click="cardClick"></card>
     </div>
     <div v-if="clusters && clusters.length > 0"
          class="rope">
@@ -76,6 +76,7 @@
           resolve: (state, res) => {
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
+            setStore('userCard', res.data.cards)
           },
           reject: () => {
           }
@@ -85,7 +86,14 @@
         console.log(obj)
       },
       goCarte (item) {
-        console.log(item)
+        if (!item.team_id) {
+          setStore('foldersParams', {id: item.id, name: item.name, backUrl: 'PersonUrl'})
+          this.$router.push({name: 'Folders', params: {id: item.id, name: item.name, backUrl: 'PersonUrl'}})
+        } else {
+          // TODO 需判断是企业还是协会
+          setStore('enterpriseCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}})
+        }
       },
       goBack () {
         this.$router.go(-1)
@@ -140,10 +148,12 @@
     }
   }
   .no-carte {
+    @include pm2rem(padding, 100px, 20px, 100px, 0px);
+    @include pm2rem(margin, 20px, 22px, 0px, 22px);
+    background-color: $white;
     text-align: center;
-    @include pm2rem(padding, 100px, 20px, 0px, 0px);
     img {
-      width: 60%;
+      @include px2rem(width, 360px);
       height: auto;
     }
   }
