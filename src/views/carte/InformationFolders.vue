@@ -141,7 +141,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            console.log(state, res.data.files)
             state.informationFolderArchives = this.handleArchives(this.tmpArchives, res.data.files)
           },
           reject: () => {

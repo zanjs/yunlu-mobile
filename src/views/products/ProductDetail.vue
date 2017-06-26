@@ -6,7 +6,7 @@
         <swiper-slide v-for="(item, index) in productDetailFiles"
                       :key="index">
           <img :src="item.url"
-               @click="viewFullScreenPic(item.id)">
+               @click="viewFullScreenPic(productDetailFiles)">
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
@@ -215,6 +215,23 @@
         </div>
       </div>
     </section>
+    <div v-if="showPreview">
+      <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
+      <div class="close"
+           @click="closePreview()">
+        <i class="fa fa-times"></i>
+      </div>
+      <swiper :options="swiperOptionFullScreen"
+              class="full-screen-swiper">
+        <!-- slides -->
+        <swiper-slide class="swiper-zoom-container full-screen-bg"
+                      v-for="(item, index) in previewImgs"
+                      :key="index">
+          <img :src="item.url"
+               alt="">
+        </swiper-slide>
+      </swiper>
+    </div>
   </section>
 </template>
 
@@ -236,9 +253,33 @@
         currentPrice: {},
         currentPriceProperties: [],
         popUp: false,
+        showPreview: false,
+        previewImgs: [],
         swiperOption: {
           pagination: '.swiper-pagination',
           paginationClickable: true
+        },
+        swiperOptionFullScreen: {
+          notNextTick: false,
+          autoplay: 0,
+          direction: 'horizontal',
+          grabCursor: true,
+          setWrapperSize: true,
+          autoHeight: false,
+          paginationClickable: false,
+          prevButton: null,
+          nextButton: null,
+          mousewheelControl: true,
+          observeParents: true,
+          preventClicks: false,
+          passiveListeners: false,
+          zoom: true,
+          height: window.innerHeight,
+          width: window.innerWidth,
+          initialSlide: 0,
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
+          }
         },
         actions: [
           {
@@ -393,8 +434,12 @@
         }
         return tmpArr
       },
-      viewFullScreenPic (id) {
-        console.log(id)
+      viewFullScreenPic (arr) {
+        this.showPreview = true
+        this.previewImgs = arr
+      },
+      closePreview () {
+        this.showPreview = false
       },
       handleChange (index) {
         this.currentIndex = index + 1
@@ -682,6 +727,35 @@
       @include font-dpr(20px);
       color: #A6A6A6;
     }
+  }
+
+  .preview-page-nav {
+    position: absolute;
+    @include px2rem(top, 38px);
+    @include px2rem(left, 130px);
+    color: white;
+    z-index: 1003;
+    @include font-dpr(20px);
+  }
+  .close {
+    position: absolute;
+    @include px2rem(top, 38px);
+    @include px2rem(left, 52px);
+    color: white;
+    z-index: 1003;
+    @include font-dpr(30px);
+    line-height: 1;
+  }
+  .full-screen-swiper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1002;
+  }
+  .full-screen-bg {
+    background-color: #000;
   }
 
   .product-popup-dialog {
