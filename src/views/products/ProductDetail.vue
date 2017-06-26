@@ -255,6 +255,7 @@
         popUp: false,
         showPreview: false,
         previewImgs: [],
+        tempArchivesFiles: [],
         swiperOption: {
           pagination: '.swiper-pagination',
           paginationClickable: true
@@ -410,6 +411,29 @@
           }
         })
       },
+      handleArchives (arr) {
+
+      },
+      getArchivesFiles (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'document',
+            team_id: this.teamId,
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.tempArchivesFiles = res.data.files
+            this.showPreview = true
+            this.previewImgs = res.data.files
+          },
+          reject: () => {
+          }
+        })
+      },
       getOrganization () {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
@@ -464,7 +488,7 @@
         this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.$store.state.allPriceProperties)
       },
       viewArchives (item) {
-        console.log(item)
+        this.getArchivesFiles(this.handleProductFiles(item.files))
       },
       openPopup () {
         this.popUp = true
@@ -730,7 +754,7 @@
   }
 
   .preview-page-nav {
-    position: absolute;
+    position: fixed;
     @include px2rem(top, 38px);
     @include px2rem(left, 130px);
     color: white;
@@ -738,7 +762,7 @@
     @include font-dpr(20px);
   }
   .close {
-    position: absolute;
+    position: fixed;
     @include px2rem(top, 38px);
     @include px2rem(left, 52px);
     color: white;
@@ -753,6 +777,7 @@
     bottom: 0;
     right: 0;
     z-index: 1002;
+    background-color: #000;
   }
   .full-screen-bg {
     background-color: #000;
