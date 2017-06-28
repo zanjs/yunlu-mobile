@@ -83,6 +83,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore, getStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -106,7 +107,8 @@
       },
       send () {
         if (this.hasLogin) {
-          this.$router.push({name: 'Hello', params: {}})
+          Toast('暂未开放')
+          // this.$router.push({name: 'Hello', params: {}})
         } else {
           this.$router.push({name: 'Login', params: {}})
         }

@@ -11,7 +11,7 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
+        <input type="password"
                v-model="password"
                placeholder="输入至少8位密码">
       </div>

@@ -24,7 +24,7 @@
       <swiper :options="swiperOption"
               class="full-screen-swiper">
         <!-- slides -->
-        <swiper-slide class="swiper-zoom-container full-screen-bg"
+        <swiper-slide class="swiper-zoom-container"
                       v-for="(item, index) in previewImgs"
                       :key="index">
           <img :src="item.url"
@@ -222,8 +222,6 @@
     bottom: 0;
     right: 0;
     z-index: 1002;
-  }
-  .full-screen-bg {
     background-color: #000;
   }
 </style>
