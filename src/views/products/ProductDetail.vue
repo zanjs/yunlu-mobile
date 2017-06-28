@@ -649,7 +649,7 @@
     @include font-dpr(16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
     background-color: rgba(0, 0, 0, .5);
-    z-index: 2;
+    z-index: 1;
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
