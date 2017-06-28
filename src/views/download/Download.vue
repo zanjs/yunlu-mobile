@@ -15,7 +15,7 @@
     </div>
     <div class="download-btn">
       <!--https://itunes.apple.com/cn/app/yun-lu/id1040721645?mt=8-->
-      <a href="http://www.yunlu6.com/yunlu.apk">下载云庐客户端</a>
+      <a @click="download()">下载云庐客户端</a>
     </div>
     <div class="tips">
       <p>如果无法下载，你可以复制下面链接，用其他的浏览器打开</p>
@@ -37,6 +37,9 @@
       },
       goHome () {
         this.$router.push({name: 'Home'})
+      },
+      download () {
+        window.location.href = 'http://www.yunlu6.com/yunlu.apk'
       }
     },
     mounted () {
@@ -100,6 +103,9 @@
       background-color: #52CAA7;
       color: $white;
       @include px2rem(border-radius, 43px);
+    }
+    a:active {
+      background-color: rgba(82, 202, 167, .5);
     }
   }
   .tips {

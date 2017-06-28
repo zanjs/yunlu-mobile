@@ -361,7 +361,6 @@
         this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
       },
       goEnterpriseDetail (id) {
-        console.log(id)
         setStore('enterpriseDetailParams', {teamId: id, backUrl: 'EnterpriseCarte'})
         this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}})
       },

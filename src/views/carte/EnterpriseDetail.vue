@@ -1,13 +1,15 @@
 <template>
   <section>
-    <mt-header title="资信"
-               fixed
-               class="header">
-      <router-link to="/enterprisecarte" slot="left">
-        <mt-button>
-          <i class="iconfont icon-fanhui"></i>
-        </mt-button>
-      </router-link>
+    <mt-header
+      title="资信"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
+        <i class="iconfont icon-fanhui"></i>
+      </mt-button>
       <router-link to="/" slot="right">
         <mt-button>
           <i class="iconfont icon-zhuye"></i>
@@ -122,6 +124,13 @@
           reject: () => {
           }
         })
+      },
+      goBack () {
+        if (this.$route.params && this.$route.params.backUrl) {
+          this.$router.push({name: this.$route.params.backUrl})
+        } else {
+          this.$router.push({name: 'Home'})
+        }
       }
     },
     mounted () {
