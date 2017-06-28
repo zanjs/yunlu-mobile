@@ -18,7 +18,8 @@
     <div class="card-container">
       <enterprise-card
         :store="teams"
-        @click="goEnterpriseDetail"></enterprise-card>
+        @click="goEnterpriseDetail">
+      </enterprise-card>
     </div>
     <div class="nav-tabs">
       <div class="tab-bar">

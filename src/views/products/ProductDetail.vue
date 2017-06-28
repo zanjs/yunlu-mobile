@@ -631,6 +631,7 @@
       max-width: 100%;
       max-height: 100%;
       width: inherit;
+      z-index: 1;
     }
   }
   .page-nav {
@@ -1084,6 +1085,9 @@
   /*覆盖mint-ui中nav-bar组件默认样式，故不用scoped*/
 
   .swipe {
+    .swiper-pagination {
+      z-index: 1;
+    }
     .swiper-pagination-bullet-active {
       background-color: $white;
     }

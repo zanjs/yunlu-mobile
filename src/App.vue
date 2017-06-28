@@ -32,4 +32,10 @@
     fill: currentColor;
     overflow: hidden;
   }
+  .mint-indicator-mask {
+    z-index: 1004 !important;
+  }
+  .mint-indicator-wrapper {
+    z-index: 1004 !important;
+  }
 </style>

@@ -60,6 +60,11 @@ export default {
         color: $white;
         @include pm2rem(padding, 0px, 00px, 0px, 20px);
         @include font-dpr(13px);
+        .name {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
         .money {
           font-weight: bold;
         }

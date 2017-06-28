@@ -10,8 +10,9 @@
       </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
-        <p v-else>张三</p>
-        <div class="icon-container">
+        <p v-else>胖胖的云庐君</p>
+        <div v-if="false"
+             class="icon-container">
           <svg class="icon big" aria-hidden="true">
             <use xlink:href="#icon-v4"></use>
           </svg>
@@ -24,6 +25,10 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-Z4"></use>
           </svg>
+        </div>
+        <div
+          v-else
+          class="icon-container">
         </div>
         <div class="address-container">
           <span
@@ -129,8 +134,11 @@
       }
       .content {
         flex: 1;
+        display: flex;
         @include px2rem(margin-left, 26px);
         @include px2rem(width, 448px);
+        flex-direction: column;
+        justify-content: space-between;
         p {
           @include font-dpr(17px);
           line-height: 1;
