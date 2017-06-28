@@ -134,11 +134,11 @@
         display: flex;
         @include px2rem(margin-left, 26px);
         @include px2rem(width, 448px);
+        @include px2rem(height, 185px);
         flex-direction: column;
         justify-content: space-between;
         p {
           @include font-dpr(17px);
-          line-height: 1;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
@@ -152,7 +152,7 @@
         }
         svg {
           @include font-dpr(20px);
-          @include pm2rem(margin, 30px, 16px, 30px, 0px);
+          @include pm2rem(margin, 20px, 16px, 30px, 0px);
         }
         .address-container {
           .address {

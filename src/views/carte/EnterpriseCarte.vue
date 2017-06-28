@@ -11,7 +11,7 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
       <mt-button slot="right"
-                 @click="goReport()"
+                 @click="goReport(teams)"
                  class="button-text">
         <i class="iconfont icon-jubao"></i>
         投诉
@@ -325,9 +325,10 @@
           }
         }
       },
-      goReport () {
+      goReport (item) {
         document.body.scrollTop = 0
-        this.$router.push({name: 'Report'})
+        setStore('reportParams', {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'})
+        this.$router.push({name: 'Report', params: {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'}})
       },
       tabClick (val) {
         this.showProduct = val === 0

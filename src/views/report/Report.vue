@@ -16,6 +16,7 @@
     <div class="report-list">
       <mt-checklist
         v-model="values"
+        :max="1"
         :options="options">
       </mt-checklist>
       <div class="text-title">举例补充说明(可选填)</div>
@@ -34,6 +35,7 @@
 
 <script>
   import { getStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -74,17 +76,34 @@
           method: 'post',
           params: {
             ...(this.token ? {token: this.token} : {}),
-            clazz: this.values,
+            clazz: this.values[0],
             resource_id: this.resourceId,
             resourceClass: this.resourceClass,
             ...(this.description ? {description: this.description} : {})
           },
           target: this,
           resolve: (state, res) => {
+            if (res.data.success) {
+              this.autoGoBack()
+            }
           },
           reject: () => {
           }
         })
+      },
+      autoGoBack () {
+        let toast = Toast({
+          message: '举报成功',
+          duration: 2000
+        })
+        setTimeout(() => {
+          toast.close()
+          if (this.$route.params && this.$route.params.backUrl) {
+            this.$router.push({name: this.$route.params.backUrl})
+          } else {
+            this.$router.push({name: 'Home'})
+          }
+        }, 2000)
       },
       goBack () {
         this.$router.go(-1)

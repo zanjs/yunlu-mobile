@@ -14,16 +14,24 @@
         <i class="iconfont icon-fenlei"></i>
       </div>
     </section>
-    <div v-show="showMenu"
-         class="drop-menu-arrow"
-         v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}"></div>
-    <section v-show="showMenu"
-             id="fullscreen-cover"
-             class="product-drop-menu"
-             v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
+    <div
+        v-show="showMenu"
+        id="fullscreen-cover"
+        class="full-screen-cover">
+      </div>
+    <div
+      v-show="showMenu"
+      class="drop-menu-arrow"
+      v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
+    </div>
+    <section
+      v-show="showMenu"
+      class="product-drop-menu"
+      v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
       <div class="menu"
-           @click="goFavorites()">
-        <div class="item">
+           id="product-drop-menu">
+        <div class="item"
+             @click="goFavorites()">
           <i class="iconfont icon-shoucang"></i>
           <span>收藏夹</span>
         </div>
@@ -60,6 +68,13 @@
         let self = this
         document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
           e.preventDefault()
+          this.cssAnimation = false
+          setTimeout(() => {
+            self.showMenu = false
+          }, 400)
+        })
+        document.getElementById('product-drop-menu').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
           this.cssAnimation = false
           setTimeout(() => {
             self.showMenu = false
@@ -103,7 +118,7 @@
     align-items: center;
     position: absolute;
     top: 0;
-    z-index: 999;
+    z-index: 2;
     .icon-box {
       display: flex;
       justify-content: center;
@@ -152,20 +167,31 @@
     border-style: solid;
     border-top: none;
   }
-  .product-drop-menu {
-    position: absolute;
+  .full-screen-cover {
+    position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: rgba(0, 0, 0, 0.45);
+  }
+  .product-drop-menu {
+    position: absolute;
+    // top: 0;
+    // left: 0;
     width: 100%;
-    height: 4000px;
-    background-color: transparent;
+    height: 100%;
+    // width: 100%;
+    // height: 4000px;
+    // background-color: transparent;
     .menu {
       position: absolute;
       @include px2rem(width, 282px);
       @include px2rem(top, 104px);
       @include px2rem(right, 16px);
       background-color: rgba(0, 0, 0, .5);
-      z-index: 9999;
+      z-index: 9999 !important;
       .item {
         @include px2rem(height, 96px);
         border-bottom: 1px solid $white;

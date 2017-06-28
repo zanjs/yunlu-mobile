@@ -466,7 +466,11 @@
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          this.$router.push({name: 'Home'})
+          if (this.$route.params && this.$route.params.backUrl) {
+            this.$router.push({name: this.$route.params.backUrl})
+          } else {
+            this.$router.push({name: 'Home'})
+          }
         }
       },
       goReport () {

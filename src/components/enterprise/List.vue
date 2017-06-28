@@ -90,7 +90,6 @@
     background-color: $white;
     border-top: 1px solid #D1D1D1;
     box-sizing: border-box;
-    @include pm2rem(margin, 10px, 0px, 0px, 0px);
     .item {
       display: flex;
       align-items: center;

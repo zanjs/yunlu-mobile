@@ -9,8 +9,8 @@
         src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
-        <p v-else>**</p>
-        <div>
+        <p v-else>胖胖的云庐君</p>
+        <div v-if="false">
           <span>个人简介</span>
         </div>
       </div>

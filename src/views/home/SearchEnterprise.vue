@@ -84,11 +84,11 @@
           setStore('emptyenterpriseCarteParams', {name: item.name, backUrl: 'SearchEnterprise'})
           this.$router.push({name: 'EmptyEnterpriseCarte', params: {name: item.name, backUrl: 'SearchEnterprise'}})
         } else if (item.organization.service.aliaz === 'association') {
-          setStore('comityCarteParams', {teamId: item.organization.id})
-          this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id}})
+          setStore('comityCarteParams', {teamId: item.organization.id, backUrl: 'SearchEnterprise'})
+          this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
         } else {
-          setStore('enterpriseCarteParams', {teamId: item.organization.id})
-          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id}})
+          setStore('enterpriseCarteParams', {teamId: item.organization.id, backUrl: 'SearchEnterprise'})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
         }
       },
       goBack () {

@@ -3,9 +3,10 @@
     <product-header
       @back="goBack()"
       @open-favorites="openFavorites()"
-      @go-report="goReport()"
+      @report="goReport()"
       @open-shopping-car="openShoppingCar()"
-      @search-near-by="searchNearBy()"></product-header>
+      @search-near-by="searchNearBy()">
+    </product-header>
     <div class="swipe">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item, index) in productDetailFiles"
@@ -143,7 +144,7 @@
         <img v-if="productDetailTeam && productDetailTeam.logo"
              :src="productDetailTeam.logo">
         <img v-else
-             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
+             src="../../assets/blank.jpg">
       </div>
       <div class="company-content">
         <span v-if="productDetailTeam && productDetailTeam.company"
@@ -274,7 +275,10 @@
         tempArchivesFiles: [],
         swiperOption: {
           pagination: '.swiper-pagination',
-          paginationClickable: true
+          paginationClickable: true,
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
+          }
         },
         swiperOptionFullScreen: {
           notNextTick: false,
@@ -435,9 +439,6 @@
           }
         })
       },
-      handleArchives (arr) {
-
-      },
       getArchivesFiles (ids) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
@@ -523,6 +524,10 @@
         } else {
           this.$router.push({name: 'Home'})
         }
+      },
+      goReport () {
+        setStore('reportParams', {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'})
+        this.$router.push({name: 'Report', params: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}})
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
@@ -642,7 +647,7 @@
     @include font-dpr(16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
     background-color: rgba(0, 0, 0, .5);
-    z-index: 1002;
+    z-index: 2;
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
