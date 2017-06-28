@@ -71,6 +71,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { getStore, removeAllStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -92,10 +93,12 @@
         this.$router.push({name: 'Download', params: {backUrl: 'Mine'}})
       },
       helpCenter () {
-        this.$router.push({name: 'Download', params: {backUrl: 'Mine'}})
+        Toast('暂未开放')
+        // this.$router.push({name: 'Download', params: {backUrl: 'Mine'}})
       },
       openProtocol () {
-        this.$router.push({name: 'Protocol', params: {backUrl: 'Mine'}})
+        Toast('暂未开放')
+        // this.$router.push({name: 'Protocol', params: {backUrl: 'Mine'}})
       }
     },
     computed: {
