@@ -21,7 +21,7 @@
                placeholder="请再次输入密码">
       </div>
       <div class="login-btn">
-        <a @click="login()">
+        <a @click="done()">
           完成
         </a>
       </div>
@@ -38,37 +38,36 @@
       return {
         password: '',
         password2: '',
-        token: getStore('user') ? getStore('user').authentication_token : null
+        mobile: getStore('setNewPasswordParams') ? getStore('setNewPasswordParams').mobile : this.$route.params.mobile,
+        code: getStore('setNewPasswordParams') ? getStore('setNewPasswordParams').code : this.$route.params.code
       }
     },
     methods: {
       goBack () {
         this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
       },
-      login () {
+      dome () {
         this.$store.dispatch('commonAction', {
           url: '/password',
-          method: 'put',
-          params: {
-            password: this.password,
-            token: this.token,
-            _method: 'put'
-          },
+          method: 'post',
+          params: {},
           data: {
+            password: this.password,
             login: this.mobile,
-            password: this.password
+            temp_token: this.code,
+            _method: 'put'
           },
           target: this,
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
             let toast = Toast({
-              message: '修改成功',
+              message: '设置成功',
               duration: 2000
             })
             setTimeout(() => {
               toast.close()
-              this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
+              this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
             }, 2000)
           },
           reject: () => {
@@ -137,7 +136,9 @@
     }
     .login-btn {
       a {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         @include px2rem(width, 610px);
         margin: 0 auto;
         @include px2rem(height, 80px);
@@ -146,7 +147,6 @@
         background-color: #52CAA7;
         color: $white;
         @include font-dpr(16px);
-        @include px2rem(line-height, 80px);
         text-align: center;
       }
       a:active {

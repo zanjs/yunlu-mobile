@@ -197,16 +197,19 @@
     }
   }
   .logout-btn {
-    @include px2rem(width, 520px);
-    @include px2rem(height,70px);
-    background-color: #52CAA7;
     color: $white;
-    margin: 0 auto;
     @include px2rem(margin-top, 22px);
     text-align: center;
-    @include px2rem(line-height, 70px);
-    @include font-dpr(15px);
-    display: block;
+    a {
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(width, 520px);
+      @include px2rem(height,70px);
+      background-color: #52CAA7;
+      @include font-dpr(15px);
+    }
     a:active {
       background-color: rgba(82, 202, 167, .5);
     }

@@ -56,21 +56,18 @@
       goBack () {
         this.$router.go(-1)
       },
-      next () {
-        console.log('next')
-      },
       getValidCode () {
         this.$store.dispatch('commonAction', {
-          url: '/check_code',
-          method: 'get',
-          params: {
-            login: this.mobile,
-            code: this.code
+          url: '/password',
+          method: 'post',
+          params: {},
+          data: {
+            mobile: this.mobile
           },
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.$router.push({name: 'SetNewPassword'})
+              this.countDown()
             } else {
               Toast(res.data.msg)
             }
@@ -96,20 +93,23 @@
           }
         }, 1000)
       },
-      login () {
+      next () {
         this.$store.dispatch('commonAction', {
-          url: '/login',
-          method: 'post',
-          params: {},
-          data: {
+          url: '/check_code',
+          method: 'get',
+          params: {
             login: this.mobile,
-            password: this.password
+            code: this.code
           },
+          data: {},
           target: this,
           resolve: (state, res) => {
-            state.user = res.data
-            setStore('user', res.data)
-            this.$router.push({name: 'Hello'})
+            if (res.data.success) {
+              setStore('setNewPasswordParams', {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'})
+              this.$router.push({name: 'SetNewPassword', params: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}})
+            } else {
+              Toast(res.data.msg)
+            }
           },
           reject: () => {
           }
