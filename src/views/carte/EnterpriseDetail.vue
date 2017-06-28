@@ -17,7 +17,7 @@
     <div class="container">
       <div class="detail-container">
         <div class="name-info">
-          <p>武汉环球万国石材有限公司</p>
+          <p>{{comityDetail.name}}</p>
           <div class="rate">
             <i class="iconfont icon-icon-test1 selected"></i>
             <i class="iconfont icon-icon-test1 selected"></i>
@@ -35,27 +35,51 @@
             </svg>
           </div>
         </div>
-        <div class="item">
+        <div
+          v-if="comityDetail && comityDetail.enttype"
+          class="item">
           <span class="label">机构状态</span>
-          <span class="content">有限责任公司(自然人投资或控股)</span>
+          <span class="content">{{comityDetail.enttype}}</span>
         </div>
-        <div class="item">
+        <div
+          v-if="comityDetail && comityDetail.organization && comityDetail.organization.legal_person"
+          class="item">
           <span class="label">法定代表人</span>
-          <span class="content">王秀兵</span>
+          <span class="content">{{comityDetail.organization.legal_person}}</span>
         </div>
-        <div class="item">
+        <div
+          v-if="comityDetail && comityDetail.info_id"
+          class="item">
           <span class="label">注册号</span>
-          <span class="content">420000000000</span>
+          <span class="content">{{comityDetail.info_id}}</span>
         </div>
-        <div class="item">
+        <div
+          v-if="comityDetail && comityDetail.address"
+          class="item">
+          <span class="label">住所</span>
+          <span class="content">{{comityDetail.address}}</span>
+        </div>
+        <div
+          v-if="comityDetail && comityDetail.reg_org"
+          class="item">
+          <span class="label">登记机关</span>
+          <span class="content">{{comityDetail.reg_org}}</span>
+        </div>
+        <div
+          v-if="false"
+          class="item">
           <span class="label">机构代码</span>
           <span class="content">4200000000000</span>
         </div>
-        <div class="item">
+        <div
+          v-if="false"
+          class="item">
           <span class="label">信用代码</span>
           <span class="content">43000000000000</span>
         </div>
-        <div class="link-container">
+        <div
+          v-if="false"
+          class="link-container">
           <div class="label">社会认证</div>
           <div class="link">
             <a class="row">
@@ -74,15 +98,39 @@
 </template>
 
 <script>
+  import { getStore } from '../../config/mUtils'
+  import { mapGetters } from 'vuex'
   export default {
     data () {
-      return {}
+      return {
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        teamId: getStore('enterpriseDetailParams') ? getStore('enterpriseDetailParams').teamId : this.$route.params.teamId
+      }
     },
     methods: {
-
+      getEnterpriseDetail () {
+        this.$store.dispatch('commonAction', {
+          url: `/enterprises/${this.teamId}/details`,
+          method: 'get',
+          params: {
+            token: this.token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.comityDetail = res.data.enterprises
+          },
+          reject: () => {
+          }
+        })
+      }
     },
     mounted () {
-
+      this.getEnterpriseDetail()
+    },
+    computed: {
+      ...mapGetters([
+        'comityDetail'
+      ])
     }
   }
 </script>

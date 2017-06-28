@@ -25,7 +25,8 @@ const state = {
   productDetailTeam: [], // 产品详情页下方的所属机构(协会产品所属机构为协会下的企业)
   allEnterprises: [], // 企业搜索列表所有的协会和企业
   userCard: {}, // 个人会员名片
-  clusters: [] // 个人会员集群(空间)
+  clusters: [], // 个人会员集群(空间)
+  comityDetail: {} // 协会详情
 }
 
 const getters = {
@@ -47,7 +48,8 @@ const getters = {
   productDetailTeam: state => state.productDetailTeam,
   allEnterprises: state => state.allEnterprises,
   userCard: state => state.userCard,
-  clusters: state => state.clusters
+  clusters: state => state.clusters,
+  comityDetail: state => state.comityDetail
 }
 
 const actions = {

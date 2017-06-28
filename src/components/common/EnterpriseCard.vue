@@ -1,7 +1,7 @@
 <template>
   <section class="card">
     <div class="user-info"
-         @click.stop="handleClick">
+         @click.stop="handleClick(store)">
       <div class="img-container">
         <img v-if="store && store.logo"
              :src="store.logo"/>
@@ -91,10 +91,8 @@
     },
     props: ['store'],
     methods: {
-      handleClick (e) {
-        console.log(e)
-        // 模拟企业Id
-        this.$emit('click')
+      handleClick (item) {
+        this.$emit('click', item.enterprise_id)
       },
       handleIconClick (obj) {
         this.$emit('', obj)

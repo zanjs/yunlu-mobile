@@ -362,7 +362,8 @@
       },
       goEnterpriseDetail (id) {
         console.log(id)
-        this.$router.push({name: 'EnterpriseDetail', params: {backUrl: 'EnterpriseCarte'}})
+        setStore('enterpriseDetailParams', {teamId: id, backUrl: 'EnterpriseCarte'})
+        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}})
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'})
