@@ -1,8 +1,6 @@
 <template>
   <section id="informationList">
-    <div
-      v-if="store && store.length > 0"
-      class="gallery">
+    <div class="gallery">
       <div v-for="(item, index) in store"
            :key="index"
            @click.stop="handleClick(item)"
@@ -12,11 +10,6 @@
           {{item.cnname}}（{{item.count}}）
         </div>
       </div>
-    </div>
-    <div
-      v-else
-      class="no-info">
-      <img src="../../assets/noInformation.png">
     </div>
   </section>
 </template>
@@ -68,16 +61,6 @@
         @include font-dpr(13px);
         @include line-height(26px);
       }
-    }
-  }
-  .no-info {
-    @include pm2rem(padding, 100px, 20px, 100px, 0px);
-    @include pm2rem(margin, 20px, 22px, 0px, 22px);
-    background-color: $white;
-    text-align: center;
-    img {
-      @include px2rem(width, 360px);
-      height: auto;
     }
   }
 </style>

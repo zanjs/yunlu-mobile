@@ -38,79 +38,109 @@
       </div>
       <div class="tab-container">
         <template v-if="activeIndex === 0">
-          <mt-loadmore
+          <template v-if="products && products.length > 0">
+            <mt-loadmore
               :top-method="loadProductTop"
               :bottom-method="loadProductBottom"
               :bottom-pull-text="bottomPullText"
               :bottom-drop-text="bottomDropText"
               :auto-fill="false"
               ref="loadMoreProducts">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
-              <product-list-mode
-                v-if="showList"
-                :store="products"
-                @click="goProductDetail">
-              </product-list-mode>
-              <product-thumbnail-mode
-                v-else
-                :store="products"
-                @click="goProductDetail">
-              </product-thumbnail-mode>
-            </transition>
-          </mt-loadmore>
-        </template>
-        <template v-if="activeIndex === 1">
-          <transition
-            name="fade"
-            :appear="true"
-            mode="out-in">
-            <information-list
-              :store="enterpriseInfoFiles"
-              @click="openInformationFolders">
-            </information-list>
-          </transition>
-        </template>
-        <template v-if="activeIndex === 2">
-          <mt-loadmore
-            :top-method="loadEnterpriseTop"
-            :bottom-method="loadEnterpriseBottom"
-            :bottom-pull-text="bottomPullText"
-            :bottom-drop-text="bottomDropText"
-            :auto-fill="false"
-            ref="loadMoreEnterprises">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
-              <enterprise-list
-                :store="enterpriseMembers"
-                @click="goEnterpriseCarte">
-              </enterprise-list>
-            </transition>
-          </mt-loadmore>
-        </template>
-        <template v-if="activeIndex === 3">
-          <template v-if="hasLogin">
-            <mt-loadmore
-              :top-method="loadPersonTop"
-              :bottom-method="loadPersonBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMorePeople">
               <transition
                 name="fade"
                 :appear="true"
                 mode="out-in">
-                <person-list
-                  :store="personMembers"
-                  @click="goPersonCarte">
-                </person-list>
+                <product-list-mode
+                  v-if="showList"
+                  :store="products"
+                  @click="goProductDetail">
+                </product-list-mode>
+                <product-thumbnail-mode
+                  v-else
+                  :store="products"
+                  @click="goProductDetail">
+                </product-thumbnail-mode>
               </transition>
             </mt-loadmore>
+          </template>
+          <div
+            v-else
+            class="no-data">
+            <img src="../../assets/noProduct.png">
+          </div>
+        </template>
+        <template v-if="activeIndex === 1">
+          <template
+            v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
+                <information-list
+                  :store="enterpriseInfoFiles"
+                  @click="openInformationFolders">
+                </information-list>
+            </transition>
+          </template>
+          <div
+            v-else
+            class="no-data">
+            <img src="../../assets/noInformation.png">
+          </div>
+        </template>
+        <template v-if="activeIndex === 2">
+          <template
+            v-if="enterpriseMembers && enterpriseMembers.length > 0">
+            <mt-loadmore
+              :top-method="loadEnterpriseTop"
+              :bottom-method="loadEnterpriseBottom"
+              :bottom-pull-text="bottomPullText"
+              :bottom-drop-text="bottomDropText"
+              :auto-fill="false"
+              ref="loadMoreEnterprises">
+              <transition
+                name="fade"
+                :appear="true"
+                mode="out-in">
+                <enterprise-list
+                  :store="enterpriseMembers"
+                  @click="goEnterpriseCarte">
+                </enterprise-list>
+              </transition>
+            </mt-loadmore>
+          </template>
+          <div
+            v-else
+            class="no-data">
+            <img src="../../assets/noEnterprise.png">
+          </div>
+        </template>
+        <template v-if="activeIndex === 3">
+          <template v-if="hasLogin">
+            <template v-if="personMembers && personMembers.length > 0">
+              <mt-loadmore
+                :top-method="loadPersonTop"
+                :bottom-method="loadPersonBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMorePeople">
+                <transition
+                  name="fade"
+                  :appear="true"
+                  mode="out-in">
+                  <person-list
+                    :store="personMembers"
+                    @click="goPersonCarte">
+                  </person-list>
+                </transition>
+              </mt-loadmore>
+            </template>
+            <div
+              v-else
+              class="no-data">
+              <img src="../../assets/noPerson.png">
+            </div>
           </template>
           <template v-else>
             <div class="tips-container">
@@ -631,6 +661,16 @@
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
         border-left: none;
+      }
+    }
+    .no-data {
+      @include pm2rem(padding, 100px, 20px, 100px, 0px);
+      @include pm2rem(margin, 20px, 22px, 0px, 22px);
+      background-color: $white;
+      text-align: center;
+      img {
+        @include px2rem(width, 360px);
+        height: auto;
       }
     }
   }
