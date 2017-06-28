@@ -302,11 +302,16 @@
             if (this.productPageIndex === 1 || q !== '') {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
-              this.$refs.loadMoreProducts.onTopLoaded()
+              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
+                this.$refs.loadMoreProducts.onTopLoaded()
+              }
             } else {
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-              this.$refs.loadMoreProducts.onBottomLoaded()
+              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
+                this.$refs.loadMoreProducts.onBottomLoaded()
+              }
             }
             this.getEnterpriseDocument()
           },

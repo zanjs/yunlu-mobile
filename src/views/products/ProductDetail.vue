@@ -114,7 +114,9 @@
                 <div class="dot"></div>
                 <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
               </div>
-              <div class="title-container">
+              <div
+                v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
+                class="title-container">
                 <div class="dot"></div>
                 <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
               </div>
