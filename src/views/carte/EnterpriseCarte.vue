@@ -1,11 +1,13 @@
 <template>
   <section>
-    <mt-header title="名片"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="名片"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
       <mt-button slot="right"
@@ -30,47 +32,62 @@
       </div>
       <div class="tab-container">
         <template v-if="showProduct">
-          <mt-loadmore
+          <template v-if="products && products.length > 0">
+            <mt-loadmore
               :top-method="loadProductTop"
               :bottom-method="loadProductBottom"
               :bottom-pull-text="bottomPullText"
               :bottom-drop-text="bottomDropText"
               :auto-fill="false"
               ref="loadMoreProducts">
+              <transition
+                name="fade"
+                :appear="true"
+                mode="out-in">
+                <product-list-mode
+                  v-if="showList"
+                  :store="products"
+                  @click="goProductDetail">
+                </product-list-mode>
+                <product-thumbnail-mode
+                  v-else
+                  :store="products"
+                  @click="goProductDetail">
+                </product-thumbnail-mode>
+              </transition>
+            </mt-loadmore>
+          </template>
+          <div
+            v-else
+            class="no-data">
+            <img src="../../assets/noProduct.png">
+          </div>
+        </template>
+        <template v-else>
+          <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
             <transition
               name="fade"
               :appear="true"
               mode="out-in">
-              <product-list-mode
-                v-if="showList"
-                :store="products"
-                @click="goProductDetail">
-              </product-list-mode>
-              <product-thumbnail-mode
-                v-else
-                :store="products"
-                @click="goProductDetail">
-              </product-thumbnail-mode>
+              <information-list
+                :store="enterpriseInfoFiles"
+                @click="openInformationFolders">
+              </information-list>
             </transition>
-          </mt-loadmore>
-        </template>
-        <template v-else>
-          <transition
-            name="fade"
-            :appear="true"
-            mode="out-in">
-            <information-list
-              :store="enterpriseInfoFiles"
-              @click="openInformationFolders">
-            </information-list>
-          </transition>
+          </template>
+          <div
+            v-else
+            class="no-data">
+            <img src="../../assets/noInformation.png">
+          </div>
         </template>
       </div>
     </div>
     <transition name="fade">
-      <search v-show="showSearchBar"
-              :placeholder="placeholder"
-              @search="search">
+      <search
+        v-show="showSearchBar"
+        :placeholder="placeholder"
+        @search="search">
       </search>
     </transition>
     <transition name="fade">
@@ -432,6 +449,16 @@
       .right {
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
+      }
+    }
+    .no-data {
+      @include pm2rem(padding, 100px, 20px, 100px, 0px);
+      @include pm2rem(margin, 20px, 22px, 0px, 22px);
+      background-color: $white;
+      text-align: center;
+      img {
+        @include px2rem(width, 360px);
+        height: auto;
       }
     }
   }
