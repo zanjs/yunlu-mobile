@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/v1': {
-        target: 'http://giant.dev.yunlu6.com',
+        target: 'http://api.yunlu6.com',
         changeOrigin: true
       }
     },

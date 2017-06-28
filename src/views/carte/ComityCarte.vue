@@ -445,6 +445,7 @@
         this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}})
       },
       goLogin () {
+        setStore('beforeLogin', {urlName: 'ComityCarte'})
         this.$router.push({name: 'Login', params: {backUrl: 'ComityCarte'}})
       },
       tabClick (val) {
