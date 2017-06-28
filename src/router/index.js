@@ -23,6 +23,7 @@ import ForgetPassword from '../views/user/ForgetPassword'
 import SetNewPassword from '../views/user/SetNewPassword'
 import RegisterNext from '../views/user/RegisterNext'
 import InformationFolders from '../views/carte/InformationFolders'
+import EmptyEnterpriseCarte from '../views/carte/EmptyEnterpriseCarte'
 
 Vue.use(Router)
 
@@ -123,6 +124,10 @@ export default new Router({
       path: '/informationfolders',
       name: 'InformationFolders',
       component: InformationFolders
+    }, {
+      path: '/emptyenterprisecarte',
+      name: 'EmptyEnterpriseCarte',
+      component: EmptyEnterpriseCarte
     }
   ]
 })

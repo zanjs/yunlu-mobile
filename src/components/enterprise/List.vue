@@ -5,12 +5,25 @@
            :key="index"
            @click="handleClick(item)"
            class="item">
-        <img :src="item.organization.logo">
+        <img
+          v-if="item.organization && item.organization.logo"
+          :src="item.organization.logo">
+        <img
+          v-else
+          src="../../assets/blank.jpg">
         <div class="content">
-          <p>{{item.organization.name}}</p>
+          <p>{{item.name}}</p>
           <div>
-            <span class="type">{{item.organization.service.name}}</span>
-            <span class="address">{{item.organization.provice_name}}{{item.organization.city_name}}</span>
+            <span
+              v-if="item.organization && item.organization.service && item.organization.service.name"
+              class="type">{{item.organization.service.name}}</span>
+            <span v-else>&nbsp;</span>
+            <span
+              v-if="item.organization && item.organization.provice_name && item.organization.city_name"
+              class="address">
+              {{item.organization.provice_name}}{{item.organization.city_name}}
+            </span>
+            <span v-else>&nbsp;</span>
           </div>
         </div>
         <div class="arrow">

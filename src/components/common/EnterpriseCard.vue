@@ -6,7 +6,7 @@
         <img v-if="store && store.logo"
              :src="store.logo"/>
         <img v-else
-             src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
+             src="../../assets/blank.jpg">
       </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
@@ -36,13 +36,10 @@
             v-if="store && store.provice_name && store.city_name">{{store.provice_name}}&middot;{{store.city_name}}</span>
           <span
             v-else
-            class="address">湖北省&middot;武汉市</span>
+            class="address">&nbsp;</span>
           <span
-            v-if="store && store.service.name"
+            v-if="store && store.service && store.service.name"
             class="tag">{{store.service.name}}</span>
-          <span
-            v-else
-            class="tag">暂无数据</span>
         </div>
       </div>
     </div>

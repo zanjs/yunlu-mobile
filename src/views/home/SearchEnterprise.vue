@@ -1,11 +1,13 @@
 <template>
   <section>
-    <mt-header title="企业"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="企业"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
@@ -15,12 +17,12 @@
     </search>
     <div class="list">
       <mt-loadmore
-            :top-method="loadEnterpriseTop"
-            :bottom-method="loadEnterpriseBottom"
-            :bottom-pull-text="bottomPullText"
-            :bottom-drop-text="bottomDropText"
-            :auto-fill="false"
-            ref="loadMoreEnterprises">
+        :top-method="loadEnterpriseTop"
+        :bottom-method="loadEnterpriseBottom"
+        :bottom-pull-text="bottomPullText"
+        :bottom-drop-text="bottomDropText"
+        :auto-fill="false"
+        ref="loadMoreEnterprises">
         <list
           :store="allEnterprises"
           @click="goEnterpriseCarte">
@@ -78,7 +80,10 @@
         })
       },
       goEnterpriseCarte (item) {
-        if (item.organization.service.aliaz === 'association') {
+        if (!item.organization) {
+          setStore('emptyenterpriseCarteParams', {name: item.name, backUrl: 'SearchEnterprise'})
+          this.$router.push({name: 'EmptyEnterpriseCarte', params: {name: item.name, backUrl: 'SearchEnterprise'}})
+        } else if (item.organization.service.aliaz === 'association') {
           setStore('comityCarteParams', {teamId: item.organization.id})
           this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id}})
         } else {
