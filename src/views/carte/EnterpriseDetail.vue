@@ -96,6 +96,11 @@
         </div>
       </div>
     </div>
+    <div class="tab-container">
+      <div class="no-data">
+        <img src="../../assets/noFile.png">
+      </div>
+    </div>
   </section>
 </template>
 
@@ -233,6 +238,18 @@
         a:active {
           background-color: #F2F2F2;
         }
+      }
+    }
+  }
+  .tab-container {
+    .no-data {
+      @include pm2rem(padding, 100px, 20px, 100px, 0px);
+      @include pm2rem(margin, 20px, 22px, 0px, 22px);
+      background-color: $white;
+      text-align: center;
+      img {
+        @include px2rem(width, 260px);
+        height: auto;
       }
     }
   }

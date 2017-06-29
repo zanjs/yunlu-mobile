@@ -11,7 +11,7 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
+        <input type="password"
                v-model="password"
                placeholder="输入至少8位密码">
       </div>
@@ -60,16 +60,20 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.user = res.data
-            setStore('user', res.data)
-            let toast = Toast({
-              message: '修改成功',
-              duration: 2000
-            })
-            setTimeout(() => {
-              toast.close()
-              this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
-            }, 2000)
+            if (res.data.success) {
+              state.user = res.data
+              setStore('user', res.data)
+              let toast = Toast({
+                message: '修改成功',
+                duration: 2000
+              })
+              setTimeout(() => {
+                toast.close()
+                this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
+              }, 2000)
+            } else {
+              Toast(res.data.msg)
+            }
           },
           reject: () => {
           }

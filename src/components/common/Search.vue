@@ -43,7 +43,7 @@
       background-color: #EDEDED;
       width: 100%;
       @include px2rem(border-radius, 14px);
-      color: #C2C2C2;
+      color: #595959;
       @include font-dpr(14px);
       @include px2rem(line-height, 58px);
       @include px2rem(height, 58px);
@@ -52,7 +52,7 @@
       border: none;
     }
     ::-webkit-input-placeholder{
-      color: #C2C2C2;
+      color: #A6A6A6;
     }
     i {
       position: absolute;

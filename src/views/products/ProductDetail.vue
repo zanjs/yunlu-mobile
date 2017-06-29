@@ -232,7 +232,7 @@
       <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
       <div class="close"
            @click="closePreview()">
-        <i class="fa fa-times"></i>
+        <i class="iconfont icon-fanhui"></i>
       </div>
       <swiper :options="swiperOptionFullScreen"
               class="full-screen-swiper">

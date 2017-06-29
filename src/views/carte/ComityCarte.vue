@@ -544,9 +544,8 @@
         this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
       },
       goEnterpriseDetail (id) {
-        console.log(id)
-        setStore('enterpriseDetailParams', {id: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'EnterpriseDetail', params: {id: id, backUrl: 'ComityCarte'}})
+        setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
+        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}})
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})
@@ -678,8 +677,9 @@
       @include pm2rem(margin, 20px, 22px, 0px, 22px);
       background-color: $white;
       text-align: center;
+      border: 1px solid #D1D1D1;
       img {
-        @include px2rem(width, 360px);
+        @include px2rem(width, 260px);
         height: auto;
       }
     }

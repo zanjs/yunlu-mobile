@@ -192,8 +192,8 @@
       }
       a {
         float: right;
-        display: block;
         @include px2rem(width, 228px);
+        @include font-dpr(13px);
         color: #52CAA7;
         border-color: #52CAA7;
         @include px2rem(border-width, 3px);
@@ -201,8 +201,9 @@
         border-style: solid;
         box-sizing: border-box;
         @include px2rem(height, 80px);
-        @include px2rem(line-height, 80px);
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center
       }
       a:active {
         color: rgba(82, 202, 167, .5);

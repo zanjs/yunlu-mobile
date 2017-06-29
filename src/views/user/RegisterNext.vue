@@ -109,7 +109,7 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: #A6A6A6;
+        color: #595959;
         @include font-dpr(14px);
         line-height: 1;
         border: none;

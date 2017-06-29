@@ -44,9 +44,9 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
+        this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
       },
-      dome () {
+      done () {
         this.$store.dispatch('commonAction', {
           url: '/password',
           method: 'post',
@@ -59,16 +59,20 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.user = res.data
-            setStore('user', res.data)
-            let toast = Toast({
-              message: '设置成功',
-              duration: 2000
-            })
-            setTimeout(() => {
-              toast.close()
-              this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
-            }, 2000)
+            if (res.data.success) {
+              state.user = res.data
+              setStore('user', res.data)
+              let toast = Toast({
+                message: '设置成功',
+                duration: 2000
+              })
+              setTimeout(() => {
+                toast.close()
+                this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
+              }, 2000)
+            } else {
+              Toast(res.data.msg)
+            }
           },
           reject: () => {
           }

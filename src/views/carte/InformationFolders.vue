@@ -16,17 +16,20 @@
       </information-gallery>
     </div>
     <div v-if="showPreview">
-      <span class="page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
-      <div class="close"
-           @click="closePreview()">
-        <i class="fa fa-times"></i>
+      <div class="option-bar">
+        <div class="close"
+            @click="closePreview()">
+          <i class="iconfont icon-fanhui"></i>
+        </div>
+        <span class="page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
-      <swiper :options="swiperOption"
-              class="full-screen-swiper">
-        <!-- slides -->
-        <swiper-slide class="swiper-zoom-container"
-                      v-for="(item, index) in previewImgs"
-                      :key="index">
+      <swiper
+        :options="swiperOption"
+        class="full-screen-swiper">
+        <swiper-slide
+          class="swiper-zoom-container"
+          v-for="(item, index) in previewImgs"
+          :key="index">
           <img :src="item.url"
                alt="">
         </swiper-slide>
@@ -192,29 +195,36 @@
   .gallery-container {
     @include px2rem(padding-top, 88px);
   }
-  .page-nav {
+  .option-bar {
     position: absolute;
     @include px2rem(top, 38px);
-    @include px2rem(left, 150px);
-    @include pm2rem(padding, 4px, 10px, 4px, 10px);
-    @include px2rem(border-radius, 10px);
-    background-color: rgba(0, 0, 0, .5);
-    color: white;
-    z-index: 1003;
-    @include font-dpr(20px);
+    @include px2rem(height, 50px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .page-nav {
+      background-color: rgba(0, 0, 0, .5);
+      color: white;
+      z-index: 1003;
+      @include font-dpr(20px);
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+    }
+    .close {
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(border-radius, 10px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      background-color: rgba(0, 0, 0, .5);
+      color: white;
+      z-index: 1003;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      i {
+         @include font-dpr(20px);
+      }
+    }
   }
-  .close {
-    position: absolute;
-    @include px2rem(top, 38px);
-    @include px2rem(left, 52px);
-    @include pm2rem(padding, 4px, 10px, 4px, 10px);
-    @include px2rem(border-radius, 10px);
-    background-color: rgba(0, 0, 0, .5);
-    color: white;
-    z-index: 1003;
-    @include font-dpr(30px);
-    line-height: 1;
-  }
+
   .full-screen-swiper {
     position: fixed;
     top: 0;
