@@ -35,7 +35,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore, getStore } from '../../config/mUtils'
+  import { setStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -46,11 +46,12 @@
     },
     methods: {
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl, params: {}})
-        } else {
-          this.$router.push({name: 'Home'})
-        }
+        this.$router.go(-1)
+        // if (this.$route.query && this.$route.query.backUrl) {
+        //   this.$router.push({name: this.$route.query.backUrl, params: {}})
+        // } else {
+        //   this.$router.push({name: 'Home'})
+        // }
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -65,12 +66,13 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            let beforeLogin = getStore('beforeLogin')
-            if (beforeLogin) {
-              this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
-            } else {
-              this.$router.push({name: 'Home', params: {}})
-            }
+            this.$router.go(-1)
+            // let beforeLogin = getStore('beforeLogin')
+            // if (beforeLogin) {
+            //   this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
+            // } else {
+            //   this.$router.push({name: 'Home', params: {}})
+            // }
           },
           reject: () => {
             Toast('手机号或密码错误')

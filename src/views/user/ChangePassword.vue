@@ -43,7 +43,8 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -69,7 +70,8 @@
               })
               setTimeout(() => {
                 toast.close()
-                this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
+                this.$router.go(-1)
+                // this.$router.push({name: 'Mine', params: {backUrl: 'Home'}})
               }, 2000)
             } else {
               Toast(res.data.msg)

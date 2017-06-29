@@ -41,7 +41,8 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Register', params: {backUrl: 'RegitserNext'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Register', params: {backUrl: 'RegitserNext'}})
       },
       finish () {
         this.$store.dispatch('commonAction', {

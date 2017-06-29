@@ -21,8 +21,8 @@
   export default {
     data () {
       return {
-        headerName: getStore('photosParams') ? getStore('photosParams').name : '相册',
-        id: getStore('photosParams') ? getStore('photosParams').id : '',
+        headerName: this.$route.query.name,
+        id: this.$route.query.id,
         pageIndex: 1,
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : '',
@@ -51,11 +51,12 @@
         })
       },
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.push({name: 'Folders'})
-        }
+        this.$router.go(-1)
+        // if (this.$route.params && this.$route.params.backUrl) {
+        //   this.$router.push({name: this.$route.params.backUrl})
+        // } else {
+        //   this.$router.push({name: 'Folders'})
+        // }
       }
     },
     mounted () {

@@ -52,7 +52,8 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
       },
       next () {
         this.$router.push({name: 'RegisterNext'})

@@ -37,12 +37,12 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
-  import { setStore, getStore } from '../../config/mUtils'
+  import { setStore } from '../../config/mUtils'
   export default {
     data () {
       return {
         placeholder: '请输入企业名称',
-        searchParams: getStore('searchEnterpriseParams') ? getStore('searchEnterpriseParams').q : '',
+        searchParams: this.$route.query.q,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         bottomPullText: '上拉加载更多',
@@ -84,17 +84,18 @@
       goEnterpriseCarte (item) {
         if (!item.organization) {
           setStore('emptyenterpriseCarteParams', {name: item.name, backUrl: 'SearchEnterprise'})
-          this.$router.push({name: 'EmptyEnterpriseCarte', params: {name: item.name, backUrl: 'SearchEnterprise'}})
+          this.$router.push({name: 'EmptyEnterpriseCarte', params: {name: item.name, backUrl: 'SearchEnterprise'}, query: {name: item.name, backUrl: 'SearchEnterprise'}})
         } else if (item.organization.service.aliaz === 'association') {
           setStore('comityCarteParams', {teamId: item.organization.id, backUrl: 'SearchEnterprise'})
-          this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
+          this.$router.push({name: 'ComityCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}, query: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
         } else {
           setStore('enterpriseCarteParams', {teamId: item.organization.id, backUrl: 'SearchEnterprise'})
-          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}, query: {teamId: item.organization.id, backUrl: 'SearchEnterprise'}})
         }
       },
       goBack () {
-        this.$router.push({name: 'Home', params: {}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Home', params: {}})
       },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1

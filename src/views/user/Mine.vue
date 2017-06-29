@@ -80,11 +80,13 @@
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
       },
       logOut () {
         removeAllStore()
-        this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
       },
       changePassword () {
         this.$router.push({name: 'ChangePassword', params: {backUrl: 'Mine'}})

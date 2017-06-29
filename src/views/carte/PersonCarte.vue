@@ -63,7 +63,7 @@
     methods: {
       goReport () {
         setStore('reportParams', {resourceId: this.$store.state.userCard.id, resourceClass: 'user'})
-        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
+        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}, query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
       },
       getPersonDetail () {
         this.$store.dispatch('commonAction', {
@@ -111,21 +111,22 @@
       goCarte (item) {
         if (!item.team_id) {
           setStore('foldersParams', {id: item.id, name: item.name, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'Folders', params: {id: item.id, name: item.name, backUrl: 'PersonCarte'}})
+          this.$router.push({name: 'Folders', params: {id: item.id, name: item.name, backUrl: 'PersonCarte'}, query: {id: item.id, name: item.name, backUrl: 'PersonCarte'}})
         } else if (item.is_association) {
-          setStore('comityCarteParams', {teamId: item.id, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'ComityCarte', params: {teamId: item.id, backUrl: 'PersonCarte'}})
+          setStore('comityCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
+          this.$router.push({name: 'ComityCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}, query: {teamId: item.team_id, backUrl: 'PersonCarte'}})
         } else {
-          setStore('enterpriseCarteParams', {teamId: item.id, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.id, backUrl: 'PersonCarte'}})
+          setStore('enterpriseCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}, query: {teamId: item.team_id, backUrl: 'PersonCarte'}})
         }
       },
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.push({name: 'ComityCarte'})
-        }
+        this.$router.go(-1)
+        // if (getStore('personCarteParams') && getStore('personCarteParams').backUrl) {
+        //   this.$router.push({name: getStore('personCarteParams').backUrl})
+        // } else {
+        //   this.$router.push({name: 'ComityCarte'})
+        // }
       }
     },
     mounted () {

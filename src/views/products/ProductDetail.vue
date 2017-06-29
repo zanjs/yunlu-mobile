@@ -264,9 +264,9 @@
       return {
         selected: '1',
         currentIndex: 1,
-        teamId: getStore('productDetailParams') ? getStore('productDetailParams').teamId : this.$route.params.teamId,
-        productId: getStore('productDetailParams') ? getStore('productDetailParams').productId : this.$route.params.productId,
-        organizationId: getStore('productDetailParams') ? getStore('productDetailParams').organizationId : this.$route.params.organizationId,
+        teamId: this.$route.query.teamId,
+        productId: this.$route.query.productId,
+        organizationId: this.$route.query.organizationId,
         hasLogin: !!getStore('user'),
         hasAddFavorites: false,
         hasAddShoppingCar: false,
@@ -526,15 +526,16 @@
         }, 400)
       },
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.push({name: 'Home'})
-        }
+        this.$router.go(-1)
+        // if (getStore('productDetailParams') && getStore('productDetailParams').backUrl) {
+        //   this.$router.push({name: getStore('productDetailParams').backUrl})
+        // } else {
+        //   this.$router.push({name: 'Home'})
+        // }
       },
       goReport () {
         setStore('reportParams', {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'})
-        this.$router.push({name: 'Report', params: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}})
+        this.$router.push({name: 'Report', params: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}, query: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}})
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
@@ -586,7 +587,7 @@
       },
       goReprot () {
         setStore('reportParams', {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'})
-        this.$router.push({name: 'Report', params: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}})
+        this.$router.push({name: 'Report', params: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}, query: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}})
       },
       stopTouchMove () {
         let self = this

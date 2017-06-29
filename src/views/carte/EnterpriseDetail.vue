@@ -19,7 +19,8 @@
     <div class="container">
       <div class="detail-container">
         <div class="name-info">
-          <p>{{comityDetail.name}}</p>
+          <p v-if="comityDetail && comityDetail.name">{{comityDetail.name}}</p>
+          <p v-else>胖胖的云庐君</p>
           <div
             class="rate"
             v-if="comityDetail.organization && comityDetail.organization.state">
@@ -29,14 +30,14 @@
               :class="{'selected': item.selected}"
               class="iconfont icon-icon-test1"></i>
           </div>
-          <div class="level">
+          <!--<div class="level">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-v3"></use>
             </svg>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-v2"></use>
             </svg>
-          </div>
+          </div>-->
         </div>
         <div
           v-if="comityDetail && comityDetail.enttype"
@@ -147,15 +148,16 @@
         })
       },
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.push({name: 'Home'})
-        }
+        this.$route.go(-1)
+        // if (this.$route.params && this.$route.params.backUrl) {
+        //   this.$router.push({name: this.$route.params.backUrl})
+        // } else {
+        //   this.$router.push({name: 'Home'})
+        // }
       },
       goComity (id) {
         setStore('comityCarteParams', {teamId: id, backUrl: 'EnterpriseDetail'})
-        this.$router.push({name: 'ComityCarte', params: {teamId: id, backUrl: 'EnterpriseDetail'}})
+        this.$router.push({name: 'ComityCarte', params: {teamId: id, backUrl: 'EnterpriseDetail'}, query: {teamId: id, backUrl: 'EnterpriseDetail'}})
       }
     },
     mounted () {

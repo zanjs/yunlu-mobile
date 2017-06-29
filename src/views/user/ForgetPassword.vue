@@ -106,7 +106,7 @@
           resolve: (state, res) => {
             if (res.data.success) {
               setStore('setNewPasswordParams', {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'})
-              this.$router.push({name: 'SetNewPassword', params: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}})
+              this.$router.push({name: 'SetNewPassword', params: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}, query: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}})
             } else {
               Toast(res.data.msg)
             }

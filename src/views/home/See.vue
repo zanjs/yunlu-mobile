@@ -79,7 +79,7 @@
       <template v-else>
         <p v-if="!enterpriseOwner"
            class="user-name"
-           @click="send()">胖胖的云庐君</p>
+           @click="send()">{{card.home_name}}</p>
         <p v-else
            class="user-name">{{seeCard.name}}</p>
       </template>
@@ -120,34 +120,34 @@
     data () {
       return {
         hasLogin: !!getStore('user'),
-        currentUser: getStore('user'),
         enterpriseOwner: false,
         card: getStore('user'),
-        token: getStore('user') ? getStore('user').authentication_token : ''
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        clientKeyWrods: []
       }
     },
     methods: {
       goMine () {
-        this.$router.push({name: 'Mine'})
+        this.$router.push({name: 'Mine', query: {backUrl: 'Home'}})
       },
       goDownload () {
-        this.$router.push({name: 'Download'})
+        this.$router.push({name: 'Download', query: {backUrl: 'Home'}})
       },
       goLogin () {
         setStore('beforeLogin', {urlName: 'Home', params: {}})
-        this.$router.push({name: 'Login'})
+        this.$router.push({name: 'Login', query: {backUrl: 'Home'}})
       },
       send () {
         if (this.hasLogin) {
           Toast('暂未开放')
           // this.$router.push({name: 'Hello', params: {}})
         } else {
-          this.$router.push({name: 'Login', params: {}})
+          this.$router.push({name: 'Login', params: {}, query: {backUrl: 'Home'}})
         }
       },
-      searchEnterprise (keyword) {
+      searchEnterprise (keyword = '') {
         setStore('searchEnterpriseParams', {q: keyword, backUrl: 'Home'})
-        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'Home'}})
+        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'Home'}, query: {q: keyword, backUrl: 'Home'}})
       },
       getSpaces () {
         this.$store.dispatch('commonAction', {
@@ -188,7 +188,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.clientKeyWrods = this.handleKeyWords(res.data.keywords)
+            this.clientKeyWrods = this.handleKeyWords(res.data.keywords)
           },
           reject: () => {
           }
@@ -216,7 +216,7 @@
     computed: {
       ...mapGetters([
         'user',
-        'clientKeyWrods',
+        // 'clientKeyWrods',
         'seeCard'
       ])
     }

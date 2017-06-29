@@ -465,27 +465,28 @@
       },
       goEnterpriseCarte (id) {
         setStore('enterpriseCarteParams', {teamId: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
       },
       goPersonCarte (id) {
         setStore('personCarteParams', {id: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'PersonCarte', params: {id: id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'PersonCarte', params: {id: id, backUrl: 'ComityCarte'}, query: {id: id, backUrl: 'ComityCarte'}})
       },
       goBack () {
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          if (this.$route.params && this.$route.params.backUrl) {
-            this.$router.push({name: this.$route.params.backUrl})
-          } else {
-            this.$router.push({name: 'Home'})
-          }
+          this.$router.go(-1)
+          // if (getStore('comityCarteParams') && getStore('comityCarteParams').backUrl) {
+          //   this.$router.push({name: getStore('comityCarteParams').backUrl})
+          // } else {
+          //   this.$router.push({name: 'Home'})
+          // }
         }
       },
       goReport () {
         document.body.scrollTop = 0
         setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'})
-        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}, query: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}})
       },
       goLogin () {
         setStore('beforeLogin', {urlName: 'ComityCarte'})
@@ -544,11 +545,11 @@
       goProductDetail (item) {
         document.body.scrollTop = 0
         setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}, query: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
       },
       goEnterpriseDetail (id) {
         setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
       },
       iconClick (item) {
         switch (item.type) {
@@ -577,7 +578,7 @@
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}, query: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}})
       },
       showListChange (val) {
         this.showList = val

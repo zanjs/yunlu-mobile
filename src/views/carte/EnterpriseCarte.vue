@@ -108,7 +108,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { setStore, getStore, showBack } from '../../config/mUtils'
+  import { setStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -117,7 +117,7 @@
   export default {
     data () {
       return {
-        teamId: getStore('enterpriseCarteParams') ? getStore('enterpriseCarteParams').teamId : this.$route.params.teamId,
+        teamId: this.$route.query.teamId,
         hasSearch: false,
         showProduct: true,
         showSearchBar: false,
@@ -327,17 +327,18 @@
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          if (this.$route.params && this.$route.params.backUrl) {
-            this.$router.push({name: this.$route.params.backUrl})
-          } else {
-            this.$router.push({name: 'Home'})
-          }
+          this.$router.go(-1)
+          // if (getStore('enterpriseCarteParams') && getStore('enterpriseCarteParams').backUrl) {
+          //   this.$router.push({name: getStore('enterpriseCarteParams').backUrl})
+          // } else {
+          //   this.$router.push({name: 'Home'})
+          // }
         }
       },
       goReport (item) {
         document.body.scrollTop = 0
         setStore('reportParams', {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'Report', params: {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'}})
+        this.$router.push({name: 'Report', params: {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'}, query: {resourceId: item.enterprise_id, resourceClass: 'product', backUrl: 'EnterpriseCarte'}})
       },
       tabClick (val) {
         this.showProduct = val === 0
@@ -362,11 +363,11 @@
       goProductDetail (item) {
         document.body.scrollTop = 0
         setStore('productDetailParams', {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}, query: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
       },
       goEnterpriseDetail (id) {
         setStore('enterpriseDetailParams', {teamId: id, backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}})
+        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}, query: {teamId: id, backUrl: 'EnterpriseCarte'}})
       },
       iconClick (item) {
         switch (item.type) {
@@ -395,7 +396,7 @@
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'}})
+        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'}, query: {teamId: this.teamId, type: item.name, backUrl: 'EnterpriseCarte'}})
       },
       showListChange (val) {
         this.showList = val

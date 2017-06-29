@@ -107,6 +107,11 @@
       },
       goBack () {
         this.$router.go(-1)
+        // if (getStore('reportParams') && getStore('reportParams').backUrl) {
+        //   this.$router.push({name: getStore('reportParams').backUrl})
+        // } else {
+        //   this.$router.push({name: 'Home'})
+        // }
       }
     }
   }

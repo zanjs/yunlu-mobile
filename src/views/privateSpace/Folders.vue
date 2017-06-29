@@ -8,12 +8,12 @@
                  class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
-      <mt-button slot="right"
+      <!--<mt-button slot="right"
                  @click="goReport()"
                  class="button-text">
         <i class="iconfont icon-jubao"></i>
         投诉
-      </mt-button>
+      </mt-button>-->
     </mt-header>
     <div class="card-container">
       <card
@@ -57,11 +57,11 @@
     methods: {
       albumClick (item) {
         setStore('photosParams', {id: item.id, name: item.name, backUrl: 'Folders'})
-        this.$router.push({name: 'Photos', params: {id: item.id, name: item.name, backUrl: 'Folders'}})
+        this.$router.push({name: 'Photos', params: {id: item.id, name: item.name, backUrl: 'Folders'}, query: {id: item.id, name: item.name, backUrl: 'Folders'}})
       },
       goReport () {
         setStore('reportParams', {backUrl: 'Folders'})
-        this.$router.push({name: 'Report', params: {backUrl: 'Folders'}})
+        this.$router.push({name: 'Report', params: {backUrl: 'Folders'}, query: {resourceId: '', resourceClass: 'photo', backUrl: 'EnterpriseCarte'}})
       },
       getSpace () {
         this.$store.dispatch('commonAction', {
@@ -84,11 +84,12 @@
         console.log(obj)
       },
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.push({name: 'PersonCarte'})
-        }
+        this.$router.go(-1)
+        // if (this.$route.params && this.$route.params.backUrl) {
+        //   this.$router.push({name: this.$route.params.backUrl})
+        // } else {
+        //   this.$router.push({name: 'PersonCarte'})
+        // }
       }
     },
     mounted () {

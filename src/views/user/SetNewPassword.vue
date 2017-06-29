@@ -31,20 +31,21 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore, getStore } from '../../config/mUtils'
+  import { setStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         password: '',
         password2: '',
-        mobile: getStore('setNewPasswordParams') ? getStore('setNewPasswordParams').mobile : this.$route.params.mobile,
-        code: getStore('setNewPasswordParams') ? getStore('setNewPasswordParams').code : this.$route.params.code
+        mobile: this.$route.query.mobile,
+        code: this.$route.query.code
       }
     },
     methods: {
       goBack () {
-        this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
+        this.$router.go(-1)
+        // this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
       },
       done () {
         this.$store.dispatch('commonAction', {
@@ -68,7 +69,7 @@
               })
               setTimeout(() => {
                 toast.close()
-                this.$router.push({name: 'Home', params: {backUrl: 'Home'}})
+                this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
               }, 2000)
             } else {
               Toast(res.data.msg)

@@ -46,8 +46,8 @@
   export default {
     data () {
       return {
-        teamId: getStore('InformationFoldersParams') ? getStore('InformationFoldersParams').teamId : this.$route.params.teamId,
-        type: getStore('InformationFoldersParams') ? getStore('InformationFoldersParams').type : this.$route.params.type,
+        teamId: this.$route.query.teamId,
+        type: this.$route.query.type,
         token: getStore('user') ? getStore('user').authentication_token : '',
         pageIndex: 1,
         pageSize: 20,
@@ -86,11 +86,12 @@
     },
     methods: {
       goBack () {
-        if (this.$route.params && this.$route.params.backUrl) {
-          this.$router.push({name: this.$route.params.backUrl})
-        } else {
-          this.$router.go(-1)
-        }
+        this.$router.go(-1)
+        // if (this.$route.params && this.$route.params.backUrl) {
+        //   this.$router.push({name: this.$route.params.backUrl})
+        // } else {
+        //   this.$router.go(-1)
+        // }
       },
       getArchives () {
         this.$store.dispatch('commonAction', {
