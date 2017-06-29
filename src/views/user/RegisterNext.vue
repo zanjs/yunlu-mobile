@@ -60,7 +60,7 @@
           target: this,
           resolve: (state, res) => {
             console.log(state, res)
-            this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
+            this.$router.push({name: 'Login', params: {backUrl: 'See'}})
           },
           reject: () => {
           }

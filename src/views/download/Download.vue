@@ -36,7 +36,7 @@
         this.$router.go(-1)
       },
       goHome () {
-        this.$router.push({name: 'Home'})
+        this.$router.push({name: 'See'})
       },
       download () {
         window.location.href = 'http://www.yunlu6.com/yunlu.apk'

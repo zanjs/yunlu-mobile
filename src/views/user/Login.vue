@@ -50,7 +50,7 @@
         // if (this.$route.query && this.$route.query.backUrl) {
         //   this.$router.push({name: this.$route.query.backUrl, params: {}})
         // } else {
-        //   this.$router.push({name: 'Home'})
+        //   this.$router.push({name: 'See'})
         // }
       },
       login () {
@@ -71,7 +71,7 @@
             // if (beforeLogin) {
             //   this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
             // } else {
-            //   this.$router.push({name: 'Home', params: {}})
+            //   this.$router.push({name: 'See', params: {}})
             // }
           },
           reject: () => {

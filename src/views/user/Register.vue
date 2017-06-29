@@ -53,7 +53,7 @@
     methods: {
       goBack () {
         this.$router.go(-1)
-        // this.$router.push({name: 'Login', params: {backUrl: 'Home'}})
+        // this.$router.push({name: 'Login', params: {backUrl: 'See'}})
       },
       next () {
         this.$router.push({name: 'RegisterNext'})

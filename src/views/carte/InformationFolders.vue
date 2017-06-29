@@ -199,7 +199,6 @@
   .option-bar {
     position: absolute;
     @include px2rem(top, 38px);
-    @include px2rem(height, 50px);
     width: 100%;
     display: flex;
     align-items: center;
@@ -210,20 +209,21 @@
       @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .close {
-      @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
       @include pm2rem(margin, 0px, 30px, 0px, 30px);
-      @include px2rem(height, 50px);
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
       background-color: rgba(0, 0, 0, .5);
       color: white;
       z-index: 1003;
-      line-height: 1;
       display: flex;
       align-items: center;
       i {
-         @include font-dpr(20px);
+        @include font-dpr(20px);
       }
     }
   }

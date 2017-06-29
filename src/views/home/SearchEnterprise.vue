@@ -11,11 +11,11 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-    <search
-      :text="searchParams"
-      :placeholder="placeholder"
-      @search="getEnterprises">
-    </search>
+      <search
+        :text="searchParams"
+        :placeholder="placeholder"
+        @search="getEnterprises">
+      </search>
     <div class="list">
       <mt-loadmore
         :top-method="loadEnterpriseTop"
@@ -95,7 +95,7 @@
       },
       goBack () {
         this.$router.go(-1)
-        // this.$router.push({name: 'Home', params: {}})
+        // this.$router.push({name: 'See', params: {}})
       },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1

@@ -186,7 +186,7 @@
   export default {
     data () {
       return {
-        teamId: getStore('comityCarteParams') ? getStore('comityCarteParams').teamId : this.$route.params.teamId,
+        teamId: this.$route.query.teamId,
         token: getStore('user') ? getStore('user').authentication_token : '',
         hasLogin: !!getStore('user'),
         hasSearch: false,
@@ -479,7 +479,7 @@
           // if (getStore('comityCarteParams') && getStore('comityCarteParams').backUrl) {
           //   this.$router.push({name: getStore('comityCarteParams').backUrl})
           // } else {
-          //   this.$router.push({name: 'Home'})
+          //   this.$router.push({name: 'See'})
           // }
         }
       },
@@ -548,8 +548,12 @@
         this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}, query: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
       },
       goEnterpriseDetail (id) {
-        setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
+        if (!this.hasLogin) {
+          Toast('登录后才能查看协会详细信息')
+        } else {
+          setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
+          this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
+        }
       },
       iconClick (item) {
         switch (item.type) {
@@ -665,8 +669,8 @@
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);
     background-color: $white;
-    color: #52CAA7;
     .tab-bar {
+      color: #52CAA7;
       @include px2rem(height, 84px);
       @include pm2rem(padding, 0px, 22px, 0px, 22px);
       display: flex;

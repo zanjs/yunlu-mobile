@@ -93,7 +93,7 @@
               class="row"
               @click="goComity(item.id)">
               <span>{{item.name}}</span>
-              <i class="iconfont icon-fanhui"/>
+              <i class="iconfont icon-fanhui"></i>
             </a>
           </div>
         </div>
@@ -116,7 +116,7 @@
     data () {
       return {
         token: getStore('user') ? getStore('user').authentication_token : '',
-        teamId: getStore('enterpriseDetailParams') ? getStore('enterpriseDetailParams').teamId : this.$route.params.teamId,
+        teamId: this.$route.query.teamId,
         starLevel: []
       }
     },
@@ -148,11 +148,11 @@
         })
       },
       goBack () {
-        this.$route.go(-1)
+        this.$router.go(-1)
         // if (this.$route.params && this.$route.params.backUrl) {
         //   this.$router.push({name: this.$route.params.backUrl})
         // } else {
-        //   this.$router.push({name: 'Home'})
+        //   this.$router.push({name: 'See'})
         // }
       },
       goComity (id) {

@@ -108,7 +108,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { setStore, showBack } from '../../config/mUtils'
+  import { setStore, getStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -118,6 +118,7 @@
     data () {
       return {
         teamId: this.$route.query.teamId,
+        hasLogin: !!getStore('user'),
         hasSearch: false,
         showProduct: true,
         showSearchBar: false,
@@ -331,7 +332,7 @@
           // if (getStore('enterpriseCarteParams') && getStore('enterpriseCarteParams').backUrl) {
           //   this.$router.push({name: getStore('enterpriseCarteParams').backUrl})
           // } else {
-          //   this.$router.push({name: 'Home'})
+          //   this.$router.push({name: 'See'})
           // }
         }
       },
@@ -366,8 +367,12 @@
         this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}, query: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
       },
       goEnterpriseDetail (id) {
-        setStore('enterpriseDetailParams', {teamId: id, backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}, query: {teamId: id, backUrl: 'EnterpriseCarte'}})
+        if (!this.hasLogin) {
+          Toast('登录后才能查看企业详细信息')
+        } else {
+          setStore('enterpriseDetailParams', {teamId: id, backUrl: 'EnterpriseCarte'})
+          this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'EnterpriseCarte'}, query: {teamId: id, backUrl: 'EnterpriseCarte'}})
+        }
       },
       iconClick (item) {
         switch (item.type) {
@@ -459,8 +464,8 @@
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);
     background-color: $white;
-    color: #52CAA7;
     .tab-bar {
+      color: #52CAA7;
       @include px2rem(height, 84px);
       @include pm2rem(padding, 0px, 22px, 0px, 22px);
       div {

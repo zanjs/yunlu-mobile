@@ -128,26 +128,26 @@
     },
     methods: {
       goMine () {
-        this.$router.push({name: 'Mine', query: {backUrl: 'Home'}})
+        this.$router.push({name: 'Mine', query: {backUrl: 'See'}})
       },
       goDownload () {
-        this.$router.push({name: 'Download', query: {backUrl: 'Home'}})
+        this.$router.push({name: 'Download', query: {backUrl: 'See'}})
       },
       goLogin () {
-        setStore('beforeLogin', {urlName: 'Home', params: {}})
-        this.$router.push({name: 'Login', query: {backUrl: 'Home'}})
+        setStore('beforeLogin', {urlName: 'See', params: {}})
+        this.$router.push({name: 'Login', query: {backUrl: 'See'}})
       },
       send () {
         if (this.hasLogin) {
           Toast('暂未开放')
           // this.$router.push({name: 'Hello', params: {}})
         } else {
-          this.$router.push({name: 'Login', params: {}, query: {backUrl: 'Home'}})
+          this.$router.push({name: 'Login', params: {}, query: {backUrl: 'See'}})
         }
       },
       searchEnterprise (keyword = '') {
-        setStore('searchEnterpriseParams', {q: keyword, backUrl: 'Home'})
-        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'Home'}, query: {q: keyword, backUrl: 'Home'}})
+        setStore('searchEnterpriseParams', {q: keyword, backUrl: 'See'})
+        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'See'}, query: {q: keyword, backUrl: 'See'}})
       },
       getSpaces () {
         this.$store.dispatch('commonAction', {

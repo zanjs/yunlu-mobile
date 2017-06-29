@@ -101,7 +101,7 @@
           if (this.$route.params && this.$route.params.backUrl) {
             this.$router.push({name: this.$route.params.backUrl})
           } else {
-            this.$router.push({name: 'Home'})
+            this.$router.push({name: 'See'})
           }
         }, 2000)
       },
@@ -110,7 +110,7 @@
         // if (getStore('reportParams') && getStore('reportParams').backUrl) {
         //   this.$router.push({name: getStore('reportParams').backUrl})
         // } else {
-        //   this.$router.push({name: 'Home'})
+        //   this.$router.push({name: 'See'})
         // }
       }
     }

@@ -530,7 +530,7 @@
         // if (getStore('productDetailParams') && getStore('productDetailParams').backUrl) {
         //   this.$router.push({name: getStore('productDetailParams').backUrl})
         // } else {
-        //   this.$router.push({name: 'Home'})
+        //   this.$router.push({name: 'See'})
         // }
       },
       goReport () {
@@ -850,7 +850,6 @@
   .option-bar {
     position: absolute;
     @include px2rem(top, 38px);
-    @include px2rem(height, 50px);
     width: 100%;
     display: flex;
     align-items: center;
@@ -861,10 +860,8 @@
       background-color: rgba(0, 0, 0, .5);
       color: white;
       z-index: 1003;
-      line-height: 1;
       display: flex;
       align-items: center;
-      @include px2rem(height, 50px);
       i {
          @include font-dpr(20px);
       }
@@ -876,6 +873,9 @@
       z-index: 1003;
       @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

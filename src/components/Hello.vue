@@ -45,7 +45,7 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('Home')">
+               @click="goRoute('See')">
       首页
     </mt-button>
   </section>
