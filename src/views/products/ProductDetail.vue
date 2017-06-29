@@ -258,6 +258,9 @@
   import { Toast } from 'mint-ui'
   export default {
     data () {
+      const noServiceYet = () => {
+        Toast('暂未开放')
+      }
       return {
         selected: '1',
         currentIndex: 1,
@@ -309,19 +312,19 @@
         actions: [
           {
             name: '发送给微信好友',
-            method: ''
+            method: noServiceYet
           }, {
             name: '分享到微信朋友圈',
-            method: ''
+            method: noServiceYet
           }, {
             name: '分享到QQ空间',
-            method: ''
+            method: noServiceYet
           }, {
             name: '分享到QQ',
-            method: ''
+            method: noServiceYet
           }, {
             name: '分享到新浪微博',
-            method: ''
+            method: noServiceYet
           }
         ],
         sheetVisible: false,
@@ -1196,7 +1199,7 @@
     }
   }
   .product-actionsheet {
-    background-color: transparent;
+    background-color: transparent !important;
     @include px2rem(margin-bottom, 12px);
     .mint-actionsheet-list {
       @include pm2rem(margin, 0px, 41px, 0px, 41px);
