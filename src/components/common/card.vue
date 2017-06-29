@@ -19,32 +19,32 @@
       <a v-if="store && store.mobiles && store.mobiles.length > 0"
          :href="'tel:' + store.mobiles[0]"
          class="icon-box"
-         @click="handleClick({'action': 'mobile', 'value': store.mobiles})">
+         @click="handleClick({'type': 'mobile', 'value': store.mobiles})">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
       <a v-if="store && store.email"
          class="icon-box"
-         @click="handleClick({'action': 'email', 'value': store.email})">
+         @click="handleClick({'type': 'email', 'value': store.email})">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
       <a v-if="store && store.address"
          class="icon-box"
-         @click="handleClick({'action': 'address', 'value': store.address})">
+         @click="handleClick({'type': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
       <a v-if="store && store.wechat"
          class="icon-box"
-         @click="handleClick({'action': 'wechat', 'value': store.wechat})">
+         @click="handleClick({'type': 'wechat', 'value': store.wechat})">
         <i class="iconfont icon-weixin weixin"></i>
       </a>
       <a v-if="store && store.weibo"
          class="icon-box"
-         @cilck="handleClick({'action': 'qq', 'value': store.weibo})">
+         @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
       </a>
       <a v-if="store && store.qq"
          class="icon-box"
-         @click="handleClick({'action': 'qq', 'value': store.qq})">
+         @click="handleClick({'type': 'qq', 'value': store.qq})">
         <i class="iconfont icon-qq qq"></i>
       </a>
     </div>

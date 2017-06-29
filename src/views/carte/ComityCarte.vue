@@ -18,6 +18,7 @@
     <div class="card-container">
       <enterprise-card
         :store="teams"
+        @icon-click="iconClick"
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
@@ -181,6 +182,7 @@
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -547,6 +549,31 @@
       goEnterpriseDetail (id) {
         setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
         this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}})
+      },
+      iconClick (item) {
+        switch (item.type) {
+          case 'email':
+            this.linkToast('协会', '邮箱地址', item.value)
+            break
+          case 'weixin':
+            this.linkToast('协会', '微信号', item.value)
+            break
+          case 'weibo':
+            this.linkToast('协会', '微博账号', item.value)
+            break
+          case 'qq':
+            this.linkToast('协会', 'QQ账号', item.value)
+            break
+          case 'address':
+            Toast('暂未开放')
+            break
+        }
+      },
+      linkToast (str, key, value) {
+        Toast({
+          message: `该${str}${key}为：${value}`,
+          duration: 5000
+        })
       },
       openInformationFolders (item) {
         setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})

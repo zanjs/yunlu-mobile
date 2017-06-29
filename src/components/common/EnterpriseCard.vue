@@ -52,31 +52,31 @@
       </a>
       <a
         v-if="store && store.email"
-        @click="handleIconClick((store.email))"
+        @click="handleIconClick({type: 'email', value: store.email})"
         class="icon-box">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
       <a
         v-if="store && store.longitude && store.latitude"
-        @click="handleIconClick({longitude: store.longitude, latitude: store.latitude})"
+        @click="handleIconClick({type:'address', value: {longitude: store.longitude, latitude: store.latitude}})"
         class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
       <a
-        v-if="store && store.qq"
-        @click="handleIconClick(store.qq)"
+        v-if="store && store.wechat"
+        @click="handleIconClick({type: 'wechat', value: store.wechat})"
         class="icon-box">
         <i class="iconfont icon-weixin weixin"></i>
       </a>
       <a
-        v-if="store && store.qq"
-        @click="handleIconClick(store.qq)"
+        v-if="store && store.weibo"
+        @click="handleIconClick({type: 'weibo', value: store.weibo})"
         class="icon-box">
         <i class="iconfont icon-weibo weibo"></i>
       </a>
       <a
         v-if="store && store.qq"
-        @click="handleIconClick(store.qq)"
+        @click="handleIconClick({type: 'qq', value: store.qq})"
         class="icon-box">
         <i class="iconfont icon-qq qq"></i>
       </a>
@@ -95,7 +95,7 @@
         this.$emit('click', item.enterprise_id)
       },
       handleIconClick (obj) {
-        this.$emit('', obj)
+        this.$emit('icon-click', obj)
       }
     },
     mountd: {

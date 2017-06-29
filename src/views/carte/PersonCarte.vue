@@ -49,6 +49,7 @@
   import Card from '../../components/common/Card'
   import { getStore, setStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -82,8 +83,30 @@
           }
         })
       },
-      cardClick (obj) {
-        console.log(obj)
+      cardClick (item) {
+        switch (item.type) {
+          case 'email':
+            this.linkToast('会员', '邮箱地址', item.value)
+            break
+          case 'wechat':
+            this.linkToast('会员', '微信号', item.value)
+            break
+          case 'weibo':
+            this.linkToast('会员', '微博账号', item.value)
+            break
+          case 'qq':
+            this.linkToast('会员', 'QQ账号', item.value)
+            break
+          case 'address':
+            Toast('暂未开放')
+            break
+        }
+      },
+      linkToast (str, key, value) {
+        Toast({
+          message: `该${str}${key}为：${value}`,
+          duration: 5000
+        })
       },
       goCarte (item) {
         if (!item.team_id) {
