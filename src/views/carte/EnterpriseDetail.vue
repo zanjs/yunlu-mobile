@@ -22,12 +22,12 @@
           <p>{{comityDetail.name}}</p>
           <div
             class="rate"
-            v-if="false">
-            <i class="iconfont icon-icon-test1 selected"></i>
-            <i class="iconfont icon-icon-test1 selected"></i>
-            <i class="iconfont icon-icon-test1 selected"></i>
-            <i class="iconfont icon-icon-test1 selected"></i>
-            <i class="iconfont icon-icon-test1"></i>
+            v-if="comityDetail.organization && comityDetail.organization.state">
+            <i
+              v-for="(item, index) in starLevelComputed"
+              :key="index"
+              :class="{'selected': item.selected}"
+              class="iconfont icon-icon-test1"></i>
           </div>
           <div class="level">
             <svg class="icon" aria-hidden="true">
@@ -115,7 +115,8 @@
     data () {
       return {
         token: getStore('user') ? getStore('user').authentication_token : '',
-        teamId: getStore('enterpriseDetailParams') ? getStore('enterpriseDetailParams').teamId : this.$route.params.teamId
+        teamId: getStore('enterpriseDetailParams') ? getStore('enterpriseDetailParams').teamId : this.$route.params.teamId,
+        starLevel: []
       }
     },
     methods: {
@@ -129,6 +130,17 @@
           target: this,
           resolve: (state, res) => {
             state.comityDetail = res.data.enterprises
+            if (res.data.enterprises.organization && res.data.enterprises.organization.state) {
+              if (res.data.enterprises.organization.state === 'approved') {
+                for (let i = 0; i < 5; i++) {
+                  this.starLevel.push({index: i, selected: i < 3})
+                }
+              } else {
+                for (let i = 0; i < 5; i++) {
+                  this.starLevel.push({index: i, selected: false})
+                }
+              }
+            }
           },
           reject: () => {
           }
@@ -152,7 +164,10 @@
     computed: {
       ...mapGetters([
         'comityDetail'
-      ])
+      ]),
+      starLevelComputed: function () {
+        return this.starLevel.sort((a, b) => a.index - b.index)
+      }
     }
   }
 </script>

@@ -11,20 +11,33 @@
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
         <p v-else>胖胖的云庐君</p>
-        <div v-if="false"
-             class="icon-container">
-          <svg class="icon big" aria-hidden="true">
-            <use xlink:href="#icon-v4"></use>
-          </svg>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-D3"></use>
-          </svg>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-J"></use>
-          </svg>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-Z4"></use>
-          </svg>
+        <div v-if="true"
+          class="icon-container">
+          <template v-if="store.state !== 'approved'">
+            <svg
+              class="icon big"
+              aria-hidden="true">
+              <use xlink:href="#icon-v4"></use>
+            </svg>
+          </template>
+          <template v-if="store.state === 'approved'">
+            <svg
+              class="icon big"
+              aria-hidden="true">
+              <use xlink:href="#icon-V2"></use>
+            </svg>
+          </template>
+          <template v-if="false">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-D3"></use>
+            </svg>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-J"></use>
+            </svg>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-Z4"></use>
+            </svg>
+          </template>
         </div>
         <div
           v-else

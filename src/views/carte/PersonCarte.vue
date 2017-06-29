@@ -112,10 +112,12 @@
         if (!item.team_id) {
           setStore('foldersParams', {id: item.id, name: item.name, backUrl: 'PersonCarte'})
           this.$router.push({name: 'Folders', params: {id: item.id, name: item.name, backUrl: 'PersonCarte'}})
+        } else if (item.is_association) {
+          setStore('comityCarteParams', {teamId: item.id, backUrl: 'PersonCarte'})
+          this.$router.push({name: 'ComityCarte', params: {teamId: item.id, backUrl: 'PersonCarte'}})
         } else {
-          // TODO 需判断是企业还是协会
-          setStore('enterpriseCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}})
+          setStore('enterpriseCarteParams', {teamId: item.id, backUrl: 'PersonCarte'})
+          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.id, backUrl: 'PersonCarte'}})
         }
       },
       goBack () {

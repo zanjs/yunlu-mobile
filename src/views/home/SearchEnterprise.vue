@@ -14,7 +14,7 @@
     <search
       :text="searchParams"
       :placeholder="placeholder"
-      @search="getEnterprises()">
+      @search="getEnterprises">
     </search>
     <div class="list">
       <mt-loadmore
