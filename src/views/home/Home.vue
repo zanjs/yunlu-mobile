@@ -84,11 +84,11 @@
       }
     }
     .mint-tab-item {
-      padding: 0;
-      color: #7F7F7F;
+      padding: 0 !important;
+      color: #7F7F7F !important;
     }
     .is-selected {
-      color: #52CAA7;
+      color: #52CAA7 !important;
     }
   }
 </style>

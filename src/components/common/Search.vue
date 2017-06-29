@@ -14,10 +14,10 @@
   export default {
     data () {
       return {
-        searchParams: ''
+        searchParams: this.text || ''
       }
     },
-    props: ['placeholder'],
+    props: ['placeholder', 'text'],
     methods: {
       handleClick () {
         this.$emit('search', this.searchParams)
@@ -59,6 +59,7 @@
       @include px2rem(right, 60px);
       @include px2rem(height, 10px);
       @include px2rem(top, 16px);
+      color: #B4B4B4;
     }
   }
 </style>

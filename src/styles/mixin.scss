@@ -69,10 +69,19 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
   #{$property}:  ($px-values  + 0px) / $base-fonts-default * 1rem;
 }
 
+/*px2rem 设计稿px转rem !important*/
+@mixin px2remimportant($property, $px-values){
+  #{$property}:  ($px-values  + 0px) / $base-fonts-default * 1rem !important;
+}
 
 /*pm2rem padding margin px转rem(0也要带单位)*/
 @mixin pm2rem($property, $top, $right, $down, $left){
   #{$property}: $top/$base-fonts-default *1rem $right/$base-fonts-default *1rem $down/$base-fonts-default *1rem $left/$base-fonts-default *1rem;
+}
+
+/*pm2rem padding margin px转rem !important(0也要带单位)*/
+@mixin pm2remimportant($property, $top, $right, $down, $left){
+  #{$property}: $top/$base-fonts-default *1rem $right/$base-fonts-default *1rem $down/$base-fonts-default *1rem $left/$base-fonts-default *1rem !important;
 }
 
 /*font-dpr 设计稿字体根据dpr缩放*/
@@ -100,7 +109,57 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
   }
 }
 
+/*font-dpr-important !important设计稿字体根据dpr缩放*/
+@mixin font-dpr-important($font-size){
+  font-size: $font-size;
+
+  [data-dpr="2"] & {
+    font-size: $font-size * 2 !important;
+  }
+  /* for mx3*/
+  [data-dpr="2.5"] & {
+    font-size: $font-size * 2.5 !important;
+  }
+  /* for 小米note*/
+  [data-dpr="2.75"] & {
+    font-size: $font-size * 2.75 !important;
+  }
+  /* for common Android Phone*/
+  [data-dpr="3"] & {
+    font-size: $font-size * 3 !important;
+  }
+  /* for 三星note4*/
+  [data-dpr="4"] & {
+    font-size: $font-size * 4 !important;
+  }
+}
+
 /*line-heigth 设计稿行高根据dpr缩放*/
+@mixin line-height($line-height){
+    line-height: $line-height;
+
+  [data-dpr="2"] & {
+    line-height: $line-height * 2 !important;
+  }
+  /* for mx3*/
+  [data-dpr="2.5"] & {
+    line-height: $line-height * 2.5 !important;
+  }
+  /* for 小米note*/
+  [data-dpr="2.75"] & {
+    line-height: $line-height * 2.75 !important;
+  }
+  /* for common Android Phone*/
+  [data-dpr="3"] & {
+    line-height: $line-height * 3 !important;
+  }
+  /* for 三星note4*/
+  [data-dpr="4"] & {
+    line-height: $line-height * 4 !important;
+  }
+}
+
+/*line-heigth-important !important 设计稿行高根据dpr缩放*/
 @mixin line-height($line-height){
     line-height: $line-height;
 
@@ -124,9 +183,10 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
     line-height: $line-height * 4;
   }
 }
-@mixin placeholder {
-  ::-webkit-input-placeholder {@content}
-  :-moz-placeholder           {@content}
-  ::-moz-placeholder          {@content}
-  :-ms-input-placeholder      {@content}
-}
+
+/* @mixin placeholder {*/
+/*   ::-webkit-input-placeholder {@content}*/
+/*   :-moz-placeholder           {@content}*/
+/*   ::-moz-placeholder          {@content}*/
+/*   :-ms-input-placeholder      {@content}*/
+/* }*/

@@ -94,7 +94,7 @@
       <order v-show="showSearchBar && showProduct"
              :order-up="orderUp"
              :show-list="showList"
-             @orderChange="orderChange"
+             @order-change="orderChange"
              @switch="showListChange"></order>
     </transition>
   </section>
@@ -129,7 +129,7 @@
         bottomDropText: '释放加载',
         queryParams: '',
         orderUp: true,
-        productOrder: 'price',
+        productOrder: 1,
         showList: false,
         currentIndex: 0
       }
@@ -373,7 +373,7 @@
       },
       orderChange (val) {
         this.orderUp = val
-        this.productOrder = val ? 'price' : '-price'
+        this.productOrder = val ? 1 : -1
         this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
         this.getProducts(this.queryParams, this.productOrder)
       },

@@ -717,18 +717,18 @@
   .nav-bar {
     @include px2rem(height, 100px);
     .mint-tab-item {
-      @include font-dpr(17px);
-      border-bottom: 1px solid #D1D1D1;
+      @include font-dpr-important(17px);
+      border-bottom: 1px solid #D1D1D1 !important;
       div {
-        @include font-dpr(17px);
+        @include font-dpr-important(17px);
       }
     }
     .is-selected {
-      color: #52CAA7;
-      margin-bottom: 0;
-      @include px2rem(border-bottom-width, 10px);
-      border-bottom-color: #52CAA7;
-      text-decoration: none;
+      color: #52CAA7 !important;
+      margin-bottom: 0 !important;
+      @include px2remimportant(border-bottom-width, 10px);
+      border-bottom-color: #52CAA7 !important;
+      text-decoration: none !important;
     }
     a:active, a:hover {
       text-decoration: none;
@@ -867,7 +867,6 @@
     }
     .preview-page-nav {
       background-color: rgba(0, 0, 0, .5);
-      @include px2rem(height, 50px);
       @include px2rem(border-radius, 10px);
       color: white;
       z-index: 1003;
@@ -1114,7 +1113,7 @@
 
   .nav-bar {
     .mint-tab-item-label {
-      @include font-dpr(15px);
+      @include font-dpr-important(15px);
     }
   }
   .prodcutdetail-price-item {

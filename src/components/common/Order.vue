@@ -34,7 +34,7 @@ export default {
   props: ['orderUp', 'showList'],
   methods: {
     changeOrder (val) {
-      this.$emit('orderChange', !val)
+      this.$emit('order-change', !val)
     },
     swithList (val) {
       this.$emit('switch', !val)

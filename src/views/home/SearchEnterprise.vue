@@ -12,8 +12,9 @@
       </mt-button>
     </mt-header>
     <search
+      :text="searchParams"
       :placeholder="placeholder"
-      @search="getEnterprises">
+      @search="getEnterprises()">
     </search>
     <div class="list">
       <mt-loadmore
@@ -36,11 +37,12 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
-  import { setStore } from '../../config/mUtils'
+  import { setStore, getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
         placeholder: '请输入企业名称',
+        searchParams: getStore('searchEnterpriseParams') ? getStore('searchEnterpriseParams').q : '',
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         bottomPullText: '上拉加载更多',
@@ -105,7 +107,7 @@
       }
     },
     mounted () {
-      this.getEnterprises()
+      this.getEnterprises(this.searchParams)
     },
     computed: {
       ...mapGetters([

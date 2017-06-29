@@ -145,8 +145,9 @@
           this.$router.push({name: 'Login', params: {}})
         }
       },
-      searchEnterprise () {
-        this.$router.push({name: 'SearchEnterprise', params: {}})
+      searchEnterprise (keyword) {
+        setStore('searchEnterpriseParams', {q: keyword, backUrl: 'Home'})
+        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'Home'}})
       },
       getSpaces () {
         this.$store.dispatch('commonAction', {
