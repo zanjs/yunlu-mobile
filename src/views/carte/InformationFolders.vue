@@ -161,10 +161,27 @@
       },
       closePreview () {
         this.showPreview = false
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault()
+          }
+        })
       }
     },
     mounted () {
       this.getArchives()
+      this.stopTouchMove()
     },
     computed: {
       ...mapGetters([
@@ -197,11 +214,12 @@
     @include px2rem(padding-top, 88px);
   }
   .option-bar {
-    position: absolute;
+    position: fixed;
     @include px2rem(top, 38px);
     width: 100%;
     display: flex;
     align-items: center;
+    z-index: 1004;
     .page-nav {
       background-color: rgba(0, 0, 0, .5);
       color: white;

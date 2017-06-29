@@ -13,14 +13,14 @@
         <p v-else>胖胖的云庐君</p>
         <div v-if="true"
           class="icon-container">
-          <template v-if="store.state !== 'approved'">
+          <template v-if="store.state && store.state !== 'approved'">
             <svg
               class="icon big"
               aria-hidden="true">
               <use xlink:href="#icon-v4"></use>
             </svg>
           </template>
-          <template v-if="store.state === 'approved'">
+          <template v-if="store.state && store.state === 'approved'">
             <svg
               class="icon big"
               aria-hidden="true">

@@ -77,7 +77,26 @@
       },
       closePreview () {
         this.showPreview = false
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault()
+          }
+        })
       }
+    },
+    mounted () {
+      this.stopTouchMove()
     }
   }
 </script>
@@ -97,10 +116,10 @@
     }
   }
   .option-bar {
-    position: absolute;
+    position: fixed;
     @include px2rem(top, 38px);
-    @include px2rem(height, 50px);
     width: 100%;
+    z-index: 1004;
     display: flex;
     align-items: center;
     .page-nav {
@@ -110,16 +129,17 @@
       @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .close {
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
       @include pm2rem(margin, 0px, 30px, 0px, 30px);
-      @include px2rem(height, 50px);
       background-color: rgba(0, 0, 0, .5);
       color: white;
       z-index: 1003;
-      line-height: 1;
       display: flex;
       align-items: center;
       i {
