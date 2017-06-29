@@ -36,6 +36,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { setStore, getStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -72,6 +73,7 @@
             }
           },
           reject: () => {
+            Toast('手机号或密码错误')
           }
         })
       },

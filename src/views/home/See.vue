@@ -56,14 +56,33 @@
            class="send">
       <div class="avatar-container"
            @click="send()">
-        <img src="../../assets/userAvatarSmall.png"
-             class="user-avatar">
+        <img
+          v-if="!hasLogin || !card"
+          src="../../assets/userAvatarSmall.png"
+          class="user-avatar">
+        <template v-else>
+          <img
+            v-if="!enterpriseOwner"
+            :src="card.avatar_url"
+            class="user-avatar">
+          <img
+            v-else
+            :src="seeCard.logo_url"
+            class="user-avatar">
+        </template>
       </div>
-      <p v-if="!hasLogin"
-         class="user-name"
-         @click="send()">胖胖的云庐君</p>
-      <p v-else
-         class="user-name">{{currentUser.home_name}}</p>
+      <p v-if="!hasLogin || !card"
+          class="user-name"
+          @click="send()">
+        胖胖的云庐君
+      </p>
+      <template v-else>
+        <p v-if="!enterpriseOwner"
+           class="user-name"
+           @click="send()">胖胖的云庐君</p>
+        <p v-else
+           class="user-name">{{seeCard.name}}</p>
+      </template>
     </div>
     <div class="card-container">
       <div class="card"
@@ -73,6 +92,19 @@
         <div class="content">
           <div class="left-border"></div>
           <p class="name">企业</p>
+          <div class="right-border"></div>
+        </div>
+      </div>
+      <div
+        v-for="(item, index) in clientKeyWrods"
+        :key="index"
+        class="card"
+        @click="searchEnterprise(item.keyword)">
+        <img src="../../assets/seeKeyWrodCardBg.png"
+             class="card-img">
+        <div class="content">
+          <div class="left-border"></div>
+          <p class="name">{{item.keyword}}</p>
           <div class="right-border"></div>
         </div>
       </div>
@@ -88,13 +120,13 @@
     data () {
       return {
         hasLogin: !!getStore('user'),
-        currentUser: getStore('user')
+        currentUser: getStore('user'),
+        enterpriseOwner: false,
+        card: getStore('user'),
+        token: getStore('user') ? getStore('user').authentication_token : ''
       }
     },
     methods: {
-      goBack () {
-        this.$router.go(-1)
-      },
       goMine () {
         this.$router.push({name: 'Mine'})
       },
@@ -115,13 +147,76 @@
       },
       searchEnterprise () {
         this.$router.push({name: 'SearchEnterprise', params: {}})
+      },
+      getSpaces () {
+        this.$store.dispatch('commonAction', {
+          url: '/spaces',
+          method: 'get',
+          params: {
+            token: this.token
+          },
+          target: this,
+          resolve: (state, res) => {
+            let arr = this.handleSeeCard(res.data)
+            this.enterpriseOwner = arr.length > 0
+            if (arr.length === 0) {
+              state.seeCard = getStore('user')
+            } else {
+              state.seeCard = arr[0]
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleSeeCard (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].organization_state && arr[i].organization_state === 'approved') {
+            tmpArr.push(arr[i])
+          }
+        }
+        return tmpArr
+      },
+      getClientKeyWords () {
+        this.$store.dispatch('commonAction', {
+          url: '/client_keywords',
+          method: 'get',
+          params: {
+            token: this.token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.clientKeyWrods = this.handleKeyWords(res.data.keywords)
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleKeyWords (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].enterprises_count >= 100) {
+            tmpArr.push(arr[i])
+          }
+        }
+        return tmpArr
+      },
+      getSeeInfo () {
+        if (this.hasLogin) {
+          this.getClientKeyWords()
+          this.getSpaces()
+        }
       }
     },
     mounted () {
+      this.getSeeInfo()
     },
     computed: {
       ...mapGetters([
-        'user'
+        'user',
+        'clientKeyWrods',
+        'seeCard'
       ])
     }
   }
@@ -277,6 +372,7 @@
       .user-avatar {
         @include px2rem(width, 108px);
         @include px2rem(height, 108px);
+        @include px2rem(border-radius, 54px);
       }
     }
     .user-name {

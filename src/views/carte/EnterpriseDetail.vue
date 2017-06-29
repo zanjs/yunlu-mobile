@@ -20,12 +20,13 @@
       <div class="detail-container">
         <div class="name-info">
           <p>{{comityDetail.name}}</p>
-          <div class="rate">
+          <div
+            class="rate"
+            v-if="false">
             <i class="iconfont icon-icon-test1 selected"></i>
             <i class="iconfont icon-icon-test1 selected"></i>
             <i class="iconfont icon-icon-test1 selected"></i>
             <i class="iconfont icon-icon-test1 selected"></i>
-            <i class="iconfont icon-icon-test1"></i>
             <i class="iconfont icon-icon-test1"></i>
           </div>
           <div class="level">
@@ -44,10 +45,10 @@
           <span class="content">{{comityDetail.enttype}}</span>
         </div>
         <div
-          v-if="comityDetail && comityDetail.organization && comityDetail.organization.legal_person"
+          v-if="comityDetail && comityDetail.legal_person"
           class="item">
           <span class="label">法定代表人</span>
-          <span class="content">{{comityDetail.organization.legal_person}}</span>
+          <span class="content">{{comityDetail.legal_person}}</span>
         </div>
         <div
           v-if="comityDetail && comityDetail.info_id"
@@ -68,35 +69,38 @@
           <span class="content">{{comityDetail.reg_org}}</span>
         </div>
         <div
-          v-if="false"
+          v-if="comityDetail && comityDetail.reg_no"
           class="item">
           <span class="label">机构代码</span>
-          <span class="content">4200000000000</span>
+          <span class="content">{{comityDetail.reg_no}}</span>
         </div>
         <div
-          v-if="false"
+          v-if="comityDetail && comityDetail.id_no"
           class="item">
           <span class="label">信用代码</span>
-          <span class="content">43000000000000</span>
+          <span class="content">{{comityDetail.id_no}}</span>
         </div>
         <div
-          v-if="false"
+          v-if="comityDetail && comityDetail.organization &&  comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length > 0"
           class="link-container">
           <div class="label">社会认证</div>
-          <div class="link">
-            <a class="row">
-              <span>yao协会</span>
-              <i class="iconfont icon-fanhui"/>
-            </a>
-            <a class="row">
-              <span>湖北省石材工业协会</span>
+          <div
+            v-for="(item, index) in comityDetail.organization.guild_organizations"
+            :key="index"
+            class="link">
+            <a
+              class="row"
+              @click="goComity(item.id)">
+              <span>{{item.name}}</span>
               <i class="iconfont icon-fanhui"/>
             </a>
           </div>
         </div>
       </div>
     </div>
-    <div class="tab-container">
+    <div
+      class="tab-container"
+      v-if="(!comityDetail.enttype && !comityDetail.legal_person && !comityDetail.info_id  && !comityDetail.address && !comityDetail.reg_org && !comityDetail.reg_no && !comityDetail.id_no ) || (comityDetail.organization && comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length === 0)">
       <div class="no-data">
         <img src="../../assets/noFile.png">
       </div>
@@ -105,7 +109,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, setStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
@@ -136,6 +140,10 @@
         } else {
           this.$router.push({name: 'Home'})
         }
+      },
+      goComity (id) {
+        setStore('comityCarteParams', {teamId: id, backUrl: 'EnterpriseDetail'})
+        this.$router.push({name: 'ComityCarte', params: {teamId: id, backUrl: 'EnterpriseDetail'}})
       }
     },
     mounted () {

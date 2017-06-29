@@ -229,10 +229,12 @@
       </div>
     </section>
     <div v-if="showPreview">
-      <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
-      <div class="close"
-           @click="closePreview()">
-        <i class="iconfont icon-fanhui"></i>
+      <div class="option-bar">
+        <div class="close"
+             @click="closePreview()">
+          <i class="iconfont icon-fanhui"></i>
+        </div>
+        <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
       <swiper :options="swiperOptionFullScreen"
               class="full-screen-swiper">
@@ -841,30 +843,40 @@
       color: #A6A6A6;
     }
   }
+  .option-bar {
+    position: absolute;
+    @include px2rem(top, 38px);
+    @include px2rem(height, 50px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .close {
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(border-radius, 10px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      background-color: rgba(0, 0, 0, .5);
+      color: white;
+      z-index: 1003;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      @include px2rem(height, 50px);
+      i {
+         @include font-dpr(20px);
+      }
+    }
+    .preview-page-nav {
+      background-color: rgba(0, 0, 0, .5);
+      @include px2rem(height, 50px);
+      @include px2rem(border-radius, 10px);
+      color: white;
+      z-index: 1003;
+      @include font-dpr(20px);
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+    }
+  }
 
-  .preview-page-nav {
-    position: fixed;
-    @include px2rem(top, 38px);
-    @include px2rem(left, 150px);
-    @include pm2rem(padding, 4px, 10px, 4px, 10px);
-    @include px2rem(border-radius, 10px);
-    background-color: rgba(0, 0, 0, .5);
-    color: white;
-    z-index: 1003;
-    @include font-dpr(20px);
-  }
-  .close {
-    position: fixed;
-    @include px2rem(top, 38px);
-    @include px2rem(left, 52px);
-    @include pm2rem(padding, 4px, 10px, 4px, 10px);
-    @include px2rem(border-radius, 10px);
-    background-color: rgba(0, 0, 0, .5);
-    color: white;
-    z-index: 1003;
-    @include font-dpr(30px);
-    line-height: 1;
-  }
+
   .full-screen-swiper {
     position: fixed;
     top: 0;

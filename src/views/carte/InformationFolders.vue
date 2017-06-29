@@ -208,6 +208,8 @@
       z-index: 1003;
       @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(height, 50px);
+      @include px2rem(border-radius, 10px);
     }
     .close {
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
