@@ -98,11 +98,12 @@
         })
         setTimeout(() => {
           toast.close()
-          if (this.$route.params && this.$route.params.backUrl) {
-            this.$router.push({name: this.$route.params.backUrl})
-          } else {
-            this.$router.push({name: 'See'})
-          }
+          this.$router.go(-1)
+          // if (this.$route.params && this.$route.params.backUrl) {
+          //   this.$router.push({name: this.$route.params.backUrl})
+          // } else {
+          //   this.$router.push({name: 'See'})
+          // }
         }, 2000)
       },
       goBack () {
