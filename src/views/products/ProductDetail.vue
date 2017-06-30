@@ -29,7 +29,7 @@
       <div class="money">
         <div>
           <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-                class="number">{{productDetail.prices[0].money}}</span>
+                class="number">{{currentPrice.money}}</span>
           <span v-else
                 class="number">0.00</span>
           <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
@@ -264,6 +264,7 @@
       return {
         selected: '1',
         currentIndex: 1,
+        token: getStore('user') ? getStore('user').authentication_token : '',
         teamId: this.$route.query.teamId,
         productId: this.$route.query.productId,
         organizationId: this.$route.query.organizationId,
@@ -360,6 +361,7 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.hasAddFavorites = res.data.products.favorable
             state.productDetail = res.data.products
             this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files)
           },
@@ -539,17 +541,60 @@
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
-          this.favoratesText = '已收藏'
-          this.hasAddFavorites = true
-          Toast('收藏成功')
+          this.favoritesRequest()
         } else if (this.hasLogin && this.hasAddFavorites) {
-          this.favoratesText = '收藏'
-          this.hasAddFavorites = false
-          Toast('你已成功取消收藏')
+          this.removeFavorites()
         } else {
           setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
           this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
         }
+      },
+      favoritesRequest () {
+        this.$store.dispatch('commonAction', {
+          url: '/favorites',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            product_id: this.productId
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorites && res.data.favorites.id === this.productId) {
+              this.hasAddFavorites = true
+              this.favoratesText = '已收藏'
+              Toast('你已成功收藏该产品')
+            } else {
+              Toast('收藏该产品失败')
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      removeFavorites () {
+        this.$store.dispatch('commonAction', {
+          url: `/favorites/${this.productId}`,
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            type: 'Product'
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorable_type && res.data.favorable_type === 'Product') {
+              this.getProductDetail()
+              this.hasAddFavorites = false
+              this.favoratesText = '收藏'
+              Toast('你已成功取消收藏')
+            } else {
+              Toast('取消收藏该产品失败')
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       openIm () {
         console.log('正在打开客服会话界面')
@@ -559,10 +604,9 @@
       },
       addShoppingCar () {
         if (this.hasLogin && !this.hasAddShoppingCar) {
-          this.shoppingCarText = '已加入购物车'
-          this.hasAddShoppingCar = true
-          Toast('加入购物车成功')
+          this.addShoppingCarRequest()
         } else if (this.hasLogin && this.hasAddShoppingCar) {
+          // 暂无移出购物车接口，这里移出购物车实际并没有移出
           this.shoppingCarText = '加入购物车'
           this.hasAddShoppingCar = false
           Toast('你已将该商品移出购物车')
@@ -570,6 +614,31 @@
           setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
           this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
         }
+      },
+      addShoppingCarRequest () {
+        this.$store.dispatch('commonAction', {
+          url: '/purchase_items',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            price_id: this.currentPrice.id,
+            quantity: 1
+          },
+          target: this,
+          resolve: (state, res) => {
+            // 该机构新增了一条访客记录
+            if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
+              this.shoppingCarText = '已加入购物车'
+              this.hasAddShoppingCar = true
+              Toast('加入购物车成功')
+            } else {
+              Toast('加入购物车失败')
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       buyNow () {
         if (this.hasLogin) {
@@ -604,9 +673,28 @@
             e.preventDefault()
           }
         })
+      },
+      visits () {
+        this.$store.dispatch('commonAction', {
+          url: '/visits',
+          method: 'post',
+          params: {},
+          data: {
+            id: this.teamId,
+            type: 'organization',
+            ...(this.token ? {token: this.token} : {})
+          },
+          target: this,
+          resolve: (state, res) => {
+            // 该机构新增了一条访客记录
+          },
+          reject: () => {
+          }
+        })
       }
     },
     mounted () {
+      this.visits()
       this.stopTouchMove()
       this.getProductDetail()
     },
