@@ -475,7 +475,11 @@
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
-          this.$router.go(-1)
+          if (window.history.length === 1) {
+            this.$router.push({name: 'Home'})
+          } else {
+            this.$router.go(-1)
+          }
           // if (getStore('comityCarteParams') && getStore('comityCarteParams').backUrl) {
           //   this.$router.push({name: getStore('comityCarteParams').backUrl})
           // } else {

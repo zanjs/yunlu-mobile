@@ -46,7 +46,11 @@
     },
     methods: {
       goBack () {
-        this.$router.go(-1)
+        if (window.history.length === 1) {
+          this.$router.push({name: 'Home'})
+        } else {
+          this.$router.go(-1)
+        }
         // if (this.$route.query && this.$route.query.backUrl) {
         //   this.$router.push({name: this.$route.query.backUrl, params: {}})
         // } else {
@@ -66,7 +70,11 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            this.$router.go(-1)
+            if (window.history.length === 1) {
+              this.$router.push({name: 'Home'})
+            } else {
+              this.$router.go(-1)
+            }
             // let beforeLogin = getStore('beforeLogin')
             // if (beforeLogin) {
             //   this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})

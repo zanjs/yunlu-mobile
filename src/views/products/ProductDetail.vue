@@ -527,7 +527,11 @@
         }, 400)
       },
       goBack () {
-        this.$router.go(-1)
+        if (window.history.length === 1) {
+          this.$router.push({name: 'Home'})
+        } else {
+          this.$router.go(-1)
+        }
         // if (getStore('productDetailParams') && getStore('productDetailParams').backUrl) {
         //   this.$router.push({name: getStore('productDetailParams').backUrl})
         // } else {

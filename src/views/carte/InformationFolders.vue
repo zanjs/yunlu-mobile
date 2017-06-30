@@ -86,7 +86,11 @@
     },
     methods: {
       goBack () {
-        this.$router.go(-1)
+        if (window.history.length === 1) {
+          this.$router.push({name: 'Home'})
+        } else {
+          this.$router.go(-1)
+        }
         // if (this.$route.params && this.$route.params.backUrl) {
         //   this.$router.push({name: this.$route.params.backUrl})
         // } else {

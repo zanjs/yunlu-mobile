@@ -327,14 +327,16 @@
       goBack () {
         if (this.hasSearch) {
           this.getProducts('', 'price')
+        } else if (window.history.length === 1) {
+          this.$router.push({name: 'Home'})
         } else {
           this.$router.go(-1)
+        }
           // if (getStore('enterpriseCarteParams') && getStore('enterpriseCarteParams').backUrl) {
           //   this.$router.push({name: getStore('enterpriseCarteParams').backUrl})
           // } else {
           //   this.$router.push({name: 'See'})
           // }
-        }
       },
       goReport (item) {
         document.body.scrollTop = 0
