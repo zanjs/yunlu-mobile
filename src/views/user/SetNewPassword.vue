@@ -70,7 +70,7 @@
               })
               setTimeout(() => {
                 toast.close()
-                this.$router.push({name: 'Login', params: {backUrl: 'See'}})
+                this.$router.go(-2)
               }, 2000)
             } else {
               Toast(res.data.msg)
