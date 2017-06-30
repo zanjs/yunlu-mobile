@@ -17,5 +17,5 @@ sed -i "s/test.yunlu6.com/giant.dev.yunlu6.com/g" ./src/constants/constant.js
 npm run build
 cp -rf ./dist /build/dev
 echo "========================="
-echo "Use mount local fold to /build to get the file..."
+echo "Use mount local folder /build to get the file..."
 echo "========================="
