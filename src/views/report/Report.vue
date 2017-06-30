@@ -171,6 +171,7 @@
         color: #A6A6A6;
         overflow: auto;
         width: 100%;
+        resize: none;
       }
       ::-webkit-input-placeholder{
         color: #A6A6A6;
