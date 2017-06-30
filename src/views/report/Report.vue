@@ -217,9 +217,9 @@
       @include px2rem(width, 42px);
       @include px2rem(height, 42px);
     }
-    .mint-checkbox-input:checked + .mint-checkbox-core{
-      background-color: #52CAA7;
-      border-color: #52CAA7;
+    .mint-checkbox-input:checked+.mint-checkbox-core{
+      background-color: #52CAA7 !important;
+      border-color: #52CAA7 !important;
     }
     a {
       text-decoration: none;
