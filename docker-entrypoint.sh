@@ -1,11 +1,6 @@
 #!/bin/sh
 
 #get the latest code
-cd /app
-git fetch origin master
-git reset --hard origin/master
-npm config set registry https://registry.npm.taobao.org
-npm install
 rm -rf /build/*
 #building product backend
 rm -rf ./dist/*
