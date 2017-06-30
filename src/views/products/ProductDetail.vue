@@ -267,7 +267,6 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         teamId: this.$route.query.teamId,
         productId: this.$route.query.productId,
-        organizationId: this.$route.query.organizationId,
         hasLogin: !!getStore('user'),
         hasAddFavorites: false,
         hasAddShoppingCar: false,
@@ -473,7 +472,7 @@
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: [this.organizationId]
+            ids: [this.teamId]
           },
           target: this,
           resolve: (state, res) => {

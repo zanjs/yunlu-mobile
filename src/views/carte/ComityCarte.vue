@@ -545,7 +545,7 @@
       goProductDetail (item) {
         document.body.scrollTop = 0
         setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}, query: {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: item.organization_id, backUrl: 'ComityCarte'}, query: {productId: item.id, teamId: item.organization_id, backUrl: 'ComityCarte'}})
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
