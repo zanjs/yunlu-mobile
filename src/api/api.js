@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {URL_DEV, REQUEST_TIME_OUT} from '../constants/constant'
-import Qs from 'Qs'
+import Qs from 'qs'
 
 export default {
   commonRequest (params, resolve, reject) {
