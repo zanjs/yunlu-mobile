@@ -9,11 +9,17 @@
     </div>
     <template v-if="showPreview">
       <div class="option-bar">
-        <div class="close"
-            @click="closePreview()">
-          <i class="iconfont icon-fanhui"></i>
+        <div class="left">
+          <div class="close"
+               @click="closePreview()">
+            <i class="iconfont icon-fanhui"></i>
+          </div>
+          <span class="page-nav">{{currentIndex}}/{{dataSource.length}}</span>
         </div>
-        <span class="page-nav">{{currentIndex}}/{{dataSource.length}}</span>
+        <div class="report"
+             @click="goReport">
+          <i class="iconfont icon-jubao"></i>
+        </div>
       </div>
       <swiper :options="swiperOption"
               class="full-screen-swiper">
@@ -93,6 +99,9 @@
             e.preventDefault()
           }
         })
+      },
+      goReport () {
+        this.$router.push({name: 'Report', query: {resourceId: this.dataSource[this.currentIndex - 1].id, resourceClass: 'photo', backUrl: 'Photos'}})
       }
     },
     mounted () {
@@ -121,19 +130,37 @@
     width: 100%;
     z-index: 1004;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    .page-nav {
-      background-color: rgba(0, 0, 0, .5);
-      color: white;
-      z-index: 1003;
-      @include font-dpr(20px);
-      @include pm2rem(padding, 4px, 10px, 4px, 10px);
-      @include px2rem(border-radius, 10px);
+    .left {
       display: flex;
-      justify-content: center;
       align-items: center;
+      .page-nav {
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        @include font-dpr(20px);
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .close {
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        @include pm2rem(margin, 0px, 30px, 0px, 30px);
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        display: flex;
+        align-items: center;
+        i {
+          @include font-dpr(20px);
+        }
+      }
     }
-    .close {
+    .report {
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
       @include pm2rem(margin, 0px, 30px, 0px, 30px);
@@ -143,7 +170,7 @@
       display: flex;
       align-items: center;
       i {
-         @include font-dpr(20px);
+        @include font-dpr(20px);
       }
     }
   }

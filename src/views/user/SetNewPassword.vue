@@ -51,10 +51,15 @@
         this.$store.dispatch('commonAction', {
           url: '/password',
           method: 'post',
-          params: {},
+          params: {
+            password: this.password,
+            mobile: this.mobile,
+            temp_token: this.code,
+            _method: 'put'
+          },
           data: {
             password: this.password,
-            login: this.mobile,
+            mobile: this.mobile,
             temp_token: this.code,
             _method: 'put'
           },

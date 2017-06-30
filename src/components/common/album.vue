@@ -38,14 +38,13 @@
   @import '../../styles/mixin';
 
   .container {
-    @include pm2rem(padding, 26px, 26px, 0px, 0px);
+    @include pm2rem(padding, 26px, 0px, 0px, 26px);
     border: 1px solid #D1D1D1;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
     .album {
       position: relative;
-      @include pm2rem(margin, 0px, -26px, 26px, 0px);
+      @include pm2rem(margin, 0px, 26px, 26px, 0px);
       .cover {
         @include px2rem(width, 312px);
         @include px2rem(height, 360px);

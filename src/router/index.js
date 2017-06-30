@@ -24,6 +24,7 @@ import SetNewPassword from '../views/user/SetNewPassword'
 import RegisterNext from '../views/user/RegisterNext'
 import InformationFolders from '../views/carte/InformationFolders'
 import EmptyEnterpriseCarte from '../views/carte/EmptyEnterpriseCarte'
+import ReportExpired from '../views/report/ReportExpired'
 
 Vue.use(Router)
 
@@ -128,6 +129,10 @@ export default new Router({
       path: '/emptyenterprisecarte',
       name: 'EmptyEnterpriseCarte',
       component: EmptyEnterpriseCarte
+    }, {
+      path: '/reportexpired',
+      name: 'ReportExpired',
+      component: ReportExpired
     }
   ]
 })

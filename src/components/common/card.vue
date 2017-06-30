@@ -10,9 +10,20 @@
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
         <p v-else>胖胖的云庐君</p>
-        <div v-if="false">
-          <span>个人简介</span>
-        </div>
+        <template v-if="store && store.mobiles && store.mobiles.length > 0">
+          <div class="level">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-V1"></use>
+            </svg>
+          </div>
+        </template>
+        <template v-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
+          <div class="level">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-v4"></use>
+            </svg>
+          </div>
+        </template>
       </div>
     </div>
     <div class="icons">
@@ -86,6 +97,11 @@
         @include px2rem(margin-left, 26px);
         p {
           @include font-dpr(17px);
+        }
+        .level {
+          @include px2rem(margin-top, 20px);
+          @include font-dpr(25px);
+          line-height: 1;
         }
       }
     }
