@@ -363,8 +363,8 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        setStore('productDetailParams', {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}, query: {productId: item.id, teamId: this.teamId, organizationId: item.organization_id, backUrl: 'EnterpriseCarte'}})
+        setStore('productDetailParams', {productId: item.id, teamId: this.teamId, backUrl: 'EnterpriseCarte'})
+        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: this.teamId, backUrl: 'EnterpriseCarte'}, query: {productId: item.id, teamId: this.teamId, backUrl: 'EnterpriseCarte'}})
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
