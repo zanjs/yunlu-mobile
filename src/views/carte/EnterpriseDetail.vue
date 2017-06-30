@@ -30,14 +30,20 @@
               :class="{'selected': item.selected}"
               class="iconfont icon-icon-test1"></i>
           </div>
-          <!--<div class="level">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-v3"></use>
-            </svg>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-v2"></use>
-            </svg>
-          </div>-->
+          <template v-if="comityDetail.organization && comityDetail.organization.state  && comityDetail.organization.state === 'approved'">
+            <div class="level">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-V2"></use>
+              </svg>
+            </div>
+          </template>
+          <template v-if="comityDetail.organization && comityDetail.organization.state  && comityDetail.organization.state !== 'approved'">
+            <div class="level">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-v4"></use>
+              </svg>
+            </div>
+          </template>
         </div>
         <div
           v-if="comityDetail && comityDetail.enttype"
@@ -221,7 +227,7 @@
         }
       }
       .level {
-        @include font-dpr(23px);
+        @include font-dpr(25px);
         line-height: 1;
       }
     }
