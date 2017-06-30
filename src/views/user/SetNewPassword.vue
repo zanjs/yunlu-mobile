@@ -30,8 +30,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { setStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -66,8 +64,6 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              state.user = res.data
-              setStore('user', res.data)
               let toast = Toast({
                 message: '设置成功',
                 duration: 2000
@@ -86,11 +82,6 @@
       }
     },
     mounted () {
-    },
-    computed: {
-      ...mapGetters([
-        'user'
-      ])
     }
   }
 </script>
