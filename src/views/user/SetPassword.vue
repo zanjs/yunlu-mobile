@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mt-header title="登录"
+    <mt-header title="设置密码"
                fixed
                class="header">
       <mt-button slot="left"
@@ -11,87 +11,68 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
-               v-model="mobile"
-               placeholder="输入手机号">
+        <input type="password"
+               v-model="password"
+               placeholder="输入至少8位密码">
       </div>
       <div class="input-container">
         <input type="password"
-               v-model="password"
-               placeholder="请输入密码">
+               v-model="password2"
+               placeholder="请再次输入密码">
       </div>
       <div class="login-btn">
-        <a @click="login()">
-          登录
+        <a @click="done()">
+          完成
         </a>
-      </div>
-      <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
-        <a @click="forgetPassword()">忘记密码?</a>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { setStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
-        mobile: '',
-        password: ''
+        password: '',
+        password2: '',
+        mobile: this.$route.query.mobile,
+        token: this.$route.query.token
       }
     },
     methods: {
       goBack () {
         this.$router.go(-1)
-        // if (this.$route.query && this.$route.query.backUrl) {
-        //   this.$router.push({name: this.$route.query.backUrl, params: {}})
-        // } else {
-        //   this.$router.push({name: 'See'})
-        // }
+        // this.$router.push({name: 'See', params: {backUrl: 'See'}})
       },
-      login () {
+      done () {
         this.$store.dispatch('commonAction', {
-          url: '/login',
-          method: 'post',
-          params: {},
+          url: '/password',
+          method: 'put',
+          params: {
+            password: this.password,
+            token: this.token,
+            _method: 'put'
+          },
           data: {
-            login: this.mobile,
-            password: this.password
+            password: this.password,
+            token: this.token,
+            _method: 'put'
           },
           target: this,
           resolve: (state, res) => {
-            state.user = res.data
-            setStore('user', res.data)
-            this.$router.go(-1)
-            // let beforeLogin = getStore('beforeLogin')
-            // if (beforeLogin) {
-            //   this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
-            // } else {
-            //   this.$router.push({name: 'See', params: {}})
-            // }
+            if (res.data.success) {
+              this.$router.push({name: 'Login'})
+            } else {
+              Toast(res.data.msg)
+            }
           },
           reject: () => {
-            Toast('手机号或密码错误')
           }
         })
-      },
-      goRegister () {
-        this.$router.push({name: 'BeforeRegister'})
-      },
-      forgetPassword () {
-        this.$router.push({name: 'ForgetPassword'})
       }
     },
     mounted () {
-    },
-    computed: {
-      ...mapGetters([
-        'user'
-      ])
     }
   }
 </script>
@@ -134,7 +115,7 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: #595959;
+        color: #A6A6A6;
         @include font-dpr(14px);
         line-height: 1;
         border: none;
@@ -147,7 +128,9 @@
     }
     .login-btn {
       a {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         @include px2rem(width, 610px);
         margin: 0 auto;
         @include px2rem(height, 80px);
@@ -156,20 +139,11 @@
         background-color: #52CAA7;
         color: $white;
         @include font-dpr(16px);
-        @include px2rem(line-height, 80px);
         text-align: center;
       }
       a:active {
         background-color: rgba(82, 202, 167, .5);
       }
-    }
-    .text-btn {
-      color: #A6A6A6;
-      @include font-dpr(14px);
-      @include pm2rem(margin, 0px, 54px, 0px, 54px);
-      display: flex;
-      justify-content: space-between;
-      align-content: center;
     }
   }
 </style>

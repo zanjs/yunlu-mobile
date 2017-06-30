@@ -95,6 +95,7 @@
             this.linkToast('会员', '微博账号', item.value)
             break
           case 'qq':
+            // window.location.href = 'http://wpa.qq.com/msgrd?v=3&uin=1501718947&site=qq&menu=yes'
             this.linkToast('会员', 'QQ账号', item.value)
             break
           case 'address':
