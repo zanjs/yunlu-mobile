@@ -37,6 +37,7 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
+  import { getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -90,7 +91,7 @@
         }
       },
       goBack () {
-        if (window.history.length === 1) {
+        if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

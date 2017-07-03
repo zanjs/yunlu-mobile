@@ -330,7 +330,7 @@
         if (this.hasSearch) {
           document.body.scrollTop = 0
           this.getProducts('', 'price')
-        } else if (window.history.length === 1) {
+        } else if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

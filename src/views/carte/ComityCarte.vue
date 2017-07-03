@@ -314,6 +314,9 @@
                 this.$refs.loadMoreProducts.onTopLoaded()
               }
             } else {
+              if (res.data.files.length === 0) {
+                Toast('没有更多数据了')
+              }
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
               if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
@@ -424,6 +427,9 @@
             if (this.enterprisePageIndex === 1 || q !== '') {
               state.enterpriseMembers = res.data.members
             } else {
+              if (res.data.members.length === 0) {
+                Toast('没有更多数据了')
+              }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
               this.$refs.loadMoreEnterprises.onBottomLoaded()
             }
@@ -459,6 +465,9 @@
             if (this.personPageIndex === 1 || q !== '') {
               state.personMembers = res.data.preps
             } else {
+              if (res.data.preps.length === 0) {
+                Toast('没有更多数据了')
+              }
               state.personMembers = [...state.personMembers, ...res.data.preps]
               this.$refs.loadMorePeople.onBottomLoaded()
             }
@@ -480,7 +489,7 @@
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           document.body.scrollTop = 0
           this.getProducts('', 'price')
-        } else if (window.history.length === 1) {
+        } else if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

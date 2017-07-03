@@ -35,7 +35,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore } from '../../config/mUtils'
+  import { getStore, setStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -46,7 +46,7 @@
     },
     methods: {
       goBack () {
-        if (window.history.length === 1) {
+        if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -65,7 +65,7 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            if (window.history.length === 1) {
+            if (getStore('showGoHome')) {
               this.$router.push({name: 'See'})
             } else {
               this.$router.go(-1)

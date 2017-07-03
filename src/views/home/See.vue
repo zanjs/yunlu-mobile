@@ -114,7 +114,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -208,6 +208,7 @@
       }
     },
     mounted () {
+      removeStore('showGoHome')
       this.getSeeInfo()
     },
     computed: {

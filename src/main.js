@@ -8,6 +8,7 @@ import 'mint-ui/lib/style.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './styles/iconfont.css'
 import store from './vuex/store'
+import { setStore } from './config/mUtils'
 // import './config/rem'
 // import FastClick from 'fastclick'
 
@@ -22,6 +23,13 @@ import store from './vuex/store'
 // window.addEventListener('popstate', function () {
 //   history.pushState(null, null, document.URL)
 // })
+
+router.beforeEach((to, from, next) => {
+  if (!from.name) {
+    setStore('showGoHome', 'true')
+  }
+  next()
+})
 
 Vue.use(MintUI)
 Vue.config.productionTip = false

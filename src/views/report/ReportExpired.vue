@@ -30,39 +30,40 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      initSecond: 12,
-      tips: '对不起，本次授权已过期，您也能安装云庐App，邀请好友相互分享精彩与喜悦。',
-      goText: '秒后进入云庐首页'
-    }
-  },
-  methods: {
-    goHome () {
-      this.$router.push({name: 'See'})
-    },
-    countDown () {
-      let interval = setInterval(() => {
-        this.initSecond -= 1
-        if (this.initSecond === 1) {
-          this.goHome()
-          clearInterval(interval)
-        }
-      }, 1000)
-    },
-    goBack () {
-      if (window.history.length === 1) {
-        this.$router.push({name: 'See'})
-      } else {
-        this.$router.go(-1)
+  import { getStore } from '../../config/mUtils'
+  export default {
+    data () {
+      return {
+        initSecond: 12,
+        tips: '对不起，本次授权已过期，您也能安装云庐App，邀请好友相互分享精彩与喜悦。',
+        goText: '秒后进入云庐首页'
       }
+    },
+    methods: {
+      goHome () {
+        this.$router.replace({name: 'See'})
+      },
+      countDown () {
+        let interval = setInterval(() => {
+          this.initSecond -= 1
+          if (this.initSecond === 1) {
+            this.goHome()
+            clearInterval(interval)
+          }
+        }, 1000)
+      },
+      goBack () {
+        if (getStore('showGoHome')) {
+          this.$router.push({name: 'See'})
+        } else {
+          this.$router.go(-1)
+        }
+      }
+    },
+    mounted () {
+      this.countDown()
     }
-  },
-  mounted () {
-    this.countDown()
   }
-}
 </script>
 
 <style lang="scss" scoped>

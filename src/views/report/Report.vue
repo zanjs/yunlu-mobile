@@ -98,16 +98,12 @@
         })
         setTimeout(() => {
           toast.close()
-          if (window.history.length === 1) {
-            this.$router.push({name: 'See'})
-          } else {
-            this.$router.go(-1)
-          }
+          this.goBack()
         }, 2000)
       },
       goBack () {
-        if (window.history.length === 1) {
-          this.$router.push({name: 'See'})
+        if (getStore('showGoHome')) {
+          this.$router.replace({name: 'See'})
         } else {
           this.$router.go(-1)
         }

@@ -43,7 +43,7 @@
     },
     methods: {
       goBack () {
-        if (window.history.length === 1) {
+        if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -73,7 +73,7 @@
               })
               setTimeout(() => {
                 toast.close()
-                if (window.history.length === 1) {
+                if (getStore('showGoHome')) {
                   this.$router.push({name: 'See'})
                 } else {
                   this.$router.go(-1)
