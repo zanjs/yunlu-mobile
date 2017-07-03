@@ -9,6 +9,9 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
+    <div v-html="html">
+
+    </div>
   </section>
 </template>
 
@@ -17,7 +20,7 @@
   export default {
     data () {
       return {
-
+        html: 'http://api.yunlu6.com/service_protocol.html'
       }
     },
     methods: {

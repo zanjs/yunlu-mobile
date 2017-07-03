@@ -136,7 +136,7 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
 
 /*line-heigth 设计稿行高根据dpr缩放*/
 @mixin line-height($line-height){
-    line-height: $line-height;
+  line-height: $line-height;
 
   [data-dpr="2"] & {
     line-height: $line-height * 2 !important;
@@ -161,7 +161,7 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
 
 /*line-heigth-important !important 设计稿行高根据dpr缩放*/
 @mixin line-height($line-height){
-    line-height: $line-height;
+  line-height: $line-height;
 
   [data-dpr="2"] & {
     line-height: $line-height * 2;

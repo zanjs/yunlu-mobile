@@ -120,6 +120,7 @@
       return {
         teamId: this.$route.query.teamId,
         header: '名片',
+        height: document.documentElement.style.fontSize.replace('px', '') * 153 / 36,
         hasLogin: !!getStore('user'),
         hasSearch: false,
         showProduct: true,
@@ -351,16 +352,15 @@
         }
       },
       handleSearchBar () {
-        let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        showBack((stauts) => {
+        showBack((status) => {
           if (this.activeIndex === 1) {
             this.showSearchBar = false
             this.header = '名片'
           } else {
-            this.showSearchBar = stauts
-            this.header = stauts ? '产品' : '名片'
+            this.showSearchBar = status
+            this.header = status ? '产品' : '名片'
           }
-        }, height)
+        }, this.height)
       },
       goProductDetail (item) {
         document.body.scrollTop = 0

@@ -193,6 +193,7 @@
         teamId: this.$route.query.teamId,
         token: getStore('user') ? getStore('user').authentication_token : '',
         header: '名片',
+        height: document.documentElement.style.fontSize.replace('px', '') * 153 / 36,
         hasLogin: !!getStore('user'),
         hasSearch: false,
         hasSearchEnterprise: false,
@@ -543,7 +544,6 @@
         }
       },
       handleSearchBar () {
-        let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
         showBack((status) => {
           if (this.activeIndex === 1) {
             this.showSearchBar = false
@@ -557,7 +557,7 @@
             this.showSearchBar = status
             this.header = status ? '个人会员' : '名片'
           }
-        }, height)
+        }, this.height)
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
