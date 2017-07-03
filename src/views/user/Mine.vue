@@ -81,26 +81,24 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // this.$router.push({name: 'See', params: {backUrl: 'See'}})
       },
       logOut () {
         removeAllStore()
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // this.$router.push({name: 'See', params: {backUrl: 'See'}})
       },
       changePassword () {
-        this.$router.push({name: 'ChangePassword', params: {backUrl: 'Mine'}})
+        this.$router.push({name: 'ChangePassword'})
       },
       contactUs () {
-        this.$router.push({name: 'Download', params: {backUrl: 'Mine'}})
+        this.$router.push({name: 'Download'})
       },
       helpCenter () {
         Toast('暂未开放')

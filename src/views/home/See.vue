@@ -114,7 +114,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore, getStore } from '../../config/mUtils'
+  import { getStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -128,26 +128,23 @@
     },
     methods: {
       goMine () {
-        this.$router.push({name: 'Mine', query: {backUrl: 'See'}})
+        this.$router.push({name: 'Mine'})
       },
       goDownload () {
-        this.$router.push({name: 'Download', query: {backUrl: 'See'}})
+        this.$router.push({name: 'Download'})
       },
       goLogin () {
-        setStore('beforeLogin', {urlName: 'See', params: {}})
-        this.$router.push({name: 'Login', query: {backUrl: 'See'}})
+        this.$router.push({name: 'Login'})
       },
       send () {
         if (this.hasLogin) {
           Toast('暂未开放')
-          // this.$router.push({name: 'Hello', params: {}})
         } else {
-          this.$router.push({name: 'Login', params: {}, query: {backUrl: 'See'}})
+          this.$router.push({name: 'Login'})
         }
       },
       searchEnterprise (keyword = '') {
-        setStore('searchEnterpriseParams', {q: keyword, backUrl: 'See'})
-        this.$router.push({name: 'SearchEnterprise', params: {q: keyword, backUrl: 'See'}, query: {q: keyword, backUrl: 'See'}})
+        this.$router.push({name: 'SearchEnterprise', query: {q: keyword}})
       },
       getSpaces () {
         this.$store.dispatch('commonAction', {

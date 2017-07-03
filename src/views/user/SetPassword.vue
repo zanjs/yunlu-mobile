@@ -43,11 +43,10 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // this.$router.push({name: 'See', params: {backUrl: 'See'}})
       },
       done () {
         this.$store.dispatch('commonAction', {

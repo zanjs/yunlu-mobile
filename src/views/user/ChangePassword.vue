@@ -44,11 +44,10 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // this.$router.push({name: 'Mine', params: {backUrl: 'ChangePassword'}})
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -75,11 +74,10 @@
               setTimeout(() => {
                 toast.close()
                 if (window.history.length === 1) {
-                  this.$router.push({name: 'Home'})
+                  this.$router.push({name: 'See'})
                 } else {
                   this.$router.go(-1)
                 }
-                // this.$router.push({name: 'Mine', params: {backUrl: 'See'}})
               }, 2000)
             } else {
               Toast(res.data.msg)

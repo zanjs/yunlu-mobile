@@ -47,15 +47,10 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (this.$route.query && this.$route.query.backUrl) {
-        //   this.$router.push({name: this.$route.query.backUrl, params: {}})
-        // } else {
-        //   this.$router.push({name: 'See'})
-        // }
       },
       login () {
         this.$store.dispatch('commonAction', {
@@ -71,16 +66,10 @@
             state.user = res.data
             setStore('user', res.data)
             if (window.history.length === 1) {
-              this.$router.push({name: 'Home'})
+              this.$router.push({name: 'See'})
             } else {
               this.$router.go(-1)
             }
-            // let beforeLogin = getStore('beforeLogin')
-            // if (beforeLogin) {
-            //   this.$router.push({name: beforeLogin.urlName, params: beforeLogin.params})
-            // } else {
-            //   this.$router.push({name: 'See', params: {}})
-            // }
           },
           reject: () => {
             Toast('手机号或密码错误')

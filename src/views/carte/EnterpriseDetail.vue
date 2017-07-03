@@ -116,7 +116,7 @@
 </template>
 
 <script>
-  import { getStore, setStore } from '../../config/mUtils'
+  import { getStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
@@ -155,19 +155,13 @@
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (this.$route.params && this.$route.params.backUrl) {
-        //   this.$router.push({name: this.$route.params.backUrl})
-        // } else {
-        //   this.$router.push({name: 'See'})
-        // }
       },
       goComity (id) {
-        setStore('comityCarteParams', {teamId: id, backUrl: 'EnterpriseDetail'})
-        this.$router.push({name: 'ComityCarte', params: {teamId: id, backUrl: 'EnterpriseDetail'}, query: {teamId: id, backUrl: 'EnterpriseDetail'}})
+        this.$router.push({name: 'ComityCarte', query: {teamId: id}})
       }
     },
     mounted () {

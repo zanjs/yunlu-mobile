@@ -65,8 +65,8 @@
         ],
         values: [],
         token: getStore('user') ? getStore('user').authentication_token : '',
-        resourceId: this.$route.params.resourceId,
-        resourceClass: this.$route.params.resourceClass
+        resourceId: this.$route.query.resourceId,
+        resourceClass: this.$route.query.resourceClass
       }
     },
     methods: {
@@ -99,28 +99,18 @@
         setTimeout(() => {
           toast.close()
           if (window.history.length === 1) {
-            this.$router.push({name: 'Home'})
+            this.$router.push({name: 'See'})
           } else {
             this.$router.go(-1)
           }
-          // if (this.$route.params && this.$route.params.backUrl) {
-          //   this.$router.push({name: this.$route.params.backUrl})
-          // } else {
-          //   this.$router.push({name: 'See'})
-          // }
         }, 2000)
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (getStore('reportParams') && getStore('reportParams').backUrl) {
-        //   this.$router.push({name: getStore('reportParams').backUrl})
-        // } else {
-        //   this.$router.push({name: 'See'})
-        // }
       }
     }
   }

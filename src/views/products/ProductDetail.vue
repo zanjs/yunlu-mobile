@@ -254,7 +254,7 @@
   import ProductHeader from '../../components/header/Head'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { getStore, setStore } from '../../config/mUtils'
+  import { getStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -327,22 +327,7 @@
             method: noServiceYet
           }
         ],
-        sheetVisible: false,
-        imgList: [
-          {
-            id: 1,
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 2,
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 3,
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }, {
-            id: 4,
-            url: 'http://7xjfsp.com2.z0.glb.qiniucdn.com/FqmSonXMMF6fG5qvru6sAp2Y7ICF-banner'
-          }
-        ]
+        sheetVisible: false
       }
     },
     components: {
@@ -528,19 +513,13 @@
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (getStore('productDetailParams') && getStore('productDetailParams').backUrl) {
-        //   this.$router.push({name: getStore('productDetailParams').backUrl})
-        // } else {
-        //   this.$router.push({name: 'See'})
-        // }
       },
       goReport () {
-        setStore('reportParams', {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'})
-        this.$router.push({name: 'Report', params: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}, query: {resourceId: this.productId, resourceClass: 'product', backUrl: 'ProductDetail'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.productId, resourceClass: 'product'}})
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
@@ -548,8 +527,7 @@
         } else if (this.hasLogin && this.hasAddFavorites) {
           this.removeFavorites()
         } else {
-          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
-          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+          this.$router.push({name: 'Login'})
         }
       },
       favoritesRequest () {
@@ -614,8 +592,7 @@
           this.hasAddShoppingCar = false
           Toast('你已将该商品移出购物车')
         } else {
-          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
-          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+          this.$router.push({name: 'Login'})
         }
       },
       addShoppingCarRequest () {
@@ -647,8 +624,7 @@
         if (this.hasLogin) {
           Toast('暂未开放')
         } else {
-          setStore('beforeLogin', {urlName: 'ProductDetail', params: {}})
-          this.$router.push({name: 'Login', params: {backUrl: 'ProductDetail'}})
+          this.$router.push({name: 'Login'})
         }
       },
       openFavorites () {
@@ -658,8 +634,7 @@
         Toast('暂未开放')
       },
       goReprot () {
-        setStore('reportParams', {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'})
-        this.$router.push({name: 'Report', params: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}, query: {resourceId: this.teamId, resourceClass: 'product', backUrl: 'ProductDetail'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.teamId, resourceClass: 'product'}})
       },
       stopTouchMove () {
         let self = this

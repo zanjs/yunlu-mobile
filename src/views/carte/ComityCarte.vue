@@ -177,7 +177,7 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { getStore, setStore, showBack } from '../../config/mUtils'
+  import { getStore, showBack } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -464,37 +464,28 @@
         })
       },
       goEnterpriseCarte (id) {
-        setStore('enterpriseCarteParams', {teamId: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'EnterpriseCarte', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'EnterpriseCarte', query: {teamId: id}})
       },
       goPersonCarte (id) {
-        setStore('personCarteParams', {id: id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'PersonCarte', params: {id: id, backUrl: 'ComityCarte'}, query: {id: id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'PersonCarte', query: {id: id}})
       },
       goBack () {
         if (this.hasSearch) {
           this.getProducts('', 'price')
         } else {
           if (window.history.length === 1) {
-            this.$router.push({name: 'Home'})
+            this.$router.push({name: 'See'})
           } else {
             this.$router.go(-1)
           }
-          // if (getStore('comityCarteParams') && getStore('comityCarteParams').backUrl) {
-          //   this.$router.push({name: getStore('comityCarteParams').backUrl})
-          // } else {
-          //   this.$router.push({name: 'See'})
-          // }
         }
       },
       goReport () {
         document.body.scrollTop = 0
-        setStore('reportParams', {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'})
-        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}, query: {resourceId: this.$store.state.teams.id, resourceClass: 'product', backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
-        setStore('beforeLogin', {urlName: 'ComityCarte'})
-        this.$router.push({name: 'Login', params: {backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'Login'})
       },
       tabClick (val) {
         this.activeIndex = val
@@ -548,15 +539,13 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        setStore('productDetailParams', {productId: item.id, organizationId: item.organization_id, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'ProductDetail', params: {productId: item.id, teamId: item.organization_id, backUrl: 'ComityCarte'}, query: {productId: item.id, teamId: item.organization_id, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: item.organization_id}})
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
           Toast('登录后才能查看协会详细信息')
         } else {
-          setStore('enterpriseDetailParams', {teamId: id, backUrl: 'ComityCarte'})
-          this.$router.push({name: 'EnterpriseDetail', params: {teamId: id, backUrl: 'ComityCarte'}, query: {teamId: id, backUrl: 'ComityCarte'}})
+          this.$router.push({name: 'EnterpriseDetail', query: {teamId: id}})
         }
       },
       iconClick (item) {
@@ -585,8 +574,7 @@
         })
       },
       openInformationFolders (item) {
-        setStore('InformationFoldersParams', {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'})
-        this.$router.push({name: 'InformationFolders', params: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}, query: {teamId: this.teamId, type: item.name, backUrl: 'ComityCarte'}})
+        this.$router.push({name: 'InformationFolders', query: {teamId: this.teamId, type: item.name}})
       },
       showListChange (val) {
         this.showList = val

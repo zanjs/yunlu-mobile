@@ -52,15 +52,10 @@
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (this.$route.params && this.$route.params.backUrl) {
-        //   this.$router.push({name: this.$route.params.backUrl})
-        // } else {
-        //   this.$router.push({name: 'Folders'})
-        // }
       }
     },
     mounted () {

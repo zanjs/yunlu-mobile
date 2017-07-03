@@ -40,7 +40,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore } from '../../config/mUtils'
   import { COUNT_DOWN_SECOND } from '../../constants/constant'
   import { Toast } from 'mint-ui'
   export default {
@@ -55,7 +54,7 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
@@ -109,8 +108,7 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              setStore('setNewPasswordParams', {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'})
-              this.$router.push({name: 'SetNewPassword', params: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}, query: {code: this.code, mobile: this.mobile, backUrl: 'ForgetPassword'}})
+              this.$router.push({name: 'SetNewPassword', query: {code: this.code, mobile: this.mobile}})
             } else {
               Toast(res.data.msg)
             }

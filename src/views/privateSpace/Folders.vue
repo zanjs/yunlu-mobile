@@ -8,12 +8,6 @@
                  class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
-      <!--<mt-button slot="right"
-                 @click="goReport()"
-                 class="button-text">
-        <i class="iconfont icon-jubao"></i>
-        投诉
-      </mt-button>-->
     </mt-header>
     <div class="card-container">
       <card
@@ -38,12 +32,12 @@
 <script>
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
-  import { getStore, setStore } from '../../config/mUtils'
+  import { getStore } from '../../config/mUtils'
   export default {
     data () {
       return {
-        headerName: getStore('foldersParams') ? getStore('foldersParams').name : '空间',
-        id: getStore('foldersParams') ? getStore('foldersParams').id : null,
+        headerName: this.$route.query.name || '空间',
+        id: this.$route.query.id || null,
         token: getStore('user') ? getStore('user').authentication_token : '',
         userId: getStore('userCard') ? getStore('userCard').id : '',
         userCard: getStore('userCard') || null,
@@ -56,12 +50,7 @@
     },
     methods: {
       albumClick (item) {
-        setStore('photosParams', {id: item.id, name: item.name, backUrl: 'Folders'})
-        this.$router.push({name: 'Photos', params: {id: item.id, name: item.name, backUrl: 'Folders'}, query: {id: item.id, name: item.name, backUrl: 'Folders'}})
-      },
-      goReport () {
-        setStore('reportParams', {backUrl: 'Folders'})
-        this.$router.push({name: 'Report', params: {backUrl: 'Folders'}, query: {resourceId: '', resourceClass: 'photo', backUrl: 'EnterpriseCarte'}})
+        this.$router.push({name: 'Photos', query: {id: item.id, name: item.name}})
       },
       getSpace () {
         this.$store.dispatch('commonAction', {
@@ -85,15 +74,10 @@
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (this.$route.params && this.$route.params.backUrl) {
-        //   this.$router.push({name: this.$route.params.backUrl})
-        // } else {
-        //   this.$router.push({name: 'PersonCarte'})
-        // }
       }
     },
     mounted () {

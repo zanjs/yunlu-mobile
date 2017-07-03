@@ -53,7 +53,7 @@
   export default {
     data () {
       return {
-        user_id: getStore('personCarteParams') ? getStore('personCarteParams').id : this.$route.params.id,
+        user_id: this.$route.query.id,
         token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
@@ -62,8 +62,7 @@
     },
     methods: {
       goReport () {
-        setStore('reportParams', {resourceId: this.$store.state.userCard.id, resourceClass: 'user'})
-        this.$router.push({name: 'Report', params: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}, query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
       },
       getPersonDetail () {
         this.$store.dispatch('commonAction', {
@@ -111,27 +110,19 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          setStore('foldersParams', {id: item.id, name: item.name, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'Folders', params: {id: item.id, name: item.name, backUrl: 'PersonCarte'}, query: {id: item.id, name: item.name, backUrl: 'PersonCarte'}})
+          this.$router.push({name: 'Folders', query: {id: item.id, name: item.name}})
         } else if (item.is_association) {
-          setStore('comityCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'ComityCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}, query: {teamId: item.team_id, backUrl: 'PersonCarte'}})
+          this.$router.push({name: 'ComityCarte', query: {teamId: item.team_id}})
         } else {
-          setStore('enterpriseCarteParams', {teamId: item.team_id, backUrl: 'PersonCarte'})
-          this.$router.push({name: 'EnterpriseCarte', params: {teamId: item.team_id, backUrl: 'PersonCarte'}, query: {teamId: item.team_id, backUrl: 'PersonCarte'}})
+          this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.team_id}})
         }
       },
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // if (getStore('personCarteParams') && getStore('personCarteParams').backUrl) {
-        //   this.$router.push({name: getStore('personCarteParams').backUrl})
-        // } else {
-        //   this.$router.push({name: 'ComityCarte'})
-        // }
       }
     },
     mounted () {

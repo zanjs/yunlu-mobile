@@ -42,11 +42,10 @@
     methods: {
       goBack () {
         if (window.history.length === 1) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
-        // this.$router.push({name: 'Register', params: {backUrl: 'RegitserNext'}})
       },
       finish () {
         this.$store.dispatch('commonAction', {
@@ -63,8 +62,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            console.log(state, res)
-            this.$router.push({name: 'Login', params: {backUrl: 'See'}})
+            this.$router.push({name: 'Login'})
           },
           reject: () => {
           }
