@@ -3,7 +3,6 @@
 #clean the dist folder
 rm -rf /build/*
 #building product backend
-npm run build
 cp -rf ./dist /build/pro
 #building test backend
 #rm -rf ./dist/*
