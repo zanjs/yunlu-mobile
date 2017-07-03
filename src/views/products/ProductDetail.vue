@@ -541,7 +541,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorites && res.data.favorites.id === this.productId) {
+            if (res.data.favorites && res.data.favorites.id === parseInt(this.productId)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
               Toast('你已成功收藏该产品')
