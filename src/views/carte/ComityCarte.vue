@@ -535,17 +535,17 @@
       },
       handleSearchBar () {
         let height = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 153 / 36
-        showBack((stauts) => {
+        showBack((status) => {
           if (this.activeIndex === 1) {
             this.showSearchBar = false
           } else if (this.activeIndex === 0) {
-            this.showSearchBar = stauts
+            this.showSearchBar = status
             this.header = status ? '产品' : '名片'
           } else if (this.activeIndex === 2) {
-            this.showSearchBar = stauts
+            this.showSearchBar = status
             this.header = status ? '企业会员' : '名片'
           } else if (this.activeIndex === 3) {
-            this.showSearchBar = stauts
+            this.showSearchBar = status
             this.header = status ? '个人会员' : '名片'
           }
         }, height)
