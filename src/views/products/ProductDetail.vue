@@ -254,7 +254,7 @@
   import ProductHeader from '../../components/header/Head'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -527,6 +527,7 @@
         } else if (this.hasLogin && this.hasAddFavorites) {
           this.removeFavorites()
         } else {
+          setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         }
       },
@@ -593,6 +594,7 @@
           this.hasAddShoppingCar = false
           Toast('你已将该商品移出购物车')
         } else {
+          setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         }
       },
@@ -625,6 +627,7 @@
         if (this.hasLogin) {
           Toast('暂未开放')
         } else {
+          setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         }
       },
@@ -673,6 +676,7 @@
       }
     },
     mounted () {
+      removeStore('beforeLogin')
       this.visits()
       this.stopTouchMove()
       this.getProductDetail()

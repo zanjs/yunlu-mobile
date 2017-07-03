@@ -181,7 +181,7 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { getStore, showBack } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -501,6 +501,7 @@
         this.$router.push({name: 'Report', query: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
+        setStore('beforeLogin', 'true')
         this.$router.push({name: 'Login'})
       },
       tabClick (val) {
@@ -639,6 +640,7 @@
       }
     },
     mounted () {
+      removeStore('beforeLogin')
       this.getEnterpriseDetail()
       this.handleSearchBar()
     },

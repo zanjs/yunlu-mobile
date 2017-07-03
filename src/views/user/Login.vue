@@ -46,7 +46,9 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('beforeLogin')) {
+          this.$router.go(-1) // beforeLogin优先级较高
+        } else if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -65,11 +67,7 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            if (getStore('showGoHome')) {
-              this.$router.push({name: 'See'})
-            } else {
-              this.$router.go(-1)
-            }
+            this.goBack()
           },
           reject: () => {
             Toast('手机号或密码错误')
