@@ -1,0 +1,17 @@
+ROM node:8-alpine
+MAINTAINER Lyndon <snakeliwei@gmail.com>
+
+RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    apk add --no-cache --virtual .build-deps make git tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    mkdir -p /app \
+
+COPY . /app
+RUN cd /app && \
+    npm install && \
+    npm run build && \
+    apk del .build-deps && \
+    apk add --no-cache --update nginx@edge && \
+    cp -rf ./dist /var/www
+
+
