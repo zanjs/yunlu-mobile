@@ -2,15 +2,15 @@ FROM node:8-alpine
 MAINTAINER Lyndon <snakeliwei@gmail.com>
 
 RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    apk add --no-cache --update nginx@edge && \
     apk add --no-cache --update --virtual .build-deps make git tzdata && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     mkdir -p /app \
 
 COPY . /app
 WORKDIR /app
-RUN npm install && \
-    npm run build && \
-    apk add --no-cache --update nginx@edge && \
+RUN npm install
+RUN npm run build && \  
     cp -rf ./dist /var/www && \
     # forward request and error logs to docker log collector
     ln -sf /dev/stdout /var/log/nginx/access.log && \
