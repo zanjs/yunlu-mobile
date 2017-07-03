@@ -1,7 +1,7 @@
 <template>
   <section>
     <mt-header
-      title="名片"
+      :title="header"
       fixed
       class="header">
       <mt-button
@@ -10,9 +10,10 @@
         class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
-      <mt-button slot="right"
-                 @click="goReport(teams)"
-                 class="button-text">
+      <mt-button
+        slot="right"
+        @click="goReport(teams)"
+        class="button-text">
         <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
@@ -118,6 +119,7 @@
     data () {
       return {
         teamId: this.$route.query.teamId,
+        header: '名片',
         hasLogin: !!getStore('user'),
         hasSearch: false,
         showProduct: true,
@@ -326,6 +328,7 @@
       },
       goBack () {
         if (this.hasSearch) {
+          document.body.scrollTop = 0
           this.getProducts('', 'price')
         } else if (window.history.length === 1) {
           this.$router.push({name: 'See'})
@@ -352,8 +355,10 @@
         showBack((stauts) => {
           if (this.activeIndex === 1) {
             this.showSearchBar = false
+            this.header = '名片'
           } else {
             this.showSearchBar = stauts
+            this.header = stauts ? '产品' : '名片'
           }
         }, height)
       },

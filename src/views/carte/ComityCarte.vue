@@ -1,16 +1,19 @@
 <template>
   <section>
-    <mt-header title="名片"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      :title="header"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
-      <mt-button slot="right"
-                 @click="goReport()"
-                 class="button-text">
+      <mt-button
+        slot="right"
+        @click="goReport()"
+        class="button-text">
         <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
@@ -154,9 +157,10 @@
         </template>
       </div>
       <transition name="fade">
-        <search v-show="showSearchBar"
-                :placeholder="placeholder"
-                @search="search">
+        <search
+          v-show="showSearchBar"
+          :placeholder="placeholder"
+          @search="search">
         </search>
       </transition>
       <transition name="fade">
@@ -188,8 +192,11 @@
       return {
         teamId: this.$route.query.teamId,
         token: getStore('user') ? getStore('user').authentication_token : '',
+        header: '名片',
         hasLogin: !!getStore('user'),
         hasSearch: false,
+        hasSearchEnterprise: false,
+        hasSearchPerson: false,
         showSearchBar: false,
         placeholder: '搜索产品',
         productPageIndex: 1,
@@ -412,7 +419,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.hasSearch = q !== ''
+            this.hasSearchEnterprise = q !== ''
             this.queryParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
               state.enterpriseMembers = res.data.members
@@ -447,7 +454,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.hasSearch = q !== ''
+            this.hasSearchPerson = q !== ''
             this.queryParams = ''
             if (this.personPageIndex === 1 || q !== '') {
               state.personMembers = res.data.preps
@@ -470,14 +477,13 @@
         this.$router.push({name: 'PersonCarte', query: {id: id}})
       },
       goBack () {
-        if (this.hasSearch) {
+        if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
+          document.body.scrollTop = 0
           this.getProducts('', 'price')
+        } else if (window.history.length === 1) {
+          this.$router.push({name: 'See'})
         } else {
-          if (window.history.length === 1) {
-            this.$router.push({name: 'See'})
-          } else {
-            this.$router.go(-1)
-          }
+          this.$router.go(-1)
         }
       },
       goReport () {
@@ -532,8 +538,15 @@
         showBack((stauts) => {
           if (this.activeIndex === 1) {
             this.showSearchBar = false
-          } else {
+          } else if (this.activeIndex === 0) {
             this.showSearchBar = stauts
+            this.header = status ? '产品' : '名片'
+          } else if (this.activeIndex === 2) {
+            this.showSearchBar = stauts
+            this.header = status ? '企业会员' : '名片'
+          } else if (this.activeIndex === 3) {
+            this.showSearchBar = stauts
+            this.header = status ? '个人会员' : '名片'
           }
         }, height)
       },
