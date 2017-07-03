@@ -12,6 +12,10 @@ RUN cd /app && \
     npm run build && \
     apk del .build-deps && \
     apk add --no-cache --update nginx@edge && \
-    cp -rf ./dist /var/www
+    cp -rf ./dist /var/www \
+    # forward request and error logs to docker log collector
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+CMD ["nginx", "-g", "daemon off;"]
 
 
