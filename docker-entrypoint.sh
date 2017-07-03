@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#get the latest code
+#clean the dist folder
 rm -rf /build/*
 #building product backend
 npm run build
