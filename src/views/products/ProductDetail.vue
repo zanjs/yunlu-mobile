@@ -578,7 +578,8 @@
         })
       },
       openIm () {
-        console.log('正在打开客服会话界面')
+        // console.log('正在打开客服会话界面')
+        Toast('暂未开放')
       },
       openShoppingCar () {
         Toast('暂未开放')
