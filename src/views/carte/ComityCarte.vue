@@ -576,7 +576,8 @@
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
-          Toast('登录后才能查看协会详细信息')
+          // Toast('登录后才能查看协会详细信息')
+          this.goLogin()
         } else {
           this.$router.push({name: 'EnterpriseDetail', query: {teamId: id}})
         }

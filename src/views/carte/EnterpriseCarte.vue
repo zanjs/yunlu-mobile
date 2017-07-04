@@ -113,7 +113,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, showBack, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -377,7 +377,9 @@
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
-          Toast('登录后才能查看企业详细信息')
+          // Toast('登录后才能查看企业详细信息')
+          setStore('beforeLogin', 'true')
+          this.$router.push({name: 'Login'})
         } else {
           this.$router.push({name: 'EnterpriseDetail', query: {teamId: id}})
         }
