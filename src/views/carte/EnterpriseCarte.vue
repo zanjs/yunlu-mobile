@@ -321,6 +321,9 @@
                 this.$refs.loadMoreProducts.onTopLoaded()
               }
             } else {
+              if (res.data.files.length === 0) {
+                Toast('没有更多数据了')
+              }
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
               if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
