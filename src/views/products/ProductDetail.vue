@@ -199,7 +199,7 @@
            @click="addFavorites()">
         <i class="iconfont icon-shoucang1"
            v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
-        <span>{{favoratesText}}</span>
+        <span v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
       </div>
       <div class="btn-box"
            @click="openIm()">
@@ -210,7 +210,7 @@
            @click="addShoppingCar()">
         <i class="iconfont icon-gouwuche1"
            v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
-        <span>{{shoppingCarText}}</span>
+        <span v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
       </div>
       <div class="btn-box btn-buy"
            @click="buyNow()">
@@ -392,12 +392,14 @@
           url: `/products/${productId}`,
           method: 'get',
           params: {
-            id: productId
+            id: productId,
+            token: this.token
           },
           target: this,
           resolve: (state, res) => {
             if (productId === this.productId) {
               this.hasAddFavorites = res.data.products.favorable
+              this.favoratesText = res.data.products.favorable ? '已收藏' : '收藏'
               state.productDetail = res.data.products
               this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files, productId, teamId)
             } else {
@@ -975,7 +977,7 @@
     }
   }
   .bottom-btn-active {
-    color: #F50E0E;
+    color: #F50E0E !important;
   }
 
   .productdetail-product-tags {
