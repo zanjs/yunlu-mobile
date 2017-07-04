@@ -28,14 +28,14 @@
 
 <script>
   import EnterpriseCard from '../../components/common/EnterpriseCard'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         teams: {
           id: null,
-          name: getStore('emptyenterpriseCarteParams') ? getStore('emptyenterpriseCarteParams').name : this.$route.params.name
+          name: this.$route.query.name
         },
         tips: '冒领者将被封停账户、冻结资产、追索损失、追究法律责任。'
       }
@@ -48,7 +48,8 @@
         // 未确权，不能点击
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('EmpryEnterpriseCarte_goHome')) {
+          removeStore('EmpryEnterpriseCarte_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

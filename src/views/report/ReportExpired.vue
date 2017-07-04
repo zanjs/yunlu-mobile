@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -53,7 +53,8 @@
         }, 1000)
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('ReportExpired_goHome')) {
+          removeStore('ReportExpired_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

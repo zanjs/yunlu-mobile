@@ -116,7 +116,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
@@ -154,7 +154,8 @@
         })
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('EnterpriseDetail_goHome')) {
+          removeStore('EnterpriseDetail_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

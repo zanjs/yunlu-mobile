@@ -26,7 +26,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -34,7 +34,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Download_goHome')) {
+          removeStore('Download_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

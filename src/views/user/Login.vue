@@ -35,7 +35,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, setStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -47,8 +47,10 @@
     methods: {
       goBack () {
         if (getStore('beforeLogin')) {
+          removeStore('beforeLogin')
           this.$router.go(-1) // beforeLogin优先级较高
-        } else if (getStore('showGoHome')) {
+        } else if (getStore('Login_goHome')) {
+          removeStore('Login_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

@@ -70,7 +70,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, removeAllStore } from '../../config/mUtils'
+  import { getStore, removeAllStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -80,7 +80,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Mine_goHome')) {
+          removeStore('Mine_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

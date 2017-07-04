@@ -32,7 +32,7 @@
 <script>
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -73,7 +73,8 @@
         console.log(obj)
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Folders_goHome')) {
+          removeStore('Folders_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

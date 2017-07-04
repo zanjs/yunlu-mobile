@@ -499,7 +499,8 @@
           this.queryParams = ''
           document.body.scrollTop = 0
           this.getProducts('', 'price')
-        } else if (getStore('showGoHome')) {
+        } else if (getStore('ComityCarte_goHome')) {
+          removeStore('ComityCarte_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

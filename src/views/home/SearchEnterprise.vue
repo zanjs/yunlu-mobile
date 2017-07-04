@@ -40,7 +40,7 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -100,7 +100,8 @@
         if (this.hasSearch) {
           this.searchParams = ''
           this.getEnterprises()
-        } else if (getStore('showGoHome')) {
+        } else if (getStore('SearchEnterprise_goHome')) {
+          removeStore('SearchEnterprise_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

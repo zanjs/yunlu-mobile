@@ -41,7 +41,6 @@
 
 <script>
   import { Tabbar, TabItem, TabContainer, TabContainerItem } from 'mint-ui'
-  import { removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -55,7 +54,6 @@
       }
     },
     created () {
-      removeStore('showGoHome')
       this.$router.replace({name: 'See'})
     },
     components: {

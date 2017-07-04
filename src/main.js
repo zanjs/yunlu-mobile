@@ -26,7 +26,7 @@ import { setStore } from './config/mUtils'
 
 router.beforeEach((to, from, next) => {
   if (!from.name) {
-    setStore('showGoHome', 'true')
+    setStore(`${to.name}_goHome`, 'true')
   }
   next()
 })

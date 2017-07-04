@@ -31,7 +31,7 @@
 
 <script>
   import { Toast } from 'mint-ui'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -43,7 +43,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('SetNewPassword_goHome')) {
+          removeStore('SetNewPassword_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -74,7 +75,8 @@
               })
               setTimeout(() => {
                 toast.close()
-                if (getStore('showGoHome')) {
+                if (getStore('SetNewPassword_goHome')) {
+                  removeStore('SetNewPassword_goHome')
                   this.$router.push({name: 'See'})
                 } else {
                   this.$router.go(-2)

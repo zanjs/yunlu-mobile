@@ -47,7 +47,7 @@
 
 <script>
   import Card from '../../components/common/Card'
-  import { getStore, setStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast } from 'mint-ui'
   export default {
@@ -118,7 +118,8 @@
         }
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('PersonCarte_goHome')) {
+          removeStore('PersonCarte_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

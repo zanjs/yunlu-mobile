@@ -113,7 +113,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, showBack } from '../../config/mUtils'
+  import { getStore, showBack, removeStore } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
@@ -339,7 +339,8 @@
         if (this.hasSearch) {
           document.body.scrollTop = 0
           this.getProducts('', 'price')
-        } else if (getStore('showGoHome')) {
+        } else if (getStore('EnterpriseCarte_goHome')) {
+          removeStore('EnterpriseCarte_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

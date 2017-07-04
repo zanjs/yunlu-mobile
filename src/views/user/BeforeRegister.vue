@@ -44,7 +44,7 @@
 <script>
   import { Toast } from 'mint-ui'
   import { VALID_CODE_IMG_URL } from '../../constants/constant'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -55,7 +55,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('BeforeRegister_goHome')) {
+          removeStore('BeforeRegister_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

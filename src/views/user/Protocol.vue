@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -25,7 +25,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Protocol_goHome')) {
+          removeStore('Protocol_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

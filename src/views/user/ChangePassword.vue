@@ -31,7 +31,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { setStore, getStore } from '../../config/mUtils'
+  import { setStore, getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -43,7 +43,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('ChangePassword_goHome')) {
+          removeStore('ChangePassword_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -73,11 +74,7 @@
               })
               setTimeout(() => {
                 toast.close()
-                if (getStore('showGoHome')) {
-                  this.$router.push({name: 'See'})
-                } else {
-                  this.$router.go(-1)
-                }
+                this.goBack()
               }, 2000)
             } else {
               Toast(res.data.msg)

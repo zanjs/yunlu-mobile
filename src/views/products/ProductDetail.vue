@@ -588,7 +588,8 @@
         }, 400)
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('ProductDetail_goHome')) {
+          removeStore('ProductDetail_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

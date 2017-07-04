@@ -37,7 +37,7 @@
 <script>
   import { COUNT_DOWN_SECOND } from '../../constants/constant'
   import { Toast } from 'mint-ui'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -49,7 +49,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Register_goHome')) {
+          removeStore('Register_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

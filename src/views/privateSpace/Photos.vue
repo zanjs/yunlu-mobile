@@ -17,7 +17,7 @@
 
 <script>
   import Gallery from '../../components/common/Gallery'
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -51,7 +51,8 @@
         })
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Photos_goHome')) {
+          removeStore('Photos_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

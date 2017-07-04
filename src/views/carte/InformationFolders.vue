@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import InformationGallery from '../../components/common/InformationGallery'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -86,7 +86,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('InformationFolders_goHome')) {
+          removeStore('InformationFolders_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)

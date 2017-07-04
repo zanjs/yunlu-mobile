@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import { getStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -102,7 +102,8 @@
         }, 2000)
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (getStore('Report_goHome')) {
+          removeStore('Report_goHome')
           this.$router.replace({name: 'See'})
         } else {
           this.$router.go(-1)
