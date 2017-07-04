@@ -5,7 +5,14 @@
            :key="index"
            @click.stop="handleClick(item)"
            class="img-box">
-        <img :src="item.file_url">
+        <img
+          v-if="item.file_url"
+          :src="item.file_url"
+          class="normal">
+        <img
+          v-else
+          src="../../assets/noImg.png"
+          class="empty">
         <div class="cover">
           <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.prices[0].money}}</span>
@@ -43,9 +50,16 @@ export default {
       @include px2rem(width, 330px);
       @include pm2rem(margin, 0px, 28px, 30px, 0px);
       position: relative;
-      img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .normal {
         width: 100%;
         height: 100%;
+      }
+      .empty {
+        width: 60%;
+        height: 60%;
       }
       .cover {
         position: absolute;

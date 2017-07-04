@@ -8,14 +8,19 @@
       @search-near-by="searchNearBy()">
     </product-header>
     <div class="swipe">
-      <swiper :options="swiperOption">
-        <swiper-slide v-for="(item, index) in productDetailFiles"
-                      :key="index">
-          <img :src="item.url"
-               @click="viewFullScreenPic(productDetailFiles)">
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
+      <template v-if="productDetailFiles && productDetailFiles.length">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(item, index) in productDetailFiles"
+                        :key="index">
+            <img :src="item.url"
+                @click="viewFullScreenPic(productDetailFiles)">
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </template>
+      <img
+        v-else
+        src="../../assets/noImg.png">
       <span v-if="productDetailFiles && productDetailFiles.length"
             class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
       <span v-else

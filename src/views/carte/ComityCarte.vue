@@ -159,9 +159,13 @@
       <transition name="fade">
         <search
           v-show="showSearchBar"
-          :placeholder="placeholder"
-          @search="search">
-        </search>
+          @search="search(queryParams)">
+          <input
+            slot="input"
+            type="text"
+            v-model="queryParams"
+            :placeholder="placeholder">
+      </search>
       </transition>
       <transition name="fade">
         <order v-show="showSearchBar && activeIndex === 0"
@@ -263,7 +267,7 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            this.queryParams = ''
+            // this.queryParams = ''
             let tmpArr = this.handleProductThumbnails(res.data.products)
             this.getFilesPublisheds(tmpArr, res.data.products, q)
           },
@@ -275,14 +279,18 @@
       handleProducts (arr, arr2) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
-          for (let j = 0; j < arr2.length; j++) {
-            if (arr[i].file_id === arr2[j].id) {
-              let tmpObj = {
-                ...arr[i],
-                file_url: arr2[j].url,
-                file_thumb_urls: arr2[j].thumb_urls[0]
-              }
-              tmpArr.push(tmpObj)
+          tmpArr.push({
+            ...arr[i],
+            file_url: '',
+            file_thumb_urls: ''
+          })
+        }
+        for (let i = 0; i < arr2.length; i++) {
+          for (let j = 0; j < tmpArr.length; j++) {
+            if (arr2[i].id === tmpArr[j].file_id) {
+              tmpArr[j].file_url = arr2[i].url
+              tmpArr[j].file_thumb_urls = arr2[i].thumb_urls[0]
+              break
             }
           }
         }
@@ -424,7 +432,7 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchEnterprise = q !== ''
-            this.queryParams = ''
+            // this.queryParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
               state.enterpriseMembers = res.data.members
             } else {
@@ -462,7 +470,7 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchPerson = q !== ''
-            this.queryParams = ''
+            // this.queryParams = ''
             if (this.personPageIndex === 1 || q !== '') {
               state.personMembers = res.data.preps
             } else {
@@ -488,6 +496,7 @@
       },
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
+          this.queryParams = ''
           document.body.scrollTop = 0
           this.getProducts('', 'price')
         } else if (getStore('showGoHome')) {

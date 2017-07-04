@@ -1,9 +1,8 @@
 <template>
   <section>
     <div class="search-container">
-      <input type="text"
-             v-model="searchParams"
-             :placeholder="placeholder">
+      <slot name="input">
+      </slot>
       <i class="iconfont icon-sousuo"
          @click.stop="handleClick"></i>
     </div>
@@ -14,13 +13,11 @@
   export default {
     data () {
       return {
-        searchParams: this.text || ''
       }
     },
-    props: ['placeholder', 'text'],
     methods: {
       handleClick () {
-        this.$emit('search', this.searchParams)
+        this.$emit('search')
       }
     }
   }

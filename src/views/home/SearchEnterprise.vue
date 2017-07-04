@@ -12,9 +12,12 @@
       </mt-button>
     </mt-header>
       <search
-        :text="searchParams"
-        :placeholder="placeholder"
-        @search="getEnterprises">
+        @search="getEnterprises(searchParams)">
+        <input
+          slot="input"
+          type="text"
+          v-model="searchParams"
+          :placeholder="placeholder">
       </search>
     <div class="list">
       <mt-loadmore
@@ -43,6 +46,7 @@
       return {
         placeholder: '请输入企业名称',
         searchParams: this.$route.query.q || '',
+        hasSearch: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         bottomPullText: '上拉加载更多',
@@ -66,6 +70,8 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.hasSearch = q !== ''
+            // this.searchParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
               state.allEnterprises = res.data.enterprises
             } else {
@@ -91,7 +97,10 @@
         }
       },
       goBack () {
-        if (getStore('showGoHome')) {
+        if (this.hasSearch) {
+          this.searchParams = ''
+          this.getEnterprises()
+        } else if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
