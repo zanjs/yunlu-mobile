@@ -10,10 +10,12 @@
     <div class="swipe">
       <template v-if="productDetailFiles && productDetailFiles.length">
         <swiper :options="swiperOption">
-          <swiper-slide v-for="(item, index) in productDetailFiles"
-                        :key="index">
-            <img :src="item.url"
-                @click="viewFullScreenPic(productDetailFiles)">
+          <swiper-slide
+            v-for="(item, index) in productDetailFiles"
+            :key="index">
+            <img
+              :src="item.url"
+              @click="viewFullScreenPic(productDetailFiles)">
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
@@ -81,7 +83,6 @@
             <span v-for="(item, index) in currentPriceProperties"
                   :key="index"
                   class="row-item">{{item.key}} : {{item.value}}</span>
-
           </template>
           <div v-else
                class="no-price">该产品暂无价格参数</div>
@@ -108,9 +109,9 @@
               </div>
             </template>
           </template>
-          <template v-else>
-            <div v-if="productDetail && productDetail.goods_type === 'StoneMaterial'"
-                 class="row-item">
+          <template
+            v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
+            <div class="row-item">
               <div class="title-container">
                 <div class="dot"></div>
                 <span class="title">{{productDetail.category_name}}</span>
@@ -126,11 +127,33 @@
                 <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
               </div>
             </div>
-            <div v-else
-                 class="no-product-args">
+            <template
+              v-if="productDetail.properties && productDetail.properties.length > 0 &&  productDetail.properties[0].children.length > 0">
+              <div v-for="(item, index) in productDetail.properties"
+                   :key="index"
+                   class="row-item">
+                <div v-for="(i, indexI) in item.children"
+                     :key="indexI"
+                     class="title-container">
+                  <div class="dot"></div>
+                  <span class="title">{{i.name}} : {{i.value}}</span>
+                  <template
+                    v-if="i.quotes && i.quotes.length > 0">
+                    <i
+                      v-for="(j, indexJ) in i.quotes"
+                      :key="indexJ"
+                      class="iconfont icon-guanlian"
+                      @click="openPopDialog(j)"></i>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </template>
+          <div
+            v-else
+            class="no-product-args">
               该产品暂无产品参数
             </div>
-          </template>
         </mt-tab-container-item>
         <mt-tab-container-item
           id="3"
@@ -194,35 +217,55 @@
         <span>立即购买</span>
       </div>
     </section>
-    <mt-actionsheet :actions="actions"
-                    v-model="sheetVisible"
-                    class="product-actionsheet">
+    <mt-actionsheet
+      :actions="actions"
+      v-model="sheetVisible"
+      class="product-actionsheet">
     </mt-actionsheet>
-    <section v-if="popUp"
-             class="product-popup-dialog"
-             v-bind:class="{'slide-in-fwd-center': cssAnimation, 'slide-out-bck-center': !cssAnimation}">
+    <section
+      v-if="popUp"
+      class="product-popup-dialog"
+      v-bind:class="{'slide-in-fwd-center': cssAnimation, 'slide-out-bck-center': !cssAnimation}">
       <div class="main">
         <div class="title">
           <span>购销渠道关系认证成功</span>
         </div>
         <div class="content">
-          <div class="item">
-            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb">
+          <div
+            class="item"
+            @click="goLinkEnterpriseDetail(teamLink)">
+            <img
+              v-if="teamLink && teamLink.logo"
+              :src="teamLink.logo">
+            <img
+              v-else
+              src="../../assets/blank.jpg">
             <div class="info">
-              <p>宜州市万福石业有限公司</p>
+              <p>{{teamLink.company}}</p>
               <div>
-                <span>矿主</span>
-                <span>广西&middot;河池</span>
+                <span>{{teamLink.service.name}}</span>
+                <span>{{teamLink.provice_name}}&middot;{{teamLink.city_name}}</span>
               </div>
             </div>
           </div>
-          <div class="item">
-            <img src="http://7xjfsp.com2.z0.glb.qiniucdn.com/FrOXCe48WEH8rwHvPz3ugLpcaTMO-thumb">
+          <div
+            class="item"
+            @click="goLinkProductDetail(productLink)">
+            <img
+              v-if="productLinkFile && productLinkFile.url"
+              :src="productLinkFile.url">
+            <img
+              v-else
+              src="../../assets/imgLoading.png">
             <div class="info">
-              <p>宜州市万福石业有限公司</p>
+              <p>{{productLink.name}}</p>
               <div>
-                <span>矿主</span>
-                <span>广西&middot;河池</span>
+                <span
+                  v-if="productLink.prices && productLink.prices.length > 0 && productLink.prices[0].money !== '定制'"
+                  class="product-price">{{productLink.prices[0].money}}元</span>
+                <span
+                  v-else
+                  class="product-price">{{productLink.prices[0].money}}</span>
               </div>
             </div>
           </div>
@@ -277,6 +320,9 @@
         hasAddShoppingCar: false,
         shoppingCarText: '加入购物车',
         favoratesText: '收藏',
+        productLink: {},
+        productLinkFile: {},
+        teamLink: {},
         morePrice: false,
         cssAnimation: false,
         currentPrice: {},
@@ -341,18 +387,23 @@
       swiperSlide
     },
     methods: {
-      getProductDetail () {
+      getProductDetail (productId = this.productId, teamId = this.teamId) {
         this.$store.dispatch('commonAction', {
-          url: `/products/${this.productId}`,
+          url: `/products/${productId}`,
           method: 'get',
           params: {
-            id: this.productId
+            id: productId
           },
           target: this,
           resolve: (state, res) => {
-            this.hasAddFavorites = res.data.products.favorable
-            state.productDetail = res.data.products
-            this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files)
+            if (productId === this.productId) {
+              this.hasAddFavorites = res.data.products.favorable
+              state.productDetail = res.data.products
+              this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files, productId, teamId)
+            } else {
+              this.productLink = res.data.products
+              this.getFilesPublisheds([this.handleProductFiles(res.data.products.files)[0]], res.data.products.files, productId, teamId)
+            }
           },
           reject: () => {
           }
@@ -404,20 +455,26 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, files) {
+      getFilesPublisheds (ids, files, productId, teamId) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
           params: {
             type: 'product',
-            team_id: this.teamId,
+            team_id: teamId,
             thumbs: ['general'],
             ids: ids
           },
           target: this,
           resolve: (state, res) => {
-            state.productDetailFiles = res.data.files
-            this.getAllPriceProperties(state.productDetail.category_id)
+            if (productId === this.productId) {
+              state.productDetailFiles = res.data.files
+              this.getAllPriceProperties(state.productDetail.category_id)
+            } else {
+              // 关联产品图片只需获取封面(传的ids参数也是只有一个元素的数组)
+              this.productLinkFile = res.data.files[0]
+              this.getOrganization(productId, teamId)
+            }
           },
           reject: () => {
           }
@@ -431,7 +488,7 @@
           target: this,
           resolve: (state, res) => {
             state.archives = res.data.archives
-            this.getOrganization()
+            this.getOrganization(this.productId, this.teamId)
           },
           reject: () => {
           }
@@ -457,16 +514,21 @@
           }
         })
       },
-      getOrganization () {
+      getOrganization (productId = this.productId, teamId = this.teamId) {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: [this.teamId]
+            ids: [teamId]
           },
           target: this,
           resolve: (state, res) => {
-            state.productDetailTeam = res.data.teams[0]
+            if (productId === this.productId) {
+              state.productDetailTeam = res.data.teams[0]
+            } else {
+              this.teamLink = res.data.teams[0]
+              this.openPopup()
+            }
           },
           reject: () => {
           }
@@ -505,6 +567,15 @@
       viewArchives (item) {
         this.getArchivesFiles(this.handleProductFiles(item.files))
       },
+      openPopDialog (item) {
+        // console.log(item.origin.id, item.origin_type, item.origin.organization_id)
+        if (item.origin_type === 'Product') {
+          this.getProductDetail(item.origin.id, item.origin.organization_id)
+          // TODO: 企业类型字段不确定
+        } else if (item.origin_type === 'Enterprise') {
+          // ...
+        }
+      },
       openPopup () {
         this.popUp = true
         this.cssAnimation = true
@@ -517,6 +588,7 @@
         }, 400)
       },
       goBack () {
+        console.log(this.$route, getStore('showGoHome'))
         if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
@@ -648,7 +720,7 @@
       stopTouchMove () {
         let self = this
         document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
+          if (self.showPreview || self.popUp) {
             e.preventDefault() // 最关键的一句，禁止浏览器默认行为
           }
         })
@@ -656,7 +728,7 @@
       allowTouchMove () {
         let self = this
         document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
+          if (self.showPreview || self.popUp) {
             e.preventDefault()
           }
         })
@@ -678,13 +750,20 @@
           reject: () => {
           }
         })
+      },
+      goLinkEnterpriseDetail (item) {
+        this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.id}})
+      },
+      goLinkProductDetail (item) {
+        this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: item.organization_id}})
+        window.location.reload()
       }
     },
     mounted () {
       removeStore('beforeLogin')
       this.visits()
       this.stopTouchMove()
-      this.getProductDetail()
+      this.getProductDetail(this.productId, this.teamId)
     },
     computed: {
       ...mapGetters([
@@ -1025,6 +1104,9 @@
             @include px2rem(margin-right, 50px);
             color: #A6A6A6;
           }
+          .product-price {
+            color: #F50E0E;
+          }
         }
       }
     }
@@ -1251,7 +1333,9 @@
       }
     }
     .title-container {
-      // @include pm2rem(padding, 20px, 0px, 20px, 0px);
+      position: relative;
+      display: flex;
+      align-items: center;
       .dot {
         @include px2rem(width, 16px);
         @include px2rem(height, 16px);
@@ -1263,7 +1347,13 @@
       .title {
         @include font-dpr(15px);
         @include line-height(30px);
+        @include px2rem(margin-right, 50px);
         // line-height: 1;
+      }
+      i {
+        color: #F4B223;
+        @include px2rem(margin-right, 10px);
+        @include font-dpr(21px);
       }
     }
     .no-product-args {

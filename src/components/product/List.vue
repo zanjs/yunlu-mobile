@@ -5,7 +5,12 @@
            :key="index"
            @click.stop="handleClick(item)"
            class="item">
-        <img :src="item.file_thumb_urls">
+        <img
+          v-if="item.file_thumb_urls"
+          :src="item.file_thumb_urls">
+        <img
+          v-else
+          src="../../assets/noImg.png">
         <div class="content">
           <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.prices[0].money}}</span>
