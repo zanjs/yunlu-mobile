@@ -148,12 +148,12 @@
                 </div>
               </div>
             </template>
+            <!--<div
+              v-else
+              class="no-product-args">
+                该产品暂无产品参数
+            </div>-->
           </template>
-          <div
-            v-else
-            class="no-product-args">
-              该产品暂无产品参数
-            </div>
         </mt-tab-container-item>
         <mt-tab-container-item
           id="3"
@@ -588,7 +588,6 @@
         }, 400)
       },
       goBack () {
-        console.log(this.$route, getStore('showGoHome'))
         if (getStore('showGoHome')) {
           this.$router.push({name: 'See'})
         } else {
