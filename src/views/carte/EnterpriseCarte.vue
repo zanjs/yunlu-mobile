@@ -362,7 +362,7 @@
       },
       handleSearchBar () {
         showBack((status) => {
-          if (this.activeIndex === 1) {
+          if (this.currentIndex === 1) {
             this.showSearchBar = false
             this.header = '名片'
           } else {
