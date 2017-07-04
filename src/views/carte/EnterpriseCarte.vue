@@ -352,7 +352,7 @@
       },
       tabClick (val) {
         this.showProduct = val === 0
-        this.placeholder = val === 0 ? '搜索产品' : '搜素资讯'
+        this.placeholder = val === 0 ? '搜索产品' : '搜索资讯'
         this.handleSearchBar()
       },
       search (res) {

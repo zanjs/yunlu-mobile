@@ -73,6 +73,7 @@
             this.hasSearch = q !== ''
             // this.searchParams = ''
             if (this.enterprisePageIndex === 1 || q !== '') {
+              document.body.scrollTop = 0
               state.allEnterprises = res.data.enterprises
             } else {
               state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]

@@ -107,7 +107,7 @@
     </div>
     <div
       class="tab-container"
-      v-if="(!comityDetail.enttype && !comityDetail.legal_person && !comityDetail.info_id  && !comityDetail.address && !comityDetail.reg_org && !comityDetail.reg_no && !comityDetail.id_no ) || (comityDetail.organization && comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length === 0)">
+      v-if="!(comityDetail.enttype || comityDetail.legal_person || comityDetail.info_id  ||comityDetail.address || comityDetail.reg_org || comityDetail.reg_no || comityDetail.id_no) && (comityDetail.organization && comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length === 0)">
       <div class="no-data">
         <img src="../../assets/noFile.png">
       </div>
@@ -232,12 +232,17 @@
     }
     .item {
       border-top: 1px dashed #D1D1D1;
-      @include px2rem(height, 78px);
       @include font-dpr(14px);
       @include px2rem(line-height, 78px);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
       .label {
         @include px2rem(width, 186px);
-        display: inline-block;
+        display: block;
+      }
+      .content {
+        flex: 1;
       }
     }
     .link-container {

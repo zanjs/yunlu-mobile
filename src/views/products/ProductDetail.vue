@@ -582,7 +582,7 @@
       },
       closePopup () {
         this.cssAnimation = false
-        // this.allowTouchMove()
+        this.allowTouchMove()
         setTimeout(() => {
           this.popUp = false
         }, 400)
