@@ -754,11 +754,11 @@
         })
       },
       goLinkEnterpriseDetail (item) {
-        this.allowTouchMove()
+        this.closePopup()
         this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.id}})
       },
       goLinkProductDetail (item) {
-        this.allowTouchMove()
+        this.closePopup()
         this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: item.organization_id}})
         window.location.reload()
       }
