@@ -87,24 +87,22 @@
         </template>
       </div>
     </div>
-    <transition name="fade">
-      <search
-        v-show="showSearchBar"
-        @search="search(queryParams)">
-         <input
-          slot="input"
-          type="text"
-          v-model="queryParams"
-          :placeholder="placeholder">
-      </search>
-    </transition>
-    <transition name="fade">
-      <order v-show="showSearchBar && showProduct"
-             :order-up="orderUp"
-             :show-list="showList"
-             @order-change="orderChange"
-             @switch="showListChange"></order>
-    </transition>
+    <search
+      v-show="showSearchBar"
+      @search="search(queryParams)">
+      <input
+        slot="input"
+        type="text"
+        v-model="queryParams"
+        :placeholder="placeholder">
+    </search>
+    <order
+      v-show="showSearchBar && showProduct"
+      :order-up="orderUp"
+      :show-list="showList"
+      @order-change="orderChange"
+      @switch="showListChange">
+    </order>
   </section>
 </template>
 
