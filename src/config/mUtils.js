@@ -67,6 +67,14 @@ export const showBack = (callback, height) => {
     })
   }
 
+  document.removeEventListener('scroll', showBackFun, false)
+
+  document.removeEventListener('touchstart', showBackFun, { passive: true, once: true })
+
+  document.removeEventListener('touchmove', showBackFun, { passive: true, once: true })
+
+  document.removeEventListener('touchend', moveEnd, { passive: true, once: true })
+
   document.addEventListener('scroll', showBackFun, false)
 
   document.addEventListener('touchstart', showBackFun, { passive: true, once: true })
