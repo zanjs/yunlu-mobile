@@ -353,6 +353,7 @@
       tabClick (val) {
         this.showProduct = val === 0
         this.placeholder = val === 0 ? '搜索产品' : '搜索资讯'
+        this.currentIndex = val
         this.handleSearchBar()
       },
       search (res) {
