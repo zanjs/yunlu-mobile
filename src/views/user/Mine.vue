@@ -11,7 +11,12 @@
     </div>
     <div class="user-avatar">
       <div class="circle">
-        <img src="../../assets/userAvatarBig.png">
+        <img
+          v-if="currentUser.avatar_url"
+          :src="currentUser.avatar_url">
+        <img
+          v-else
+          src="../../assets/userAvatarBig.png">
       </div>
     </div>
     <div class="menu-container">
