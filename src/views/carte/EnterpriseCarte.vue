@@ -401,7 +401,8 @@
             this.linkToast('企业', 'QQ账号', item.value)
             break
           case 'address':
-            Toast('暂未开放')
+            // Toast('暂未开放')
+            this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
             break
         }
       },

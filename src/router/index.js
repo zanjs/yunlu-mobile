@@ -28,6 +28,7 @@ import ReportExpired from '../views/report/ReportExpired'
 import BeforeRegister from '../views/user/BeforeRegister'
 import SetPassword from '../views/user/SetPassword'
 import Chat from '../views/chat/Chat'
+import Maps from '../views/map/Maps'
 
 Vue.use(Router)
 
@@ -148,6 +149,10 @@ export default new Router({
       path: '/chat',
       name: 'Chat',
       component: Chat
+    }, {
+      path: '/maps',
+      name: 'Maps',
+      component: Maps
     }
   ]
 })

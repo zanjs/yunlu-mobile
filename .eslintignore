@@ -1,3 +1,4 @@
 build/*.js
 config/*.js
 src/common/iconfont.js
+src/views/map/Maps.vue
