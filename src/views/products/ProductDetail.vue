@@ -660,7 +660,11 @@
       openIm () {
         // console.log('正在打开客服会话界面')
         // Toast('暂未开放')
-        this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.teamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
+        if (!this.hasLogin) {
+          this.$router.push({name: 'Login'})
+        } else {
+          this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.teamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
+        }
       },
       openShoppingCar () {
         Toast('暂未开放')

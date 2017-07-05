@@ -7,6 +7,7 @@ import api from '../api/api'
 Vue.use(Vuex)
 
 const state = {
+  userDelegate: null,
   pageLoading: false,
   loadSuccess: false,
   user: null,
@@ -32,6 +33,7 @@ const state = {
 }
 
 const getters = {
+  userDelegate: state => state.userDelegate,
   pageLoading: state => state.pageLoading,
   loadSuccess: state => state.loadSuccess,
   user: state => state.user,
@@ -60,6 +62,9 @@ const actions = {
   commonAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
     api.commonRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
+  },
+  setUserDelegate ({commit}, params) {
+    commit(types.SET_USER_DELEGATE, {params})
   }
 }
 
@@ -87,6 +92,10 @@ const mutations = {
     state.pageLoading = false
     state.loadSuccess = false
     params.reject(state, err)
+  },
+
+  [types.SET_USER_DELEGATE] (state, {params}) {
+    state.userDelegate = params
   }
 }
 

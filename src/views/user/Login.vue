@@ -86,11 +86,35 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
+            this.initImClient()
             this.goBack()
           },
           reject: () => {
           }
         })
+      },
+      async initImClient () {
+        this.userDelegate = await this.$realtime.createIMClient(this.uuid, {
+          signatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
+              })
+            })
+          },
+          conversationSignatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
+              })
+            })
+          }
+        })
+        this.$store.dispatch('setUserDelegate', this.userDelegate)
       },
       goRegister () {
         this.$router.push({name: 'BeforeRegister'})

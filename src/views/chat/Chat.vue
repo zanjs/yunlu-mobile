@@ -147,7 +147,6 @@ export default {
       document.body.scrollTop = document.body.scrollHeight
     },
     async init () {
-      console.log(typeof getStore('signature').signature, typeof getStore('signature').timestamp, typeof getStore('signature').nonce)
       this.userDelegate = await this.$realtime.createIMClient(this.uuid, {
         signatureFactory: () => {
           return new Promise((resolve, reject) => {
@@ -168,11 +167,13 @@ export default {
           })
         }
       })
+      // console.log(this.userDelegate)
       this.conversation = await this.userDelegate.createConversation({
         members: [this.uuid, this.targetUser.uuid],
         name: this.title,
         unique: true
       })
+      // console.log(this.conversation)
       this.userDelegate.on('message', message => {
         let tmpObj = {
           isSelf: false,
