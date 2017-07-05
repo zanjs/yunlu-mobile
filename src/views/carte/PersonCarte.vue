@@ -110,7 +110,7 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          this.$router.push({name: 'Folders', query: {id: item.id, name: item.name}})
+          this.$router.push({name: 'Folders', query: {id: item.id, name: item.name, userId: item.user_id}})
         } else if (item.is_association) {
           this.$router.push({name: 'ComityCarte', query: {teamId: item.team_id}})
         } else {
