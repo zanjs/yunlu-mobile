@@ -69,10 +69,26 @@
           resolve: (state, res) => {
             state.user = res.data
             setStore('user', res.data)
-            this.goBack()
+            this.getSignature()
           },
           reject: () => {
             Toast('手机号或密码错误')
+          }
+        })
+      },
+      getSignature () {
+        this.$store.dispatch('commonAction', {
+          url: '/im/sign',
+          method: 'get',
+          params: {
+            token: getStore('user').authentication_token
+          },
+          target: this,
+          resolve: (state, res) => {
+            setStore('signature', res.data)
+            this.goBack()
+          },
+          reject: () => {
           }
         })
       },

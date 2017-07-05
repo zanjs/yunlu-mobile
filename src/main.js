@@ -9,6 +9,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import './styles/iconfont.css'
 import store from './vuex/store'
 import { setStore } from './config/mUtils'
+import realtime from './config/leancloud'
 // import './config/rem'
 // import FastClick from 'fastclick'
 
@@ -31,6 +32,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+Vue.use(realtime)
 Vue.use(MintUI)
 Vue.config.productionTip = false
 

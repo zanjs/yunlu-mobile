@@ -27,6 +27,7 @@ import EmptyEnterpriseCarte from '../views/carte/EmptyEnterpriseCarte'
 import ReportExpired from '../views/report/ReportExpired'
 import BeforeRegister from '../views/user/BeforeRegister'
 import SetPassword from '../views/user/SetPassword'
+import Chat from '../views/chat/Chat'
 
 Vue.use(Router)
 
@@ -143,6 +144,10 @@ export default new Router({
       path: '/setpassword',
       name: 'SetPassword',
       component: SetPassword
+    }, {
+      path: '/chat',
+      name: 'Chat',
+      component: Chat
     }
   ]
 })
