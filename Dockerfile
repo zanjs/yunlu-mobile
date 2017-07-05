@@ -10,8 +10,9 @@ COPY . /app
 WORKDIR /app
 RUN npm install && \
     npm run build && \
+    mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
     rm -rf /app && \
-    chmod +x /app/docker-entrypoint.sh
+    chmod +x /docker-entrypoint.sh
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
