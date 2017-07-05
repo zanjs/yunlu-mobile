@@ -39,7 +39,7 @@
         headerName: this.$route.query.name || '空间',
         id: this.$route.query.id || null,
         token: getStore('user') ? getStore('user').authentication_token : '',
-        userId: this.$route.query.userId,
+        userId: getStore('userCard') ? getStore('userCard').user_id : '',
         userCard: getStore('userCard') || null,
         Thumbnails: []
       }
