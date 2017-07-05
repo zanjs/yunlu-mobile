@@ -3,8 +3,7 @@ MAINTAINER Lyndon <snakeliwei@gmail.com>
 
 RUN apk --update --no-cache add make git \
     && mkdir -p /app \
-    && mkdir -p /build \
-    && mkdir -p /dist
+    && mkdir -p /build 
 
 COPY . /app
 WORKDIR /app
