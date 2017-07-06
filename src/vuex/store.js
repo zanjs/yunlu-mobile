@@ -65,6 +65,10 @@ const actions = {
   },
   setUserDelegate ({commit}, params) {
     commit(types.SET_USER_DELEGATE, {params})
+  },
+  validCodeAction ({commit}, params) {
+    commit(types.FETCH_BEGIN, params)
+    api.validCodeRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
   }
 }
 

@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { Toast } from 'mint-ui'
+  // import { Toast } from 'mint-ui'
   import { VALID_CODE_IMG_URL } from '../../constants/constant'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
@@ -50,7 +50,8 @@
       return {
         mobile: '',
         captcha: '',
-        validImgCodeSrc: VALID_CODE_IMG_URL
+        validImgCodeSrc: VALID_CODE_IMG_URL,
+        imgSrc: ''
       }
     },
     methods: {
@@ -66,30 +67,60 @@
         window.location.reload()
       },
       next () {
-        this.$store.dispatch('commonAction', {
-          url: '/before_registrations',
-          method: 'get',
-          params: {
-            mobile: this.mobile,
-            captcha: this.captcha
-          },
-          target: this,
-          resolve: (state, res) => {
-            if (res.data.success) {
-              this.$router.push({name: 'Register', query: {mobile: this.mobile}})
-            } else {
-              Toast(res.data.msg)
-            }
-          },
-          reject: () => {
-          }
-        })
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `https://api.yunlu6.com/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
+        xhr.onload = (e) => {
+          console.log(e)
+        }
+        xhr.send()
+        // this.$store.dispatch('commonAction', {
+        //   url: '/before_registrations',
+        //   method: 'get',
+        //   params: {
+        //     mobile: this.mobile,
+        //     captcha: this.captcha
+        //   },
+        //   target: this,
+        //   resolve: (state, res) => {
+        //     if (res.data.success) {
+        //       this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+        //     } else {
+        //       Toast(res.data.msg)
+        //     }
+        //   },
+        //   reject: () => {
+        //   }
+        // })
+      },
+      getValidCode () {
+        let script = document.createElement('script')
+        script.type = 'application/javascript'
+        // script.src = 'https://api.yunlu6.com/captcha'
+        script.id = 'saveValidCodeImg'
+        let img = document.createElement('img')
+        img.src = 'https://api.yunlu6.com/captcha'
+        script.appendChild(img)
+        document.getElementsByTagName('body')[0].appendChild(script)
+        // this.$store.dispatch('validCodeAction', {
+        //   url: 'https://api.yunlu6.com/captcha',
+        //   method: 'get',
+        //   params: {
+        //   },
+        //   target: this,
+        //   resolve: (state, res) => {
+        //     console.log(res)
+        //     this.imgSrc = window.URL.createObjectURL(res.data)
+        //   },
+        //   reject: () => {
+        //   }
+        // })
       },
       openProtocol () {
         this.$router.push({name: 'Protocol'})
       }
     },
     mounted () {
+      // this.getValidCode()
     }
   }
 </script>
