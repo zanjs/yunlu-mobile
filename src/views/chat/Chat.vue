@@ -54,6 +54,7 @@
   import ChatInput from '../../components/chat/ChatInput'
   import { TextMessage } from 'leancloud-realtime'
   import { getStore, removeStore } from '../../config/mUtils'
+  import moment from 'moment'
   export default {
     data () {
       return {
@@ -69,7 +70,7 @@
         productImg: this.$route.query.productImg || '',
         targetUuid: this.$route.query.uuid,
         conversationId: this.$route.query.conversationId,
-        userDelegate: null,
+        currentUserDelegate: null,
         conversation: null,
         title: '',
         msg: null,
@@ -135,49 +136,57 @@
       },
       async sendContent (content) {
         let result = await this.conversation.send(new TextMessage(content))
-        console.log(result)
+        // console.log(result)
         let tmpObj = {
           isSelf: true,
           content: content,
           name: this.mySelf.home_name,
           avatar: this.mySelf.avatar_url,
-          date: new Date()
+          date: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
         }
         this.msgs.push(tmpObj)
         document.body.scrollTop = document.body.scrollHeight
       },
       async init () {
-        this.userDelegate = await this.$realtime.createIMClient(this.uuid, {
-          signatureFactory: () => {
-            return new Promise((resolve, reject) => {
-              return resolve({
-                signature: getStore('signature').signature,
-                timestamp: getStore('signature').timestamp / 1,
-                nonce: getStore('signature').nonce
+        if (!this.$store.state.userDelegate) {
+          this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
+            signatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('signature').signature,
+                  timestamp: getStore('signature').timestamp / 1,
+                  nonce: getStore('signature').nonce
+                })
               })
-            })
-          },
-          conversationSignatureFactory: () => {
-            return new Promise((resolve, reject) => {
-              return resolve({
-                signature: getStore('signature').signature,
-                timestamp: getStore('signature').timestamp / 1,
-                nonce: getStore('signature').nonce
+            },
+            conversationSignatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('signature').signature,
+                  timestamp: getStore('signature').timestamp / 1,
+                  nonce: getStore('signature').nonce
+                })
               })
-            })
-          }
-        })
-        // console.log(this.userDelegate)
-        // this.conversation = await this.userDelegate.createConversation({
-        //   members: [this.uuid, this.targetUser.uuid],
-        //   name: this.title,
-        //   unique: true
-        // })
-        console.log(this.conferences.conversation_id)
-        this.conversation = await this.userDelegate.getConversation('595c8a1ea22b9d006d05b7fc')
-        console.log(this.conversation)
-        this.conversation.join()
-        this.userDelegate.on('message', message => {
+            }
+          })
+        } else {
+          this.currentUserDelegate = this.$store.state.userDelegate
+        }
+        // console.log(this.conferences.conversation_id)
+        if (this.conferences && this.conferences.conversation_id) {
+          this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
+        } else {
+          // this.conversation = await this.userDelegate.createConversation({
+          //   members: [this.uuid, this.targetUser.uuid],
+          //   name: this.title,
+          //   unique: true
+          // })
+        }
+        let msgHistory = await this.conversation.queryMessages({limit: 1000})
+        if (msgHistory) {
+          this.handleHistoryMsg(msgHistory)
+        }
+        this.currentUserDelegate.on('message', message => {
           let tmpObj = {
             isSelf: false,
             content: message.content._lctext,
@@ -188,6 +197,31 @@
           this.msgs.push(tmpObj)
           document.body.scrollTop = document.body.scrollHeight
         })
+      },
+      handleHistoryMsg (arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].from === this.uuid) {
+            let tmpObj = {
+              isSelf: true,
+              content: arr[i].content._lctext,
+              name: this.mySelf.home_name,
+              avatar: this.mySelf.avatar_url,
+              date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
+            }
+            this.msgs.push(tmpObj)
+            document.body.scrollTop = document.body.scrollHeight
+          } else {
+            let tmpObj = {
+              isSelf: false,
+              content: arr[i].content._lctext,
+              name: this.targetUser.display_name,
+              avatar: this.targetUser.avatar_url,
+              date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
+            }
+            this.msgs.push(tmpObj)
+            document.body.scrollTop = document.body.scrollHeight
+          }
+        }
       },
       goBack () {
         if (getStore('Chat_goHome')) {
@@ -230,6 +264,7 @@
     @include px2rem(top, 88px);
     @include pm2rem(padding, 20px, 30px, 20px, 30px);
     background-color: $white;
+    z-index: 1;
     .img-container {
       @include px2rem(width, 120px);
       @include px2rem(height, 120px);
