@@ -15,7 +15,7 @@
       @search="getEnterprises(searchParams)">
       <input
         slot="input"
-        type="search"
+        type="text"
         v-model="searchParams"
         :placeholder="placeholder">
     </search>
