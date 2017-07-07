@@ -112,10 +112,10 @@
           <template
             v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
             <div class="row-item">
-              <div class="title-container">
+              <!--<div class="title-container">
                 <div class="dot"></div>
                 <span class="title">{{productDetail.category_name}}</span>
-              </div>
+              </div>-->
               <div class="title-container">
                 <div class="dot"></div>
                 <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
