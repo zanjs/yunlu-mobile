@@ -86,49 +86,36 @@
         })
       },
       cardClick (item) {
-        switch (item.type) {
-          case 'email':
-            // this.linkToast('会员', '邮箱地址', item.value)
-            MessageBox({
-              title: '长按复制到剪切板',
-              message: item.value,
-              showCancelButton: true
-            })
-            break
-          case 'wechat':
-            // this.linkToast('会员', '微信号', item.value)
-            MessageBox({
-              title: '长按复制到剪切板',
-              message: item.value,
-              showCancelButton: true
-            })
-            break
-          case 'weibo':
-            this.linkToast('会员', '微博账号', item.value)
-            break
-          case 'qq':
-            MessageBox({
-              title: '长按复制到剪切板',
-              message: item.value,
-              showCancelButton: true
-            })
-            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('会员', 'QQ账号', item.value)
-            break
-          case 'address':
-            // Toast('暂未开放')
-            MessageBox({
-              title: '长按复制到剪切板',
-              message: item.value,
-              showCancelButton: true
-            })
-            break
-        }
+        this.showMessageBox(item.value)
+        // switch (item.type) {
+        //   case 'email':
+        //     this.linkToast('会员', '邮箱地址', item.value)
+        //     break
+        //   case 'wechat':
+        //     this.linkToast('会员', '微信号', item.value)
+        //     break
+        //   case 'weibo':
+        //     this.linkToast('会员', '微博账号', item.value)
+        //     break
+        //   case 'qq':
+        //     // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+        //     this.linkToast('会员', 'QQ账号', item.value)
+        //     break
+        //   case 'address':
+        //     Toast('暂未开放')
+        //     break
+        // }
       },
       linkToast (str, key, value) {
         Toast({
           message: `该${str}${key}为：${value}`,
           duration: 5000
+        })
+      },
+      showMessageBox (str) {
+        MessageBox({
+          title: '长按复制到剪切板',
+          message: str
         })
       },
       goCarte (item) {

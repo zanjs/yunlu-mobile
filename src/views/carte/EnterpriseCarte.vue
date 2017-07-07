@@ -116,7 +116,7 @@
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
@@ -389,17 +389,21 @@
       iconClick (item) {
         switch (item.type) {
           case 'email':
-            this.linkToast('企业', '邮箱地址', item.value)
+            // this.linkToast('企业', '邮箱地址', item.value)
+            this.showMessageBox(item.value)
             break
           case 'weixin':
-            this.linkToast('企业', '微信号', item.value)
+            // this.linkToast('企业', '微信号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'weibo':
-            this.linkToast('企业', '微博账号', item.value)
+            // this.linkToast('企业', '微博账号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'qq':
-            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('企业', 'QQ账号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'address':
             // Toast('暂未开放')
@@ -411,6 +415,12 @@
         Toast({
           message: `该${str}${key}为：${value}`,
           duration: 5000
+        })
+      },
+      showMessageBox (str) {
+        MessageBox({
+          title: '长按复制到剪切板',
+          message: str
         })
       },
       openInformationFolders (item) {

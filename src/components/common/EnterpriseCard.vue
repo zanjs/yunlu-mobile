@@ -65,7 +65,7 @@
       </a>
       <a
         v-if="store && store.email"
-        @click="handleClick({'type': 'email', 'value': store.email})"
+        @click="handleIconClick({type: 'email', value: store.email})"
         class="icon-box">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>

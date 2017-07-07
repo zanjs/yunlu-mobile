@@ -188,7 +188,7 @@
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
@@ -583,20 +583,24 @@
       iconClick (item) {
         switch (item.type) {
           case 'email':
-            this.linkToast('协会', '邮箱地址', item.value)
+            // this.linkToast('协会', '邮箱地址', item.value)
+            this.showMessageBox(item.value)
             break
           case 'weixin':
-            this.linkToast('协会', '微信号', item.value)
+            // this.linkToast('协会', '微信号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'weibo':
-            this.linkToast('协会', '微博账号', item.value)
+            // this.linkToast('协会', '微博账号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'qq':
-            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('协会', 'QQ账号', item.value)
+            this.showMessageBox(item.value)
             break
           case 'address':
-            Toast('暂未开放')
+            this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
             break
         }
       },
@@ -604,6 +608,12 @@
         Toast({
           message: `该${str}${key}为：${value}`,
           duration: 5000
+        })
+      },
+      showMessageBox (str) {
+        MessageBox({
+          title: '长按复制到剪切板',
+          message: str
         })
       },
       openInformationFolders (item) {

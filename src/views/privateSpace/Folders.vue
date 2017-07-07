@@ -73,7 +73,7 @@
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
   import { mapGetters } from 'vuex'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
@@ -152,29 +152,36 @@
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
       cardClick (item) {
-        switch (item.type) {
-          case 'email':
-            this.linkToast('会员', '邮箱地址', item.value)
-            break
-          case 'wechat':
-            this.linkToast('会员', '微信号', item.value)
-            break
-          case 'weibo':
-            this.linkToast('会员', '微博账号', item.value)
-            break
-          case 'qq':
-            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('会员', 'QQ账号', item.value)
-            break
-          case 'address':
-            Toast('暂未开放')
-            break
-        }
+        this.showMessageBox(item.value)
+        // switch (item.type) {
+        //   case 'email':
+        //     this.linkToast('会员', '邮箱地址', item.value)
+        //     break
+        //   case 'wechat':
+        //     this.linkToast('会员', '微信号', item.value)
+        //     break
+        //   case 'weibo':
+        //     this.linkToast('会员', '微博账号', item.value)
+        //     break
+        //   case 'qq':
+        //     window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+        //     // this.linkToast('会员', 'QQ账号', item.value)
+        //     break
+        //   case 'address':
+        //     Toast('暂未开放')
+        //     break
+        // }
       },
       linkToast (str, key, value) {
         Toast({
           message: `该${str}${key}为：${value}`,
           duration: 5000
+        })
+      },
+      showMessageBox (str) {
+        MessageBox({
+          title: '长按复制到剪切板',
+          message: str
         })
       },
       getPersonDetail () {
