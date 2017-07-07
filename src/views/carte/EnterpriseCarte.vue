@@ -408,7 +408,11 @@
             break
           case 'address':
             // Toast('暂未开放')
-            this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+            if (item.value.latitude && item.value.longitude) {
+              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+            } else {
+              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.teams.company, address: item.value.address}})
+            }
             break
         }
       },

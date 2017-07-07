@@ -70,8 +70,8 @@
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
       <a
-        v-if="store && store.longitude && store.latitude"
-        @click="handleIconClick({type:'address', value: {longitude: store.longitude, latitude: store.latitude}})"
+        v-if="store && (store.address || store.longitude && store.latitude)"
+        @click="handleIconClick({type:'address', value: {longitude: store.longitude, latitude: store.latitude, address: store.address}})"
         class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>

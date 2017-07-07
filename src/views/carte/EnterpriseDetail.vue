@@ -162,7 +162,7 @@
         }
       },
       goComity (id) {
-        this.$router.push({name: 'ComityCarte', query: {teamId: id}})
+        this.$router.push({name: 'ComityCarte', params: {id: id}})
       }
     },
     mounted () {
