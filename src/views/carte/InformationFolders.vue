@@ -46,7 +46,7 @@
   export default {
     data () {
       return {
-        teamId: this.$route.query.teamId,
+        teamId: this.$route.params.id,
         type: this.$route.query.type,
         token: getStore('user') ? getStore('user').authentication_token : '',
         pageIndex: 1,

@@ -29,8 +29,7 @@
     <div class="icons">
       <a v-if="store && store.mobiles && store.mobiles.length > 0"
          :href="'tel:' + store.mobiles[0]"
-         class="icon-box"
-         @click="handleClick({'type': 'mobile', 'value': store.mobiles})">
+         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
       <a v-if="store && store.email"

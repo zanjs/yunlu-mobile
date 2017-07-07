@@ -577,7 +577,7 @@
           // Toast('登录后才能查看协会详细信息')
           this.goLogin()
         } else {
-          this.$router.push({name: 'EnterpriseDetail', query: {teamId: id}})
+          this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
         }
       },
       iconClick (item) {
@@ -618,7 +618,7 @@
         })
       },
       openInformationFolders (item) {
-        this.$router.push({name: 'InformationFolders', query: {teamId: this.teamId, type: item.name}})
+        this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
       },
       showListChange (val) {
         this.showList = val

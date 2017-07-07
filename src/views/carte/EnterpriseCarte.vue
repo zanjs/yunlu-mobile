@@ -383,7 +383,7 @@
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         } else {
-          this.$router.push({name: 'EnterpriseDetail', query: {teamId: id}})
+          this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
         }
       },
       iconClick (item) {
@@ -425,7 +425,7 @@
         })
       },
       openInformationFolders (item) {
-        this.$router.push({name: 'InformationFolders', query: {teamId: this.teamId, type: item.name}})
+        this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
       },
       showListChange (val) {
         this.showList = val

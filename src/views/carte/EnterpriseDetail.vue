@@ -122,7 +122,7 @@
     data () {
       return {
         token: getStore('user') ? getStore('user').authentication_token : '',
-        teamId: this.$route.query.teamId,
+        teamId: this.$route.params.id,
         starLevel: []
       }
     },

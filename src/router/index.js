@@ -66,7 +66,7 @@ export default new Router({
       name: 'ComityCarte',
       component: ComityCarte
     }, {
-      path: '/enterprisedetail',
+      path: '/enterprisedetails/:id',
       name: 'EnterpriseDetail',
       component: EnterpriseDetail
     }, {
@@ -121,7 +121,7 @@ export default new Router({
       name: 'RegisterNext',
       component: RegisterNext
     }, {
-      path: '/informationfolders',
+      path: '/informationfolders/:id',
       name: 'InformationFolders',
       component: InformationFolders
     }, {
