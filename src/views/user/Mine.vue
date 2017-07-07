@@ -103,11 +103,17 @@
         this.$router.push({name: 'Download'})
       },
       helpCenter () {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
         // this.$router.push({name: 'Download', params: {backUrl: 'Mine'}})
       },
       openProtocol () {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
         // this.$router.push({name: 'Protocol', params: {backUrl: 'Mine'}})
       }
     },

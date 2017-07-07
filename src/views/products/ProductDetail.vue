@@ -307,7 +307,10 @@
   export default {
     data () {
       const noServiceYet = () => {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       }
       return {
         selected: '1',
@@ -661,8 +664,6 @@
         })
       },
       openIm () {
-        // console.log('正在打开客服会话界面')
-        // Toast('暂未开放')
         if (!this.hasLogin) {
           this.$router.push({name: 'Login'})
         } else {
@@ -670,7 +671,10 @@
         }
       },
       openShoppingCar () {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       },
       addShoppingCar () {
         if (this.hasLogin && !this.hasAddShoppingCar) {
@@ -712,17 +716,26 @@
       },
       buyNow () {
         if (this.hasLogin) {
-          Toast('暂未开放')
+          Toast({
+            message: '暂未开放',
+            duration: 500
+          })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         }
       },
       openFavorites () {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       },
       searchNearBy () {
-        Toast('暂未开放')
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       },
       goReprot () {
         this.$router.push({name: 'Report', query: {resourceId: this.currentTeamId, resourceClass: 'product'}})

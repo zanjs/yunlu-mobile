@@ -82,10 +82,10 @@
         <i class="iconfont icon-weixin weixin"></i>
       </a>
       <a
-        v-if="store && store.weibo"
-        @click="handleIconClick({type: 'weibo', value: store.weibo})"
+        v-if="store && store.website"
+        @click="handleIconClick({type: 'website', value: store.website})"
         class="icon-box">
-        <i class="iconfont icon-weibo weibo"></i>
+        <i class="iconfont icon-wangluo wangluo"></i>
       </a>
       <a
         v-if="store && store.qq"
@@ -216,7 +216,7 @@
       .weixin {
         color: #2EB6FC;
       }
-      .weibo {
+      .wangluo {
         color: #D52EFF;
       }
       .qq {

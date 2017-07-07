@@ -396,9 +396,10 @@
             // this.linkToast('企业', '微信号', item.value)
             this.showMessageBox(item.value)
             break
-          case 'weibo':
-            // this.linkToast('企业', '微博账号', item.value)
-            this.showMessageBox(item.value)
+          case 'website':
+            // this.linkToast('企业', '网址', item.value)
+            // this.showMessageBox(item.value)
+            window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
             break
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`

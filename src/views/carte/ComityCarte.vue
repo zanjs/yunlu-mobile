@@ -570,7 +570,7 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: item.organization_id}})
+        this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
@@ -590,9 +590,10 @@
             // this.linkToast('协会', '微信号', item.value)
             this.showMessageBox(item.value)
             break
-          case 'weibo':
-            // this.linkToast('协会', '微博账号', item.value)
-            this.showMessageBox(item.value)
+          case 'website':
+            // this.linkToast('协会', '网址', item.value)
+            window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
+            // this.showMessageBox(item.value)
             break
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
