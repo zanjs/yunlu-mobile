@@ -45,9 +45,9 @@ export default {
   background-color: #E2E2E2;
   .input {
     @include font-dpr(15px);
-    @include px2rem(line-height, 60px);
+    @include px2rem(line-height, 80px);
     @include px2rem(max-height, 300px);
-    @include px2rem(height, 60px);
+    @include px2rem(height, 80px);
     color: #595959;
     flex: 1;
     background-color: #fdfdfd;
@@ -60,12 +60,12 @@ export default {
     align-items: center;
     justify-content: center;
     color: #FFF;
-    @include font-dpr(14px);
+    @include font-dpr(16px);
     a {
       display: flex;
       background-color: #43CDFD;
-      @include px2rem(width, 100px);
-      @include px2rem(height, 60px);
+      @include px2rem(width, 120px);
+      @include px2rem(height, 80px);
       @include px2rem(border-radius, 20px);
       align-items: center;
       justify-content: center;

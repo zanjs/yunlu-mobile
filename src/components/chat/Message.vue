@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="msg-container">
     <div class="date">
       <span>{{date}}</span>
     </div>
@@ -49,16 +49,20 @@ export default {
 <style lang="scss" scoped>
   @import '../../styles/mixin.scss';
 
+  .msg-container {
+    @include px2rem(padding-top, 20px);
+  }
   .date {
     text-align: center;
     span {
       @include pm2rem(padding, 4px, 20px, 4px, 20px);
       @include px2rem(border-radius, 10px);
-      background-color: rgba(193, 187, 187, .5);
+      background-color: rgba(232, 220, 220, .5);
       line-height: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      color: #A6A6A6;
     }
   }
   .msg-row {
@@ -72,7 +76,7 @@ export default {
       @include px2rem(min-height, 80px);
       .bubble {
         position: relative;
-        background-color: #5ACBFD;
+        background-color: #52CAA7;
         @include pm2rem(padding, 15px, 30px, 15px, 30px);
         @include px2rem(border-radius, 20px);
         display: flex;
@@ -83,18 +87,21 @@ export default {
           @include line-height(20px);
           @include px2rem(max-width, 320px);
           word-wrap: break-word;
-          color: #F6FFF9;
+          color: #595959;
           text-align: left;
         }
       }
       .bubble-left {
         @include px2rem(right, 20px);
         @include px2rem(margin-right, 20px);
+        .content {
+          color: #FFF;
+        }
       }
       .bubble-right {
         @include px2rem(left, 20px);
         @include px2rem(margin-left, 20px);
-        background-color: #868080;
+        background-color: #D1D1D1;
       }
       .arrow {
         position: absolute;
@@ -108,13 +115,13 @@ export default {
       .arrow-left {
         @include px2rem(left, 20px);
         @include px2rem(border-right-width, 26px);
-        border-right-color: #868080;
+        border-right-color: #D1D1D1;
         border-left: none;
       }
       .arrow-right {
         @include px2rem(right, 20px);
         @include px2rem(border-left-width, 26px);
-        border-left-color: #5ACBFD;
+        border-left-color: #52CAA7;
         border-right: none;
       }
     }
