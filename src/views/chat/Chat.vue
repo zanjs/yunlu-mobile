@@ -135,8 +135,17 @@
         }
       },
       async sendContent (content) {
-        let result = await this.conversation.send(new TextMessage(content))
-        // console.log(result)
+        let msg = new TextMessage(content)
+        msg.setAttributes({
+          fromLogo: this.mySelf.avatar_url,
+          clazz: 'user',
+          conversationType: 0,
+          fromName: this.mySelf.home_name,
+          iOS_toName: this.targetUser.display_name,
+          username: this.mySelf.home_name,
+          iOS_toURL: this.targetUser.avatar_url
+        })
+        let result = await this.conversation.send(msg)
         let tmpObj = {
           isSelf: true,
           content: content,
