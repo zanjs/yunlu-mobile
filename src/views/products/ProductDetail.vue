@@ -515,8 +515,8 @@
           target: this,
           resolve: (state, res) => {
             this.tempArchivesFiles = res.data.files
-            this.showPreview = true
-            this.previewImgs = res.data.files
+            this.currentIndex = 1
+            this.viewFullScreenPic(res.data.files)
           },
           reject: () => {
           }
@@ -557,6 +557,7 @@
       },
       closePreview () {
         this.showPreview = false
+        this.currentIndex = 1
       },
       handleChange (index) {
         this.currentIndex = index + 1

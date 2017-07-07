@@ -487,7 +487,7 @@
         })
       },
       goEnterpriseCarte (id) {
-        this.$router.push({name: 'EnterpriseCarte', query: {teamId: id}})
+        this.$router.push({name: 'EnterpriseCarte', params: {id: id}})
       },
       goPersonCarte (id) {
         this.$router.push({name: 'PersonCarte', params: {user_id: id}})
