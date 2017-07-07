@@ -30,6 +30,7 @@ router.beforeEach((to, from, next) => {
     setStore(`${to.name}_goHome`, 'true')
   }
   next()
+  document.body.scrollTop = 0
 })
 
 Vue.use(realtime)

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="container">
     <mt-header
       :title="header"
       fixed
@@ -192,10 +192,10 @@
   export default {
     data () {
       return {
-        teamId: this.$route.query.teamId,
+        teamId: this.$route.params.id,
         token: getStore('user') ? getStore('user').authentication_token : '',
         header: '名片',
-        height: document.documentElement.style.fontSize.replace('px', '') * 153 / 36,
+        height: 153,
         hasLogin: !!getStore('user'),
         hasSearch: false,
         hasSearchEnterprise: false,
@@ -490,7 +490,7 @@
         this.$router.push({name: 'EnterpriseCarte', query: {teamId: id}})
       },
       goPersonCarte (id) {
-        this.$router.push({name: 'PersonCarte', query: {id: id}})
+        this.$router.push({name: 'PersonCarte', params: {id: id}})
       },
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
@@ -592,7 +592,8 @@
             this.linkToast('协会', '微博账号', item.value)
             break
           case 'qq':
-            this.linkToast('协会', 'QQ账号', item.value)
+            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // this.linkToast('协会', 'QQ账号', item.value)
             break
           case 'address':
             Toast('暂未开放')
@@ -687,6 +688,10 @@
     i {
       @include font-dpr(20px);
     }
+  }
+  .container {
+    @include px2rem(min-height, 1344px);
+    background-color: $white;
   }
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);

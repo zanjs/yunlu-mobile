@@ -313,8 +313,9 @@
         selected: '1',
         currentIndex: 1,
         token: getStore('user') ? getStore('user').authentication_token : '',
-        teamId: this.$route.query.teamId,
-        productId: this.$route.query.productId,
+        teamId: '',
+        currentTeamId: '',
+        productId: this.$route.params.id,
         hasLogin: !!getStore('user'),
         hasAddFavorites: false,
         hasAddShoppingCar: false,
@@ -387,7 +388,7 @@
       swiperSlide
     },
     methods: {
-      getProductDetail (productId = this.productId, teamId = this.teamId) {
+      getProductDetail (productId = this.productId) {
         this.$store.dispatch('commonAction', {
           url: `/products/${productId}`,
           method: 'get',
@@ -401,17 +402,19 @@
               this.hasAddFavorites = res.data.products.favorable
               this.favoratesText = res.data.products.favorable ? '已收藏' : '收藏'
               state.productDetail = res.data.products
-              this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files, productId, teamId)
+              this.currentTeamId = res.data.products.organization_id
+              this.visits(res.data.products.organization_id)
+              this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files, productId, res.data.products.organization_id)
             } else {
               this.productLink = res.data.products
-              this.getFilesPublisheds([this.handleProductFiles(res.data.products.files)[0]], res.data.products.files, productId, teamId)
+              this.getFilesPublisheds([this.handleProductFiles(res.data.products.files)[0]], res.data.products.files, productId, res.data.products.organization_id)
             }
           },
           reject: () => {
           }
         })
       },
-      getAllPriceProperties (categoryId) {
+      getAllPriceProperties (categoryId, productId, teamId) {
         this.$store.dispatch('commonAction', {
           url: '/price_properties',
           method: 'get',
@@ -423,7 +426,7 @@
             state.allPriceProperties = res.data.properties
             this.currentPrice = state.productDetail.prices[0]
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
-            this.getProductArchives()
+            this.getProductArchives(productId, teamId)
           },
           reject: () => {
           }
@@ -471,7 +474,7 @@
           resolve: (state, res) => {
             if (productId === this.productId) {
               state.productDetailFiles = res.data.files
-              this.getAllPriceProperties(state.productDetail.category_id)
+              this.getAllPriceProperties(state.productDetail.category_id, productId, teamId)
             } else {
               // 关联产品图片只需获取封面(传的ids参数也是只有一个元素的数组)
               this.productLinkFile = res.data.files[0]
@@ -482,15 +485,15 @@
           }
         })
       },
-      getProductArchives () {
+      getProductArchives (productId, teamId) {
         this.$store.dispatch('commonAction', {
-          url: `/products/${this.productId}/archives`,
+          url: `/products/${productId}/archives`,
           method: 'get',
           params: {},
           target: this,
           resolve: (state, res) => {
             state.archives = res.data.archives
-            this.getOrganization(this.productId, this.teamId)
+            this.getOrganization(productId, teamId)
           },
           reject: () => {
           }
@@ -516,7 +519,7 @@
           }
         })
       },
-      getOrganization (productId = this.productId, teamId = this.teamId) {
+      getOrganization (productId = this.productId, teamId = '') {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -572,7 +575,7 @@
       openPopDialog (item) {
         // console.log(item.origin.id, item.origin_type, item.origin.organization_id)
         if (item.origin_type === 'Product') {
-          this.getProductDetail(item.origin.id, item.origin.organization_id)
+          this.getProductDetail(item.origin.id)
           // TODO: 企业类型字段不确定
         } else if (item.origin_type === 'Enterprise') {
           // ...
@@ -663,7 +666,7 @@
         if (!this.hasLogin) {
           this.$router.push({name: 'Login'})
         } else {
-          this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.teamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
+          this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.currentTeamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
         }
       },
       openShoppingCar () {
@@ -722,7 +725,7 @@
         Toast('暂未开放')
       },
       goReprot () {
-        this.$router.push({name: 'Report', query: {resourceId: this.teamId, resourceClass: 'product'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.currentTeamId, resourceClass: 'product'}})
       },
       stopTouchMove () {
         let self = this
@@ -740,13 +743,13 @@
           }
         })
       },
-      visits () {
+      visits (teamId) {
         this.$store.dispatch('commonAction', {
           url: '/visits',
           method: 'post',
           params: {},
           data: {
-            id: this.teamId,
+            id: teamId,
             type: 'organization',
             ...(this.token ? {token: this.token} : {})
           },
@@ -760,19 +763,18 @@
       },
       goLinkEnterpriseDetail (item) {
         this.closePopup()
-        this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.id}})
+        this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
       },
       goLinkProductDetail (item) {
         this.closePopup()
-        this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: item.organization_id}})
+        this.$router.push({name: 'ProductDetail', params: {id: item.id}})
         window.location.reload()
       }
     },
     mounted () {
       removeStore('beforeLogin')
-      this.visits()
       this.stopTouchMove()
-      this.getProductDetail(this.productId, this.teamId)
+      this.getProductDetail(this.productId)
     },
     computed: {
       ...mapGetters([

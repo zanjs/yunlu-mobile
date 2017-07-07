@@ -43,6 +43,7 @@ export default {
 
   .gallery {
     @include pm2rem(padding, 16px, 2px, 0px, 30px);
+    @include px2rem(min-height, 600px);
     display: flex;
     flex-wrap: wrap;
     .img-box {

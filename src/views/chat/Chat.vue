@@ -148,54 +148,47 @@
         document.body.scrollTop = document.body.scrollHeight
       },
       async init () {
-        if (!this.$store.state.userDelegate) {
-          this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
-            signatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('signature').signature,
-                  timestamp: getStore('signature').timestamp / 1,
-                  nonce: getStore('signature').nonce
-                })
+        this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
+          signatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
               })
-            },
-            conversationSignatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('signature').signature,
-                  timestamp: getStore('signature').timestamp / 1,
-                  nonce: getStore('signature').nonce
-                })
+            })
+          },
+          conversationSignatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
               })
-            }
-          })
-        } else {
-          this.currentUserDelegate = this.$store.state.userDelegate
-        }
-        // console.log(this.conferences.conversation_id)
+            })
+          }
+        })
         if (this.conferences && this.conferences.conversation_id) {
           this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
-        } else {
-          // this.conversation = await this.userDelegate.createConversation({
-          //   members: [this.uuid, this.targetUser.uuid],
-          //   name: this.title,
-          //   unique: true
-          // })
         }
         let msgHistory = await this.conversation.queryMessages({limit: 1000})
         if (msgHistory) {
           this.handleHistoryMsg(msgHistory)
         }
         this.currentUserDelegate.on('message', message => {
-          let tmpObj = {
-            isSelf: false,
-            content: message.content._lctext,
-            name: this.targetUser.display_name,
-            avatar: this.targetUser.avatar_url,
-            date: new Date()
+          if (message.from === this.uuid) {
+            return false
+          } else {
+            let tmpObj = {
+              isSelf: false,
+              content: message.content._lctext,
+              name: this.targetUser.display_name,
+              avatar: this.targetUser.avatar_url,
+              date: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')
+            }
+            this.msgs.push(tmpObj)
+            document.body.scrollTop = document.body.scrollHeight
           }
-          this.msgs.push(tmpObj)
-          document.body.scrollTop = document.body.scrollHeight
         })
       },
       handleHistoryMsg (arr) {
@@ -209,7 +202,6 @@
               date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
             this.msgs.push(tmpObj)
-            document.body.scrollTop = document.body.scrollHeight
           } else {
             let tmpObj = {
               isSelf: false,
@@ -219,9 +211,9 @@
               date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
             this.msgs.push(tmpObj)
-            document.body.scrollTop = document.body.scrollHeight
           }
         }
+        document.body.scrollTop = document.body.scrollHeight
       },
       goBack () {
         if (getStore('Chat_goHome')) {
@@ -287,6 +279,7 @@
     }
   }
   .container {
-    @include pm2rem(padding, 248px, 0px, 100px, 0px);
+    @include pm2rem(padding, 248px, 0px, 240px, 0px);
+    background-color: #FAFAFA;
   }
 </style>

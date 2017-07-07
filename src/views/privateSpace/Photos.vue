@@ -9,24 +9,39 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-    <div class="photos-container">
-      <gallery :data-source="photos"></gallery>
-    </div>
+    <section class="container">
+      <mt-loadmore
+        :top-method="loadPhotosTop"
+        :bottom-method="loadPhotosBottom"
+        :bottom-pull-text="bottomPullText"
+        :bottom-drop-text="bottomDropText"
+        :top-distance="topDistance"
+        :auto-fill="false"
+        ref="loadMorePhotos">
+        <div class="photos-container">
+          <gallery :data-source="photos"></gallery>
+        </div>
+      </mt-loadmore>
+    </section>
   </section>
 </template>
 
 <script>
   import Gallery from '../../components/common/Gallery'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         headerName: this.$route.query.name,
-        id: this.$route.query.id,
+        id: this.$route.params.id,
         pageIndex: 1,
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : '',
-        photos: []
+        photos: [],
+        bottomPullText: '上拉加载更多',
+        bottomDropText: '释放加载',
+        topDistance: 10
       }
     },
     components: {
@@ -44,7 +59,21 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.photos = res.data.photos
+            if (this.pageIndex === 1) {
+              this.photos = res.data.photos
+              // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
+                this.$refs.loadMorePhotos.onTopLoaded()
+              }
+            } else {
+              if (res.data.photos.length === 0) {
+                Toast('没有更多数据了')
+              }
+              this.photos = [...this.photos, ...res.data.photos]
+              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
+                this.$refs.loadMorePhotos.onBottomLoaded()
+              }
+            }
           },
           reject: () => {
           }
@@ -57,6 +86,14 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      loadPhotosTop () {
+        this.pageIndex = 1
+        this.getPhotos()
+      },
+      loadPhotosBottom () {
+        this.pageIndex += 1
+        this.getPhotos()
       }
     },
     mounted () {
@@ -83,7 +120,7 @@
       @include font-dpr(20px);
     }
   }
-  .photos-container {
-    height: 100%;
+  .container {
+    @include px2rem(padding-top, 88px);
   }
 </style>

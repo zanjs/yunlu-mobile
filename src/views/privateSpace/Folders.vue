@@ -1,29 +1,31 @@
 <template>
   <section>
-    <mt-header :title="headerName"
+    <mt-header title="武当山三日游"
                fixed
                class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
+      <router-link to="/" slot="left">
+        <mt-button>
+          <i class="iconfont icon-zhuye"></i>
+        </mt-button>
+      </router-link>
+      <mt-button slot="right"
+                 @click="goReport()"
                  class="button-text">
-        <i class="iconfont icon-fanhui"></i>
+        <i class="iconfont icon-jubao"></i>
+        投诉
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <card
-        :store="userCard"
-        @click="cardClick"></card>
+      <card></card>
     </div>
-    <div v-if="Thumbnails && Thumbnails.length > 0"
-         class="rope">
+    <div class="rope">
       <img src="../../assets/shengzi@2x.png"
            class="left">
       <img src="../../assets/shengzi@2x.png"
            class="right">
     </div>
-    <div v-if="Thumbnails && Thumbnails.length > 0"
-         class="album-comtainer">
-      <album :data-source="Thumbnails"
+    <div class="album-comtainer">
+      <album :data-source="albumList"
              @click="albumClick"></album>
     </div>
   </section>
@@ -32,16 +34,50 @@
 <script>
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
-  import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
-        headerName: this.$route.query.name || '空间',
-        id: this.$route.query.id || null,
-        token: getStore('user') ? getStore('user').authentication_token : '',
-        userId: getStore('userCard') ? (getStore('userCard').user_id || getStore('userCard').id) : '',
-        userCard: getStore('userCard') || null,
-        Thumbnails: []
+        albumList: [{
+          id: 1,
+          title: '武当三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 3
+        }, {
+          id: 2,
+          title: '踏青旅游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 12
+        }, {
+          id: 3,
+          title: '巴黎三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 19
+        }, {
+          id: 4,
+          title: '瑞士三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 36
+        }, {
+          id: 5,
+          title: '武当三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 3
+        }, {
+          id: 6,
+          title: '踏青旅游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 12
+        }, {
+          id: 7,
+          title: '巴黎三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 19
+        }, {
+          id: 8,
+          title: '瑞士三日游',
+          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
+          count: 36
+        }]
       }
     },
     components: {
@@ -49,40 +85,16 @@
       Album
     },
     methods: {
-      albumClick (item) {
-        this.$router.push({name: 'Photos', query: {id: item.id, name: item.name}})
+      albumClick (id) {
+        console.log(id)
+        this.$router.push({path: '/photos'})
       },
-      getSpace () {
-        this.$store.dispatch('commonAction', {
-          url: '/galleries',
-          method: 'get',
-          params: {
-            token: this.token,
-            user_id: this.userId,
-            cluster_id: this.id
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.Thumbnails = res.data.gallery
-          },
-          reject: () => {
-          }
-        })
-      },
-      cardClick (obj) {
-        console.log(obj)
-      },
-      goBack () {
-        if (getStore('Folders_goHome')) {
-          removeStore('Folders_goHome')
-          this.$router.push({name: 'See'})
-        } else {
-          this.$router.go(-1)
-        }
+      goReport () {
+        this.$router.push({path: '/report'})
       }
     },
-    mounted () {
-      this.getSpace()
+    mountd: {
+
     }
   }
 </script>

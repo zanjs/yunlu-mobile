@@ -22,7 +22,7 @@ export default {
     return axios.request({
       url: params.url,
       method: params.method,
-      baseURL: '',
+      baseURL: `${URL_DEV}/`,
       params: params.params || {},
       paramsSerializer: function (params) {
         return Qs.stringify(params, {arrayFormat: 'brackets'})

@@ -11,14 +11,14 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-      <search
-        @search="getEnterprises(searchParams)">
-        <input
-          slot="input"
-          type="text"
-          v-model="searchParams"
-          :placeholder="placeholder">
-      </search>
+    <search
+      @search="getEnterprises(searchParams)">
+      <input
+        slot="input"
+        type="search"
+        v-model="searchParams"
+        :placeholder="placeholder">
+    </search>
     <div class="list">
       <mt-loadmore
         :top-method="loadEnterpriseTop"
@@ -92,9 +92,9 @@
         if (!item.organization) {
           this.$router.push({name: 'EmptyEnterpriseCarte', query: {name: item.name}})
         } else if (item.organization.service.aliaz === 'association') {
-          this.$router.push({name: 'ComityCarte', query: {teamId: item.organization.id}})
+          this.$router.push({name: 'ComityCarte', params: {id: item.organization.id}})
         } else {
-          this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.organization.id}})
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.organization.id}})
         }
       },
       goBack () {

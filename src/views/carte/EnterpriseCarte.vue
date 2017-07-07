@@ -120,9 +120,9 @@
   export default {
     data () {
       return {
-        teamId: this.$route.query.teamId,
+        teamId: this.$route.params.id,
         header: '名片',
-        height: document.documentElement.style.fontSize.replace('px', '') * 153 / 36,
+        height: 153,
         hasLogin: !!getStore('user'),
         hasSearch: false,
         showProduct: true,
@@ -154,12 +154,12 @@
       Order
     },
     methods: {
-      getEnterpriseDetail () {
+      getEnterpriseDetail (teamId = this.teamId) {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: this.teamId
+            ids: teamId
           },
           target: this,
           resolve: (state, res) => {
@@ -278,7 +278,7 @@
         return files
       },
       // 获取指定组织已发布的公司档分类概况(公司/企业名片资讯)
-      getEnterpriseDocument () {
+      getEnterpriseDocument (teamId) {
         this.$store.dispatch('commonAction', {
           url: '/archives/stat/types',
           method: 'get',
@@ -375,7 +375,7 @@
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
-        this.$router.push({name: 'ProductDetail', query: {productId: item.id, teamId: this.teamId}})
+        this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
@@ -398,7 +398,8 @@
             this.linkToast('企业', '微博账号', item.value)
             break
           case 'qq':
-            this.linkToast('企业', 'QQ账号', item.value)
+            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // this.linkToast('企业', 'QQ账号', item.value)
             break
           case 'address':
             // Toast('暂未开放')
@@ -434,7 +435,7 @@
       }
     },
     mounted () {
-      this.getEnterpriseDetail()
+      this.getEnterpriseDetail(this.teamId)
       this.handleSearchBar()
     },
     computed: {

@@ -53,7 +53,7 @@
   export default {
     data () {
       return {
-        user_id: this.$route.query.id,
+        user_id: this.$route.params.id,
         token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
@@ -94,8 +94,8 @@
             this.linkToast('会员', '微博账号', item.value)
             break
           case 'qq':
-            // window.location.href = 'http://wpa.qq.com/msgrd?v=3&uin=1501718947&site=qq&menu=yes'
-            this.linkToast('会员', 'QQ账号', item.value)
+            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // this.linkToast('会员', 'QQ账号', item.value)
             break
           case 'address':
             Toast('暂未开放')
@@ -110,11 +110,11 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          this.$router.push({name: 'Folders', query: {id: item.id, name: item.name}})
+          this.$router.push({name: 'Space', params: {id: item.id}, query: {name: item.name, user_id: this.user_id}})
         } else if (item.is_association) {
-          this.$router.push({name: 'ComityCarte', query: {teamId: item.team_id}})
+          this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else {
-          this.$router.push({name: 'EnterpriseCarte', query: {teamId: item.team_id}})
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
         }
       },
       goBack () {

@@ -3,13 +3,13 @@
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('Space')">
+               @click="goRoute('Folders')">
                私人空间
     </mt-button>
     <mt-button type="primary"
                size="large"
                class="btn-block"
-               @click="goRoute('Folders')">
+               @click="goRoute('Space')">
                私人空间文件夹
     </mt-button>
     <mt-button type="primary"

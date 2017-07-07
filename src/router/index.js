@@ -35,19 +35,19 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/space',
+      path: '/space/:id',
       name: 'Space',
       component: Space
     }, {
-      path: '/folders',
+      path: '/folders/:id',
       name: 'Folders',
       component: Folders
     }, {
-      path: '/photos',
+      path: '/photos/:id',
       name: 'Photos',
       component: Photos
     }, {
-      path: '/productdetail',
+      path: '/product/:id',
       name: 'ProductDetail',
       component: ProductDetail
     }, {
@@ -55,15 +55,15 @@ export default new Router({
       name: 'Report',
       component: Report
     }, {
-      path: '/personcarte',
+      path: '/user/:id',
       name: 'PersonCarte',
       component: PersonCarte
     }, {
-      path: '/enterprisecarte',
+      path: '/enterprise/:id',
       name: 'EnterpriseCarte',
       component: EnterpriseCarte
     }, {
-      path: '/comitycarte',
+      path: '/association/:id',
       name: 'ComityCarte',
       component: ComityCarte
     }, {
