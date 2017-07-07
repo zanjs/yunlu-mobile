@@ -149,7 +149,7 @@
         })
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.dataSource[this.currentIndex - 1].id, resourceClass: 'photo'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
       cardClick (item) {
         switch (item.type) {
