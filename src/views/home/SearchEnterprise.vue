@@ -111,11 +111,11 @@
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1
         this.hasPullUpEnterprise = true // 列表数量较少时，下拉刷新需要重置位置
-        this.getEnterprises()
+        this.getEnterprises(this.searchParams)
       },
       loadEnterpriseBottom () {
         this.enterprisePageIndex += 1
-        this.getEnterprises()
+        this.getEnterprises(this.searchParams)
       }
     },
     mounted () {
