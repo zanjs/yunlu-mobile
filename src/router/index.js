@@ -38,7 +38,7 @@ export default new Router({
       name: 'Photos',
       component: Photos
     }, {
-      path: '/product/:id',
+      path: '/products/:id',
       name: 'ProductDetail',
       component: ProductDetail
     }, {
@@ -46,23 +46,23 @@ export default new Router({
       name: 'Report',
       component: Report
     }, {
-      path: '/user/:user_id',
+      path: '/users/:user_id',
       name: 'PersonCarte',
       component: PersonCarte
     }, {
-      path: '/user/:user_id/spaces/:space_id',
+      path: '/users/:user_id/spaces/:space_id',
       name: 'Spaces',
       component: Spaces
     }, {
-      path: '/user/:user_id/folders/:id',
+      path: '/users/:user_id/folders/:id',
       name: 'Folders',
       component: Folders
     }, {
-      path: '/enterprise/:id',
+      path: '/enterprises/:id',
       name: 'EnterpriseCarte',
       component: EnterpriseCarte
     }, {
-      path: '/association/:id',
+      path: '/associations/:id',
       name: 'ComityCarte',
       component: ComityCarte
     }, {
@@ -105,7 +105,7 @@ export default new Router({
       name: 'ChangePassword',
       component: ChangePassword
     }, {
-      path: '/searchenterprise',
+      path: '/searchenterprises',
       name: 'SearchEnterprise',
       component: SearchEnterprise
     }, {

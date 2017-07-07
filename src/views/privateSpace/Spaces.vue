@@ -38,7 +38,7 @@
   import Card from '../../components/common/Card'
   import FoldersCover from '../../components/common/FoldersCover'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -134,11 +134,22 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      showGoHome () {
+        if (!this.token) {
+          // 需要延时跳转，否则本页面不会进入路由历史记录
+          setTimeout(() => {
+            setStore('beforeLogin', 'true')
+            this.$router.push({name: 'Login'})
+          }, 300)
+        } else {
+          this.getPersonDetail()
+          this.getSpace()
+        }
       }
     },
     mounted () {
-      this.getPersonDetail()
-      this.getSpace()
+      this.showGoHome()
     },
     computed: {
       ...mapGetters([

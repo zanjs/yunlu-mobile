@@ -52,7 +52,7 @@
   import Card from '../../components/common/Card'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
@@ -88,20 +88,40 @@
       cardClick (item) {
         switch (item.type) {
           case 'email':
-            this.linkToast('会员', '邮箱地址', item.value)
+            // this.linkToast('会员', '邮箱地址', item.value)
+            MessageBox({
+              title: '长按复制到剪切板',
+              message: item.value,
+              showCancelButton: true
+            })
             break
           case 'wechat':
-            this.linkToast('会员', '微信号', item.value)
+            // this.linkToast('会员', '微信号', item.value)
+            MessageBox({
+              title: '长按复制到剪切板',
+              message: item.value,
+              showCancelButton: true
+            })
             break
           case 'weibo':
             this.linkToast('会员', '微博账号', item.value)
             break
           case 'qq':
-            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            MessageBox({
+              title: '长按复制到剪切板',
+              message: item.value,
+              showCancelButton: true
+            })
+            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('会员', 'QQ账号', item.value)
             break
           case 'address':
-            Toast('暂未开放')
+            // Toast('暂未开放')
+            MessageBox({
+              title: '长按复制到剪切板',
+              message: item.value,
+              showCancelButton: true
+            })
             break
         }
       },
@@ -127,10 +147,21 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      showGoHome () {
+        if (!this.token) {
+          // 需要延时跳转，否则本页面不会进入路由历史记录
+          setTimeout(() => {
+            setStore('beforeLogin', 'true')
+            this.$router.push({name: 'Login'})
+          }, 300)
+        } else {
+          this.getPersonDetail()
+        }
       }
     },
     mounted () {
-      this.getPersonDetail()
+      this.showGoHome()
     },
     computed: {
       ...mapGetters([

@@ -74,7 +74,7 @@
   import Album from '../../components/common/Album'
   import { mapGetters } from 'vuex'
   import { Toast } from 'mint-ui'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     data () {
@@ -242,11 +242,22 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      showGoHome () {
+        if (!this.token) {
+          // 需要延时跳转，否则本页面不会进入路由历史记录
+          setTimeout(() => {
+            setStore('beforeLogin', 'true')
+            this.$router.push({name: 'Login'})
+          }, 300)
+        } else {
+          this.getPersonDetail()
+          this.getPhotos()
+        }
       }
     },
     mounted () {
-      this.getPersonDetail()
-      this.getPhotos()
+      this.showGoHome()
     },
     computed: {
       ...mapGetters([

@@ -35,7 +35,7 @@
       </a>
       <a v-if="store && store.email"
          class="icon-box"
-         :href="'mailto:' + store.email">
+         @click="handleClick({'type': 'email', 'value': store.email})">
         <i class="iconfont icon-youxiang youxiang"></i>
       </a>
       <a v-if="store && store.address"
