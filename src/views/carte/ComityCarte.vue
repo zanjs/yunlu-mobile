@@ -490,7 +490,7 @@
         this.$router.push({name: 'EnterpriseCarte', query: {teamId: id}})
       },
       goPersonCarte (id) {
-        this.$router.push({name: 'PersonCarte', params: {id: id}})
+        this.$router.push({name: 'PersonCarte', params: {user_id: id}})
       },
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {

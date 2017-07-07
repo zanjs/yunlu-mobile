@@ -1,18 +1,21 @@
 <template>
   <section>
-    <mt-header :title="headerName"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      :title="headerName"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
     <div class="card-container">
       <card
         :store="userCard"
-        @click="cardClick"></card>
+        @click="cardClick">
+      </card>
     </div>
     <div v-if="Thumbnails && Thumbnails.length > 0"
          class="rope">
@@ -23,34 +26,55 @@
     </div>
     <div v-if="Thumbnails && Thumbnails.length > 0"
          class="album-comtainer">
-      <album :data-source="Thumbnails"
-             @click="albumClick"></album>
+      <folders-cover
+        :data-source="Thumbnails"
+        @click="albumClick">
+      </folders-cover>
     </div>
   </section>
 </template>
 
 <script>
   import Card from '../../components/common/Card'
-  import Album from '../../components/common/Album'
+  import FoldersCover from '../../components/common/FoldersCover'
+  import { mapGetters } from 'vuex'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
-        headerName: this.$route.query.name || '空间',
-        id: this.$route.params.id,
+        headerName: '私人空间',
+        space_id: this.$route.params.space_id,
+        user_id: this.$route.params.user_id,
         token: getStore('user') ? getStore('user').authentication_token : '',
-        userId: getStore('userCard') ? (getStore('userCard').user_id || getStore('userCard').id) : '',
-        userCard: getStore('userCard') || null,
         Thumbnails: []
       }
     },
     components: {
       Card,
-      Album
+      FoldersCover
     },
     methods: {
       albumClick (item) {
         this.$router.push({name: 'Photos', params: {id: item.id}, query: {name: item.name}})
+      },
+      getPersonDetail () {
+        this.$store.dispatch('commonAction', {
+          url: '/business_cards',
+          method: 'get',
+          params: {
+            token: this.token,
+            user_id: this.user_id
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.userCard = res.data.cards
+            state.clusters = res.data.clusters
+            this.handleName(this.space_id, res.data.clusters)
+          },
+          reject: () => {
+          }
+        })
       },
       getSpace () {
         this.$store.dispatch('commonAction', {
@@ -58,8 +82,8 @@
           method: 'get',
           params: {
             token: this.token,
-            user_id: this.userId,
-            cluster_id: this.id
+            user_id: this.user_id,
+            cluster_id: this.space_id
           },
           target: this,
           resolve: (state, res) => {
@@ -69,12 +93,43 @@
           }
         })
       },
-      cardClick (obj) {
-        console.log(obj)
+      handleName (id, arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (id === arr[i].id) {
+            this.headerName = arr[i].name
+            return true
+          }
+        }
+      },
+      cardClick (item) {
+        switch (item.type) {
+          case 'email':
+            this.linkToast('会员', '邮箱地址', item.value)
+            break
+          case 'wechat':
+            this.linkToast('会员', '微信号', item.value)
+            break
+          case 'weibo':
+            this.linkToast('会员', '微博账号', item.value)
+            break
+          case 'qq':
+            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // this.linkToast('会员', 'QQ账号', item.value)
+            break
+          case 'address':
+            Toast('暂未开放')
+            break
+        }
+      },
+      linkToast (str, key, value) {
+        Toast({
+          message: `该${str}${key}为：${value}`,
+          duration: 5000
+        })
       },
       goBack () {
-        if (getStore('Folders_goHome')) {
-          removeStore('Folders_goHome')
+        if (getStore('Spaces_goHome')) {
+          removeStore('Spaces_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -82,7 +137,14 @@
       }
     },
     mounted () {
+      this.getPersonDetail()
       this.getSpace()
+    },
+    computed: {
+      ...mapGetters([
+        'userCard',
+        'clusters'
+      ])
     }
   }
 </script>

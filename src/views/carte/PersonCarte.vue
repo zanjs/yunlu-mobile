@@ -1,16 +1,19 @@
 <template>
   <section>
-    <mt-header title="名片"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="名片"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
-      <mt-button slot="right"
-                 @click="goReport()"
-                 class="button-text">
+      <mt-button
+        slot="right"
+        @click="goReport()"
+        class="button-text">
         <i class="iconfont icon-jubao"></i>
         投诉
       </mt-button>
@@ -53,7 +56,7 @@
   export default {
     data () {
       return {
-        user_id: this.$route.params.id,
+        user_id: this.$route.params.user_id,
         token: getStore('user') ? getStore('user').authentication_token : null
       }
     },
@@ -110,7 +113,7 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          this.$router.push({name: 'Space', params: {id: item.id}, query: {name: item.name, user_id: this.user_id}})
+          this.$router.push({name: 'Spaces', params: {user_id: this.user_id, space_id: item.id}})
         } else if (item.is_association) {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else {

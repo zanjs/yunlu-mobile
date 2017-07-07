@@ -1,22 +1,21 @@
 <template>
   <section>
-    <mt-header title="武当山三日游"
-               fixed
-               class="header">
-      <router-link to="/" slot="left">
-        <mt-button>
-          <i class="iconfont icon-zhuye"></i>
-        </mt-button>
-      </router-link>
-      <mt-button slot="right"
-                 @click="goReport()"
-                 class="button-text">
-        <i class="iconfont icon-jubao"></i>
-        投诉
+    <mt-header
+      :title="headerName"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
+        <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
     <div class="card-container">
-      <card></card>
+      <card
+        :store="userCard"
+        @click="cardClick">
+      </card>
     </div>
     <div class="rope">
       <img src="../../assets/shengzi@2x.png"
@@ -25,76 +24,235 @@
            class="right">
     </div>
     <div class="album-comtainer">
-      <album :data-source="albumList"
-             @click="albumClick"></album>
+      <mt-loadmore
+        :top-method="loadPhotosTop"
+        :bottom-method="loadPhotosBottom"
+        :bottom-pull-text="bottomPullText"
+        :bottom-drop-text="bottomDropText"
+        :auto-fill="false"
+        ref="loadMorePhotos">
+        <div class="photos-container">
+          <album
+            :data-source="photos"
+            @click="showFullScreenPreview">
+          </album>
+        </div>
+      </mt-loadmore>
     </div>
+    <template v-if="showPreview">
+      <div class="option-bar">
+        <div class="left">
+          <div class="close"
+               @click="closePreview()">
+            <i class="iconfont icon-fanhui"></i>
+          </div>
+          <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
+        </div>
+        <div class="report"
+             @click="goReport">
+          <i class="iconfont icon-jubao"></i>
+        </div>
+      </div>
+      <swiper
+        :options="swiperOption"
+        class="full-screen-swiper">
+        <!-- slides -->
+        <swiper-slide
+          class="swiper-zoom-container full-screen-bg"
+          v-for="(item, index) in photos"
+          :key="item.url">
+          <img :src="item.url"
+               alt="">
+        </swiper-slide>
+      </swiper>
+    </template>
   </section>
 </template>
 
 <script>
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
+  import { mapGetters } from 'vuex'
+  import { Toast } from 'mint-ui'
+  import { getStore, removeStore } from '../../config/mUtils'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     data () {
       return {
-        albumList: [{
-          id: 1,
-          title: '武当三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 3
-        }, {
-          id: 2,
-          title: '踏青旅游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 12
-        }, {
-          id: 3,
-          title: '巴黎三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 19
-        }, {
-          id: 4,
-          title: '瑞士三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 36
-        }, {
-          id: 5,
-          title: '武当三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 3
-        }, {
-          id: 6,
-          title: '踏青旅游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 12
-        }, {
-          id: 7,
-          title: '巴黎三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 19
-        }, {
-          id: 8,
-          title: '瑞士三日游',
-          cover: 'http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg',
-          count: 36
-        }]
+        user_id: this.$route.params.user_id,
+        id: this.$route.params.id,
+        pageIndex: 1,
+        pageSize: 24,
+        headerName: '私人空间文件夹',
+        bottomPullText: '上拉加载更多',
+        bottomDropText: '释放加载',
+        photos: [],
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        showPreview: false,
+        currentIndex: 1,
+        swiperOption: {
+          notNextTick: false,
+          autoplay: 0,
+          direction: 'horizontal',
+          grabCursor: true,
+          setWrapperSize: true,
+          autoHeight: false,
+          paginationClickable: false,
+          prevButton: null,
+          nextButton: null,
+          mousewheelControl: true,
+          observeParents: true,
+          // 如果自行设计了插件，那么插件的一些配置相关参数，也应该出现在这个对象中，如下debugger
+          debugger: true,
+          preventClicks: false,
+          passiveListeners: false,
+          zoom: true,
+          height: window.innerHeight,
+          width: window.innerWidth,
+          touchAngle: 45,
+          initialSlide: 0,
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
+          }
+        }
       }
     },
     components: {
       Card,
-      Album
+      Album,
+      swiper,
+      swiperSlide
     },
     methods: {
-      albumClick (id) {
-        console.log(id)
-        this.$router.push({path: '/photos'})
+      showFullScreenPreview (index) {
+        this.currentIndex = index + 1
+        this.swiperOption.initialSlide = index
+        this.showPreview = true
+      },
+      closePreview () {
+        this.showPreview = false
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault()
+          }
+        })
       },
       goReport () {
-        this.$router.push({path: '/report'})
+        this.$router.push({name: 'Report', query: {resourceId: this.dataSource[this.currentIndex - 1].id, resourceClass: 'photo'}})
+      },
+      cardClick (item) {
+        switch (item.type) {
+          case 'email':
+            this.linkToast('会员', '邮箱地址', item.value)
+            break
+          case 'wechat':
+            this.linkToast('会员', '微信号', item.value)
+            break
+          case 'weibo':
+            this.linkToast('会员', '微博账号', item.value)
+            break
+          case 'qq':
+            window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
+            // this.linkToast('会员', 'QQ账号', item.value)
+            break
+          case 'address':
+            Toast('暂未开放')
+            break
+        }
+      },
+      linkToast (str, key, value) {
+        Toast({
+          message: `该${str}${key}为：${value}`,
+          duration: 5000
+        })
+      },
+      getPersonDetail () {
+        this.$store.dispatch('commonAction', {
+          url: '/business_cards',
+          method: 'get',
+          params: {
+            token: this.token,
+            user_id: this.user_id
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.userCard = res.data.cards
+            state.clusters = res.data.clusters
+            this.handleName(this.space_id, res.data.clusters)
+          },
+          reject: () => {
+          }
+        })
+      },
+      getPhotos () {
+        this.$store.dispatch('commonAction', {
+          url: `/galleries/${this.id}/photos`,
+          method: 'get',
+          params: {
+            token: this.token,
+            page: this.pageIndex,
+            per_page: this.pageSize
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.headerName = res.data.gallery_name
+            if (this.pageIndex === 1) {
+              this.photos = res.data.photos
+              // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
+                this.$refs.loadMorePhotos.onTopLoaded()
+              }
+            } else {
+              if (res.data.photos.length === 0) {
+                Toast('没有更多数据了')
+              }
+              this.photos = [...this.photos, ...res.data.photos]
+              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
+                this.$refs.loadMorePhotos.onBottomLoaded()
+              }
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      loadPhotosTop () {
+        this.pageIndex = 1
+        this.getPhotos()
+      },
+      loadPhotosBottom () {
+        this.pageIndex += 1
+        this.getPhotos()
+      },
+      goBack () {
+        if (getStore('Folders_goHome')) {
+          removeStore('Folders_goHome')
+          this.$router.push({name: 'See'})
+        } else {
+          this.$router.go(-1)
+        }
       }
     },
-    mountd: {
-
+    mounted () {
+      this.getPersonDetail()
+      this.getPhotos()
+    },
+    computed: {
+      ...mapGetters([
+        'userCard',
+        'clusters'
+      ])
     }
   }
 </script>
@@ -137,5 +295,67 @@
   }
   .album-comtainer {
     @include pm2rem(padding, 24px, 22px, 0px, 22px);
+  }
+  .option-bar {
+    position: fixed;
+    @include px2rem(top, 38px);
+    width: 100%;
+    z-index: 1004;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      display: flex;
+      align-items: center;
+      .page-nav {
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        @include font-dpr(20px);
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .close {
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        @include pm2rem(margin, 0px, 30px, 0px, 30px);
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        display: flex;
+        align-items: center;
+        i {
+          @include font-dpr(20px);
+        }
+      }
+    }
+    .report {
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(border-radius, 10px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      background-color: rgba(0, 0, 0, .5);
+      color: white;
+      z-index: 1003;
+      display: flex;
+      align-items: center;
+      i {
+        @include font-dpr(20px);
+      }
+    }
+  }
+  .full-screen-swiper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1002;
+    background-color: #000;
+  }
+  .full-screen-bg {
+    background-color: #000;
   }
 </style>

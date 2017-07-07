@@ -3,13 +3,9 @@
     <div v-for="(item, index) in dataSource"
          :key="index"
          class="album"
-         @click="handleClick(item)">
-      <img :src="item.last_photo"
+         @click="handleClick(index)">
+      <img :src="item.thumb_url"
            class="cover">
-      <div class="label">
-        <span class="text">{{item.name}}</span>
-        <span class="count">{{item.count}}</span>
-      </div>
     </div>
   </section>
 </template>
@@ -18,7 +14,6 @@
   export default {
     data () {
       return {
-
       }
     },
     name: 'Album',
@@ -27,9 +22,6 @@
       handleClick (value) {
         this.$emit('click', value)
       }
-    },
-    mountd: {
-
     }
   }
 </script>
@@ -48,31 +40,6 @@
       .cover {
         @include px2rem(width, 312px);
         @include px2rem(height, 360px);
-      }
-      .label {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        background-color: rgba(0,0,0,.5);
-        @include px2rem(height, 57px);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: $white;
-        .text {
-          @include px2rem(padding-left, 26px);
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        .count {
-          @include px2rem(width, 70px);
-          background-color: $green;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
       }
     }
   }

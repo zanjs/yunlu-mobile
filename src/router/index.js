@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
-import Space from '../views/privateSpace/Space'
+import Spaces from '../views/privateSpace/Spaces'
 import Folders from '../views/privateSpace/Folders'
 import Photos from '../views/privateSpace/Photos'
 import ProductDetail from '../views/products/ProductDetail'
@@ -35,14 +34,6 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/space/:id',
-      name: 'Space',
-      component: Space
-    }, {
-      path: '/folders/:id',
-      name: 'Folders',
-      component: Folders
-    }, {
       path: '/photos/:id',
       name: 'Photos',
       component: Photos
@@ -55,9 +46,17 @@ export default new Router({
       name: 'Report',
       component: Report
     }, {
-      path: '/user/:id',
+      path: '/user/:user_id',
       name: 'PersonCarte',
       component: PersonCarte
+    }, {
+      path: '/user/:user_id/spaces/:space_id',
+      name: 'Spaces',
+      component: Spaces
+    }, {
+      path: '/user/:user_id/folders/:id',
+      name: 'Folders',
+      component: Folders
     }, {
       path: '/enterprise/:id',
       name: 'EnterpriseCarte',
@@ -101,10 +100,6 @@ export default new Router({
       path: '/mine',
       name: 'Mine',
       component: Mine
-    }, {
-      path: '/hello',
-      name: 'Hello',
-      component: Hello
     }, {
       path: '/changepassword',
       name: 'ChangePassword',

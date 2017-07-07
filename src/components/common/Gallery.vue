@@ -40,7 +40,6 @@
     data () {
       return {
         showPreview: false,
-        cssAnimation: false,
         currentIndex: 1,
         swiperOption: {
           notNextTick: false,
