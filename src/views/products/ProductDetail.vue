@@ -177,7 +177,9 @@
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
-    <section class="company-info">
+    <section
+      class="company-info"
+      @click="goEnterprise()">
       <div class="company-img">
         <img v-if="productDetailTeam && productDetailTeam.logo"
              :src="productDetailTeam.logo">
@@ -324,7 +326,6 @@
         selected: '1',
         currentIndex: 1,
         token: getStore('user') ? getStore('user').authentication_token : '',
-        teamId: '',
         currentTeamId: '',
         productId: this.$route.params.id,
         hasLogin: !!getStore('user'),
@@ -516,7 +517,7 @@
           method: 'get',
           params: {
             type: 'document',
-            team_id: this.teamId,
+            team_id: this.currentTeamId,
             thumbs: ['general'],
             ids: ids
           },
@@ -791,6 +792,9 @@
         this.closePopup()
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
         window.location.reload()
+      },
+      goEnterprise () {
+        this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
       }
     },
     mounted () {
