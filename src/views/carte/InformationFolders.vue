@@ -131,6 +131,7 @@
             for (let m = 0; m < arr[i].files.length; m++) {
               if (arr[i].files[m].file_id === arr2[j].id) {
                 tmpArr[i].files[m].url = arr2[j].url
+                tmpArr[i].files[m].thumb_url = arr2[j].thumb_urls[0]
               }
             }
           }

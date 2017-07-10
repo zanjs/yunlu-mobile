@@ -5,7 +5,7 @@
       :key="index"
       @click.stop="handleClick(item)"
       class="img-container">
-      <img :src="item.files[0].url">
+      <img :src="item.files[0].thumb_url">
       <div class="cover">
         {{item.name}}（{{item.files.length}})
       </div>

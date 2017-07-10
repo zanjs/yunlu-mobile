@@ -5,7 +5,7 @@
            :key="index"
            @click.stop="handleClick(item)"
            class="img-box">
-        <img :src="item.url">
+        <img :src="item.thumb_urls[0]">
         <div class="cover">
           {{item.cnname}}（{{item.count}}）
         </div>

@@ -6,8 +6,8 @@
            @click.stop="handleClick(item)"
            class="img-box">
         <img
-          v-if="item.file_url"
-          :src="item.file_url"
+          v-if="item.file_thumb_urls"
+          :src="item.file_thumb_urls"
           class="normal">
         <img
           v-else
@@ -23,19 +23,19 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-    }
-  },
-  name: 'ProductThumbnailMode',
-  props: ['store'],
-  methods: {
-    handleClick (item) {
-      this.$emit('click', item)
+  export default {
+    data () {
+      return {
+      }
+    },
+    name: 'ProductThumbnailMode',
+    props: ['store'],
+    methods: {
+      handleClick (item) {
+        this.$emit('click', item)
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

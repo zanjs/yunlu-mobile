@@ -14,7 +14,7 @@
             v-for="(item, index) in productDetailFiles"
             :key="index">
             <img
-              :src="item.url"
+              :src="item.thumb_urls[0]"
               @click="viewFullScreenPic(productDetailFiles)">
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
