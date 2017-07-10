@@ -91,6 +91,14 @@
           id="2"
           class="productdetail-product-item">
           <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
+            <template v-if="productDetail && productDetail.goods_type === 'Medicament'">
+              <div class="row-item">
+                <div class="title-container">
+                  <i class="iconfont icon-circle dot"></i>
+                  <span class="title">功能主治 : {{productDetail.indication}}</span>
+                </div>
+              </div>
+            </template>
             <template v-if="productDetail.properties && productDetail.properties.length > 0 &&  productDetail.properties[0].children.length > 0">
               <div v-for="(item, index) in productDetail.properties"
                    :key="index"
@@ -98,7 +106,7 @@
                 <div v-for="(i, indexI) in item.children"
                      :key="indexI"
                      class="title-container">
-                  <div class="dot"></div>
+                  <i class="iconfont icon-circle dot"></i>
                   <span class="title">{{i.name}} : {{i.value}}</span>
                 </div>
               </div>
@@ -113,17 +121,17 @@
             v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
             <div class="row-item">
               <!--<div class="title-container">
-                <div class="dot"></div>
+                <i class="iconfont icon-circle dot"></i>
                 <span class="title">{{productDetail.category_name}}</span>
               </div>-->
               <div class="title-container">
-                <div class="dot"></div>
+                <i class="iconfont icon-circle dot"></i>
                 <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
               </div>
               <div
                 v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
                 class="title-container">
-                <div class="dot"></div>
+                <i class="iconfont icon-circle dot"></i>
                 <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
               </div>
             </div>
@@ -135,7 +143,7 @@
                 <div v-for="(i, indexI) in item.children"
                      :key="indexI"
                      class="title-container">
-                  <div class="dot"></div>
+                  <i class="iconfont icon-circle dot"></i>
                   <span class="title">{{i.name}} : {{i.value}}</span>
                   <template
                     v-if="i.quotes && i.quotes.length > 0">
@@ -1360,14 +1368,12 @@
     .title-container {
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       .dot {
-        @include px2rem(width, 16px);
-        @include px2rem(height, 16px);
-        @include px2rem(border-radius, 8px);
-        @include px2rem(margin-right, 6px);
-        background-color: #ACACAC;
-        display: inline-block;
+        @include pm2rem(margin, 0px, -9px, 0px, -20px);
+        @include font-dpr(30px);
+        @include line-height(30px);
+        color: #ACACAC;
       }
       .title {
         @include font-dpr(15px);
