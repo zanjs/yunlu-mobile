@@ -28,6 +28,10 @@ import BeforeRegister from '../views/user/BeforeRegister'
 import SetPassword from '../views/user/SetPassword'
 import Chat from '../views/chat/Chat'
 import Maps from '../views/map/Maps'
+import Favorites from '../views/home/Favorites'
+import ShoppingCart from '../views/home/ShoppingCart'
+import Conversation from '../views/home/Conversation'
+import SearchProducts from '../views/home/SearchProducts'
 
 Vue.use(Router)
 
@@ -87,7 +91,7 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '/see',
+          path: 'see',
           component: See,
           name: 'See'
         }
@@ -148,6 +152,22 @@ export default new Router({
       path: '/maps',
       name: 'Maps',
       component: Maps
+    }, {
+      path: '/favorites',
+      name: 'Favorites',
+      component: Favorites
+    }, {
+      path: '/shoppingcart',
+      name: 'ShoppingCart',
+      component: ShoppingCart
+    }, {
+      path: '/conversation',
+      name: 'Conversation',
+      component: Conversation
+    }, {
+      path: '/searchproducts',
+      name: 'SearchProducts',
+      component: SearchProducts
     }
   ]
 })

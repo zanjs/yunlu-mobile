@@ -117,11 +117,6 @@
                 <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
               </div>
             </div>
-            <!--<div
-              v-else
-              class="no-product-args">
-                该产品暂无产品参数
-            </div>-->
           </template>
           <template
             v-if="productDetail.properties && productDetail.properties.length > 0">
