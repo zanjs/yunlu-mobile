@@ -74,8 +74,9 @@
         <mt-tab-item id="2">产品参数</mt-tab-item>
         <mt-tab-item id="3">关联信息</mt-tab-item>
       </mt-navbar>
-      <mt-tab-container v-model="selected"
-                        class="nav-bar-container">
+      <mt-tab-container
+        v-model="selected"
+        class="nav-bar-container">
         <mt-tab-container-item
           id="1"
           class="prodcutdetail-price-item">
@@ -90,32 +91,13 @@
         <mt-tab-container-item
           id="2"
           class="productdetail-product-item">
-          <template v-if="productDetail && productDetail.goods_type !== 'StoneMaterial'">
-            <template v-if="productDetail && productDetail.goods_type === 'Medicament'">
-              <div class="row-item">
-                <div class="title-container">
-                  <i class="iconfont icon-circle dot"></i>
-                  <span class="title">功能主治 : {{productDetail.indication}}</span>
-                </div>
+          <template v-if="productDetail && productDetail.goods_type === 'Medicament'">
+            <div class="row-item">
+              <div class="title-container">
+                <i class="iconfont icon-circle dot"></i>
+                <span class="title">功能主治 : {{productDetail.indication}}</span>
               </div>
-            </template>
-            <template v-if="productDetail.properties && productDetail.properties.length > 0 &&  productDetail.properties[0].children.length > 0">
-              <div v-for="(item, index) in productDetail.properties"
-                   :key="index"
-                   class="row-item">
-                <div v-for="(i, indexI) in item.children"
-                     :key="indexI"
-                     class="title-container">
-                  <i class="iconfont icon-circle dot"></i>
-                  <span class="title">{{i.name}} : {{i.value}}</span>
-                </div>
-              </div>
-            </template>
-            <template v-else>
-              <div class="no-product-args">
-                该产品暂无产品参数
-              </div>
-            </template>
+            </div>
           </template>
           <template
             v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
@@ -135,32 +117,36 @@
                 <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
               </div>
             </div>
-            <template
-              v-if="productDetail.properties && productDetail.properties.length > 0 &&  productDetail.properties[0].children.length > 0">
-              <div v-for="(item, index) in productDetail.properties"
-                   :key="index"
-                   class="row-item">
-                <div v-for="(i, indexI) in item.children"
-                     :key="indexI"
-                     class="title-container">
-                  <i class="iconfont icon-circle dot"></i>
-                  <span class="title">{{i.name}} : {{i.value}}</span>
-                  <template
-                    v-if="i.quotes && i.quotes.length > 0">
-                    <i
-                      v-for="(j, indexJ) in i.quotes"
-                      :key="indexJ"
-                      class="iconfont icon-guanlian"
-                      @click="openPopDialog(j)"></i>
-                  </template>
-                </div>
-              </div>
-            </template>
             <!--<div
               v-else
               class="no-product-args">
                 该产品暂无产品参数
             </div>-->
+          </template>
+          <template
+            v-if="productDetail.properties && productDetail.properties.length > 0">
+            <div
+              v-for="(item, index) in productDetail.properties"
+              :key="index"
+              class="row-item">
+              <div
+                v-for="(i, indexI) in item.children"
+                :key="indexI"
+                class="title-container">
+                <i class="iconfont icon-circle dot"></i>
+                <span class="title">{{i.name}} : {{i.value}}</span>
+                <i
+                  v-for="(j, indexJ) in i.quotes"
+                  :key="indexJ"
+                  class="iconfont icon-guanlian"
+                  @click="openPopDialog(j)"></i>
+              </div>
+            </div>
+          </template>
+          <template v-if="!hasProperties">
+            <div class="no-product-args">
+              该产品暂无产品参数
+            </div>
           </template>
         </mt-tab-container-item>
         <mt-tab-container-item
@@ -329,6 +315,7 @@
         currentTeamId: '',
         productId: this.$route.params.id,
         hasLogin: !!getStore('user'),
+        hasProperties: true,
         hasAddFavorites: false,
         hasAddShoppingCar: false,
         shoppingCarText: '加入购物车',
@@ -415,6 +402,7 @@
               this.favoratesText = res.data.products.favorable ? '已收藏' : '收藏'
               state.productDetail = res.data.products
               this.currentTeamId = res.data.products.organization_id
+              this.hasProperties = this.handleProperties(res.data.products)
               this.visits(res.data.products.organization_id)
               this.getFilesPublisheds(this.handleProductFiles(res.data.products.files), res.data.products.files, productId, res.data.products.organization_id)
             } else {
@@ -425,6 +413,21 @@
           reject: () => {
           }
         })
+      },
+      handleProperties (productDetail) {
+        if (!productDetail.goods_type) {
+          let index = 0
+          for (let i = 0; i < productDetail.properties.length; i++) {
+            if (productDetail.properties[i].children.length === 0) {
+              index += 1
+            }
+          }
+          if (index === 4) {
+            return index !== 4
+          }
+        } else {
+          return true
+        }
       },
       getAllPriceProperties (categoryId, productId, teamId) {
         this.$store.dispatch('commonAction', {
@@ -1389,6 +1392,7 @@
         color: #F4B223;
         @include px2rem(margin-right, 10px);
         @include font-dpr(21px);
+        @include line-height(30px);
       }
     }
     .no-product-args {
