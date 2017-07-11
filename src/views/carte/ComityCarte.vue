@@ -322,7 +322,10 @@
               }
             } else {
               if (res.data.files.length === 0) {
-                Toast('没有更多数据了')
+                Toast({
+                  message: '没有跟多数据了',
+                  duration: 1000
+                })
               }
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
@@ -435,7 +438,10 @@
               state.enterpriseMembers = res.data.members
             } else {
               if (res.data.members.length === 0) {
-                Toast('没有更多数据了')
+                Toast({
+                  message: '没有跟多数据了',
+                  duration: 1000
+                })
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
               this.$refs.loadMoreEnterprises.onBottomLoaded()
@@ -473,7 +479,10 @@
               state.personMembers = res.data.preps
             } else {
               if (res.data.preps.length === 0) {
-                Toast('没有更多数据了')
+                Toast({
+                  message: '没有跟多数据了',
+                  duration: 1000
+                })
               }
               state.personMembers = [...state.personMembers, ...res.data.preps]
               this.$refs.loadMorePeople.onBottomLoaded()

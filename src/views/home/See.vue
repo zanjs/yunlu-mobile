@@ -3,44 +3,44 @@
     <div class="search-bar">
       <img src="../../assets/homePageTopBg.png">
       <div class="search-input"
-           @click="goRoute('SearchProducts')">
+           @click="searchEnterprise()">
         <input type="text"
                placeholder="任你搜 任意搜">
         <i class="iconfont icon-sousuo"></i>
       </div>
       <i v-if="hasLogin"
          class="iconfont icon-geren icon-btn"
-         @click="goRoute('Mine')"></i>
+         @click="goRoute('Mine', true)"></i>
       <p v-else
-         @click="goRoute('Login')"
+         @click="goRoute('Login', false)"
          class="icon-btn login-btn">登录|注册</p>
     </div>
     <div class="option-bars">
       <img src="../../assets/seeBg.png">
       <div class="row">
         <div class="row-item"
-             @click="goRoute('Download')">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-1">
             <i class="iconfont icon-liucheng"></i>
           </div>
           <span>流程</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download')">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
           <span>会话</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download')">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-3">
             <i class="iconfont icon-gouwuche1"></i>
           </div>
           <span>购物车</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download')">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-4">
             <i class="iconfont icon-shoucang1"></i>
           </div>
@@ -127,8 +127,8 @@
       }
     },
     methods: {
-      goRoute (route) {
-        this.$router.push({name: route})
+      goRoute (route, bool) {
+        this.$router.push({name: bool ? route : 'Login'})
       },
       send () {
         if (this.hasLogin) {
