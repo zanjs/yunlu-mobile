@@ -313,7 +313,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (this.productPageIndex === 1 || q !== '') {
+            if (this.productPageIndex === 1) {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
               // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法

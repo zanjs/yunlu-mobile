@@ -72,7 +72,7 @@
           resolve: (state, res) => {
             this.hasSearch = q !== ''
             // this.searchParams = ''
-            if (this.enterprisePageIndex === 1 || q !== '') {
+            if (this.enterprisePageIndex === 1) {
               document.body.scrollTop = 0
               state.allEnterprises = res.data.enterprises
             } else {

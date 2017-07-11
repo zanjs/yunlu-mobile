@@ -313,7 +313,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (this.productPageIndex === 1 || q !== '') {
+            if (this.productPageIndex === 1) {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
               // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
@@ -431,7 +431,7 @@
           resolve: (state, res) => {
             this.hasSearchEnterprise = q !== ''
             // this.queryParams = ''
-            if (this.enterprisePageIndex === 1 || q !== '') {
+            if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
             } else {
               if (res.data.members.length === 0) {
@@ -469,7 +469,7 @@
           resolve: (state, res) => {
             this.hasSearchPerson = q !== ''
             // this.queryParams = ''
-            if (this.personPageIndex === 1 || q !== '') {
+            if (this.personPageIndex === 1) {
               state.personMembers = res.data.preps
             } else {
               if (res.data.preps.length === 0) {

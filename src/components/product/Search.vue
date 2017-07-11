@@ -55,6 +55,8 @@ export default {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #D1D1D1;
+    background-color: $white;
+    z-index: 2;
     .icon-box {
       @include pm2rem(padding, 0px, 40px, 0px, 30px);
       display: flex;

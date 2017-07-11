@@ -417,9 +417,7 @@
               index += 1
             }
           }
-          if (index === 4) {
-            return index !== 4
-          }
+          return index !== 4
         } else {
           return true
         }

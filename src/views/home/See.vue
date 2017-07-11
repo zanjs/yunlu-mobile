@@ -3,7 +3,7 @@
     <div class="search-bar">
       <img src="../../assets/homePageTopBg.png">
       <div class="search-input"
-           @click="searchEnterprise()">
+           @click="goRoute('SearchProducts')">
         <input type="text"
                placeholder="任你搜 任意搜">
         <i class="iconfont icon-sousuo"></i>

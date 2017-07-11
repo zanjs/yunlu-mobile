@@ -58,7 +58,7 @@
         justify-content: space-around;
         .name {
           @include font-dpr(15px);
-          color: #595959;
+          color: #262626;
           @include px2rem(margin-bottom, 22px);
           line-height: 1;
         }

@@ -1,11 +1,14 @@
 <template>
   <section>
-    <div class="search-container">
+    <form
+      class="search-container"
+      action="#">
       <slot name="input">
       </slot>
-      <i class="iconfont icon-sousuo"
-         @click.stop="handleClick"></i>
-    </div>
+      <i
+        class="iconfont icon-sousuo"
+        @click.stop="handleClick"></i>
+    </form>
   </section>
 </template>
 
