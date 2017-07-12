@@ -100,7 +100,7 @@
           data: {
             mobile: this.mobile,
             code: this.code,
-            name: this.this.mobile
+            name: this.mobile
           },
           target: this,
           resolve: (state, res) => {
