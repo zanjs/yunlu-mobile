@@ -142,20 +142,22 @@
           this.$router.go(-1)
         }
       },
-      showGoHome () {
+      shouldLogin () {
         if (!this.token) {
-          // 需要延时跳转，否则本页面不会进入路由历史记录
+          let toast = Toast({
+            message: `您未登录，正在转入登录页`
+          })
           setTimeout(() => {
-            setStore('beforeLogin', 'true')
+            toast.close()
             this.$router.push({name: 'Login'})
-          }, 300)
+          }, 2000)
         } else {
           this.getPersonDetail()
         }
       }
     },
     mounted () {
-      this.showGoHome()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([

@@ -42,14 +42,15 @@
 </template>
 
 <script>
-  import { Toast } from 'mint-ui'
+  // import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { URL_DEV, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
     data () {
       return {
         mobile: '',
         captcha: '',
-        imgSrc: ''
+        imgSrc: VALID_CODE_IMG_URL
       }
     },
     methods: {
@@ -62,7 +63,22 @@
         }
       },
       next () {
-        this.$store.dispatch('commonAction', {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `${URL_DEV}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
+        xhr.withCredentials = true
+        xhr.onload = (e) => {
+          console.log(e)
+          // this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+        }
+        // if (xhr.readyState === 4 && xhr.status === 200) {
+        //   this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+        // } else {
+        //   this.getValidCode()
+        //   Toast(xhr.responseText)
+        // }
+        xhr.send()
+
+        /* this.$store.dispatch('commonAction', {
           url: '/before_registrations',
           method: 'get',
           params: {
@@ -80,10 +96,10 @@
           },
           reject: () => {
           }
-        })
+        }) */
       },
       getValidCode () {
-        this.$store.dispatch('validCodeAction', {
+        /* this.$store.dispatch('validCodeAction', {
           url: '/captcha',
           method: 'get',
           params: {
@@ -94,14 +110,15 @@
           },
           reject: () => {
           }
-        })
+        }) */
+        window.location.reload()
       },
       openProtocol () {
         this.$router.push({name: 'Protocol'})
       }
     },
     mounted () {
-      this.getValidCode()
+      // this.getValidCode()
     }
   }
 </script>

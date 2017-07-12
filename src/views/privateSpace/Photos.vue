@@ -184,10 +184,23 @@
       },
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo', backUrl: 'Photos'}})
+      },
+      shouldLogin () {
+        if (!this.token) {
+          let toast = Toast({
+            message: `您未登录，正在转入登录页`
+          })
+          setTimeout(() => {
+            toast.close()
+            this.$router.push({name: 'Login'})
+          }, 2000)
+        } else {
+          this.getPhotos()
+        }
       }
     },
     mounted () {
-      this.getPhotos()
+      this.shouldLogin()
     }
   }
 </script>

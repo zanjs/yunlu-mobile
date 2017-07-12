@@ -3,7 +3,7 @@
     <div class="search-bar">
       <img src="../../assets/homePageTopBg.png">
       <div class="search-input"
-           @click="searchEnterprise()">
+           @click="goRoute('SearchProducts', true)">
         <input type="text"
                placeholder="任你搜 任意搜">
         <i class="iconfont icon-sousuo"></i>
@@ -26,21 +26,21 @@
           <span>流程</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download', true)">
+             @click="goRoute('Conversation', hasLogin)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
           <span>会话</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download', true)">
+             @click="goRoute('ShoppingCart', hasLogin)">
           <div class="icon-box box-3">
             <i class="iconfont icon-gouwuche1"></i>
           </div>
           <span>购物车</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download', true)">
+             @click="goRoute('Favorites', hasLogin)">
           <div class="icon-box box-4">
             <i class="iconfont icon-shoucang1"></i>
           </div>

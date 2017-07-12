@@ -62,10 +62,16 @@
           <p>全选</p>
         </div>
         <a
+          v-show="hasChecked"
           class="text-btn"
           @click="handleDeleteFavorites(favorites)">
           移出收藏夹
         </a>
+        <div
+          v-show="!hasChecked"
+          class="text-btn btn-disabled">
+          移出收藏夹
+        </div>
       </div>
     </template>
     <template v-if="favorites && favorites.length === 0">
@@ -73,7 +79,7 @@
         <div class="img-container">
           <img src="../../assets/noFavorites.png">
         </div>
-        <p>您还没有收藏任何宝贝呦</p>
+        <p>您还没有收藏任何宝贝呦~</p>
       </div>
     </template>
   </section>
@@ -95,7 +101,7 @@
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         hasSearch: false,
-        checkCount: 0
+        hasChecked: false
       }
     },
     components: {
@@ -112,7 +118,7 @@
       },
       resetSearchBar () {
         this.searchParams = ''
-        this.checkCount = 0
+        this.hasChecked = false
         this.hasSearch = false
         this.pageIndex = 1
         this.getFavorites()
@@ -235,6 +241,7 @@
             count += 1
           }
         }
+        this.hasChecked = count > 0
         this.checkAll = count === arr.length
       },
       deleteFavorites (arr1, arr2) {
@@ -256,7 +263,7 @@
         for (let i = 0; i < arr.length; i++) {
           arr[i].checked = !bool
         }
-        this.checkAll = !bool
+        this.checkAll = this.hasChecked = !bool
       },
       loadFavoritesTop () {
         this.pageIndex = 1
@@ -265,10 +272,23 @@
       loadFavoritesBottom () {
         this.pageIndex += 1
         this.getFavorites(this.searchParams)
+      },
+      shouldLogin () {
+        if (!this.token) {
+          let toast = Toast({
+            message: `您未登录，正在转入登录页`
+          })
+          setTimeout(() => {
+            toast.close()
+            this.$router.push({name: 'Login'})
+          }, 2000)
+        } else {
+          this.getFavorites(this.searchParams)
+        }
       }
     },
     mounted () {
-      this.getFavorites(this.searchParams)
+      this.shouldLogin()
     }
   }
 </script>
@@ -375,6 +395,7 @@
       align-items: center;
       height: inherit;
       @include px2rem(padding-right, 30px);
+      line-height: 1;
       i {
         @include font-dpr(18px);
         color: #D1D1D1;
@@ -397,9 +418,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      line-height: 1;
     }
     a:active {
       background-color: rgba(82, 202, 167, .5);
+    }
+    .btn-disabled {
+      background-color: #DEDEDE;
     }
   }
   .empty-container {
@@ -408,8 +433,8 @@
       @include pm2rem(padding, 90px, 0px, 40px, 0px);
       text-align: center;
       img {
-        @include px2rem(width, 278px);
-        @include px2rem(height, 341px);
+        @include px2rem(width, 266px);
+        @include px2rem(height, 342px);
       }
     }
     p {
