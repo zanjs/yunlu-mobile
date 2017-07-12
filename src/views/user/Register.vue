@@ -57,7 +57,25 @@
         }
       },
       next () {
-        this.$router.push({name: 'RegisterNext'})
+        this.$store.dispatch('commonAction', {
+          url: '/create',
+          method: 'post',
+          params: {
+            mobile: this.mobile,
+            code: this.code
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.success) {
+              console.log(res.data)
+              // this.$router.push({name: 'RegisterNext'})
+            } else {
+              Toast(res.data.msg)
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       getCode () {
         this.$store.dispatch('commonAction', {
