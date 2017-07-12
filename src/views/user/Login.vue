@@ -46,12 +46,15 @@
     },
     methods: {
       goBack () {
-        if (getStore('beforeLogin')) {
+        if (getStore('afterRegistration')) {
+          removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
+          this.$router.replace({name: 'See'})
+        } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
           this.$router.go(-1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
-          this.$router.push({name: 'See'})
+          this.$router.replace({name: 'See'})
         } else {
           this.$router.go(-1)
         }

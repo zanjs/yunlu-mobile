@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -64,7 +64,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.$router.push({name: 'Login'})
+            setStore('afterRegistration', 'true')
+            this.$router.replace({name: 'Login'})
           },
           reject: () => {
           }
