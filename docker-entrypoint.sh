@@ -1,9 +1,9 @@
 #!/bin/sh
 
 #clean the dist folder
-rm -rf /build/*
+rm -rf /build/test/
 #building product backend
-cp -rf /dist /build/pro
+cp -rf /dist /build/test
 #building test backend
 #rm -rf ./dist/*
 #sed -i "s/api.yunlu6.com/test.yunlu6.com/g" ./src/constants/constant.js
