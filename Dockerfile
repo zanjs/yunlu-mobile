@@ -8,7 +8,7 @@ RUN apk --update --no-cache add make git \
 COPY . /app
 WORKDIR /app
 RUN npm install && \
-    sed -i "s/api.yunlu6.com/test.yunlu6.com/g" ./src/constants/constant.js
+    sed -i "s/api.yunlu6.com/test.yunlu6.com/g" ./src/constants/constant.js && \
     npm run build && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
