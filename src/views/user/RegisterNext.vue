@@ -36,7 +36,8 @@
       return {
         password: '',
         password2: '',
-        token: getStore('user') ? getStore('user').authentication_token : null
+        mobile: this.$route.params.mobile,
+        token: this.$route.query.token
       }
     },
     methods: {

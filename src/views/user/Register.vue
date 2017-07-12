@@ -56,27 +56,6 @@
           this.$router.go(-1)
         }
       },
-      next () {
-        this.$store.dispatch('commonAction', {
-          url: '/create',
-          method: 'post',
-          params: {
-            mobile: this.mobile,
-            code: this.code
-          },
-          target: this,
-          resolve: (state, res) => {
-            if (res.data.success) {
-              console.log(res.data)
-              // this.$router.push({name: 'RegisterNext'})
-            } else {
-              Toast(res.data.msg)
-            }
-          },
-          reject: () => {
-          }
-        })
-      },
       getCode () {
         this.$store.dispatch('commonAction', {
           url: '/sms_code',
@@ -113,7 +92,7 @@
           }
         }, 1000)
       },
-      login () {
+      next () {
         this.$store.dispatch('commonAction', {
           url: '/registrations',
           method: 'post',
@@ -126,7 +105,7 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.$router.push({name: 'SetPassword', query: {mobile: this.mobile, token: res.data.authentication_token}})
+              this.$router.push({name: 'RegisterNext', params: {mobile: this.mobile}, query: {token: res.data.authentication_token}})
             } else {
               Toast(res.data.msg)
             }

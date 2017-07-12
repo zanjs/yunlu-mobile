@@ -121,7 +121,7 @@ export default new Router({
       name: 'SetNewPassword',
       component: SetNewPassword
     }, {
-      path: '/registernext',
+      path: '/registernext/:mobile',
       name: 'RegisterNext',
       component: RegisterNext
     }, {
