@@ -419,6 +419,7 @@
       align-items: center;
       justify-content: center;
       line-height: 1;
+      @include font-dpr(15px);
     }
     a:active {
       background-color: rgba(82, 202, 167, .5);

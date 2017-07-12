@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  // import { Toast } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   import { URL_DEV, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
@@ -68,7 +68,21 @@
         xhr.withCredentials = true
         xhr.onload = (e) => {
           console.log(e)
-          // this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+          if (e && e.target && e.target.readyState === 4 && e.target.status === 200 && JSON.parse(e.target.response) && JSON.parse(e.target.response).success) {
+            this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+          } else if (e && e.target && JSON.parse(e.target.response) && JSON.parse(e.target.response).msg) {
+            let toast = Toast(JSON.parse(e.target.response).msg)
+            setTimeout(() => {
+              clearTimeout(toast)
+              window.location.reload()
+            }, 1000)
+          } else {
+            let toast = Toast('网络异常，请重试')
+            setTimeout(() => {
+              clearTimeout(toast)
+              window.location.reload()
+            }, 1000)
+          }
         }
         // if (xhr.readyState === 4 && xhr.status === 200) {
         //   this.$router.push({name: 'Register', query: {mobile: this.mobile}})

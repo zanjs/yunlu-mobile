@@ -11,11 +11,22 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
+    <template v-if="purchaseItems && purchaseItems.length > 0">
+      <shopping-cart-list
+        class="list-container"
+        :store="purchaseItems"
+        @check-group="checkGroup"
+        @check-item="checkItem"
+        @increase="increase"
+        @decrease="decrease">
+      </shopping-cart-list>
+    </template>
   </section>
 </template>
 
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
+  import ShoppingCartList from '../../components/product/ShoppingCartList'
   export default {
     data () {
       return {
@@ -23,30 +34,12 @@
         purchaseItems: []
       }
     },
+    components: {
+      ShoppingCartList
+    },
     methods: {
-      async getPucrhaseItems () {
-        let productResults = await this.commonRequest('/purchase_items', 'get', {token: this.token})
-        if (productResults && productResults.purchase_items && productResults.purchase_items.length > 0) {
-          let ids = this.handleIds(productResults.purchase_items, 'id')
-          let fileIds = this.handleFileIds(productResults.purchase_items)
-          let fileResults = await this.commonRequest('/links/files/publisheds', 'get', {type: 'product', thumbs: ['general'], ids: fileIds})
-          let groupResults = await this.commonRequest('/purchase_items/groups', 'get', {token: this.token, ids: ids})
-          if (groupResults && groupResults.groups && groupResults.groups.length > 0) {
-            let teamIds = this.handleIds(groupResults.groups, 'organization_id')
-            let teamResults = await this.commonRequest('/links/teams', 'get', {ids: teamIds})
-            console.log(teamResults, fileResults, groupResults)
-            if (teamResults && teamResults.teams && teamResults.teams.length > 0) {
-              let newTeams = this.handleGroups(teamResults.teams, groupResults.groups)
-              if (fileResults && fileResults.files && fileResults.files.length > 0) {
-                this.purchaseItems = this.handleTeams(newTeams, fileResults.files)
-              }
-            }
-          }
-          // this.handlePurchaseItems(res.purchase_items, result.groups)
-        }
-      },
-      getPucrhaseItemsRequest () {
-        return new Promise((resolve, reject) => this.$store.dispatch('commonAction', {
+      getProducts () {
+        this.$store.dispatch('commonAction', {
           url: '/purchase_items',
           method: 'get',
           params: {
@@ -54,14 +47,48 @@
           },
           target: this,
           resolve: (state, res) => {
-            resolve(res.data.purchase_items)
+            let groupIds = this.handleIds(res.data.purchase_items, 'id')
+            this.getProductGroups(groupIds, res.data.purchase_items)
           },
           reject: () => {
-            reject(new Error(''))
           }
-        }))
+        })
       },
-      getFilesPublishedsRequest (ids) {
+      getProductGroups (ids, products) {
+        this.$store.dispatch('commonAction', {
+          url: '/purchase_items/groups',
+          method: 'get',
+          params: {
+            token: this.token,
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            let teamIds = this.handleIds(res.data.groups, 'organization_id')
+            this.getTeams(teamIds, products, res.data.groups)
+          },
+          reject: () => {
+          }
+        })
+      },
+      getTeams (ids, products, groups) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/teams',
+          method: 'get',
+          params: {
+            token: this.token,
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            let ids = this.handleFileIds(products)
+            this.getFilesPublisheds(ids, products, res.data.teams, groups)
+          },
+          reject: () => {
+          }
+        })
+      },
+      getFilesPublisheds (ids, products, teams, groups) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -72,39 +99,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.productFiles = res.data.files
-          },
-          reject: () => {
-          }
-        })
-      },
-      getGroupPurchaseItemsRequest (ids) {
-        return new Promise((resolve, reject) => this.$store.dispatch('commonAction', {
-          url: '/purchase_items/groups',
-          method: 'get',
-          params: {
-            token: this.token,
-            ids: ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            resolve(res.data.groups)
-          },
-          reject: () => {
-            reject(new Error(''))
-          }
-        }))
-      },
-      getTeamDetail (ids) {
-        this.$store.dispatch('commonAction', {
-          url: '/links/teams',
-          method: 'get',
-          params: {
-            ids: []
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.teams = res.data.teams
+            let newTeams = this.handleGroups(teams, groups)
+            this.purchaseItems = this.handleTeams(newTeams, res.data.files)
           },
           reject: () => {
           }
@@ -116,6 +112,7 @@
           for (let j = 0; j < groups.length; j++) {
             if (teams[i].id === groups[j].organization_id) {
               tmpArr[i].purchase_items = [...groups[j].purchase_items]
+              tmpArr[i].checked = false
             }
           }
         }
@@ -129,6 +126,7 @@
               if (teams[i].purchase_items[j].price.product.file_id === files[m].id) {
                 tmpArr[i].purchase_items[j].price.product.file_url = files[m].url
                 tmpArr[i].purchase_items[j].price.product.file_thumb_url = files[m].thumb_urls[0]
+                tmpArr[i].purchase_items[j].checked = false
               }
             }
           }
@@ -148,6 +146,43 @@
           tmpArr.push(arr[i][prop])
         }
         return tmpArr
+      },
+      checkGroup (item) {
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          if (item.item.id === this.purchaseItems[i].id) {
+            this.purchaseItems[i].checked = !item.checked
+            for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+              this.purchaseItems[i].purchase_items[j].checked = !item.checked
+            }
+          }
+        }
+      },
+      checkItem (item) {
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          if (item.parentItem.id === this.purchaseItems[i].id) {
+            for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+              if (item.item.id === this.purchaseItems[i].purchase_items[j].id) {
+                this.purchaseItems[i].purchase_items[j].checked = !item.checked
+                this.purchaseItems[i].checked = this.isGroupChecked(this.purchaseItems[i].purchase_items)
+              }
+            }
+          }
+        }
+      },
+      isGroupChecked (arr) {
+        let count = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].checked) {
+            count += 1
+          }
+        }
+        return count === arr.length
+      },
+      increase (item) {
+        console.log(item)
+      },
+      decrease (item) {
+        console.log(item)
       },
       goBack () {
         if (getStore('ShoppingCart_goHome')) {
@@ -173,7 +208,7 @@
       }
     },
     mounted () {
-      this.getPucrhaseItems()
+      this.getProducts()
     }
   }
 </script>
@@ -197,5 +232,9 @@
     i {
       @include font-dpr(20px);
     }
+  }
+  .list-container {
+    @include px2rem(padding-top, 88px);
+    background-color: #E7E7E7;
   }
 </style>
