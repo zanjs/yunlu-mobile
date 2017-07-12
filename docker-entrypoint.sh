@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #clean the dist folder
-rm -rf /build/*
+rm -rf /build/pro/
 #building product backend
 cp -rf /dist /build/pro
 #building test backend
