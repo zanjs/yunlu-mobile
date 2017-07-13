@@ -155,6 +155,13 @@
             </div>
           </template>
         </template>
+        <div
+          v-if="showGoTopBtn"
+          class="cirlce-btn"
+          @click="goTop()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p>置顶</p>
+        </div>
       </div>
       <search
         v-show="showSearchBar"
@@ -207,17 +214,16 @@
         productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
-        hasPullUpEnterprise: false,
         personPageIndex: 1,
         personPageSize: 20,
-        hasPullUpPerson: false,
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         queryParams: '',
         productOrder: 1,
         orderUp: true,
         showList: false,
-        activeIndex: 0
+        activeIndex: 0,
+        showGoTopBtn: false
       }
     },
     components: {
@@ -433,9 +439,11 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchEnterprise = q !== ''
-            // this.queryParams = ''
             if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
+                this.$refs.loadMoreEnterprises.onTopLoaded()
+              }
             } else {
               if (res.data.members.length === 0) {
                 Toast({
@@ -444,11 +452,9 @@
                 })
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
-              this.$refs.loadMoreEnterprises.onBottomLoaded()
-            }
-            if (this.hasPullUpEnterprise) {
-              this.$refs.loadMoreEnterprises.onTopLoaded()
-              this.hasPullUpEnterprise = false
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
+                this.$refs.loadMoreEnterprises.onBottomLoaded()
+              }
             }
             if (getStore('user')) {
               this.getPersonList()
@@ -474,9 +480,11 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchPerson = q !== ''
-            // this.queryParams = ''
             if (this.personPageIndex === 1) {
               state.personMembers = res.data.preps
+              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onTopLoaded) {
+                this.$refs.loadMorePeople.onTopLoaded()
+              }
             } else {
               if (res.data.preps.length === 0) {
                 Toast({
@@ -485,10 +493,9 @@
                 })
               }
               state.personMembers = [...state.personMembers, ...res.data.preps]
-              this.$refs.loadMorePeople.onBottomLoaded()
-            }
-            if (this.hasPullUpPerson) {
-              this.$refs.loadMorePeople.onTopLoaded()
+              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onBottomLoaded) {
+                this.$refs.loadMorePeople.onBottomLoaded()
+              }
             }
           },
           reject: () => {
@@ -512,6 +519,9 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      goTop () {
+        document.body.scrollTop = 0
       },
       goReport () {
         document.body.scrollTop = 0
@@ -563,6 +573,7 @@
       },
       handleSearchBar () {
         showBack((status) => {
+          this.showGoTopBtn = status
           if (this.activeIndex === 1) {
             this.showSearchBar = false
           } else if (this.activeIndex === 0) {
@@ -652,7 +663,6 @@
       },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1
-        this.hasPullUpEnterprise = true // 列表数量较少时，下拉刷新需要重置位置
         this.getEnterpriseList()
       },
       loadEnterpriseBottom () {
@@ -661,7 +671,6 @@
       },
       loadPersonTop () {
         this.personPageIndex = 1
-        this.hasPullUpPerson = true // 列表数量较少时，手动重置下拉刷新位置
         if (getStore('user')) {
           this.getPersonList()
         }
@@ -757,6 +766,28 @@
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
         border-left: none;
+      }
+    }
+    .cirlce-btn {
+      @include px2rem(width, 100px);
+      @include px2rem(height, 100px);
+      @include px2rem(border-radius, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      @include px2rem(bottom, 76px);
+      @include px2rem(right, 40px);
+      color: $white;
+      background-color: rgba(0, 0, 0, .68);
+      line-height: 1;
+      z-index: 1004;
+      i {
+        @include font-dpr(21px);
+      }
+      p {
+        @include font-dpr(12px);
       }
     }
     .no-data {

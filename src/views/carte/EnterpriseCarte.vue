@@ -60,6 +60,13 @@
                 </product-thumbnail-mode>
               </transition>
             </mt-loadmore>
+            <div
+              v-if="showGoTopBtn"
+              class="cirlce-btn"
+              @click="goTop()">
+              <i class="iconfont icon-dingzhi"></i>
+              <p>置顶</p>
+            </div>
           </template>
           <div
             v-else
@@ -141,7 +148,8 @@
         orderUp: true,
         productOrder: 1,
         showList: false,
-        currentIndex: 0
+        currentIndex: 0,
+        showGoTopBtn: false
       }
     },
     components: {
@@ -367,6 +375,7 @@
       },
       handleSearchBar () {
         showBack((status) => {
+          this.showGoTopBtn = status
           if (this.currentIndex === 1) {
             this.showSearchBar = false
             this.header = '名片'
@@ -375,6 +384,9 @@
             this.header = status ? '产品' : '名片'
           }
         }, this.height)
+      },
+      goTop () {
+        document.body.scrollTop = 0
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
@@ -521,6 +533,28 @@
       .right {
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
+      }
+    }
+    .cirlce-btn {
+      @include px2rem(width, 100px);
+      @include px2rem(height, 100px);
+      @include px2rem(border-radius, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      @include px2rem(bottom, 76px);
+      @include px2rem(right, 40px);
+      color: $white;
+      background-color: rgba(0, 0, 0, .68);
+      line-height: 1;
+      z-index: 1004;
+      i {
+        @include font-dpr(21px);
+      }
+      p {
+        @include font-dpr(12px);
       }
     }
     .no-data {

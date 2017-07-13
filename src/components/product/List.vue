@@ -43,7 +43,7 @@
   .gallery-list {
     background-color: $white;
     .item {
-      border-bottom: 1px solid #D1D1D1;
+      border-bottom: 1px solid #E0E0E0;
       @include pm2rem(padding, 10px, 10px, 10px, 10px);
       display: flex;
       align-items: center;

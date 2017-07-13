@@ -32,6 +32,13 @@
           @click="goEnterpriseCarte">
         </list>
       </mt-loadmore>
+      <div
+        v-if="showGoTopBtn"
+        class="cirlce-btn"
+        @click="goTop()">
+        <i class="iconfont icon-dingzhi"></i>
+        <p>置顶</p>
+      </div>
     </div>
   </section>
 </template>
@@ -40,7 +47,7 @@
   import Search from '../../components/common/Search.vue'
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -52,7 +59,8 @@
         enterprisePageSize: 10,
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
-        hasPullUpEnterprise: false
+        height: 160, // 向上滚动到160px，就显示回到顶部按钮
+        showGoTopBtn: false
       }
     },
     components: {
@@ -72,23 +80,23 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            // this.searchParams = ''
             if (this.enterprisePageIndex === 1) {
               document.body.scrollTop = 0
               state.allEnterprises = res.data.enterprises
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
+                this.$refs.loadMoreEnterprises.onTopLoaded()
+              }
             } else {
-              if (res.data.files.enterprises === 0) {
+              if (res.data.enterprises === 0) {
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000
                 })
               }
               state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
-              this.$refs.loadMoreEnterprises.onBottomLoaded()
-            }
-            if (this.hasPullUpEnterprise) {
-              this.$refs.loadMoreEnterprises.onTopLoaded()
-              this.hasPullUpEnterprise = false
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
+                this.$refs.loadMoreEnterprises.onBottomLoaded()
+              }
             }
           },
           reject: () => {
@@ -115,9 +123,16 @@
           this.$router.go(-1)
         }
       },
+      goTop () {
+        document.body.scrollTop = 0
+      },
+      handleGoTopBtn () {
+        showBack((status) => {
+          this.showGoTopBtn = status
+        }, this.height)
+      },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1
-        this.hasPullUpEnterprise = true // 列表数量较少时，下拉刷新需要重置位置
         this.getEnterprises(this.searchParams)
       },
       loadEnterpriseBottom () {
@@ -127,6 +142,7 @@
     },
     mounted () {
       this.getEnterprises(this.searchParams)
+      this.handleGoTopBtn()
     },
     computed: {
       ...mapGetters([
@@ -158,5 +174,27 @@
   }
   .list {
     @include px2rem(margin-top, 170px);
+    .cirlce-btn {
+      @include px2rem(width, 100px);
+      @include px2rem(height, 100px);
+      @include px2rem(border-radius, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      @include px2rem(bottom, 76px);
+      @include px2rem(right, 40px);
+      color: $white;
+      background-color: rgba(0, 0, 0, .68);
+      line-height: 1;
+      z-index: 1004;
+      i {
+        @include font-dpr(21px);
+      }
+      p {
+        @include font-dpr(12px);
+      }
+    }
   }
 </style>
