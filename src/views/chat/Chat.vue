@@ -84,12 +84,12 @@
     methods: {
       beforeGetConferences () {
         if (this.type === 'Product') {
-          this.getConferences(this.teamId, this.productId)
+          this.createConferences(this.teamId, this.productId)
         } else {
-          this.getConferences()
+          this.createConferences()
         }
       },
-      getConferences (teamId = '', productId = '') {
+      createConferences (teamId = '', productId = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/conferences',
           method: 'post',
@@ -179,10 +179,12 @@
         })
         if (this.conferences && this.conferences.conversation_id) {
           this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
-        }
-        let msgHistory = await this.conversation.queryMessages({limit: 1000})
-        if (msgHistory) {
-          this.handleHistoryMsg(msgHistory)
+          if (this.conversation) {
+            let msgHistory = await this.conversation.queryMessages({limit: 1000})
+            if (msgHistory) {
+              this.handleHistoryMsg(msgHistory)
+            }
+          }
         }
         this.currentUserDelegate.on('message', message => {
           if (message.from === this.uuid) {

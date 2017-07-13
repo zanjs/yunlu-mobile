@@ -7,8 +7,55 @@
 </template>
 
 <script>
+  import { getStore } from './config/mUtils'
   export default {
-    name: 'app'
+    name: 'app',
+    data () {
+      return {
+        hasLogin: !!getStore('user'),
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        currentUserDelegate: null,
+        conversation: null,
+        uuid: getStore('user') ? getStore('user').id : ''
+      }
+    },
+    methods: {
+      async init () {
+        this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
+          signatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
+              })
+            })
+          },
+          conversationSignatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('signature').signature,
+                timestamp: getStore('signature').timestamp / 1,
+                nonce: getStore('signature').nonce
+              })
+            })
+          }
+        })
+        this.currentUserDelegate.getQuery().containsMembers([`${this.uuid}`]).find().then(conversations => {
+          conversations.map(conversation => {
+            console.log(conversation.lastMessageAt.toString(), conversation)
+          })
+        }).catch(
+          console.error.bind(console)
+        )
+        this.currentUserDelegate.on('message', message => {
+          console.log(message)
+        })
+      }
+    },
+    mounted () {
+      this.init()
+    }
   }
 </script>
 
