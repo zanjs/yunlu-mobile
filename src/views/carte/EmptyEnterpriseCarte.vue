@@ -29,7 +29,6 @@
 <script>
   import EnterpriseCard from '../../components/common/EnterpriseCard'
   import { getStore, removeStore } from '../../config/mUtils'
-  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -56,7 +55,7 @@
         }
       },
       claim () {
-        Toast('暂未开放')
+        this.$router.push({name: 'Download'})
       }
     }
   }

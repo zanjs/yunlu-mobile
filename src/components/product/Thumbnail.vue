@@ -54,6 +54,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      border: 1px solid #E0E0E0;
+      box-sizing: border-box;
       .normal {
         width: 100%;
         height: 100%;

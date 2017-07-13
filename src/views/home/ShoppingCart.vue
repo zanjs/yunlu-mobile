@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="container">
     <mt-header
       title="购物车"
       fixed
@@ -303,6 +303,10 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
+  .container {
+    background-color: #FAFAFA;
+    @include pm2rem(padding, 0px, 0px, 98px, 0px);
+  }
   .header {
     background-color: $green;
     @include px2rem(height, 88px);
@@ -321,7 +325,7 @@
     }
   }
   .list-container {
-    @include px2rem(padding-top, 88px);
+    @include pm2rem(padding, 88px, 0px, 0px, 0px);
     background-color: #E7E7E7;
   }
   .option-bar {

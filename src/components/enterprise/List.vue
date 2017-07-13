@@ -98,13 +98,16 @@
         flex-direction: column;
         justify-content: space-between;
         flex: 1;
-        text-overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
         p {
           @include font-dpr(15px);
           line-height: 1;
           @include px2rem(margin-bottom, 22px);
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
         div {
           line-height: 1;

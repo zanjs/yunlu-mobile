@@ -41,6 +41,7 @@
   import List from '../../components/enterprise/List.vue'
   import { mapGetters } from 'vuex'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -76,6 +77,12 @@
               document.body.scrollTop = 0
               state.allEnterprises = res.data.enterprises
             } else {
+              if (res.data.files.enterprises === 0) {
+                Toast({
+                  message: '没有跟多数据了',
+                  duration: 1000
+                })
+              }
               state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
               this.$refs.loadMoreEnterprises.onBottomLoaded()
             }

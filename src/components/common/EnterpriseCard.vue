@@ -93,6 +93,9 @@
         class="icon-box">
         <i class="iconfont icon-qq qq"></i>
       </a>
+      <div
+        v-if="!store.phone && !store.email && !store.address && !store.longitude && !store.latitude && !store.wechat && !store.website && !store.qq"
+        class="tips">暂无联系方式</div>
     </div>
   </section>
 </template>
@@ -221,6 +224,17 @@
       }
       .qq {
         color: #F9B000;
+      }
+      .tips {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: inherit;
+        height: inherit;
+        line-height: 1;
+        @include font-dpr(13px);
+        color: #A6A6A6;
       }
     }
   }
