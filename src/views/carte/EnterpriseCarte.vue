@@ -60,13 +60,6 @@
                 </product-thumbnail-mode>
               </transition>
             </mt-loadmore>
-            <div
-              v-if="showGoTopBtn"
-              class="cirlce-btn"
-              @click="goTop()">
-              <i class="iconfont icon-dingzhi"></i>
-              <p>置顶</p>
-            </div>
           </template>
           <div
             v-else
@@ -92,6 +85,13 @@
             <img src="../../assets/noInformation.png">
           </div>
         </template>
+        <div
+          v-if="showGoTopBtn"
+          class="cirlce-btn"
+          @click="goTop()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p>置顶</p>
+        </div>
       </div>
     </div>
     <search

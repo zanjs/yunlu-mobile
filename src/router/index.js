@@ -32,7 +32,6 @@ import Router from 'vue-router'
 // import ShoppingCart from '../views/home/ShoppingCart'
 // import Conversation from '../views/home/Conversation'
 // import SearchProducts from '../views/home/SearchProducts'
-
 const Spaces = resolve => require(['../views/privateSpace/Spaces'], resolve)
 const Folders = resolve => require(['../views/privateSpace/Folders'], resolve)
 const Photos = resolve => require(['../views/privateSpace/Photos'], resolve)
