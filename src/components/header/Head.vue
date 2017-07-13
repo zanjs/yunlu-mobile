@@ -106,7 +106,7 @@
         this.$emit('back')
       },
       goHome () {
-        this.$meit('home')
+        this.$emit('home')
       }
     },
     mounted () {

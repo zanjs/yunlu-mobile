@@ -58,8 +58,8 @@
     </div>
     <div class="icons">
       <a
-        v-if="store && store.phone"
-        :href="'tel:' + store.phone"
+        v-if="store && store.mobile"
+        :href="'tel:' + store.mobile"
         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
@@ -94,7 +94,7 @@
         <i class="iconfont icon-qq qq"></i>
       </a>
       <div
-        v-if="!store.phone && !store.email && !store.address && !store.longitude && !store.latitude && !store.wechat && !store.website && !store.qq"
+        v-if="!store.mobile && !store.email && !store.address && !store.longitude && !store.latitude && !store.wechat && !store.website && !store.qq"
         class="tips">暂无联系方式</div>
     </div>
   </section>
