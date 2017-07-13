@@ -9,7 +9,7 @@
              src="../../assets/blank.jpg">
       </div>
       <div class="content">
-        <p v-if="store && store.name">{{store.company}}</p>
+        <p v-if="store && store.company">{{store.company}}</p>
         <p v-else>胖胖的云庐君</p>
         <div v-if="true"
           class="icon-container">

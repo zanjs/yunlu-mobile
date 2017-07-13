@@ -7,7 +7,7 @@
       <div class="title">
         <div
           class="title-check-box"
-          @click="handleGropChecked(item, item.checked)">
+          @click.stop="handleGropChecked(item, item.checked)">
           <i
             v-if="!item.checked"
             class="iconfont icon-weixuanzhong"></i>
@@ -15,7 +15,9 @@
             v-if="item.checked"
             class="iconfont icon-xuanzhong checked"></i>
         </div>
-        <div class="title-container">
+        <div
+          class="title-container"
+          @click.stop="handleTitleClick(item)">
           <img :src="item.logo">
           <p>{{item.company}}</p>
         </div>
@@ -26,7 +28,7 @@
         class="row-item">
         <div
           class="check-box"
-          @click="handleItemChecked(i, item, i.checked)">
+          @click.stop="handleItemChecked(i, item, i.checked)">
           <i
             v-if="i.checked"
             class="iconfont icon-xuanzhong checked"></i>
@@ -36,7 +38,9 @@
         </div>
         <div class="container">
           <img :src="i.price.product.file_thumb_url">
-          <div class="content">
+          <div
+            class="content"
+            @click.stop="handleItemClick(i)">
             <p>{{i.price.product.name}}</p>
             <div class="price-container">
               <div class="price">
@@ -44,17 +48,33 @@
               </div>
               <div class="count-bar">
                 <i
+                  v-if="i.quantity > 1"
                   class="iconfont icon-jianshao"
-                  @click="decrease(i)"></i>
-                <div class="count">
+                  @click.stop="decrease(i, item)"></i>
+                <i
+                  v-if="i.quantity === 1"
+                  class="iconfont icon-jianshao disabled"
+                  @click.stop="doNothing"></i>
+                <div
+                  class="count"
+                  @click.stop="doNothing">
                   <input
-                    type="text"
-                    @input="handleInput(i.quantity)"
-                    v-model="i.quantity">
+                    v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')"
+                    type="number"
+                    @input="handleInput($event.target.value, i.price.amount, i, item)"
+                    :value="i.quantity">
+                    <span
+                      v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">{{i.quantity}}</span>
                 </div>
                 <i
+                  v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')"
                   class="iconfont icon-tianjia"
-                  @click="increase(i)"></i>
+                  @click.stop="increase(i, item)"></i>
+                <i
+                  v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')"
+                  class="iconfont icon-tianjia disabled"
+                  @click.stop="doNothing">
+                </i>
               </div>
             </div>
           </div>
@@ -79,14 +99,26 @@ export default {
     handleItemChecked (i, item, bool) {
       this.$emit('check-item', {item: i, parentItem: item, checked: bool})
     },
-    decrease (item) {
-      this.$emit('decrease', item)
+    decrease (i, item) {
+      this.$emit('decrease', {item: i, parentItem: item})
     },
-    increase (item) {
-      this.$emit('increase', item)
+    increase (i, item) {
+      this.$emit('increase', {item: i, parentItem: item})
     },
-    handleInput (e) {
-      console.log(e)
+    handleTitleClick (item) {
+      this.$emit('go-organization', item)
+    },
+    handleItemClick (item) {
+      this.$emit('go-product-detail', item)
+    },
+    handleInput (quantity, amount, i, item) {
+      console.log(amount, quantity)
+      if (parseInt(quantity + '') >= parseInt(amount + '')) {
+        this.$emit('input', {quantity: amount, item: i, parentItem: item})
+      }
+    },
+    doNothing () {
+
     }
   }
 }
@@ -106,7 +138,7 @@ export default {
       background-color: $white;
       border-bottom: 1px solid #CBCBCB;
       .title-check-box {
-        @include px2rem(width, 88px);
+        @include px2rem(width, 80px);
         height: inherit;
         display: flex;
         align-items: center;
@@ -145,7 +177,7 @@ export default {
       align-items: center;
       background-color: $white;
       .check-box {
-        @include px2rem(width, 100px);
+        @include px2rem(width, 72px);
         @include px2rem(padding-left, 28px);
         display: flex;
         align-items: center;
@@ -211,6 +243,9 @@ export default {
                 color: #A6A6A6;
                 @include font-dpr(21px);
                 line-height: 1;
+              }
+              .disabled {
+                color: #DADADA;
               }
             }
             .count {

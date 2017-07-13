@@ -35,7 +35,7 @@
       return {
         teams: {
           id: null,
-          name: this.$route.query.name
+          company: this.$route.query.name
         },
         tips: '冒领者将被封停账户、冻结资产、追索损失、追究法律责任。'
       }
