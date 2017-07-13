@@ -20,6 +20,13 @@
       }
     },
     methods: {
+      beforeInit () {
+        if (!this.hasLogin) {
+          return false
+        } else {
+          this.init()
+        }
+      },
       async init () {
         this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
           signatureFactory: () => {
@@ -54,7 +61,7 @@
       }
     },
     mounted () {
-      this.init()
+      this.beforeInit()
     }
   }
 </script>
