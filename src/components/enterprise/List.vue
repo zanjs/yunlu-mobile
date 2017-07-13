@@ -26,9 +26,6 @@
             <span v-else>&nbsp;</span>
           </div>
         </div>
-        <div class="arrow">
-          <i class="iconfont icon-fanhui"></i>
-        </div>
       </div>
     </div>
   </section>
@@ -58,7 +55,6 @@
   .search-container {
     background-color: $white;
     @include pm2rem(padding, 12px, 32px, 12px, 32px);
-    box-shadow: 0px 6px 20px rgba(185, 179, 179, 0.5);
     position: fixed;
     @include px2rem(top, 88px);
     left: 0;
@@ -102,6 +98,9 @@
         flex-direction: column;
         justify-content: space-between;
         flex: 1;
+        text-overflow: hidden;
+        white-space: nowrap;
+        overflow: hidden;
         p {
           @include font-dpr(15px);
           line-height: 1;
@@ -118,17 +117,6 @@
         }
         .address {
           flex: 1;
-        }
-      }
-      .arrow {
-        @include font-dpr(36px);
-        color: #A6A6A6;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        @include px2rem(margin-right, 30px);
-        i {
-          transform: rotate(180deg);
         }
       }
     }

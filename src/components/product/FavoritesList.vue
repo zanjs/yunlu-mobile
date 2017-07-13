@@ -64,13 +64,13 @@
 
   .item-list {
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #E0E0E0;
     box-sizing: border-box;
     .item {
       @include px2rem(height, 140px);
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #D1D1D1;
+      border-bottom: 1px solid #E0E0E0;
       .icon-box {
         @include px2rem(width, 88px);
         height: inherit;

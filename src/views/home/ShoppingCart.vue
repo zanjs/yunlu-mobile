@@ -345,7 +345,7 @@
       line-height: 1;
       i {
         @include font-dpr(21px);
-        color: #D1D1D1;
+        color: #A6A6A6;
         @include px2rem(margin-right, 12px);
       }
       span {
@@ -382,6 +382,8 @@
       align-items: center;
       justify-content: center;
       position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       @include px2rem(right, 28px);
       background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
     }

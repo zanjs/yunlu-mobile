@@ -136,7 +136,6 @@ export default {
       display: flex;
       align-items: center;
       background-color: $white;
-      border-bottom: 1px solid #CBCBCB;
       .title-check-box {
         @include px2rem(width, 80px);
         height: inherit;
@@ -171,7 +170,7 @@ export default {
       }
     }
     .row-item {
-      border-bottom: 1px solid #CCC;
+      border-top: 1px solid #E0E0E0;
       @include px2rem(height, 140px);
       display: flex;
       align-items: center;
@@ -184,7 +183,7 @@ export default {
         height: inherit;
         i {
           @include font-dpr(21px);
-          color: #D1D1D1;
+          color: #A6A6A6;
           line-height: 1;
         }
         .checked {

@@ -366,6 +366,8 @@
       position: absolute;
       @include px2rem(right, 60px);
       @include px2rem(height, 66px);
+      top: 50%;
+      transform: translateY(-50%);
       color: #B4B4B4;
       display: flex;
       justify-content: center;

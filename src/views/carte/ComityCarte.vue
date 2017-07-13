@@ -714,7 +714,7 @@
     }
   }
   .container {
-    @include px2rem(min-height, 1344px);
+    // @include px2rem(min-height, 1344px);
     background-color: $white;
   }
   .card-container {

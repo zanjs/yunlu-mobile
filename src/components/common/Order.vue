@@ -48,7 +48,6 @@ export default {
 
   .option-bar {
     @include px2rem(height, 74px);
-    box-shadow: 0px 6px 20px rgba(185, 179, 179, 0.5);
     border-top: 1px solid #D1D1D1;
     border-bottom: 1px solid #D1D1D1;
     display: flex;

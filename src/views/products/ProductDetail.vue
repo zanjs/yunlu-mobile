@@ -114,7 +114,7 @@
                 v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
                 class="title-container">
                 <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
+                <div class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</div>
               </div>
             </div>
           </template>
@@ -129,7 +129,7 @@
                 :key="indexI"
                 class="title-container">
                 <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{i.name}} : {{i.value}}</span>
+                <div class="title">{{i.name}} : {{i.value}}</div>
                 <i
                   v-for="(j, indexJ) in i.quotes"
                   :key="indexJ"
@@ -1376,10 +1376,12 @@
         color: #ACACAC;
       }
       .title {
+        flex: 1;
         @include font-dpr(15px);
         @include line-height(30px);
         @include px2rem(margin-right, 50px);
-        // line-height: 1;
+        word-wrap: break-word;
+        word-break: break-all;
       }
       i {
         color: #F4B223;

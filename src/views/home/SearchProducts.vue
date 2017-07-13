@@ -296,7 +296,7 @@
     text-align: left;
     border: none;
     @include font-dpr(14px);
-    line-height: 1;
+    @include px2rem(padding-top, 4px);
   }
   input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: none; // 此处只是去掉默认的小×
