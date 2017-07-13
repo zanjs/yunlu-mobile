@@ -64,7 +64,7 @@
         <a
           v-show="hasChecked"
           class="text-btn"
-          @click="handleDeleteFavorites(favorites)">
+          @click="deleteConfirm()">
           移出收藏夹
         </a>
         <div
@@ -73,6 +73,11 @@
           移出收藏夹
         </div>
       </div>
+      <confirm-dialog
+        v-if="showConfirm"
+        :msg="confirmMsg"
+        @click="deleteItem">
+      </confirm-dialog>
     </template>
     <template v-if="favorites && favorites.length === 0">
       <div class="empty-container">
@@ -88,6 +93,7 @@
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
   import FavoritesList from '../../components/product/FavoritesList'
+  import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -101,11 +107,14 @@
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         hasSearch: false,
-        hasChecked: false
+        hasChecked: false,
+        showConfirm: false,
+        confirmMsg: '确定要删除选中的商品吗?'
       }
     },
     components: {
-      FavoritesList
+      FavoritesList,
+      ConfirmDialog
     },
     methods: {
       goBack () {
@@ -189,6 +198,15 @@
         }
         return tmpArr
       },
+      deleteConfirm () {
+        this.showConfirm = true
+      },
+      deleteItem (bool) {
+        this.showConfirm = false
+        if (bool) {
+          this.handleDeleteFavorites(this.favorites)
+        }
+      },
       handleDeleteFavorites (arr) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
@@ -213,7 +231,7 @@
               this.favorites = this.deleteFavorites(this.favorites, arr)
               Toast({
                 message: '删除成功',
-                duration: 1000
+                duration: 500
               })
             }
           },

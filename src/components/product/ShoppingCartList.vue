@@ -239,7 +239,7 @@ export default {
                 }
               }
               i {
-                color: #A6A6A6;
+                color: #595959;
                 @include font-dpr(21px);
                 line-height: 1;
               }

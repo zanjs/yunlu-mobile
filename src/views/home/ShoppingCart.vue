@@ -37,9 +37,18 @@
         </a>
         <a
           class="delete"
+          v-bind:class="{'disabled': !hasCheckItems}"
           @click="deleteConfirm()">删除</a>
         <p>合计&nbsp;&nbsp;&yen;：{{totalMoney}}</p>
-        <a class="pay-btn">支付</a>
+        <div
+          v-if="!hasCheckItems"
+          class="pay-btn pay-btn-disabled">
+          支付
+        </div>
+        <a
+          v-if="hasCheckItems"
+          class="pay-btn"
+          @click="pay()">支付</a>
       </div>
       <confirm-dialog
         v-if="showConfirm"
@@ -54,6 +63,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -62,7 +72,8 @@
         totalMoney: 0.00,
         checkAll: false,
         showConfirm: false,
-        confirmMsg: '确定要删除选中商品吗'
+        confirmMsg: '确定要删除选中的商品吗?',
+        hasCheckItems: false
       }
     },
     components: {
@@ -185,10 +196,11 @@
             this.purchaseItems[i].checked = !item.checked
             for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
               this.purchaseItems[i].purchase_items[j].checked = !item.checked
-              this.checkAll = this.isGroupChecked(this.purchaseItems)
             }
           }
         }
+        this.checkAll = this.isGroupChecked(this.purchaseItems)
+        this.isItemChecked()
         this.handleTotalMoney()
       },
       checkItem (item) {
@@ -203,6 +215,7 @@
             }
           }
         }
+        this.isItemChecked()
         this.handleTotalMoney()
       },
       isGroupChecked (arr) {
@@ -240,12 +253,79 @@
         }
         this.handleTotalMoney()
       },
-      deleteConfirm () {
-        this.showConfirm = true
+      isItemChecked () {
+        let canDelete = false
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          if (this.purchaseItems[i].checked) {
+            canDelete = true
+            break
+          }
+          for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+            if (this.purchaseItems[i].purchase_items[j].checked) {
+              canDelete = true
+              break
+            }
+          }
+        }
+        this.hasCheckItems = canDelete
       },
-      deleteItem (bool) {
+      deleteConfirm () {
+        let canDelete = false
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          if (this.purchaseItems[i].checked) {
+            canDelete = true
+            break
+          }
+          for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+            if (this.purchaseItems[i].purchase_items[j].checked) {
+              canDelete = true
+              break
+            }
+          }
+        }
+        this.showConfirm = canDelete
+      },
+      deleteItem (bool, ids) {
         this.showConfirm = false
-        console.log('123', bool)
+        if (bool) {
+          let ids = this.handleCheckedItems()
+          this.deleteItemRequest(ids)
+        }
+      },
+      handleCheckedItems () {
+        let tmpArr = []
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+            if (this.purchaseItems[i].purchase_items[j].checked) {
+              tmpArr.push(this.purchaseItems[i].purchase_items[j].id)
+            }
+          }
+        }
+        return tmpArr
+      },
+      deleteItemRequest (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/purchase_items',
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.ids && res.data.ids.length > 0) {
+              Toast({
+                message: '删除成功',
+                duration: 500
+              })
+              this.hasCheckItems = false
+              this.getProducts()
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       goBack () {
         if (getStore('ShoppingCart_goHome')) {
@@ -273,6 +353,7 @@
           }
         }
         this.checkAll = !this.checkAll
+        this.isItemChecked()
         this.handleTotalMoney()
       },
       handleTotalMoney () {
@@ -296,6 +377,12 @@
             }
           }
         }
+      },
+      pay () {
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       },
       commonRequest (url, method, params) {
         return new Promise((resolve, reject) => this.$store.dispatch('commonAction', {
@@ -387,8 +474,12 @@
       align-items: center;
       line-height: 1;
     }
+    .disabled {
+      color: #DEDEDE;
+    }
     p {
       @include font-dpr(14px);
+      font-weight: bold;
       color: #F75544;
     }
     .checked {
@@ -408,6 +499,9 @@
       transform: translateY(-50%);
       @include px2rem(right, 28px);
       background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
+    }
+    .pay-btn-disabled {
+      background: #DEDEDE;
     }
   }
 </style>
