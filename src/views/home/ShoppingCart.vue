@@ -35,10 +35,17 @@
             class="iconfont icon-weixuanzhong"></i>
           <span>全选</span>
         </a>
-        <a class="delete">删除</a>
+        <a
+          class="delete"
+          @click="deleteConfirm()">删除</a>
         <p>合计&nbsp;&nbsp;&yen;：{{totalMoney}}</p>
         <a class="pay-btn">支付</a>
       </div>
+      <confirm-dialog
+        v-if="showConfirm"
+        :msg="confirmMsg"
+        @click="deleteItem">
+      </confirm-dialog>
     </template>
   </section>
 </template>
@@ -46,17 +53,21 @@
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
+  import ConfirmDialog from '../../components/common/ConfirmDialog'
   export default {
     data () {
       return {
         token: getStore('user') ? getStore('user').authentication_token : null,
         purchaseItems: [],
         totalMoney: 0.00,
-        checkAll: false
+        checkAll: false,
+        showConfirm: false,
+        confirmMsg: '确定要删除选中商品吗'
       }
     },
     components: {
-      ShoppingCartList
+      ShoppingCartList,
+      ConfirmDialog
     },
     methods: {
       getProducts () {
@@ -228,6 +239,13 @@
           }
         }
         this.handleTotalMoney()
+      },
+      deleteConfirm () {
+        this.showConfirm = true
+      },
+      deleteItem (bool) {
+        this.showConfirm = false
+        console.log('123', bool)
       },
       goBack () {
         if (getStore('ShoppingCart_goHome')) {
