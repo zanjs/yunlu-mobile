@@ -56,6 +56,14 @@
         @click="deleteItem">
       </confirm-dialog>
     </template>
+    <template v-if="purchaseItems && purchaseItems.length === 0">
+      <div class="empty-container">
+        <div class="img-container">
+          <img src="../../assets/empryShoppingCart.png">
+        </div>
+        <p>您的购物车还没有宝贝呦~</p>
+      </div>
+    </template>
   </section>
 </template>
 
@@ -90,8 +98,14 @@
           },
           target: this,
           resolve: (state, res) => {
-            let groupIds = this.handleIds(res.data.purchase_items, 'id')
-            this.getProductGroups(groupIds, res.data.purchase_items)
+            if (res.data.purchase_items.length > 0) {
+              let groupIds = this.handleIds(res.data.purchase_items, 'id')
+              if (groupIds.length > 0) {
+                this.getProductGroups(groupIds, res.data.purchase_items)
+              }
+            } else {
+              this.purchaseItems = []
+            }
           },
           reject: () => {
           }
@@ -502,6 +516,22 @@
     }
     .pay-btn-disabled {
       background: #DEDEDE;
+    }
+  }
+   .empty-container {
+    @include pm2rem(padding, 176px, 0px, 0px, 0px);
+    .img-container {
+      @include pm2rem(padding, 90px, 0px, 40px, 0px);
+      text-align: center;
+      img {
+        @include px2rem(width, 278px);
+        @include px2rem(height, 341px);
+      }
+    }
+    p {
+      @include font-dpr(16px);
+      color: #A6A6A6;
+      text-align: center;
     }
   }
 </style>
