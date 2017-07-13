@@ -5,7 +5,8 @@
       @open-favorites="openFavorites()"
       @report="goReport()"
       @open-shopping-car="openShoppingCar()"
-      @search-near-by="searchNearBy()">
+      @search-near-by="searchNearBy()"
+      @home="goHome()">
     </product-header>
     <div class="swipe">
       <template v-if="productDetailFiles && productDetailFiles.length">
@@ -612,6 +613,9 @@
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.productId, resourceClass: 'product'}})
       },
+      goHome () {
+        this.$router.push({name: 'See'})
+      },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
           this.favoritesRequest()
@@ -677,10 +681,7 @@
         }
       },
       openShoppingCar () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
+        this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
       },
       addShoppingCar () {
         if (this.hasLogin && !this.hasAddShoppingCar) {
@@ -732,10 +733,7 @@
         }
       },
       openFavorites () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
+        this.$router.push({name: this.hasLogin ? 'Favorites' : 'Login'})
       },
       searchNearBy () {
         Toast({
