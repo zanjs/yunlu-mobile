@@ -91,16 +91,18 @@
           v-if="comityDetail && comityDetail.organization &&  comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length > 0"
           class="link-container">
           <div class="label">社会认证</div>
-          <div
-            v-for="(item, index) in comityDetail.organization.guild_organizations"
-            :key="index"
-            class="link">
-            <a
-              class="row"
-              @click="goComity(item.id)">
-              <span>{{item.name}}</span>
-              <i class="iconfont icon-fanhui"></i>
-            </a>
+          <div class="link-item">
+            <div
+              v-for="(item, index) in comityDetail.organization.guild_organizations"
+              :key="index"
+              class="link">
+              <a
+                class="row"
+                @click="goComity(item.id)">
+                <span>{{item.name}}</span>
+                <i class="iconfont icon-fanhui"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -254,24 +256,30 @@
       .label {
         @include px2rem(width, 186px);
       }
-      .link {
+      .link-item {
+        display: flex;
         flex: 1;
-        .row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          @include pm2rem(padding, 20px, 0px, 20px, 0px);
-        }
-        i {
-          transform: rotateY(180deg);
-          @include font-dpr(15px);
-          color: #52CAA7;
-        }
-        a {
-          text-decoration: none;
-        }
-        a:active {
-          background-color: #F2F2F2;
+        flex-direction: column;
+        justify-content: center;
+        .link {
+          flex: 1;
+          .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            @include pm2rem(padding, 20px, 0px, 20px, 0px);
+          }
+          i {
+            transform: rotateY(180deg);
+            @include font-dpr(15px);
+            color: #52CAA7;
+          }
+          a {
+            text-decoration: none;
+          }
+          a:active {
+            background-color: #F2F2F2;
+          }
         }
       }
     }

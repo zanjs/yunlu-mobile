@@ -217,8 +217,8 @@
   }
   .carte-container {
     background-color: $white;
-    @include pm2rem(padding, 0px, 22px, 0px, 22px);
-    @include pm2rem(margin, 20px, 0px, 30px, 0px);
+    @include pm2rem(padding, 0px, 22px, 30px, 22px);
+    @include pm2rem(margin, 20px, 0px, 0px, 0px);
     .item {
       display: flex;
       justify-content: space-between;
