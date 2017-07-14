@@ -94,7 +94,7 @@
         <i class="iconfont icon-qq qq"></i>
       </a>
       <div
-        v-if="!store.mobile && !store.email && !store.address && !store.longitude && !store.latitude && !store.wechat && !store.website && !store.qq"
+        v-if="!store || !(store.mobile || store.email || store.address || store.longitude || store.latitude || store.wechat || store.website || store.qq)"
         class="tips">暂无联系方式</div>
     </div>
   </section>

@@ -46,7 +46,9 @@
               <div class="price">
                 {{i.price.money}}
               </div>
-              <div class="count-bar">
+              <div
+                v-if="i.price.amount !== '定制'"
+                class="count-bar">
                 <i
                   v-if="i.quantity > 1"
                   class="iconfont icon-jianshao"
@@ -63,8 +65,10 @@
                     type="number"
                     @input="handleInput($event.target.value, i.price.amount, i, item)"
                     :value="i.quantity">
-                    <span
-                      v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">{{i.quantity}}</span>
+                  <span
+                    v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">
+                    {{i.quantity}}
+                  </span>
                 </div>
                 <i
                   v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')"
@@ -112,9 +116,10 @@ export default {
       this.$emit('go-product-detail', item)
     },
     handleInput (quantity, amount, i, item) {
-      console.log(amount, quantity)
       if (parseInt(quantity + '') >= parseInt(amount + '')) {
         this.$emit('input', {quantity: amount, item: i, parentItem: item})
+      } else if (parseInt(quantity + '') <= 0) {
+        this.$emit('input', {quantity: 1, item: i, parentItem: item})
       }
     },
     doNothing () {

@@ -58,7 +58,7 @@
         <i class="iconfont icon-qq qq"></i>
       </a>
       <div
-        v-if="(!store.mobiles || store.mobiles.length === 0) && !store.email && !store.address && !store.wechat && !store.weibo && !store.qq"
+        v-if="!store || (!store.mobiles || store.mobiles.length === 0) && !store.email && !store.address && !store.wechat && !store.weibo && !store.qq"
         class="tips">暂无联系方式</div>
     </div>
   </section>
