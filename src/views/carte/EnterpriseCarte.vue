@@ -110,6 +110,12 @@
       @order-change="orderChange"
       @switch="showListChange">
     </order>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
   </section>
 </template>
 
@@ -121,6 +127,7 @@
   import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
+  import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import { Toast, MessageBox } from 'mint-ui'
@@ -149,7 +156,9 @@
         productOrder: 1,
         showList: false,
         currentIndex: 0,
-        showGoTopBtn: false
+        showGoTopBtn: false,
+        showDialog: false,
+        message: null
       }
     },
     components: {
@@ -158,6 +167,7 @@
       ProductListMode,
       InformationList,
       ViewBigImg,
+      PopDialog,
       Search,
       Order
     },
@@ -405,11 +415,13 @@
         switch (item.type) {
           case 'email':
             // this.linkToast('企业', '邮箱地址', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
             // this.linkToast('企业', '微信号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
             // this.linkToast('企业', '网址', item.value)
@@ -419,7 +431,8 @@
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('企业', 'QQ账号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
             // Toast('暂未开放')
@@ -443,6 +456,14 @@
           message: str
         })
       },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
+      },
       openInformationFolders (item) {
         this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
       },
@@ -462,6 +483,9 @@
       loadProductBottom () {
         this.productPageIndex += 1
         this.getProducts()
+      },
+      closeDialog () {
+        this.showDialog = false
       }
     },
     mounted () {

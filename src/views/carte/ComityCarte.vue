@@ -179,6 +179,12 @@
         @order-change="orderChange"
         @switch="showListChange">
       </order>
+      <template v-if="showDialog">
+        <pop-dialog
+          :store="message"
+          @close="closeDialog">
+        </pop-dialog>
+      </template>
     </div>
   </section>
 </template>
@@ -195,6 +201,7 @@
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
+  import PopDialog from '../../components/common/PopDialog'
   import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
@@ -223,7 +230,9 @@
         orderUp: true,
         showList: false,
         activeIndex: 0,
-        showGoTopBtn: false
+        showGoTopBtn: false,
+        showDialog: false,
+        message: null
       }
     },
     components: {
@@ -234,6 +243,7 @@
       EnterpriseList,
       PersonList,
       ViewBigImg,
+      PopDialog,
       Search,
       Order
     },
@@ -604,11 +614,13 @@
         switch (item.type) {
           case 'email':
             // this.linkToast('协会', '邮箱地址', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
             // this.linkToast('协会', '微信号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
             // this.linkToast('协会', '网址', item.value)
@@ -618,7 +630,8 @@
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('协会', 'QQ账号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
             if (item.value.latitude && item.value.longitude) {
@@ -640,6 +653,14 @@
           title: '长按复制到剪切板',
           message: str
         })
+      },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
       },
       openInformationFolders (item) {
         this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
@@ -680,6 +701,9 @@
         if (getStore('user')) {
           this.getPersonList()
         }
+      },
+      closeDialog () {
+        this.showDialog = false
       }
     },
     mounted () {

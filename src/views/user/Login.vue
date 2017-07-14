@@ -89,7 +89,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            this.initImClient()
+            // this.initImClient()
             this.goBack()
           },
           reject: () => {

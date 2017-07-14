@@ -26,7 +26,7 @@
           <span>流程</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Conversation', hasLogin)">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
@@ -198,22 +198,7 @@
         if (this.hasLogin) {
           this.getClientKeyWords()
           this.getSpaces()
-          // this.registerMessageListener()
         }
-      },
-      registerMessageListener () {
-        this.$store.state.userDelegate.on('message', message => {
-          console.log(message)
-          // let tmpObj = {
-          //   isSelf: false,
-          //   content: message.content._lctext,
-          //   name: this.targetUser.display_name,
-          //   avatar: this.targetUser.avatar_url,
-          //   date: new Date()
-          // }
-          // this.msgs.push(tmpObj)
-          // document.body.scrollTop = document.body.scrollHeight
-        })
       }
     },
     mounted () {
