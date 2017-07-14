@@ -60,7 +60,8 @@
           },
           data: {
             login: this.mobile,
-            password: this.password
+            password: this.password,
+            token: this.token
           },
           target: this,
           resolve: (state, res) => {
