@@ -696,16 +696,16 @@
         this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
       },
       addShoppingCar () {
-        if (this.hasLogin && !this.hasAddShoppingCar) {
+        if (this.hasLogin) {
           this.addShoppingCarRequest()
-        } else if (this.hasLogin && this.hasAddShoppingCar) {
-          // 暂无移出购物车接口，这里移出购物车实际并没有移出
-          this.shoppingCarText = '加入购物车'
-          this.hasAddShoppingCar = false
-          Toast({
-            message: '你已将该商品移出购物车',
-            duration: 1000
-          })
+        // } else if (this.hasLogin && this.hasAddShoppingCar) {
+        //   // 暂无移出购物车接口，这里移出购物车实际并没有移出
+        //   this.shoppingCarText = '加入购物车'
+        //   this.hasAddShoppingCar = false
+        //   Toast({
+        //     message: '你已将该商品移出购物车',
+        //     duration: 1000
+        //   })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
@@ -726,8 +726,8 @@
             // 该机构新增了一条访客记录
             if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
               // 加入购物车可以加入多次
-              this.shoppingCarText = '加入购物车'
-              this.hasAddShoppingCar = false
+              this.shoppingCarText = '已加入购物车'
+              this.hasAddShoppingCar = true
               Toast({
                 message: '加入购物车成功',
                 duration: 1000

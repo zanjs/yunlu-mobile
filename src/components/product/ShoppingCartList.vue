@@ -125,8 +125,10 @@ export default {
       // }
       if (parseInt(quantity + '') <= 0) {
         this.$emit('input', {quantity: 1, item: i, parentItem: item})
+      } else if (parseInt(quantity + '') >= 999) {
+        this.$emit('input', {quantity: 999, item: i, parentItem: item})
       } else {
-        this.$emit('input', {quantity: quantity, item: i, parentItem: item})
+        this.$emit('input', {quantity: parseInt(quantity + ''), item: i, parentItem: item})
       }
     },
     doNothing () {
@@ -219,10 +221,20 @@ export default {
           height: inherit;
           flex: 1;
           line-height: 1;
+          // overflow: hidden;
+          // text-overflow: ellipsis;
+          // white-space:nowrap;
           p {
             line-height: 1;
             @include font-dpr(14px);
             color: #595959;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+            // white-space:nowrap;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
           }
           .price-container {
             display: flex;

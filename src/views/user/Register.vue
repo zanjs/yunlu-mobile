@@ -100,7 +100,9 @@
           data: {
             mobile: this.mobile,
             code: this.code,
-            name: this.mobile
+            name: this.mobile,
+            dev_name: 'iPhone 6',
+            dev_class: 'web'
           },
           target: this,
           resolve: (state, res) => {
