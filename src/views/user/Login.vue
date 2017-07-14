@@ -66,7 +66,9 @@
           params: {},
           data: {
             login: this.mobile,
-            password: this.password
+            password: this.password,
+            dev_name: 'iPhone 6',
+            dev_class: 'web'
           },
           target: this,
           resolve: (state, res) => {
@@ -89,7 +91,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            // this.initImClient()
+            this.initImClient()
             this.goBack()
           },
           reject: () => {

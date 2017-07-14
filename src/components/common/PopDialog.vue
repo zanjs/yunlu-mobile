@@ -100,11 +100,13 @@ export default {
         @include px2rem(height, 150px);
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
+        line-height: 1;
         .name {
           @include font-dpr(16px);
           color: #595959;
+          @include px2rem(margin-bottom, 20px);
         }
         .value {
           @include font-dpr(15px);

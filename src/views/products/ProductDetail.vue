@@ -248,7 +248,7 @@
               :src="productLinkFile.url">
             <img
               v-else
-              src="../../assets/imgLoading.png">
+              src="../../assets/imgLoading3.jpg">
             <div class="info">
               <p>{{productLink.name}}</p>
               <div>
@@ -640,9 +640,15 @@
             if (res.data.favorites && res.data.favorites.id === parseInt(this.productId)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
-              Toast('你已成功收藏该产品')
+              Toast({
+                message: '你已成功收藏该产品',
+                duration: 1000
+              })
             } else {
-              Toast('收藏该产品失败')
+              Toast({
+                message: '收藏该产品失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
@@ -664,9 +670,15 @@
               this.getProductDetail()
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
-              Toast('你已成功取消收藏')
+              Toast({
+                message: '你已成功取消收藏',
+                duration: 1000
+              })
             } else {
-              Toast('取消收藏该产品失败')
+              Toast({
+                message: '取消收藏该产品失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
@@ -690,7 +702,10 @@
           // 暂无移出购物车接口，这里移出购物车实际并没有移出
           this.shoppingCarText = '加入购物车'
           this.hasAddShoppingCar = false
-          Toast('你已将该商品移出购物车')
+          Toast({
+            message: '你已将该商品移出购物车',
+            duration: 1000
+          })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
@@ -710,11 +725,18 @@
           resolve: (state, res) => {
             // 该机构新增了一条访客记录
             if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
-              this.shoppingCarText = '已加入购物车'
-              this.hasAddShoppingCar = true
-              Toast('加入购物车成功')
+              // 加入购物车可以加入多次
+              this.shoppingCarText = '加入购物车'
+              this.hasAddShoppingCar = false
+              Toast({
+                message: '加入购物车成功',
+                duration: 1000
+              })
             } else {
-              Toast('加入购物车失败')
+              Toast({
+                message: '加入购物车失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
