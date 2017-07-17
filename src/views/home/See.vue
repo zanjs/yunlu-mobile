@@ -4,8 +4,7 @@
       <img src="../../assets/homePageTopBg.png">
       <div class="search-input"
            @click="goRoute('SearchProducts', true)">
-        <input type="text"
-               placeholder="任你搜 任意搜">
+        <div>任你搜 任意搜</div>
         <i class="iconfont icon-sousuo"></i>
       </div>
       <i v-if="hasLogin"
@@ -243,18 +242,17 @@
       @include px2rem(height, 70px);
       @include pm2rem(padding, 22px, 0px, 22px, 0px);
       @include pm2rem(margin, 0px, 44px, 0px, 55px);
-      input {
-        color: #B4B4B4;
+      div {
+        color: #C2C2C2;
         border: none;
         width: 100%;
         @include px2rem(border-radius, 40px);
-        @include pm2rem(padding, 8px, 20px, 0px, 102px);
+        @include pm2rem(padding, 0px, 20px, 0px, 102px);
         @include font-dpr(14px);
         line-height: 1;
-      }
-      ::-webkit-input-placeholder{
-        color: #C2C2C2;
-        @include px2rem(padding-top, 2px);
+        background-color: $white;
+        display: flex;
+        align-items: center;
       }
       i {
         position: absolute;

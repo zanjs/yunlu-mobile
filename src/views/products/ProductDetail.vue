@@ -162,22 +162,28 @@
     <section
       class="company-info"
       @click="goEnterprise()">
-      <div class="company-img">
-        <img v-if="productDetailTeam && productDetailTeam.logo"
-             :src="productDetailTeam.logo">
-        <img v-else
-             src="../../assets/blank.jpg">
-      </div>
-      <div class="company-content">
-        <span v-if="productDetailTeam && productDetailTeam.company"
-              class="title">{{productDetailTeam.company}}</span>
-        <span v-else
-              class="title">***</span>
-        <div class="info">
-          <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
-          <span v-else>***</span>
-          <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
-          <span v-else>0件商品</span>
+      <div class="wraper">
+        <div class="company-img">
+          <img v-if="productDetailTeam && productDetailTeam.logo"
+              :src="productDetailTeam.logo">
+          <img v-else
+              src="../../assets/blank.jpg">
+        </div>
+        <div class="company-content">
+          <div
+            v-if="productDetailTeam && productDetailTeam.company"
+            class="title">
+            {{productDetailTeam.company}}这个公司的名字很长很长
+          </div>
+          <span
+            v-else
+            class="title">***</span>
+          <div class="info">
+            <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
+            <span v-else>***</span>
+            <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
+            <span v-else>0件商品</span>
+          </div>
         </div>
       </div>
     </section>
@@ -957,28 +963,45 @@
     @include pm2rem(padding, 24px, 24px, 124px, 24px);
     border-top: 1px solid #D1D1D1;
     background-color: $white;
-    display: -webkit-box;
     line-height: 1;
-    .company-img {
-      @include pm2rem(padding, 2px, 24px, 0px, 0px);
-      img {
-        @include px2rem(width, 82px);
-        @include px2rem(height, 82px);
+    .wraper {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      .company-img {
+        // @include pm2rem(padding, 2px, 24px, 0px, 0px);
+        @include px2rem(width, 106px);
+        height: inherit;
+        display: block;
+        img {
+          @include px2rem(width, 82px);
+          @include px2rem(height, 82px);
+        }
       }
-    }
-    .company-content {
-      height: auto;
-      line-height: 1;
-      .title {
-        @include font-dpr(16px);
-        color: #000;
-      }
-      .info {
-        @include pm2rem(margin, 28px, 0px, 0px, 0px);
-        span {
-          @include font-dpr(14px);
-          color: #535252;
-          @include px2rem(margin-right, 50px);
+      .company-content {
+        height: inherit;
+        line-height: 1;
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        flex: 1;
+        .title {
+          @include font-dpr(16px);
+          font-weight: 100;
+          color: #ff5001;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          width: inherit;
+        }
+        .info {
+          @include pm2rem(margin, 28px, 0px, 0px, 0px);
+          span {
+            @include font-dpr(14px);
+            color: #535252;
+            @include px2rem(margin-right, 50px);
+          }
         }
       }
     }
@@ -1038,7 +1061,7 @@
     background-color: $white;
     .tag {
       @include px2rem(border-radius, 7px);
-      border: 1px solid #ACACAC;
+      border: 1px solid #E0E0E0;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       @include pm2rem(margin, 0px, 20px, 20px, 0px);
       line-height: 1;

@@ -113,4 +113,11 @@
   .mint-indicator-wrapper {
     z-index: 1004 !important;
   }
+  .mint-header-title {
+    height: inherit !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    line-height: 1 !important;
+  }
 </style>

@@ -5,12 +5,14 @@
            :key="index"
            @click.stop="handleClick(item)"
            class="item">
-        <img
-          v-if="item.file_thumb_urls"
-          :src="item.file_thumb_urls">
-        <img
-          v-else
-          src="../../assets/noImg.png">
+        <div class="img-box">
+          <img
+            v-if="item.file_thumb_urls"
+            :src="item.file_thumb_urls">
+          <img
+            v-else
+            src="../../assets/noImg.png">
+        </div>
         <div class="content">
           <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.prices[0].money}}</span>
@@ -47,20 +49,32 @@
       @include pm2rem(padding, 10px, 10px, 10px, 10px);
       display: flex;
       align-items: center;
-      img {
+      .img-box {
         @include px2rem(width, 118px);
         @include px2rem(height, 118px);
         @include px2rem(margin-right, 30px);
+        display: block;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
       .content {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+        flex: 1;
         .name {
           @include font-dpr(15px);
           color: #262626;
           @include px2rem(margin-bottom, 22px);
           line-height: 1;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: normal;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
         }
         .money {
           font-weight: bold;

@@ -77,7 +77,7 @@
     .item {
       display: flex;
       align-items: center;
-      color: #595959;
+      color: #262626;
       border-bottom: 1px solid #E0E0E0;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
@@ -97,6 +97,7 @@
         }
         .type {
           flex: 1;
+          color: #A6A6A6;
         }
         .address {
           color: #F75544;

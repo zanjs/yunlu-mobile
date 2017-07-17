@@ -36,11 +36,11 @@
             v-if="!i.checked"
             class="iconfont icon-weixuanzhong"></i>
         </div>
-        <div class="container">
+        <div
+          class="container"
+          @click.stop="handleItemClick(i)">
           <img :src="i.price.product.file_thumb_url">
-          <div
-            class="content"
-            @click.stop="handleItemClick(i)">
+          <div class="content">
             <p>{{i.price.product.name}}</p>
             <div class="price-container">
               <div class="price">
@@ -64,7 +64,7 @@
                   <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
                   <input
                     type="number"
-                    @input="handleInput($event.target.value, i.price.amount, i, item)"
+                    @blur="handleInput($event.target.value, i.price.amount, i, item)"
                     :value="i.quantity">
                   <!-- <span
                     v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">

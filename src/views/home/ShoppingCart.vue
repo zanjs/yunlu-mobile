@@ -81,7 +81,8 @@
         checkAll: false,
         showConfirm: false,
         confirmMsg: '确定要删除选中的商品吗?',
-        hasCheckItems: false
+        hasCheckItems: false,
+        hasOnFocus: true
       }
     },
     components: {
@@ -252,6 +253,7 @@
             }
           }
         }
+        this.updateShoppingCartRequest(item.item.id, item.item.quantity)
         this.handleTotalMoney()
       },
       decrease (item) {
@@ -265,6 +267,7 @@
             }
           }
         }
+        this.updateShoppingCartRequest(item.item.id, item.item.quantity)
         this.handleTotalMoney()
       },
       isItemChecked () {
@@ -382,6 +385,7 @@
         this.totalMoney = totalMoney
       },
       updateQuentity (item) {
+        this.hasOnFocus = true
         for (let i = 0; i < this.purchaseItems.length; i++) {
           if (item.parentItem.id === this.purchaseItems[i].id) {
             for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
@@ -391,26 +395,43 @@
             }
           }
         }
+        this.updateShoppingCartRequest(item.item.id, item.quantity)
+      },
+      updateShoppingCartRequest (id, quantity) {
+        this.$store.dispatch('commonAction', {
+          url: `/purchase_items/${id}`,
+          method: 'put',
+          params: {},
+          data: {
+            token: this.token,
+            quantity: quantity
+          },
+          target: this,
+          resolve: (state, res) => {
+            // 该机构新增了一条访客记录
+            if (res.data.id === id) {
+              // 更新购物车中商品数量成功
+              this.hasOnFocus = false
+            } else {
+              let toast = Toast({
+                message: '更改商品数量失败',
+                duration: 1000
+              })
+              setTimeout(() => {
+                clearTimeout(toast)
+                this.getProducts()
+              }, 1000)
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       pay () {
         Toast({
           message: '暂未开放',
           duration: 500
         })
-      },
-      commonRequest (url, method, params) {
-        return new Promise((resolve, reject) => this.$store.dispatch('commonAction', {
-          url: url,
-          method: method,
-          params: params,
-          target: this,
-          resolve: (state, res) => {
-            resolve(res.data)
-          },
-          reject: () => {
-            reject(new Error(''))
-          }
-        }))
       }
     },
     mounted () {

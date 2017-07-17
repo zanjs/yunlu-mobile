@@ -12,7 +12,8 @@
         v-model="searchParams"
         @input="handleInput"
         @keyup.enter="handleSearchBtn"
-        placeholder="搜一搜">
+        placeholder="搜一搜"
+        ref="searchInput">
     </product-search-bar>
     <hot-tags
       v-if="!hasSearch"
@@ -124,12 +125,14 @@
         this.sort = ''
         this.hasSearch = false
         this.products = []
+        this.pageIndex = 1
         this.productsThumbnails = []
       },
       handleInput () {
         if (this.searchParams === '') {
           this.resetSearchBar()
         }
+        this.pageIndex = 1
       },
       sortProducts (val) {
         // 每次切换排序方式，都需要栋第一页开始，避免前面已加载的数据顺序异常
@@ -269,6 +272,7 @@
     },
     mounted () {
       this.handleGoTopBtn()
+      this.$refs.searchInput.focus()
     }
   }
 </script>
