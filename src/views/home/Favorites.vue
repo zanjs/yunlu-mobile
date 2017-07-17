@@ -20,12 +20,12 @@
         @input="handleInput"
         @keyup.enter="handleSearchBtn"
         placeholder="搜一搜">
-      <div
+      <!-- <div
         v-show="searchParams"
         class="clear-btn"
         @click.stop="resetSearchBar()">
         <i class="iconfont icon-shanchubiaoqian"></i>
-      </div>
+      </div> -->
       <div
         class="search-btn"
         @click.stop="searchFavorites">
@@ -418,7 +418,7 @@
       line-height: 1;
       i {
         @include font-dpr(18px);
-        color: #D1D1D1;
+        color: #A6A6A6;
         @include px2rem(margin-right, 12px);
       }
       p {

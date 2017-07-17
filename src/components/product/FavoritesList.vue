@@ -79,7 +79,7 @@
         justify-content: center;
         i {
           @include font-dpr(20px);
-          color: #D1D1D1;
+          color: #A6A6A6;
         }
         .checked {
           color: #52CAA7;

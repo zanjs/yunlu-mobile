@@ -90,7 +90,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: #595959;
+      color: #262626;
       border-bottom: 1px solid #D1D1D1;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {

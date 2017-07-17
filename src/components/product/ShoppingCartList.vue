@@ -158,7 +158,7 @@ export default {
         @include px2rem(padding-left, 28px);
         i {
           @include font-dpr(21px);
-          color: #D1D1D1;
+          color: #A6A6A6;
           line-height: 1;
         }
         .checked {
