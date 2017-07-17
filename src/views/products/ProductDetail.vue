@@ -169,22 +169,24 @@
           <img v-else
               src="../../assets/blank.jpg">
         </div>
-        <div class="company-content">
-          <div
-            v-if="productDetailTeam && productDetailTeam.company"
-            class="title">
-            {{productDetailTeam.company}}这个公司的名字很长很长
+         <div class="content-wraper">
+          <div class="company-content">
+            <div
+              v-if="productDetailTeam && productDetailTeam.company"
+              class="title">
+              {{productDetailTeam.company}}
+            </div>
+            <span
+              v-else
+              class="title">***</span>
+            <div class="info">
+              <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
+              <span v-else>***</span>
+              <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
+              <span v-else>0件商品</span>
+            </div>
           </div>
-          <span
-            v-else
-            class="title">***</span>
-          <div class="info">
-            <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
-            <span v-else>***</span>
-            <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
-            <span v-else>0件商品</span>
-          </div>
-        </div>
+         </div>
       </div>
     </section>
     <section class="product-tab-bar">
@@ -965,8 +967,7 @@
     background-color: $white;
     line-height: 1;
     .wraper {
-      width: 100%;
-      box-sizing: border-box;
+      // box-sizing: border-box;
       display: flex;
       align-items: center;
       .company-img {
@@ -979,28 +980,33 @@
           @include px2rem(height, 82px);
         }
       }
-      .company-content {
-        height: inherit;
-        line-height: 1;
+      .content-wraper {
         display: block;
-        box-sizing: border-box;
-        width: 100%;
-        flex: 1;
-        .title {
-          @include font-dpr(16px);
-          font-weight: 100;
-          color: #ff5001;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
+        width: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        .company-content {
+          height: inherit;
+          line-height: 1;
+          display: block;
+          flex: 1;
           width: inherit;
-        }
-        .info {
-          @include pm2rem(margin, 28px, 0px, 0px, 0px);
-          span {
-            @include font-dpr(14px);
-            color: #535252;
-            @include px2rem(margin-right, 50px);
+          .title {
+            @include font-dpr(16px);
+            font-weight: 100;
+            color: #ff5001;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .info {
+            @include pm2rem(margin, 28px, 0px, 0px, 0px);
+            span {
+              @include font-dpr(14px);
+              color: #535252;
+              @include px2rem(margin-right, 50px);
+            }
           }
         }
       }

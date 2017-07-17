@@ -152,6 +152,7 @@
       line-height: 1;
       color: #2F705D;
       text-align: center;
+      font-weight: bold;
     }
   }
   .user-avatar {
