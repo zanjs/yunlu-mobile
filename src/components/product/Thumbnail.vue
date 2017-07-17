@@ -14,8 +14,10 @@
           src="../../assets/noImg.png"
           class="empty">
          <div class="cover">
-          <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.prices[0].money}}</span>
+           <div class="wraper">
+            <div class="name">{{item.name}}</div>
+            <div class="money">&yen; ：{{item.prices[0].money}}</div>
+           </div>
         </div>
       </div>
     </div>
@@ -70,22 +72,35 @@
       }
       .cover {
         @include px2rem(height, 110px);
-        display: flex;
-        flex-direction: column;
-        // justify-content: space-between;
-        align-items: flex-start;
+        display: block;
         color: #262626;
-        @include pm2rem(padding, 0px, 0px, 0px, 20px);
         @include font-dpr(14px);
-        .name {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-          @include pm2rem(margin, 16px, 0px, 16px, 0px);
-        }
-        .money {
-          font-weight: bold;
-          color: #FF0000;
+        width: inherit;
+        .wraper {
+          @include pm2rem(padding, 0px, 0px, 0px, 20px);
+          width: inherit;
+          height: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          box-sizing: border-box;
+          div {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+          }
+          .name {
+            @include pm2rem(margin, 16px, 0px, 16px, 0px);
+            line-height: 1;
+            box-sizing: border-box;
+            position: relative;
+          }
+          .money {
+            font-weight: bold;
+            box-sizing: border-box;
+            color: #FF0000;
+          }
         }
       }
     }
