@@ -7,8 +7,83 @@
 </template>
 
 <script>
+  import { getStore } from './config/mUtils'
+  import moment from 'moment'
   export default {
-    name: 'app'
+    name: 'app',
+    data () {
+      return {
+        hasLogin: !!getStore('user'),
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        currentUserDelegate: null,
+        conversation: null,
+        conversationList: [],
+        uuid: getStore('user') ? getStore('user').id : ''
+      }
+    },
+    methods: {
+      beforeInit () {
+        if (!this.hasLogin) {
+          return false
+        } else {
+          this.init()
+        }
+      },
+      async init () {
+        if (!this.currentUserDelegate) {
+          this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
+            signatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('signature').signature,
+                  timestamp: getStore('signature').timestamp / 1,
+                  nonce: getStore('signature').nonce
+                })
+              })
+            },
+            conversationSignatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('signature').signature,
+                  timestamp: getStore('signature').timestamp / 1,
+                  nonce: getStore('signature').nonce
+                })
+              })
+            }
+          })
+        }
+        this.$store.dispatch('setUserDelegate', this.userDelegate)
+        this.currentUserDelegate.getQuery().limit(1000).containsMembers([`${this.uuid}`]).find().then(conversations => {
+          this.$store.dispatch('updateLeanCouldConversations', conversations)
+        })
+        this.currentUserDelegate.on('message', message => {
+          let tmpObj = {
+            conversationId: message.cid,
+            from: message.from,
+            id: message.id,
+            fromLogo: message._lcattrs.fromLogo,
+            fromName: message._lcattrs.fromName,
+            timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
+            clazz: message._lcattrs.clazz,
+            lastMessage: message._lctext,
+            isSelf: false
+          }
+          // 不在聊天页面，收到的新消息统一默认为未读消息
+          if (this.$route.name !== 'Chat') {
+            this.$store.dispatch('receiveNewMessage', tmpObj)
+          }
+        })
+        this.currentUserDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
+          console.log('未读消息记录', unreadMessagesCount)
+        })
+      }
+    },
+    mounted () {
+      // this.beforeInit()
+    },
+    updated () {
+      this.beforeInit()
+    }
   }
 </script>
 
@@ -37,5 +112,12 @@
   }
   .mint-indicator-wrapper {
     z-index: 1004 !important;
+  }
+  .mint-header-title {
+    height: inherit !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    line-height: 1 !important;
   }
 </style>

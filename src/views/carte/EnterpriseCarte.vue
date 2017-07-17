@@ -35,19 +35,20 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <template v-if="showProduct">
-          <template v-if="products && products.length > 0">
-            <mt-loadmore
-              :top-method="loadProductTop"
-              :bottom-method="loadProductBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreProducts">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
+        <transition
+          name="fade"
+          :appear="true"
+          mode="out-in">
+          <template v-if="showProduct">
+            <template v-if="products && products.length > 0">
+              <mt-loadmore
+                key="product"
+                :top-method="loadProductTop"
+                :bottom-method="loadProductBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreProducts">
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -58,33 +59,38 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </transition>
-            </mt-loadmore>
+              </mt-loadmore>
+            </template>
+            <div
+              v-else
+              key="product1"
+              class="no-data">
+                <img src="../../assets/noProduct.png">
+            </div>
           </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noProduct.png">
-          </div>
-        </template>
-        <template v-else>
-          <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
+          <template v-else>
+            <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
               <information-list
+                key="information"
                 :store="enterpriseInfoFiles"
                 @click="openInformationFolders">
               </information-list>
-            </transition>
+            </template>
+            <div
+              v-else
+              key="information1"
+              class="no-data">
+              <img src="../../assets/noInformation.png">
+            </div>
           </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noInformation.png">
-          </div>
-        </template>
+        </transition>
+        <div
+          v-if="showGoTopBtn"
+          class="cirlce-btn"
+          @click="goTop()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p>置顶</p>
+        </div>
       </div>
     </div>
     <search
@@ -103,6 +109,12 @@
       @order-change="orderChange"
       @switch="showListChange">
     </order>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
   </section>
 </template>
 
@@ -114,6 +126,7 @@
   import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
   import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
+  import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import { Toast, MessageBox } from 'mint-ui'
@@ -141,7 +154,10 @@
         orderUp: true,
         productOrder: 1,
         showList: false,
-        currentIndex: 0
+        currentIndex: 0,
+        showGoTopBtn: false,
+        showDialog: false,
+        message: null
       }
     },
     components: {
@@ -150,6 +166,7 @@
       ProductListMode,
       InformationList,
       ViewBigImg,
+      PopDialog,
       Search,
       Order
     },
@@ -323,7 +340,7 @@
             } else {
               if (res.data.files.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
@@ -367,6 +384,7 @@
       },
       handleSearchBar () {
         showBack((status) => {
+          this.showGoTopBtn = status
           if (this.currentIndex === 1) {
             this.showSearchBar = false
             this.header = '名片'
@@ -375,6 +393,9 @@
             this.header = status ? '产品' : '名片'
           }
         }, this.height)
+      },
+      goTop () {
+        document.body.scrollTop = 0
       },
       goProductDetail (item) {
         document.body.scrollTop = 0
@@ -393,11 +414,13 @@
         switch (item.type) {
           case 'email':
             // this.linkToast('企业', '邮箱地址', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
             // this.linkToast('企业', '微信号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
             // this.linkToast('企业', '网址', item.value)
@@ -407,7 +430,8 @@
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('企业', 'QQ账号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
             // Toast('暂未开放')
@@ -431,6 +455,14 @@
           message: str
         })
       },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
+      },
       openInformationFolders (item) {
         this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
       },
@@ -450,6 +482,9 @@
       loadProductBottom () {
         this.productPageIndex += 1
         this.getProducts()
+      },
+      closeDialog () {
+        this.showDialog = false
       }
     },
     mounted () {
@@ -521,6 +556,28 @@
       .right {
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
+      }
+    }
+    .cirlce-btn {
+      @include px2rem(width, 100px);
+      @include px2rem(height, 100px);
+      @include px2rem(border-radius, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      @include px2rem(bottom, 76px);
+      @include px2rem(right, 40px);
+      color: $white;
+      background-color: rgba(0, 0, 0, .68);
+      line-height: 1;
+      z-index: 1004;
+      i {
+        @include font-dpr(21px);
+      }
+      p {
+        @include font-dpr(12px);
       }
     }
     .no-data {

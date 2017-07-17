@@ -30,18 +30,27 @@
       v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
       <div class="menu"
            id="product-drop-menu">
-        <div class="item"
-             @click="goFavorites()">
+        <div
+          class="item"
+          @click.stop="goHome()">
+          <i class="iconfont icon-shouye"></i>
+          <span>首页</span>
+        </div>
+        <div
+          class="item"
+          @click.stop="goFavorites()">
           <i class="iconfont icon-shoucang"></i>
           <span>收藏夹</span>
         </div>
-        <div class="item"
-             @click="searchNearBy()">
+        <div
+          class="item"
+          @click.stop="searchNearBy()">
           <i class="iconfont icon-fujin"></i>
           <span>搜附近</span>
         </div>
-        <div class="item"
-             @click="goReport()">
+        <div
+          class="item"
+          @click.stop="goReport()">
           <i class="iconfont icon-jubao"></i>
           <span>举报Ta</span>
         </div>
@@ -67,7 +76,7 @@
       addTouch () {
         let self = this
         document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
-          e.preventDefault()
+          // e.preventDefault()
           this.cssAnimation = false
           setTimeout(() => {
             self.showMenu = false
@@ -95,6 +104,9 @@
       },
       goBack () {
         this.$emit('back')
+      },
+      goHome () {
+        this.$emit('home')
       }
     },
     mounted () {
@@ -173,15 +185,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    // z-index: -1;
-    background-color: rgba(0, 0, 0, 0.45);
+    // z-index: 1;
+    // background-color: rgba(0, 0, 0, 0.45);
   }
   .product-drop-menu {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    z-index: 0;
     // width: 100%;
     // height: 4000px;
     // background-color: transparent;
@@ -194,7 +207,7 @@
       z-index: 9999 !important;
       .item {
         @include px2rem(height, 96px);
-        border-bottom: 1px solid $white;
+        border-bottom: 1px solid rgba(255, 255, 255, .45);
         @include pm2rem(padding, 0px, 0px, 0px, 34px);
         @include px2rem(line-height, 96px);
         @include font-dpr(15px);

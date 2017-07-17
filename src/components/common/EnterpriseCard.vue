@@ -9,7 +9,7 @@
              src="../../assets/blank.jpg">
       </div>
       <div class="content">
-        <p v-if="store && store.name">{{store.company}}</p>
+        <p v-if="store && store.company">{{store.company}}</p>
         <p v-else>胖胖的云庐君</p>
         <div v-if="true"
           class="icon-container">
@@ -58,8 +58,8 @@
     </div>
     <div class="icons">
       <a
-        v-if="store && store.phone"
-        :href="'tel:' + store.phone"
+        v-if="store && store.mobile"
+        :href="'tel:' + store.mobile"
         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
       </a>
@@ -93,6 +93,9 @@
         class="icon-box">
         <i class="iconfont icon-qq qq"></i>
       </a>
+      <div
+        v-if="!store || !(store.mobile || store.email || store.address || store.longitude || store.latitude || store.wechat || store.website || store.qq)"
+        class="tips">暂无联系方式</div>
     </div>
   </section>
 </template>
@@ -221,6 +224,17 @@
       }
       .qq {
         color: #F9B000;
+      }
+      .tips {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: inherit;
+        height: inherit;
+        line-height: 1;
+        @include font-dpr(13px);
+        color: #A6A6A6;
       }
     }
   }

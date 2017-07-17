@@ -44,12 +44,13 @@
 <script>
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { URL_DEV, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
     data () {
       return {
         mobile: '',
         captcha: '',
-        imgSrc: ''
+        imgSrc: VALID_CODE_IMG_URL
       }
     },
     methods: {
@@ -62,7 +63,36 @@
         }
       },
       next () {
-        this.$store.dispatch('commonAction', {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', `${URL_DEV}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
+        xhr.withCredentials = true
+        xhr.onload = (e) => {
+          console.log(e)
+          if (e && e.target && e.target.readyState === 4 && e.target.status === 200 && JSON.parse(e.target.response) && JSON.parse(e.target.response).success) {
+            this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+          } else if (e && e.target && JSON.parse(e.target.response) && JSON.parse(e.target.response).msg) {
+            let toast = Toast(JSON.parse(e.target.response).msg)
+            setTimeout(() => {
+              clearTimeout(toast)
+              window.location.reload()
+            }, 1000)
+          } else {
+            let toast = Toast('网络异常，请重试')
+            setTimeout(() => {
+              clearTimeout(toast)
+              window.location.reload()
+            }, 1000)
+          }
+        }
+        // if (xhr.readyState === 4 && xhr.status === 200) {
+        //   this.$router.push({name: 'Register', query: {mobile: this.mobile}})
+        // } else {
+        //   this.getValidCode()
+        //   Toast(xhr.responseText)
+        // }
+        xhr.send()
+
+        /* this.$store.dispatch('commonAction', {
           url: '/before_registrations',
           method: 'get',
           params: {
@@ -80,10 +110,10 @@
           },
           reject: () => {
           }
-        })
+        }) */
       },
       getValidCode () {
-        this.$store.dispatch('validCodeAction', {
+        /* this.$store.dispatch('validCodeAction', {
           url: '/captcha',
           method: 'get',
           params: {
@@ -94,14 +124,15 @@
           },
           reject: () => {
           }
-        })
+        }) */
+        window.location.reload()
       },
       openProtocol () {
         this.$router.push({name: 'Protocol'})
       }
     },
     mounted () {
-      this.getValidCode()
+      // this.getValidCode()
     }
   }
 </script>

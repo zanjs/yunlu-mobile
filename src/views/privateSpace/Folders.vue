@@ -74,7 +74,7 @@
   import Album from '../../components/common/Album'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     data () {
@@ -223,7 +223,7 @@
             } else {
               if (res.data.photos.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
@@ -253,13 +253,15 @@
           this.$router.go(-1)
         }
       },
-      showGoHome () {
+      shouldLogin () {
         if (!this.token) {
-          // 需要延时跳转，否则本页面不会进入路由历史记录
+          let toast = Toast({
+            message: `您未登录，正在转入登录页`
+          })
           setTimeout(() => {
-            setStore('beforeLogin', 'true')
+            toast.close()
             this.$router.push({name: 'Login'})
-          }, 300)
+          }, 2000)
         } else {
           this.getPersonDetail()
           this.getPhotos()
@@ -267,7 +269,7 @@
       }
     },
     mounted () {
-      this.showGoHome()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([

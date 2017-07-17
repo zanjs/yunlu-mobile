@@ -3,11 +3,17 @@ import Vuex from 'vuex'
 import * as types from './mutation-types'
 import api from '../api/api'
 // import { Indicator } from 'mint-ui'
+import moment from 'moment'
+import { getStore } from '../config/mUtils'
 
 Vue.use(Vuex)
 
 const state = {
+  uuid: getStore('user') ? getStore('user').id : '',
   userDelegate: null,
+  leanCloudConversations: [],
+  yunLuConversations: [],
+  conversationList: [],
   pageLoading: false,
   loadSuccess: false,
   user: null,
@@ -34,6 +40,9 @@ const state = {
 
 const getters = {
   userDelegate: state => state.userDelegate,
+  leanCloudConversations: state => state.leanCloudConversations,
+  yunLuConversations: state => state.yunLuConversations,
+  conversationList: state => state.conversationList,
   pageLoading: state => state.pageLoading,
   loadSuccess: state => state.loadSuccess,
   user: state => state.user,
@@ -65,6 +74,12 @@ const actions = {
   },
   setUserDelegate ({commit}, params) {
     commit(types.SET_USER_DELEGATE, {params})
+  },
+  updateLeanCouldConversations ({commit}, params) {
+    commit(types.UPDATE_LEAN_CLOUD_CONVERSATIONS, {params})
+  },
+  receiveNewMessage ({commit}, params) {
+    commit(types.RECEIVE_NEW_MESSAGE, {params})
   },
   validCodeAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
@@ -100,6 +115,44 @@ const mutations = {
 
   [types.SET_USER_DELEGATE] (state, {params}) {
     state.userDelegate = params
+  },
+
+  [types.UPDATE_LEAN_CLOUD_CONVERSATIONS] (state, {params}) {
+    let tmpArr = []
+    for (let i = 0; i < params.length; i++) {
+      if (params[i].lastMessage) {
+        tmpArr.push({
+          conversationId: params[i].lastMessage.cid,
+          from: params[i].lastMessage.from,
+          id: params[i].lastMessage.id,
+          fromLogo: params[i].lastMessage._lcattrs.fromLogo,
+          fromName: params[i].lastMessage._lcattrs.fromName,
+          timestamp: moment(params[i].timestamp).format('YYYY-MM-DD HH:mm:ss'),
+          clazz: params[i].lastMessage._lcattrs.clazz,
+          lastMessage: params[i].lastMessage._lctext,
+          isSelf: params[i].from === state.uuid,
+          hasRead: true
+        })
+      }
+    }
+    state.leanCloudConversations = tmpArr
+  },
+
+  [types.RECEIVE_NEW_MESSAGE] (state, {params}) {
+    let count = 0
+    for (let i = 0; i < state.conversationList.length; i++) {
+      if (state.conversationList[i].conversationId === params.conversationId) {
+        state.conversationList[i].id = params.id
+        state.conversationList[i].timestamp = params.timestamp
+        state.conversationList[i].lastMessage = params.lastMessage
+        state.conversationList[i].hasRead = false
+        count += 1
+        break
+      }
+    }
+    if (count === 0) {
+      state.conversationList.push(params)
+    }
   }
 }
 

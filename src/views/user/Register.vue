@@ -56,9 +56,6 @@
           this.$router.go(-1)
         }
       },
-      next () {
-        this.$router.push({name: 'RegisterNext'})
-      },
       getCode () {
         this.$store.dispatch('commonAction', {
           url: '/sms_code',
@@ -95,7 +92,7 @@
           }
         }, 1000)
       },
-      login () {
+      next () {
         this.$store.dispatch('commonAction', {
           url: '/registrations',
           method: 'post',
@@ -103,12 +100,14 @@
           data: {
             mobile: this.mobile,
             code: this.code,
-            name: this.this.mobile
+            name: this.mobile,
+            dev_name: 'iPhone 6',
+            dev_class: 'web'
           },
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.$router.push({name: 'SetPassword', query: {mobile: this.mobile, token: res.data.authentication_token}})
+              this.$router.push({name: 'RegisterNext', params: {mobile: this.mobile}, query: {token: res.data.authentication_token}})
             } else {
               Toast(res.data.msg)
             }

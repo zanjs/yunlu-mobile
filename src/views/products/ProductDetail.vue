@@ -5,7 +5,8 @@
       @open-favorites="openFavorites()"
       @report="goReport()"
       @open-shopping-car="openShoppingCar()"
-      @search-near-by="searchNearBy()">
+      @search-near-by="searchNearBy()"
+      @home="goHome()">
     </product-header>
     <div class="swipe">
       <template v-if="productDetailFiles && productDetailFiles.length">
@@ -114,7 +115,7 @@
                 v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
                 class="title-container">
                 <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</span>
+                <div class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</div>
               </div>
             </div>
           </template>
@@ -129,7 +130,7 @@
                 :key="indexI"
                 class="title-container">
                 <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{i.name}} : {{i.value}}</span>
+                <div class="title">{{i.name}} : {{i.value}}</div>
                 <i
                   v-for="(j, indexJ) in i.quotes"
                   :key="indexJ"
@@ -161,23 +162,31 @@
     <section
       class="company-info"
       @click="goEnterprise()">
-      <div class="company-img">
-        <img v-if="productDetailTeam && productDetailTeam.logo"
-             :src="productDetailTeam.logo">
-        <img v-else
-             src="../../assets/blank.jpg">
-      </div>
-      <div class="company-content">
-        <span v-if="productDetailTeam && productDetailTeam.company"
-              class="title">{{productDetailTeam.company}}</span>
-        <span v-else
-              class="title">***</span>
-        <div class="info">
-          <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
-          <span v-else>***</span>
-          <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
-          <span v-else>0件商品</span>
+      <div class="wraper">
+        <div class="company-img">
+          <img v-if="productDetailTeam && productDetailTeam.logo"
+              :src="productDetailTeam.logo">
+          <img v-else
+              src="../../assets/blank.jpg">
         </div>
+         <div class="content-wraper">
+          <div class="company-content">
+            <div
+              v-if="productDetailTeam && productDetailTeam.company"
+              class="title">
+              {{productDetailTeam.company}}
+            </div>
+            <span
+              v-else
+              class="title">***</span>
+            <div class="info">
+              <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
+              <span v-else>***</span>
+              <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
+              <span v-else>0件商品</span>
+            </div>
+          </div>
+         </div>
       </div>
     </section>
     <section class="product-tab-bar">
@@ -247,7 +256,7 @@
               :src="productLinkFile.url">
             <img
               v-else
-              src="../../assets/imgLoading.png">
+              src="../../assets/imgLoading3.jpg">
             <div class="info">
               <p>{{productLink.name}}</p>
               <div>
@@ -612,6 +621,9 @@
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.productId, resourceClass: 'product'}})
       },
+      goHome () {
+        this.$router.push({name: 'See'})
+      },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
           this.favoritesRequest()
@@ -636,9 +648,15 @@
             if (res.data.favorites && res.data.favorites.id === parseInt(this.productId)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
-              Toast('你已成功收藏该产品')
+              Toast({
+                message: '你已成功收藏该产品',
+                duration: 1000
+              })
             } else {
-              Toast('收藏该产品失败')
+              Toast({
+                message: '收藏该产品失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
@@ -660,9 +678,15 @@
               this.getProductDetail()
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
-              Toast('你已成功取消收藏')
+              Toast({
+                message: '你已成功取消收藏',
+                duration: 1000
+              })
             } else {
-              Toast('取消收藏该产品失败')
+              Toast({
+                message: '取消收藏该产品失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
@@ -677,19 +701,19 @@
         }
       },
       openShoppingCar () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
+        this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
       },
       addShoppingCar () {
-        if (this.hasLogin && !this.hasAddShoppingCar) {
+        if (this.hasLogin) {
           this.addShoppingCarRequest()
-        } else if (this.hasLogin && this.hasAddShoppingCar) {
-          // 暂无移出购物车接口，这里移出购物车实际并没有移出
-          this.shoppingCarText = '加入购物车'
-          this.hasAddShoppingCar = false
-          Toast('你已将该商品移出购物车')
+        // } else if (this.hasLogin && this.hasAddShoppingCar) {
+        //   // 暂无移出购物车接口，这里移出购物车实际并没有移出
+        //   this.shoppingCarText = '加入购物车'
+        //   this.hasAddShoppingCar = false
+        //   Toast({
+        //     message: '你已将该商品移出购物车',
+        //     duration: 1000
+        //   })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
@@ -709,11 +733,18 @@
           resolve: (state, res) => {
             // 该机构新增了一条访客记录
             if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
+              // 加入购物车可以加入多次
               this.shoppingCarText = '已加入购物车'
               this.hasAddShoppingCar = true
-              Toast('加入购物车成功')
+              Toast({
+                message: '加入购物车成功',
+                duration: 1000
+              })
             } else {
-              Toast('加入购物车失败')
+              Toast({
+                message: '加入购物车失败',
+                duration: 1000
+              })
             }
           },
           reject: () => {
@@ -732,10 +763,7 @@
         }
       },
       openFavorites () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
+        this.$router.push({name: this.hasLogin ? 'Favorites' : 'Login'})
       },
       searchNearBy () {
         Toast({
@@ -937,28 +965,49 @@
     @include pm2rem(padding, 24px, 24px, 124px, 24px);
     border-top: 1px solid #D1D1D1;
     background-color: $white;
-    display: -webkit-box;
     line-height: 1;
-    .company-img {
-      @include pm2rem(padding, 2px, 24px, 0px, 0px);
-      img {
-        @include px2rem(width, 82px);
-        @include px2rem(height, 82px);
+    .wraper {
+      // box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      .company-img {
+        // @include pm2rem(padding, 2px, 24px, 0px, 0px);
+        @include px2rem(width, 106px);
+        height: inherit;
+        display: block;
+        img {
+          @include px2rem(width, 82px);
+          @include px2rem(height, 82px);
+        }
       }
-    }
-    .company-content {
-      height: auto;
-      line-height: 1;
-      .title {
-        @include font-dpr(16px);
-        color: #000;
-      }
-      .info {
-        @include pm2rem(margin, 28px, 0px, 0px, 0px);
-        span {
-          @include font-dpr(14px);
-          color: #535252;
-          @include px2rem(margin-right, 50px);
+      .content-wraper {
+        display: block;
+        width: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        .company-content {
+          height: inherit;
+          line-height: 1;
+          display: block;
+          flex: 1;
+          width: inherit;
+          .title {
+            @include font-dpr(16px);
+            font-weight: 100;
+            color: #ff5001;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .info {
+            @include pm2rem(margin, 28px, 0px, 0px, 0px);
+            span {
+              @include font-dpr(14px);
+              color: #535252;
+              @include px2rem(margin-right, 50px);
+            }
+          }
         }
       }
     }
@@ -1018,7 +1067,7 @@
     background-color: $white;
     .tag {
       @include px2rem(border-radius, 7px);
-      border: 1px solid #ACACAC;
+      border: 1px solid #E0E0E0;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       @include pm2rem(margin, 0px, 20px, 20px, 0px);
       line-height: 1;
@@ -1376,10 +1425,12 @@
         color: #ACACAC;
       }
       .title {
+        flex: 1;
         @include font-dpr(15px);
         @include line-height(30px);
         @include px2rem(margin-right, 50px);
-        // line-height: 1;
+        word-wrap: break-word;
+        word-break: break-all;
       }
       i {
         color: #F4B223;

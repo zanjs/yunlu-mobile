@@ -11,7 +11,7 @@
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
+        <input type="password"
                v-model="password"
                placeholder="输入至少8位密码">
       </div>
@@ -30,13 +30,14 @@
 </template>
 
 <script>
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setStore } from '../../config/mUtils'
   export default {
     data () {
       return {
         password: '',
         password2: '',
-        token: getStore('user') ? getStore('user').authentication_token : null
+        mobile: this.$route.params.mobile,
+        token: this.$route.query.token
       }
     },
     methods: {
@@ -59,11 +60,13 @@
           },
           data: {
             login: this.mobile,
-            password: this.password
+            password: this.password,
+            token: this.token
           },
           target: this,
           resolve: (state, res) => {
-            this.$router.push({name: 'Login'})
+            setStore('afterRegistration', 'true')
+            this.$router.replace({name: 'Login'})
           },
           reject: () => {
           }

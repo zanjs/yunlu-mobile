@@ -12,7 +12,8 @@
         v-model="searchParams"
         @input="handleInput"
         @keyup.enter="handleSearchBtn"
-        placeholder="搜一搜">
+        placeholder="搜一搜"
+        ref="searchInput">
     </product-search-bar>
     <hot-tags
       v-if="!hasSearch"
@@ -124,12 +125,14 @@
         this.sort = ''
         this.hasSearch = false
         this.products = []
+        this.pageIndex = 1
         this.productsThumbnails = []
       },
       handleInput () {
         if (this.searchParams === '') {
           this.resetSearchBar()
         }
+        this.pageIndex = 1
       },
       sortProducts (val) {
         // 每次切换排序方式，都需要栋第一页开始，避免前面已加载的数据顺序异常
@@ -195,7 +198,7 @@
             } else {
               if (res.data.files.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
@@ -269,6 +272,7 @@
     },
     mounted () {
       this.handleGoTopBtn()
+      this.$refs.searchInput.focus()
     }
   }
 </script>
@@ -296,7 +300,7 @@
     text-align: left;
     border: none;
     @include font-dpr(14px);
-    line-height: 1;
+    @include px2rem(padding-top, 4px);
   }
   input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: none; // 此处只是去掉默认的小×

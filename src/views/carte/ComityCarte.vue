@@ -41,19 +41,20 @@
              @click.prevent="tabClick(3)">个人会员</div>
       </div>
       <div class="tab-container">
-        <template v-if="activeIndex === 0">
-          <template v-if="products && products.length > 0">
-            <mt-loadmore
-              :top-method="loadProductTop"
-              :bottom-method="loadProductBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreProducts">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
+        <transition
+          name="fade"
+          :appear="true"
+          mode="out-in">
+          <template v-if="activeIndex === 0">
+            <template v-if="products && products.length > 0">
+              <mt-loadmore
+                key="product"
+                :top-method="loadProductTop"
+                :bottom-method="loadProductBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreProducts">
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -64,97 +65,96 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </transition>
-            </mt-loadmore>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noProduct.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 1">
-          <template
-            v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
-                <information-list
-                  :store="enterpriseInfoFiles"
-                  @click="openInformationFolders">
-                </information-list>
-            </transition>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noInformation.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 2">
-          <template
-            v-if="enterpriseMembers && enterpriseMembers.length > 0">
-            <mt-loadmore
-              :top-method="loadEnterpriseTop"
-              :bottom-method="loadEnterpriseBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreEnterprises">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
-                <enterprise-list
-                  :store="enterpriseMembers"
-                  @click="goEnterpriseCarte">
-                </enterprise-list>
-              </transition>
-            </mt-loadmore>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noEnterprise.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 3">
-          <template v-if="hasLogin">
-            <template v-if="personMembers && personMembers.length > 0">
-              <mt-loadmore
-                :top-method="loadPersonTop"
-                :bottom-method="loadPersonBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMorePeople">
-                <transition
-                  name="fade"
-                  :appear="true"
-                  mode="out-in">
-                  <person-list
-                    :store="personMembers"
-                    @click="goPersonCarte">
-                  </person-list>
-                </transition>
               </mt-loadmore>
             </template>
             <div
               v-else
+              key="product1"
               class="no-data">
-              <img src="../../assets/noPerson.png">
+              <img src="../../assets/noProduct.png">
             </div>
           </template>
-          <template v-else>
-            <div class="tips-container">
-              <p>登录后才能查看</p>
-              <div class="login-btn">
-                <a @click="goLogin()">登录</a>
+          <template v-if="activeIndex === 1">
+            <template  v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
+              <information-list
+                key="information"
+                :store="enterpriseInfoFiles"
+                @click="openInformationFolders">
+              </information-list>
+            </template>
+            <div
+              v-else
+              key="information1"
+              class="no-data">
+              <img src="../../assets/noInformation.png">
+            </div>
+          </template>
+          <template v-if="activeIndex === 2">
+            <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
+              <mt-loadmore
+                key="enterprise"
+                :top-method="loadEnterpriseTop"
+                :bottom-method="loadEnterpriseBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreEnterprises">
+                <enterprise-list
+                  :store="enterpriseMembers"
+                  @click="goEnterpriseCarte">
+                </enterprise-list>
+              </mt-loadmore>
+            </template>
+            <div
+              v-else
+              key="enterprise1"
+              class="no-data">
+              <img src="../../assets/noEnterprise.png">
+            </div>
+          </template>
+          <template v-if="activeIndex === 3">
+            <template v-if="hasLogin">
+              <template v-if="personMembers && personMembers.length > 0">
+                <mt-loadmore
+                  key="person"
+                  :top-method="loadPersonTop"
+                  :bottom-method="loadPersonBottom"
+                  :bottom-pull-text="bottomPullText"
+                  :bottom-drop-text="bottomDropText"
+                  :auto-fill="false"
+                  ref="loadMorePeople">
+                  <person-list
+                    :store="personMembers"
+                    @click="goPersonCarte">
+                  </person-list>
+                </mt-loadmore>
+              </template>
+              <div
+                v-else
+                key="person1"
+                class="no-data">
+                <img src="../../assets/noPerson.png">
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <div
+                key="noLogin"
+                class="tips-container">
+                <p>登录后才能查看</p>
+                <div class="login-btn">
+                  <a @click="goLogin()">登录</a>
+                </div>
+              </div>
+            </template>
           </template>
-        </template>
+        </transition>
+        <div
+          v-if="showGoTopBtn"
+          class="cirlce-btn"
+          @click="goTop()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p>置顶</p>
+        </div>
       </div>
       <search
         v-show="showSearchBar"
@@ -172,6 +172,12 @@
         @order-change="orderChange"
         @switch="showListChange">
       </order>
+      <template v-if="showDialog">
+        <pop-dialog
+          :store="message"
+          @close="closeDialog">
+        </pop-dialog>
+      </template>
     </div>
   </section>
 </template>
@@ -188,6 +194,7 @@
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
+  import PopDialog from '../../components/common/PopDialog'
   import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
@@ -207,17 +214,18 @@
         productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
-        hasPullUpEnterprise: false,
         personPageIndex: 1,
         personPageSize: 20,
-        hasPullUpPerson: false,
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         queryParams: '',
         productOrder: 1,
         orderUp: true,
         showList: false,
-        activeIndex: 0
+        activeIndex: 0,
+        showGoTopBtn: false,
+        showDialog: false,
+        message: null
       }
     },
     components: {
@@ -228,6 +236,7 @@
       EnterpriseList,
       PersonList,
       ViewBigImg,
+      PopDialog,
       Search,
       Order
     },
@@ -323,7 +332,7 @@
             } else {
               if (res.data.files.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
@@ -433,22 +442,22 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchEnterprise = q !== ''
-            // this.queryParams = ''
             if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
+                this.$refs.loadMoreEnterprises.onTopLoaded()
+              }
             } else {
               if (res.data.members.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
-              this.$refs.loadMoreEnterprises.onBottomLoaded()
-            }
-            if (this.hasPullUpEnterprise) {
-              this.$refs.loadMoreEnterprises.onTopLoaded()
-              this.hasPullUpEnterprise = false
+              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
+                this.$refs.loadMoreEnterprises.onBottomLoaded()
+              }
             }
             if (getStore('user')) {
               this.getPersonList()
@@ -474,21 +483,22 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchPerson = q !== ''
-            // this.queryParams = ''
             if (this.personPageIndex === 1) {
               state.personMembers = res.data.preps
+              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onTopLoaded) {
+                this.$refs.loadMorePeople.onTopLoaded()
+              }
             } else {
               if (res.data.preps.length === 0) {
                 Toast({
-                  message: '没有跟多数据了',
+                  message: '没有更多数据了',
                   duration: 1000
                 })
               }
               state.personMembers = [...state.personMembers, ...res.data.preps]
-              this.$refs.loadMorePeople.onBottomLoaded()
-            }
-            if (this.hasPullUpPerson) {
-              this.$refs.loadMorePeople.onTopLoaded()
+              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onBottomLoaded) {
+                this.$refs.loadMorePeople.onBottomLoaded()
+              }
             }
           },
           reject: () => {
@@ -512,6 +522,9 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      goTop () {
+        document.body.scrollTop = 0
       },
       goReport () {
         document.body.scrollTop = 0
@@ -563,6 +576,7 @@
       },
       handleSearchBar () {
         showBack((status) => {
+          this.showGoTopBtn = status
           if (this.activeIndex === 1) {
             this.showSearchBar = false
           } else if (this.activeIndex === 0) {
@@ -593,11 +607,13 @@
         switch (item.type) {
           case 'email':
             // this.linkToast('协会', '邮箱地址', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
             // this.linkToast('协会', '微信号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
             // this.linkToast('协会', '网址', item.value)
@@ -607,7 +623,8 @@
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('协会', 'QQ账号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
             if (item.value.latitude && item.value.longitude) {
@@ -629,6 +646,14 @@
           title: '长按复制到剪切板',
           message: str
         })
+      },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
       },
       openInformationFolders (item) {
         this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
@@ -652,7 +677,6 @@
       },
       loadEnterpriseTop () {
         this.enterprisePageIndex = 1
-        this.hasPullUpEnterprise = true // 列表数量较少时，下拉刷新需要重置位置
         this.getEnterpriseList()
       },
       loadEnterpriseBottom () {
@@ -661,7 +685,6 @@
       },
       loadPersonTop () {
         this.personPageIndex = 1
-        this.hasPullUpPerson = true // 列表数量较少时，手动重置下拉刷新位置
         if (getStore('user')) {
           this.getPersonList()
         }
@@ -671,6 +694,9 @@
         if (getStore('user')) {
           this.getPersonList()
         }
+      },
+      closeDialog () {
+        this.showDialog = false
       }
     },
     mounted () {
@@ -714,7 +740,7 @@
     }
   }
   .container {
-    @include px2rem(min-height, 1344px);
+    // @include px2rem(min-height, 1344px);
     background-color: $white;
   }
   .card-container {
@@ -757,6 +783,28 @@
         @include px2rem(border-top-right-radius, 14px);
         @include px2rem(border-bottom-right-radius, 14px);
         border-left: none;
+      }
+    }
+    .cirlce-btn {
+      @include px2rem(width, 100px);
+      @include px2rem(height, 100px);
+      @include px2rem(border-radius, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      @include px2rem(bottom, 76px);
+      @include px2rem(right, 40px);
+      color: $white;
+      background-color: rgba(0, 0, 0, .68);
+      line-height: 1;
+      z-index: 1004;
+      i {
+        @include font-dpr(21px);
+      }
+      p {
+        @include font-dpr(12px);
       }
     }
     .no-data {

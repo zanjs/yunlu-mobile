@@ -13,9 +13,11 @@
           v-else
           src="../../assets/noImg.png"
           class="empty">
-        <div class="cover">
-          <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.prices[0].money}}</span>
+         <div class="cover">
+           <div class="wraper">
+            <div class="name">{{item.name}}</div>
+            <div class="money">&yen; ：{{item.prices[0].money}}</div>
+           </div>
         </div>
       </div>
     </div>
@@ -42,46 +44,63 @@
   @import '../../styles/mixin';
 
   .gallery {
-    @include pm2rem(padding, 16px, 2px, 0px, 30px);
+    @include pm2rem(padding, 16px, 8px, 0px, 22px);
     @include px2rem(min-height, 600px);
     display: flex;
     flex-wrap: wrap;
     .img-box {
-      @include px2rem(height, 306px);
-      @include px2rem(width, 330px);
-      @include pm2rem(margin, 0px, 28px, 30px, 0px);
+      // @include px2rem(height, 396px);
+      @include px2rem(width, 346px);
+      @include pm2rem(margin, 0px, 14px, 20px, 0px);
       position: relative;
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      border: 1px solid #E0E0E0;
+      box-sizing: border-box;
       .normal {
+        @include px2rem(height, 346px);
         width: 100%;
-        height: 100%;
+        // @include px2rem(width, 346px);
       }
       .empty {
-        width: 60%;
-        height: 60%;
+        // width: 60%;
+        // height: 60%;
+        @include px2rem(height, 346px);
+        @include px2rem(width, 346px);
       }
       .cover {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, .5);
-        @include px2rem(height, 90px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        color: $white;
-        @include pm2rem(padding, 0px, 00px, 0px, 20px);
-        @include font-dpr(13px);
-        .name {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-        }
-        .money {
-          font-weight: bold;
+        @include px2rem(height, 110px);
+        display: block;
+        color: #262626;
+        @include font-dpr(14px);
+        width: inherit;
+        .wraper {
+          @include pm2rem(padding, 0px, 0px, 0px, 20px);
+          width: inherit;
+          height: inherit;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          box-sizing: border-box;
+          div {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+          }
+          .name {
+            @include pm2rem(margin, 16px, 0px, 16px, 0px);
+            line-height: 1;
+            box-sizing: border-box;
+            position: relative;
+          }
+          .money {
+            font-weight: bold;
+            box-sizing: border-box;
+            color: #FF0000;
+          }
         }
       }
     }

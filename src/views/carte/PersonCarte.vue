@@ -45,6 +45,12 @@
         <i class="iconfont icon-fanhui"></i>
       </a>
     </div>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
   </section>
 </template>
 
@@ -53,15 +59,19 @@
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
+  import PopDialog from '../../components/common/PopDialog'
   export default {
     data () {
       return {
         user_id: this.$route.params.user_id,
-        token: getStore('user') ? getStore('user').authentication_token : null
+        token: getStore('user') ? getStore('user').authentication_token : null,
+        showDialog: false,
+        message: null
       }
     },
     components: {
-      Card
+      Card,
+      PopDialog
     },
     methods: {
       goReport () {
@@ -89,11 +99,13 @@
         switch (item.type) {
           case 'email':
             // this.linkToast('会员', '邮箱地址', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'wechat':
             // this.linkToast('会员', '微信号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(1, '微信号', item.value)
             break
           case 'weibo':
             // this.linkToast('会员', '微博账号', item.value)
@@ -102,7 +114,8 @@
           case 'qq':
             // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
             // this.linkToast('会员', 'QQ账号', item.value)
-            this.showMessageBox(item.value)
+            // this.showMessageBox(item.value)
+            this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
             if (item.value.latitude && item.value.longitude) {
@@ -118,6 +131,14 @@
           message: `该${str}${key}为：${value}`,
           duration: 5000
         })
+      },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
       },
       showMessageBox (str) {
         MessageBox({
@@ -142,20 +163,25 @@
           this.$router.go(-1)
         }
       },
-      showGoHome () {
+      shouldLogin () {
         if (!this.token) {
-          // 需要延时跳转，否则本页面不会进入路由历史记录
+          let toast = Toast({
+            message: `您未登录，正在转入登录页`
+          })
           setTimeout(() => {
-            setStore('beforeLogin', 'true')
+            toast.close()
             this.$router.push({name: 'Login'})
-          }, 300)
+          }, 2000)
         } else {
           this.getPersonDetail()
         }
+      },
+      closeDialog () {
+        this.showDialog = false
       }
     },
     mounted () {
-      this.showGoHome()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
@@ -215,8 +241,8 @@
   }
   .carte-container {
     background-color: $white;
-    @include pm2rem(padding, 0px, 22px, 0px, 22px);
-    @include pm2rem(margin, 20px, 0px, 30px, 0px);
+    @include pm2rem(padding, 0px, 22px, 30px, 22px);
+    @include pm2rem(margin, 20px, 0px, 0px, 0px);
     .item {
       display: flex;
       justify-content: space-between;

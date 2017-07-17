@@ -12,9 +12,9 @@
       </mt-button>
     </mt-header>
     <div
-    class="map-container"
-    id="aMapContainer"
-    tabindex="0">
+      class="map-container"
+      id="aMapContainer"
+      tabindex="0">
     </div>
   </section>
 </template>

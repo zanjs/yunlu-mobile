@@ -42,7 +42,6 @@
   .search-container {
     background-color: $white;
     @include pm2rem(padding, 12px, 32px, 12px, 32px);
-    box-shadow: 0px 6px 20px rgba(185, 179, 179, 0.5);
     position: fixed;
     @include px2rem(top, 88px);
     left: 0;
@@ -72,14 +71,14 @@
   }
   .list-container {
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #E0E0E0;
     @include pm2rem(margin, 10px, 0px, 0px, 0px);
     @include px2rem(min-height, 600px);
     .item {
       display: flex;
       align-items: center;
-      color: #595959;
-      border-bottom: 1px solid #D1D1D1;
+      color: #262626;
+      border-bottom: 1px solid #E0E0E0;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
         display: flex;
@@ -98,6 +97,7 @@
         }
         .type {
           flex: 1;
+          color: #A6A6A6;
         }
         .address {
           color: #F75544;
