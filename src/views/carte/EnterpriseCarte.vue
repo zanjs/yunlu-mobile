@@ -35,19 +35,20 @@
              @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
-        <template v-if="showProduct">
-          <template v-if="products && products.length > 0">
-            <mt-loadmore
-              :top-method="loadProductTop"
-              :bottom-method="loadProductBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreProducts">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
+        <transition
+          name="fade"
+          :appear="true"
+          mode="out-in">
+          <template v-if="showProduct">
+            <template v-if="products && products.length > 0">
+              <mt-loadmore
+                key="product"
+                :top-method="loadProductTop"
+                :bottom-method="loadProductBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreProducts">
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -58,33 +59,31 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </transition>
-            </mt-loadmore>
+              </mt-loadmore>
+            </template>
+            <div
+              v-else
+              key="product1"
+              class="no-data">
+                <img src="../../assets/noProduct.png">
+            </div>
           </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noProduct.png">
-          </div>
-        </template>
-        <template v-else>
-          <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
+          <template v-else>
+            <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
               <information-list
+                key="information"
                 :store="enterpriseInfoFiles"
                 @click="openInformationFolders">
               </information-list>
-            </transition>
+            </template>
+            <div
+              v-else
+              key="information1"
+              class="no-data">
+              <img src="../../assets/noInformation.png">
+            </div>
           </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noInformation.png">
-          </div>
-        </template>
+        </transition>
         <div
           v-if="showGoTopBtn"
           class="cirlce-btn"

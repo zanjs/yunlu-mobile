@@ -41,19 +41,20 @@
              @click.prevent="tabClick(3)">个人会员</div>
       </div>
       <div class="tab-container">
-        <template v-if="activeIndex === 0">
-          <template v-if="products && products.length > 0">
-            <mt-loadmore
-              :top-method="loadProductTop"
-              :bottom-method="loadProductBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreProducts">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
+        <transition
+          name="fade"
+          :appear="true"
+          mode="out-in">
+          <template v-if="activeIndex === 0">
+            <template v-if="products && products.length > 0">
+              <mt-loadmore
+                key="product"
+                :top-method="loadProductTop"
+                :bottom-method="loadProductBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreProducts">
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -64,97 +65,89 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </transition>
-            </mt-loadmore>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noProduct.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 1">
-          <template
-            v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-            <transition
-              name="fade"
-              :appear="true"
-              mode="out-in">
-                <information-list
-                  :store="enterpriseInfoFiles"
-                  @click="openInformationFolders">
-                </information-list>
-            </transition>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noInformation.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 2">
-          <template
-            v-if="enterpriseMembers && enterpriseMembers.length > 0">
-            <mt-loadmore
-              :top-method="loadEnterpriseTop"
-              :bottom-method="loadEnterpriseBottom"
-              :bottom-pull-text="bottomPullText"
-              :bottom-drop-text="bottomDropText"
-              :auto-fill="false"
-              ref="loadMoreEnterprises">
-              <transition
-                name="fade"
-                :appear="true"
-                mode="out-in">
-                <enterprise-list
-                  :store="enterpriseMembers"
-                  @click="goEnterpriseCarte">
-                </enterprise-list>
-              </transition>
-            </mt-loadmore>
-          </template>
-          <div
-            v-else
-            class="no-data">
-            <img src="../../assets/noEnterprise.png">
-          </div>
-        </template>
-        <template v-if="activeIndex === 3">
-          <template v-if="hasLogin">
-            <template v-if="personMembers && personMembers.length > 0">
-              <mt-loadmore
-                :top-method="loadPersonTop"
-                :bottom-method="loadPersonBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMorePeople">
-                <transition
-                  name="fade"
-                  :appear="true"
-                  mode="out-in">
-                  <person-list
-                    :store="personMembers"
-                    @click="goPersonCarte">
-                  </person-list>
-                </transition>
               </mt-loadmore>
             </template>
             <div
               v-else
+              key="product1"
               class="no-data">
-              <img src="../../assets/noPerson.png">
+              <img src="../../assets/noProduct.png">
             </div>
           </template>
-          <template v-else>
-            <div class="tips-container">
-              <p>登录后才能查看</p>
-              <div class="login-btn">
-                <a @click="goLogin()">登录</a>
+          <template v-if="activeIndex === 1">
+            <template  v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
+              <information-list
+                key="information"
+                :store="enterpriseInfoFiles"
+                @click="openInformationFolders">
+              </information-list>
+            </template>
+            <div
+              v-else
+              key="information1"
+              class="no-data">
+              <img src="../../assets/noInformation.png">
+            </div>
+          </template>
+          <template v-if="activeIndex === 2">
+            <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
+              <mt-loadmore
+                key="enterprise"
+                :top-method="loadEnterpriseTop"
+                :bottom-method="loadEnterpriseBottom"
+                :bottom-pull-text="bottomPullText"
+                :bottom-drop-text="bottomDropText"
+                :auto-fill="false"
+                ref="loadMoreEnterprises">
+                <enterprise-list
+                  :store="enterpriseMembers"
+                  @click="goEnterpriseCarte">
+                </enterprise-list>
+              </mt-loadmore>
+            </template>
+            <div
+              v-else
+              key="enterprise1"
+              class="no-data">
+              <img src="../../assets/noEnterprise.png">
+            </div>
+          </template>
+          <template v-if="activeIndex === 3">
+            <template v-if="hasLogin">
+              <template v-if="personMembers && personMembers.length > 0">
+                <mt-loadmore
+                  key="person"
+                  :top-method="loadPersonTop"
+                  :bottom-method="loadPersonBottom"
+                  :bottom-pull-text="bottomPullText"
+                  :bottom-drop-text="bottomDropText"
+                  :auto-fill="false"
+                  ref="loadMorePeople">
+                  <person-list
+                    :store="personMembers"
+                    @click="goPersonCarte">
+                  </person-list>
+                </mt-loadmore>
+              </template>
+              <div
+                v-else
+                key="person1"
+                class="no-data">
+                <img src="../../assets/noPerson.png">
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <div
+                key="noLogin"
+                class="tips-container">
+                <p>登录后才能查看</p>
+                <div class="login-btn">
+                  <a @click="goLogin()">登录</a>
+                </div>
+              </div>
+            </template>
           </template>
-        </template>
+        </transition>
         <div
           v-if="showGoTopBtn"
           class="cirlce-btn"
