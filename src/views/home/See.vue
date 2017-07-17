@@ -253,6 +253,7 @@
         background-color: $white;
         display: flex;
         align-items: center;
+        @include px2rem(padding-top, 8px);
       }
       i {
         position: absolute;
