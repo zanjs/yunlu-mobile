@@ -115,9 +115,10 @@
   }
   .mint-header-title {
     height: inherit !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    line-height: 1 !important;
+    // display: flex !important;
+    // justify-content: center !important;
+    // align-items: center !important;
+    // line-height: 1 !important;
+    @include px2rem(line-height, 88px);
   }
 </style>
