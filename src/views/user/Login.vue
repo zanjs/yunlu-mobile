@@ -26,7 +26,7 @@
         </a>
       </div>
       <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
+        <!-- <a @click="goRegister()">注册账号</a> -->
         <a @click="forgetPassword()">忘记密码?</a>
       </div>
     </div>
