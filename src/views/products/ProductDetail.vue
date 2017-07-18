@@ -426,7 +426,7 @@
               index += 1
             }
           }
-          return index !== 4
+          return index !== productDetail.properties.length
         } else {
           return true
         }
@@ -994,7 +994,7 @@
           width: inherit;
           .title {
             @include font-dpr(16px);
-            font-weight: 100;
+            font-weight: 400;
             color: #ff5001;
             text-overflow: ellipsis;
             white-space: nowrap;
