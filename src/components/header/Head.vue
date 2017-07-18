@@ -21,13 +21,11 @@
       </div>
     <div
       v-show="showMenu"
-      class="drop-menu-arrow"
-      v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
+      class="drop-menu-arrow">
     </div>
     <section
       v-show="showMenu"
-      class="product-drop-menu"
-      v-bind:class="{'fade-in': cssAnimation, 'fade-out': !cssAnimation}">
+      class="product-drop-menu">
       <div class="menu"
            id="product-drop-menu">
         <div
@@ -63,28 +61,24 @@
   export default {
     data () {
       return {
-        showMenu: false,
-        cssAnimation: true
+        showMenu: false
       }
     },
     name: 'ProductHeader',
     methods: {
       openDropMenu () {
         this.showMenu = true
-        this.cssAnimation = true
       },
       addTouch () {
         let self = this
         document.getElementById('fullscreen-cover').addEventListener('touchstart', (e) => {
           // e.preventDefault()
-          this.cssAnimation = false
           setTimeout(() => {
             self.showMenu = false
           }, 400)
         })
         document.getElementById('product-drop-menu').addEventListener('touchstart', (e) => {
           // e.preventDefault()
-          this.cssAnimation = false
           setTimeout(() => {
             self.showMenu = false
           }, 400)
@@ -185,7 +179,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    // z-index: 1;
+    // z-index: 0;
     // background-color: rgba(0, 0, 0, 0.45);
   }
   .product-drop-menu {
@@ -219,27 +213,6 @@
       & .item:last-child {
         border-bottom: none;
       }
-    }
-  }
-  .fade-in {animation:fadeIn 0.4s 0s 1 both}
-
-  .fade-out {animation:fadeOut 0.4s 0s 1 both}
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
     }
   }
 </style>

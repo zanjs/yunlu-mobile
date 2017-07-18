@@ -341,6 +341,10 @@
             }
           },
           reject: () => {
+            Toast({
+              message: '删除失败',
+              duration: 500
+            })
           }
         })
       },
