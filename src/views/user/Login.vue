@@ -66,7 +66,8 @@
         time: AUTHORIZATION_TIME,
         tips: '登录请求已发送，请等待授权...',
         showDialog: false,
-        user: null
+        user: null,
+        interval: null
       }
     },
     methods: {
@@ -163,6 +164,9 @@
         })
       },
       closeDialog () {
+        if (this.interval) {
+          clearInterval(this.interval)
+        }
         this.showDialog = false
       },
       goRegister () {
@@ -172,14 +176,14 @@
         this.$router.push({name: 'ForgetPassword'})
       },
       countDown (seconds, speed = 1000) {
-        let interval = setInterval(() => {
+        this.interval = setInterval(() => {
           let minute = Math.floor(seconds / 60)
           let second = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
           if (seconds < 3600) {
             this.time = `${minute} : ${second}`
             seconds -= 1
             if (this.time === '0 : 00') {
-              clearInterval(interval)
+              clearInterval(this.interval)
               this.closeDialog()
               return false
             }
