@@ -70,17 +70,21 @@
               setStore('user', res.data)
               let toast = Toast({
                 message: '修改成功',
-                duration: 2000
+                duration: 1000
               })
               setTimeout(() => {
                 toast.close()
                 this.goBack()
-              }, 2000)
+              }, 1000)
             } else {
               Toast(res.data.msg)
             }
           },
-          reject: () => {
+          reject: (state, err) => {
+            Toast({
+              message: err.response.data.error,
+              duration: 1000
+            })
           }
         })
       }
