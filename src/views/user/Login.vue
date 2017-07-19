@@ -283,9 +283,10 @@
       header {
         background-color: #52CAA7;
         color: $white;
-        @include px2rem(height, 70px);
+        @include px2rem(height, 80px);
         text-align: center;
-        @include px2rem(line-height, 70px);
+        @include px2rem(line-height,80px);
+        @include font-dpr(15px);
       }
       .content {
         background-color: $white;
@@ -311,7 +312,9 @@
         text-align: center;
         line-height: 1;
         border-top: 1px solid #E0E0E0;
-        @include pm2rem(padding, 30px, 0px, 30px, 0px);
+        @include pm2rem(padding, 20px, 0px, 20px, 0px);
+        @include font-dpr(15px);
+        color: #262626;
       }
     }
   }
