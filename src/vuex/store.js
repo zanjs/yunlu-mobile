@@ -11,6 +11,7 @@ Vue.use(Vuex)
 const state = {
   uuid: getStore('user') ? getStore('user').id : '',
   userDelegate: null,
+  deviceDelegate: null,
   leanCloudConversations: [],
   yunLuConversations: [],
   conversationList: [],
@@ -40,6 +41,7 @@ const state = {
 
 const getters = {
   userDelegate: state => state.userDelegate,
+  deviceDelegate: state => state.deviceDelegate,
   leanCloudConversations: state => state.leanCloudConversations,
   yunLuConversations: state => state.yunLuConversations,
   conversationList: state => state.conversationList,
@@ -71,6 +73,9 @@ const actions = {
   commonAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
     api.commonRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
+  },
+  setDeviceDelegate ({commit}, params) {
+    commit(types.SET_DEVICE_DELEGATE, {params})
   },
   setUserDelegate ({commit}, params) {
     commit(types.SET_USER_DELEGATE, {params})
@@ -115,6 +120,10 @@ const mutations = {
 
   [types.SET_USER_DELEGATE] (state, {params}) {
     state.userDelegate = params
+  },
+
+  [types.SET_DEVICE_DELEGATE] (state, {params}) {
+    state.deviceDelegate = params
   },
 
   [types.UPDATE_LEAN_CLOUD_CONVERSATIONS] (state, {params}) {

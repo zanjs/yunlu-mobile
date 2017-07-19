@@ -15,10 +15,12 @@
       return {
         hasLogin: !!getStore('user'),
         token: getStore('user') ? getStore('user').authentication_token : '',
-        currentUserDelegate: null,
+        currentUserDelegate: this.$store.state.userDelegate || null,
+        currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
         conversationList: [],
-        uuid: getStore('user') ? getStore('user').id : ''
+        uuid: getStore('user') ? getStore('user').id : '',
+        deviceId: getStore('user') ? getStore('user').device_id : ''
       }
     },
     methods: {
@@ -30,7 +32,30 @@
         }
       },
       async init () {
-        if (!this.currentUserDelegate) {
+        if (!this.$store.state.deviceDelegate) {
+          this.currentDeviceDelegate = await this.$realtime.createIMClient(this.deviceId, {
+            signatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('device_signature').signature,
+                  timestamp: getStore('device_signature').timestamp / 1,
+                  nonce: getStore('device_signature').nonce
+                })
+              })
+            },
+            conversationSignatureFactory: () => {
+              return new Promise((resolve, reject) => {
+                return resolve({
+                  signature: getStore('device_signature').signature,
+                  timestamp: getStore('device_signature').timestamp / 1,
+                  nonce: getStore('device_signature').nonce
+                })
+              })
+            }
+          })
+          this.$store.dispatch('setDeviceDelegate', this.currentDeviceDelegate)
+        }
+        if (!this.$store.state.userDelegate) {
           this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
             signatureFactory: () => {
               return new Promise((resolve, reject) => {
@@ -51,12 +76,16 @@
               })
             }
           })
+          this.$store.dispatch('setUserDelegate', this.currentUserDelegate)
         }
-        this.$store.dispatch('setUserDelegate', this.userDelegate)
         this.currentUserDelegate.getQuery().limit(1000).containsMembers([`${this.uuid}`]).find().then(conversations => {
           this.$store.dispatch('updateLeanCouldConversations', conversations)
         })
+        this.currentDeviceDelegate.on('message', message => {
+          console.log('deviceDelegate', message)
+        })
         this.currentUserDelegate.on('message', message => {
+          console.log('userDelegate', message)
           let tmpObj = {
             conversationId: message.cid,
             from: message.from,
@@ -82,7 +111,8 @@
       // this.beforeInit()
     },
     updated () {
-      this.beforeInit()
+      // console.log('updated')
+      // this.beforeInit()
     }
   }
 </script>
