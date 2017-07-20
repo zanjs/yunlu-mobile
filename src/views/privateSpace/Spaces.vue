@@ -94,7 +94,7 @@
               }
             }
           },
-          reject: (err) => {
+          reject: (state, err) => {
             console.dir(err)
             if (err.response.status === 500) {
               this.$router.replace({name: 'ReportExpired'})
