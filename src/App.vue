@@ -55,7 +55,7 @@
       },
       async init () {
         if (!this.$store.state.deviceDelegate) {
-          this.currentDeviceDelegate = await this.openIMClient(`dev_${this.deviceId}`, 'signature_device')
+          this.currentDeviceDelegate = await this.openIMClient(`dev_${this.deviceId}`, 'device_signature')
           this.$store.dispatch('setDeviceDelegate', this.currentDeviceDelegate)
         }
         if (!this.$store.state.userDelegate) {
