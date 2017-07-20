@@ -140,13 +140,13 @@
           target: this,
           resolve: (state, res) => {
             let ids = this.handleFileIds(products)
-            this.getFilesPublisheds(ids, products, res.data.teams, groups)
+            this.getFilesPublisheds(ids, res.data.teams, groups)
           },
           reject: () => {
           }
         })
       },
-      getFilesPublisheds (ids, products, teams, groups) {
+      getFilesPublisheds (ids, teams, groups) {
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -194,7 +194,9 @@
       handleFileIds (arr) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
-          tmpArr.push(arr[i].price.product.file_id)
+          if (arr[i].price) {
+            tmpArr.push(arr[i].price.product.file_id)
+          }
         }
         return tmpArr
       },
