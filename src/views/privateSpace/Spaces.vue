@@ -78,7 +78,7 @@
       },
       getData (url, params) {
         this.$store.dispatch('commonAction', {
-          url: 'url',
+          url: url,
           method: 'get',
           params: params,
           target: this,
