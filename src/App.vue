@@ -95,7 +95,6 @@
       // this.beforeInit()
     },
     updated () {
-      // console.log('updated')
       this.beforeInit()
     }
   }

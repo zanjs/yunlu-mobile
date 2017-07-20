@@ -80,9 +80,9 @@
               Toast(res.data.msg)
             }
           },
-          reject: (state, err) => {
+          reject: () => {
             Toast({
-              message: err.response.data.error || '非主控设备没有授权此操作',
+              message: '非主控设备没有授权此操作',
               duration: 1000
             })
           }
