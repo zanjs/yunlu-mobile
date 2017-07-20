@@ -96,33 +96,23 @@
             state.clusters = res.data.clusters
             setStore('userCard', res.data.cards)
           },
-          reject: (state, err) => {
-            if (err.response.status === 500) {
-              this.$router.replace({name: 'ReportExpired'})
-            }
+          reject: () => {
+            this.$router.replace({name: 'ReportExpired'})
           }
         })
       },
       cardClick (item) {
         switch (item.type) {
           case 'email':
-            // this.linkToast('会员', '邮箱地址', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'wechat':
-            // this.linkToast('会员', '微信号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(1, '微信号', item.value)
             break
           case 'weibo':
-            // this.linkToast('会员', '微博账号', item.value)
             this.showMessageBox(item.value)
             break
           case 'qq':
-            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('会员', 'QQ账号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
