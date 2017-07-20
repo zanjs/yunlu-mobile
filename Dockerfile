@@ -11,7 +11,7 @@ RUN yarn install && \
     npm run build && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
-    echo "$(git rev-parse --short HEAD)($(git log -1 HEAD --pretty=format:%s))" > /dist/version && \
+    echo "$(git rev-parse --short HEAD)-$(git log -1 HEAD --pretty=format:%s)" > /dist/version && \
     rm -rf /app && \
     chmod +x /docker-entrypoint.sh
 
