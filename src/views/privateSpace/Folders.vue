@@ -66,6 +66,12 @@
         </swiper-slide>
       </swiper>
     </template>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
   </section>
 </template>
 
@@ -76,11 +82,13 @@
   import { Toast, MessageBox } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import PopDialog from '../../components/common/PopDialog'
   export default {
     data () {
       return {
         user_id: this.$route.params.user_id,
         id: this.$route.params.id,
+        p: this.$route.query.p || '',
         pageIndex: 1,
         pageSize: 24,
         headerName: '私人空间文件夹',
@@ -90,6 +98,8 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         showPreview: false,
         currentIndex: 1,
+        showDialog: false,
+        message: null,
         swiperOption: {
           notNextTick: false,
           autoplay: 0,
@@ -121,9 +131,17 @@
       Card,
       Album,
       swiper,
-      swiperSlide
+      swiperSlide,
+      PopDialog
     },
     methods: {
+      beforeGetData () {
+        if (this.p) {
+          this.getData('/shares/photos', {p: this.p})
+        } else {
+          this.shouldLogin()
+        }
+      },
       showFullScreenPreview (index) {
         this.currentIndex = index + 1
         this.swiperOption.initialSlide = index
@@ -152,25 +170,27 @@
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
       cardClick (item) {
-        this.showMessageBox(item.value)
-        // switch (item.type) {
-        //   case 'email':
-        //     this.linkToast('会员', '邮箱地址', item.value)
-        //     break
-        //   case 'wechat':
-        //     this.linkToast('会员', '微信号', item.value)
-        //     break
-        //   case 'weibo':
-        //     this.linkToast('会员', '微博账号', item.value)
-        //     break
-        //   case 'qq':
-        //     window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-        //     // this.linkToast('会员', 'QQ账号', item.value)
-        //     break
-        //   case 'address':
-        //     Toast('暂未开放')
-        //     break
-        // }
+        switch (item.type) {
+          case 'email':
+            this.showPopDialog(2, '邮箱地址', item.value)
+            break
+          case 'wechat':
+            this.showPopDialog(1, '微信号', item.value)
+            break
+          case 'weibo':
+            this.showMessageBox(item.value)
+            break
+          case 'qq':
+            this.showPopDialog(0, 'QQ号', item.value)
+            break
+          case 'address':
+            if (item.value.latitude && item.value.longitude) {
+              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+            } else {
+              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.userCard.name, address: item.value}})
+            }
+            break
+        }
       },
       linkToast (str, key, value) {
         Toast({
@@ -184,66 +204,66 @@
           message: str
         })
       },
-      getPersonDetail () {
-        this.$store.dispatch('commonAction', {
-          url: '/business_cards',
-          method: 'get',
-          params: {
-            token: this.token,
-            user_id: this.user_id
-          },
-          target: this,
-          resolve: (state, res) => {
-            state.userCard = res.data.cards
-            state.clusters = res.data.clusters
-            this.handleName(this.space_id, res.data.clusters)
-          },
-          reject: () => {
-          }
-        })
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
       },
-      getPhotos () {
+      closeDialog () {
+        this.showDialog = false
+      },
+      getData (url, params) {
         this.$store.dispatch('commonAction', {
-          url: `/galleries/${this.id}/photos`,
+          url: url,
           method: 'get',
-          params: {
-            token: this.token,
-            page: this.pageIndex,
-            per_page: this.pageSize
-          },
+          params: params,
           target: this,
           resolve: (state, res) => {
-            this.headerName = res.data.gallery_name
-            if (this.pageIndex === 1) {
-              this.photos = res.data.photos
-              // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
-                this.$refs.loadMorePhotos.onTopLoaded()
-              }
+            if (url === '/business_cards') {
+              state.userCard = res.data.cards
+              state.clusters = res.data.clusters
+              this.handleName(this.space_id, res.data.clusters)
             } else {
-              if (res.data.photos.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+              this.headerName = res.data.gallery_name
+              if (this.pageIndex === 1) {
+                // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+                if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
+                  this.$refs.loadMorePhotos.onTopLoaded()
+                }
+              } else {
+                if (res.data.photos.length === 0) {
+                  Toast({
+                    message: '没有更多数据了',
+                    duration: 1000
+                  })
+                }
+                this.photos = [...this.photos, ...res.data.photos]
+                if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
+                  this.$refs.loadMorePhotos.onBottomLoaded()
+                }
               }
-              this.photos = [...this.photos, ...res.data.photos]
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
-                this.$refs.loadMorePhotos.onBottomLoaded()
+              if (url === '/shares/photos') {
+                state.userCard = res.data.cards
               }
             }
           },
-          reject: () => {
+          reject: (state, err) => {
+            if (err.response.status === 500) {
+              this.$router.replace({name: 'ReportExpired'})
+            }
           }
         })
       },
       loadPhotosTop () {
         this.pageIndex = 1
-        this.getPhotos()
+        this.getData(`/galleries/${this.id}/photos`, {token: this.token, page: this.pageIndex, per_page: this.pageSize})
       },
       loadPhotosBottom () {
         this.pageIndex += 1
-        this.getPhotos()
+        this.getData(`/galleries/${this.id}/photos`, {token: this.token, page: this.pageIndex, per_page: this.pageSize})
       },
       goBack () {
         if (getStore('Folders_goHome')) {
@@ -263,13 +283,13 @@
             this.$router.push({name: 'Login'})
           }, 2000)
         } else {
-          this.getPersonDetail()
-          this.getPhotos()
+          this.getData('/business_cards', {token: this.token, user_id: this.user_id})
+          this.getData(`/galleries/${this.id}/photos`, {token: this.token, page: this.pageIndex, per_page: this.pageSize})
         }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.beforeGetData()
     },
     computed: {
       ...mapGetters([
