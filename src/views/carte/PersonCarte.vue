@@ -63,7 +63,8 @@
   export default {
     data () {
       return {
-        user_id: this.$route.params.user_id,
+        user_id: this.$route.params.user_id || '',
+        p: this.$route.query.p || '',
         token: getStore('user') ? getStore('user').authentication_token : null,
         showDialog: false,
         message: null
@@ -74,24 +75,31 @@
       PopDialog
     },
     methods: {
+      beforeGetData () {
+        if (this.p) {
+          this.getPersonDetail('/shares/card', {p: this.p})
+        } else {
+          this.shouldLogin()
+        }
+      },
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
       },
-      getPersonDetail () {
+      getPersonDetail (url, params) {
         this.$store.dispatch('commonAction', {
-          url: '/business_cards',
+          url: url,
           method: 'get',
-          params: {
-            token: this.token,
-            user_id: this.user_id
-          },
+          params: params,
           target: this,
           resolve: (state, res) => {
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
             setStore('userCard', res.data.cards)
           },
-          reject: () => {
+          reject: (state, err) => {
+            if (err.response.status === 500) {
+              this.$router.replace({name: 'ReportExpired'})
+            }
           }
         })
       },
@@ -148,7 +156,7 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          this.$router.push({name: 'Spaces', params: {user_id: this.user_id, space_id: item.id}})
+          this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
         } else if (item.is_association) {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else {
@@ -173,7 +181,7 @@
             this.$router.push({name: 'Login'})
           }, 2000)
         } else {
-          this.getPersonDetail()
+          this.getPersonDetail('/business_cards', {token: this.token, user_id: this.user_id})
         }
       },
       closeDialog () {
@@ -181,7 +189,7 @@
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.beforeGetData()
     },
     computed: {
       ...mapGetters([

@@ -509,7 +509,7 @@
         this.$router.push({name: 'EnterpriseCarte', params: {id: id}})
       },
       goPersonCarte (id) {
-        this.$router.push({name: 'PersonCarte', params: {user_id: id}})
+        this.$router.push({path: `/users/${id}`})
       },
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {

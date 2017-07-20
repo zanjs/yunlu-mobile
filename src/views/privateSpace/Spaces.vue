@@ -17,20 +17,26 @@
         @click="cardClick">
       </card>
     </div>
-    <div v-if="Thumbnails && Thumbnails.length > 0"
+    <div v-if="thumbnails && thumbnails.length > 0"
          class="rope">
       <img src="../../assets/shengzi@2x.png"
            class="left">
       <img src="../../assets/shengzi@2x.png"
            class="right">
     </div>
-    <div v-if="Thumbnails && Thumbnails.length > 0"
+    <div v-if="thumbnails && thumbnails.length > 0"
          class="album-comtainer">
       <folders-cover
-        :data-source="Thumbnails"
+        :data-source="thumbnails"
         @click="albumClick">
       </folders-cover>
     </div>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
   </section>
 </template>
 
@@ -40,56 +46,58 @@
   import { mapGetters } from 'vuex'
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast, MessageBox } from 'mint-ui'
+  import PopDialog from '../../components/common/PopDialog'
   export default {
     data () {
       return {
         headerName: '私人空间',
-        space_id: this.$route.params.space_id,
-        user_id: this.$route.params.user_id,
+        p: this.$route.query.p || '',
+        space_id: this.$route.params.space_id || '',
+        user_id: this.$route.params.user_id || '',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        Thumbnails: []
+        thumbnails: [],
+        showDialog: false,
+        message: null
       }
     },
     components: {
       Card,
-      FoldersCover
+      FoldersCover,
+      PopDialog
     },
     methods: {
+      beforeGetData () {
+        if (this.p) {
+          this.getData('/shares/zone', {p: this.p})
+        } else {
+          this.shouldLogin()
+        }
+      },
       albumClick (item) {
-        this.$router.push({name: 'Photos', params: {id: item.id}, query: {name: item.name}})
+        this.$router.push({path: `/photos/${item.id}`, query: {name: item.name}})
       },
-      getPersonDetail () {
+      getData (url, params) {
         this.$store.dispatch('commonAction', {
-          url: '/business_cards',
+          url: 'url',
           method: 'get',
-          params: {
-            token: this.token,
-            user_id: this.user_id
-          },
+          params: params,
           target: this,
           resolve: (state, res) => {
-            state.userCard = res.data.cards
-            state.clusters = res.data.clusters
-            this.handleName(this.space_id, res.data.clusters)
+            if (url === '/business_cards') {
+              state.userCard = res.data.cards
+              state.clusters = res.data.clusters
+              this.handleName(this.space_id, res.data.clusters)
+            } else {
+              this.thumbnails = res.data.gallery
+              if (url === '/shares/zone') {
+                state.userCard = res.data.cards
+              }
+            }
           },
-          reject: () => {
-          }
-        })
-      },
-      getSpace () {
-        this.$store.dispatch('commonAction', {
-          url: '/galleries',
-          method: 'get',
-          params: {
-            token: this.token,
-            user_id: this.user_id,
-            cluster_id: this.space_id
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.Thumbnails = res.data.gallery
-          },
-          reject: () => {
+          reject: (err) => {
+            if (err.response.status === 500) {
+              this.$router.replace({name: 'ReportExpired'})
+            }
           }
         })
       },
@@ -102,25 +110,27 @@
         }
       },
       cardClick (item) {
-        this.showMessageBox(item.value)
-        // switch (item.type) {
-        //   case 'email':
-        //     this.linkToast('会员', '邮箱地址', item.value)
-        //     break
-        //   case 'wechat':
-        //     this.linkToast('会员', '微信号', item.value)
-        //     break
-        //   case 'weibo':
-        //     this.linkToast('会员', '微博账号', item.value)
-        //     break
-        //   case 'qq':
-        //     window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-        //     // this.linkToast('会员', 'QQ账号', item.value)
-        //     break
-        //   case 'address':
-        //     Toast('暂未开放')
-        //     break
-        // }
+        switch (item.type) {
+          case 'email':
+            this.showPopDialog(2, '邮箱地址', item.value)
+            break
+          case 'wechat':
+            this.showPopDialog(1, '微信号', item.value)
+            break
+          case 'weibo':
+            this.showMessageBox(item.value)
+            break
+          case 'qq':
+            this.showPopDialog(0, 'QQ号', item.value)
+            break
+          case 'address':
+            if (item.value.latitude && item.value.longitude) {
+              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+            } else {
+              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.userCard.name, address: item.value}})
+            }
+            break
+        }
       },
       linkToast (str, key, value) {
         Toast({
@@ -133,6 +143,17 @@
           title: '长按复制到剪切板',
           message: str
         })
+      },
+      showPopDialog (type, name, value) {
+        this.message = {
+          type: type,
+          name: name,
+          value: value
+        }
+        this.showDialog = true
+      },
+      closeDialog () {
+        this.showDialog = false
       },
       goBack () {
         if (getStore('Spaces_goHome')) {
@@ -152,13 +173,13 @@
             this.$router.push({name: 'Login'})
           }, 2000)
         } else {
-          this.getPersonDetail()
-          this.getSpace()
+          this.getData('/business_cards', {token: this.token, user_id: this.user_id})
+          this.getData('/galleries', {token: this.token, cluster_id: this.space_id, user_id: this.user_id})
         }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.beforeGetData()
     },
     computed: {
       ...mapGetters([
