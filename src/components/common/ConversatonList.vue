@@ -23,7 +23,7 @@
             class="content">
             <div class="top">
               <span class="name">{{item.fromName}}</span>
-              <span class="date">{{item.timestamp}}</span>
+              <span class="date">{{item.timestamp | dateFilter}}</span>
             </div>
             <div class="msg">
               {{item.lastMessage}}
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import moment from 'moment'
   export default {
     data () {
       return {
@@ -49,6 +50,13 @@
       },
       handleChecked (item, bool) {
         this.$emit('check', {item: item, checked: bool})
+      }
+    },
+    filters: {
+      dateFilter (str) {
+        let today = moment(new Date()).format('YYYY-MM-DD')
+        let day = moment(str).format('YYYY-MM-DD')
+        return moment(day).isSame(today, 'day') ? moment(str).format('HH:mm:ss') : day
       }
     }
   }
@@ -105,6 +113,9 @@
           .name {
             @include font-dpr(16px);
             color: #595959;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
           .date {
             @include font-dpr(14px);
