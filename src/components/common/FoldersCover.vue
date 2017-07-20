@@ -7,8 +7,8 @@
       <img :src="item.last_photo"
            class="cover">
       <div class="label">
-        <span class="text">{{item.name}}</span>
-        <span class="count">{{item.count}}</span>
+        <p class="text">{{item.name}}</p>
+        <p class="count">{{item.count}}</p>
       </div>
     </div>
   </section>
@@ -45,8 +45,10 @@
     .album {
       position: relative;
       @include pm2rem(margin, 0px, 26px, 26px, 0px);
+      @include px2rem(height, 360px);
+      @include px2rem(width, 311px);
       .cover {
-        @include px2rem(width, 312px);
+        @include px2rem(width, 311px);
         @include px2rem(height, 360px);
       }
       .label {
@@ -59,6 +61,7 @@
         align-items: center;
         justify-content: space-between;
         color: $white;
+        line-height: 1;
         .text {
           @include px2rem(padding-left, 26px);
           overflow: hidden;

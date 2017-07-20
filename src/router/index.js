@@ -82,13 +82,25 @@ export default new Router({
       name: 'Report',
       component: Report
     }, {
+      path: '/card',
+      name: 'PersonCarte',
+      component: PersonCarte
+    }, {
       path: '/users/:user_id',
       name: 'PersonCarte',
       component: PersonCarte
     }, {
+      path: '/zone',
+      name: 'Spaces',
+      component: Spaces
+    }, {
       path: '/users/:user_id/spaces/:space_id',
       name: 'Spaces',
       component: Spaces
+    }, {
+      path: '/photos',
+      name: 'Folders',
+      component: Folders
     }, {
       path: '/users/:user_id/folders/:id',
       name: 'Folders',
