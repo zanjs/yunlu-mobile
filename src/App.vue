@@ -31,60 +31,44 @@
           this.init()
         }
       },
+      openIMClient (id, signatureStr) {
+        return this.$realtime.createIMClient(id, {
+          signatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore(`${signatureStr}`).signature,
+                timestamp: getStore(`${signatureStr}`).timestamp / 1,
+                nonce: getStore(`${signatureStr}`).nonce
+              })
+            })
+          },
+          conversationSignatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore(`${signatureStr}`).signature,
+                timestamp: getStore(`${signatureStr}`).timestamp / 1,
+                nonce: getStore(`${signatureStr}`).nonce
+              })
+            })
+          }
+        })
+      },
       async init () {
         if (!this.$store.state.deviceDelegate) {
-          this.currentDeviceDelegate = await this.$realtime.createIMClient(this.deviceId, {
-            signatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('device_signature').signature,
-                  timestamp: getStore('device_signature').timestamp / 1,
-                  nonce: getStore('device_signature').nonce
-                })
-              })
-            },
-            conversationSignatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('device_signature').signature,
-                  timestamp: getStore('device_signature').timestamp / 1,
-                  nonce: getStore('device_signature').nonce
-                })
-              })
-            }
-          })
+          this.currentDeviceDelegate = await this.openIMClient(`dev_${this.deviceId}`, 'signature_device')
           this.$store.dispatch('setDeviceDelegate', this.currentDeviceDelegate)
         }
         if (!this.$store.state.userDelegate) {
-          this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
-            signatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('signature').signature,
-                  timestamp: getStore('signature').timestamp / 1,
-                  nonce: getStore('signature').nonce
-                })
-              })
-            },
-            conversationSignatureFactory: () => {
-              return new Promise((resolve, reject) => {
-                return resolve({
-                  signature: getStore('signature').signature,
-                  timestamp: getStore('signature').timestamp / 1,
-                  nonce: getStore('signature').nonce
-                })
-              })
-            }
-          })
+          this.currentUserDelegate = await this.openIMClient(this.uuid, 'signature')
           this.$store.dispatch('setUserDelegate', this.currentUserDelegate)
         }
-        this.currentUserDelegate.getQuery().limit(1000).containsMembers([`${this.uuid}`]).find().then(conversations => {
+        this.$store.state.userDelegate.getQuery().limit(1000).containsMembers([`${this.uuid}`]).find().then(conversations => {
           this.$store.dispatch('updateLeanCouldConversations', conversations)
         })
-        this.currentDeviceDelegate.on('message', message => {
+        this.$store.state.deviceDelegate.on('message', message => {
           console.log('deviceDelegate', message)
         })
-        this.currentUserDelegate.on('message', message => {
+        this.$store.state.userDelegate.on('message', message => {
           console.log('userDelegate', message)
           let tmpObj = {
             conversationId: message.cid,
@@ -102,7 +86,7 @@
             this.$store.dispatch('receiveNewMessage', tmpObj)
           }
         })
-        this.currentUserDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
+        this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
           console.log('未读消息记录', unreadMessagesCount)
         })
       }
@@ -112,7 +96,7 @@
     },
     updated () {
       // console.log('updated')
-      // this.beforeInit()
+      this.beforeInit()
     }
   }
 </script>
@@ -145,10 +129,6 @@
   }
   .mint-header-title {
     height: inherit !important;
-    // display: flex !important;
-    // justify-content: center !important;
-    // align-items: center !important;
-    // line-height: 1 !important;
     @include px2rem(line-height, 88px);
   }
 </style>

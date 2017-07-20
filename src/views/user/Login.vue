@@ -108,7 +108,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.goBack()
+              this.getSignature(res.data.authentication_token)
             }
           },
           reject: () => {

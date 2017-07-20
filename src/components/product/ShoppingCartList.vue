@@ -26,64 +26,66 @@
         v-for="(i, index) in item.purchase_items"
         :key="index"
         class="row-item">
-        <div
-          class="check-box"
-          @click.stop="handleItemChecked(i, item, i.checked)">
-          <i
-            v-if="i.checked"
-            class="iconfont icon-xuanzhong checked"></i>
-          <i
-            v-if="!i.checked"
-            class="iconfont icon-weixuanzhong"></i>
-        </div>
-        <div
-          class="container"
-          @click.stop="handleItemClick(i)">
-          <img :src="i.price.product.file_thumb_url">
-          <div class="content">
-            <p>{{i.price.product.name}}</p>
-            <div class="price-container">
-              <div class="price">
-                {{i.price.money}}
-              </div>
-              <div
-                v-if="i.price.amount !== '定制'"
-                class="count-bar">
-                <i
-                  v-if="i.quantity > 1"
-                  class="iconfont icon-jianshao"
-                  @click.stop="decrease(i, item)"></i>
-                <i
-                  v-if="i.quantity === 1"
-                  class="iconfont icon-jianshao disabled"
-                  @click.stop="doNothing"></i>
-                <div
-                  class="count"
-                  @click.stop="doNothing">
-                  <!-- 暂时不考虑库存 -->
-                  <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
-                  <input
-                    type="number"
-                    @blur="handleInput($event.target.value, i.price.amount, i, item)"
-                    :value="i.quantity">
-                  <!-- <span
-                    v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">
-                    {{i.quantity}}
-                  </span> -->
+        <template v-if="i.price">
+          <div
+            class="check-box"
+            @click.stop="handleItemChecked(i, item, i.checked)">
+            <i
+              v-if="i.checked"
+              class="iconfont icon-xuanzhong checked"></i>
+            <i
+              v-if="!i.checked"
+              class="iconfont icon-weixuanzhong"></i>
+          </div>
+          <div
+            class="container"
+            @click.stop="handleItemClick(i)">
+            <img :src="i.price.product.file_thumb_url">
+            <div class="content">
+              <p>{{i.price.product.name}}</p>
+              <div class="price-container">
+                <div class="price">
+                  {{i.price.money}}
                 </div>
-                <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
-                <i
-                  class="iconfont icon-tianjia"
-                  @click.stop="increase(i, item)"></i>
-                <!-- <i
-                  v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')"
-                  class="iconfont icon-tianjia disabled"
-                  @click.stop="doNothing">
-                </i> -->
+                <div
+                  v-if="i.price.amount !== '定制'"
+                  class="count-bar">
+                  <i
+                    v-if="i.quantity > 1"
+                    class="iconfont icon-jianshao"
+                    @click.stop="decrease(i, item)"></i>
+                  <i
+                    v-if="i.quantity === 1"
+                    class="iconfont icon-jianshao disabled"
+                    @click.stop="doNothing"></i>
+                  <div
+                    class="count"
+                    @click.stop="doNothing">
+                    <!-- 暂时不考虑库存 -->
+                    <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
+                    <input
+                      type="number"
+                      @blur="handleInput($event.target.value, i.price.amount, i, item)"
+                      :value="i.quantity">
+                    <!-- <span
+                      v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">
+                      {{i.quantity}}
+                    </span> -->
+                  </div>
+                  <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
+                  <i
+                    class="iconfont icon-tianjia"
+                    @click.stop="increase(i, item)"></i>
+                  <!-- <i
+                    v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')"
+                    class="iconfont icon-tianjia disabled"
+                    @click.stop="doNothing">
+                  </i> -->
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </section>
