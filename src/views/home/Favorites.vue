@@ -11,9 +11,7 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-    <form
-      class="search-bar"
-      action="#">
+    <div class="search-bar">
       <input
         type="search"
         v-model="searchParams"
@@ -31,7 +29,7 @@
         @click.stop="searchFavorites">
         <i class="iconfont icon-sousuo"></i>
       </div>
-    </form>
+    </div>
     <template v-if="favorites && favorites.length > 0">
       <section class="list-container">
         <mt-loadmore

@@ -18,15 +18,23 @@
         <div
           class="container"
           @click="handleClick(item)">
-          <img :src="item.fromLogo">
-          <div
-            class="content">
-            <div class="top">
-              <span class="name">{{item.fromName}}</span>
-              <span class="date">{{item.timestamp | dateFilter}}</span>
-            </div>
-            <div class="msg">
-              {{item.lastMessage}}
+          <img
+            v-if="item.logoUrl"
+            :src="item.logoUrl">
+          <img
+            v-else
+            src="../../assets/userAvatarSmall.png">
+          <div class="content-wraper">
+            <div class="content">
+              <div class="top">
+                <div class="name">
+                  {{item.remark}}
+                </div>
+                <div class="date">{{item.timestamp | dateFilter}}</div>
+              </div>
+              <div class="msg">
+                {{item.lastMessage}}
+              </div>
             </div>
           </div>
         </div>
@@ -97,34 +105,43 @@
           @include px2rem(border-radius, 59px);
           @include px2rem(margin-right, 30px);
         }
-      }
-      .content {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        line-height: 1;
-        flex: 1;
-        height: inherit;
-        @include px2rem(padding-right, 32px);
-        .top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          .name {
-            @include font-dpr(16px);
-            color: #595959;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
+        .content-wraper {
+          display: block;
+          height: inherit;
+          @include px2rem(padding-right, 32px);
+          flex: 1;
+          .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            line-height: 1;
+            height: inherit;
+            width: 100%;
+            .top {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              .name {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                @include font-dpr(16px);
+                color: #595959;
+                @include px2rem(width, 260px);
+              }
+              .date {
+                @include font-dpr(14px);
+                color: #A6A6A6;
+                @include px2rem(width, 200px);
+                text-align: right;
+              }
+            }
+            .msg {
+              @include font-dpr(14px);
+              color: #A6A6A6;
+            }
           }
-          .date {
-            @include font-dpr(14px);
-            color: #A6A6A6;
-          }
-        }
-        .msg {
-          @include font-dpr(14px);
-          color: #A6A6A6;
         }
       }
     }
