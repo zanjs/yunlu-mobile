@@ -174,7 +174,7 @@
             <div
               v-if="productDetailTeam && productDetailTeam.company"
               class="title">
-              {{productDetailTeam.company}}这个公司的名字很长很长
+              {{productDetailTeam.company}}
             </div>
             <span
               v-else
