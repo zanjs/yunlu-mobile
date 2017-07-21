@@ -13,22 +13,19 @@
     name: 'app',
     data () {
       return {
-        hasLogin: !!getStore('user'),
-        token: getStore('user') ? getStore('user').authentication_token : '',
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
-        conversationList: [],
-        uuid: getStore('user') ? getStore('user').id : '',
-        deviceId: getStore('user') ? getStore('user').device_id : ''
+        conversationList: []
       }
     },
     methods: {
       beforeInit () {
-        if (!this.hasLogin) {
-          return false
-        } else {
+        // 登录后getStore('user')会发生变化，不能直接从data中取数据，data中的数据不是响应式的。
+        if (getStore('user') && getStore('user').authentication_token) {
           this.init()
+        } else {
+          return false
         }
       },
       openIMClient (id, signatureStr) {
@@ -55,14 +52,14 @@
       },
       async init () {
         if (!this.$store.state.deviceDelegate) {
-          this.currentDeviceDelegate = await this.openIMClient(`dev_${this.deviceId}`, 'device_signature')
+          this.currentDeviceDelegate = await this.openIMClient(`dev_${getStore('user').device_id}`, 'device_signature')
           this.$store.dispatch('setDeviceDelegate', this.currentDeviceDelegate)
         }
         if (!this.$store.state.userDelegate) {
-          this.currentUserDelegate = await this.openIMClient(this.uuid, 'signature')
+          this.currentUserDelegate = await this.openIMClient(getStore('user').id, 'signature')
           this.$store.dispatch('setUserDelegate', this.currentUserDelegate)
         }
-        this.$store.state.userDelegate.getQuery().limit(1000).containsMembers([`${this.uuid}`]).find().then(conversations => {
+        this.$store.state.userDelegate.getQuery().limit(1000).containsMembers([`${getStore('user').id}`]).find().then(conversations => {
           this.$store.dispatch('updateLeanCouldConversations', conversations)
         })
         this.$store.state.deviceDelegate.on('message', message => {
@@ -90,9 +87,6 @@
           console.log('未读消息记录', unreadMessagesCount)
         })
       }
-    },
-    mounted () {
-      // this.beforeInit()
     },
     updated () {
       this.beforeInit()
