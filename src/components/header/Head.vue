@@ -75,13 +75,13 @@
           // e.preventDefault()
           setTimeout(() => {
             self.showMenu = false
-          }, 400)
+          }, 500)
         })
         document.getElementById('product-drop-menu').addEventListener('touchstart', (e) => {
           // e.preventDefault()
           setTimeout(() => {
             self.showMenu = false
-          }, 400)
+          }, 500)
         })
       },
       goFavorites () {
