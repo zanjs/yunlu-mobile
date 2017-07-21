@@ -25,7 +25,7 @@
           <span>流程</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Conversation', hasLogin)">
+             @click="goRoute('Download', true)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
