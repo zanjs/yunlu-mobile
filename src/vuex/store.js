@@ -4,7 +4,7 @@ import * as types from './mutation-types'
 import api from '../api/api'
 // import { Indicator } from 'mint-ui'
 import moment from 'moment'
-import { getStore } from '../config/mUtils'
+import { getStore, setStore } from '../config/mUtils'
 
 Vue.use(Vuex)
 
@@ -129,22 +129,21 @@ const mutations = {
   [types.UPDATE_LEAN_CLOUD_CONVERSATIONS] (state, {params}) {
     let tmpArr = []
     for (let i = 0; i < params.length; i++) {
-      if (params[i].lastMessage) {
-        tmpArr.push({
-          conversationId: params[i].lastMessage.cid,
-          from: params[i].lastMessage.from,
-          id: params[i].lastMessage.id,
-          fromLogo: params[i].lastMessage._lcattrs.fromLogo,
-          fromName: params[i].lastMessage._lcattrs.fromName,
-          timestamp: moment(params[i].timestamp).format('YYYY-MM-DD HH:mm:ss'),
-          clazz: params[i].lastMessage._lcattrs.clazz,
-          lastMessage: params[i].lastMessage._lctext,
-          isSelf: params[i].from === state.uuid,
-          hasRead: true
-        })
-      }
+      tmpArr.push({
+        conversationId: params[i].id,
+        from: params[i].lastMessage && params[i].lastMessage.from ? params[i].lastMessage.from : '',
+        id: params[i].lastMessage && params[i].lastMessage.id ? params[i].lastMessage.id : '',
+        fromLogo: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.fromLogo ? params[i].lastMessage._lcattrs.fromLogo : '',
+        fromName: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.fromName ? params[i].lastMessage._lcattrs.fromName : '',
+        timestamp: moment(params[i]._updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+        clazz: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.clazz ? params[i].lastMessage._lcattrs.clazz : 'user',
+        lastMessage: params[i].lastMessage && params[i].lastMessage._lctext ? params[i].lastMessage._lctext : '点击查看聊天记录',
+        isSelf: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.from ? params[i].lastMessage._lcattrs.from === state.uuid : false,
+        hasRead: true
+      })
     }
     state.leanCloudConversations = tmpArr
+    setStore('leanCloudConversations', tmpArr)
   },
 
   [types.RECEIVE_NEW_MESSAGE] (state, {params}) {

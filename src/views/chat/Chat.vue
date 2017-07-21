@@ -63,13 +63,11 @@
         mySelf: getStore('user') || null,
         targetUser: null,
         type: this.$route.query.type,
-        teamId: this.$route.query.teamId || '',
+        teamId: '',
         productId: this.$route.query.productId || '',
-        productName: this.$route.query.productName || '',
-        productPrice: this.$route.query.productPrice || '',
-        productImg: this.$route.query.productImg || '',
-        targetUuid: this.$route.query.uuid,
-        conversationId: this.$route.query.conversationId,
+        productName: '',
+        productPrice: '',
+        productImg: '',
         currentUserDelegate: null,
         conversation: null,
         title: '',
@@ -84,7 +82,7 @@
     methods: {
       beforeGetConferences () {
         if (this.type === 'Product') {
-          this.createConferences(this.teamId, this.productId)
+          this.getProductDetail()
         } else {
           this.createConferences()
         }
@@ -121,7 +119,28 @@
           },
           target: this,
           resolve: (state, res) => {
-
+            this.teamId = res.data.products.organization_id
+            this.productName = res.data.products.name
+            this.productPrice = res.data.products.prices[0].money
+            this.getFilesPublisheds([res.data.products.files[0].file_id])
+          },
+          reject: () => {
+          }
+        })
+      },
+      getFilesPublisheds (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/links/files/publisheds',
+          method: 'get',
+          params: {
+            type: 'product',
+            thumbs: ['general'],
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.createConferences(this.teamId, this.productId)
+            this.productImg = res.data.files[0].thumb_urls[0]
           },
           reject: () => {
           }

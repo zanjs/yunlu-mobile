@@ -174,7 +174,7 @@
             <div
               v-if="productDetailTeam && productDetailTeam.company"
               class="title">
-              {{productDetailTeam.company}}
+              {{productDetailTeam.company}}这个公司的名字很长很长
             </div>
             <span
               v-else
@@ -986,6 +986,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        flex: 1;
         .company-content {
           height: inherit;
           line-height: 1;
@@ -999,6 +1000,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            width: 100%;
           }
           .info {
             @include pm2rem(margin, 28px, 0px, 0px, 0px);

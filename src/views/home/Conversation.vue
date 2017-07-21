@@ -11,27 +11,19 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-    <form
-      class="search-bar"
-      action="#">
+    <div class="search-bar">
       <input
         type="search"
         v-model="searchParams"
         @input="handleInput"
-        @keyup.enter="handleSearchBtn"
+        @keyup.enter="handleSearch"
         placeholder="搜索会话">
       <div
-        v-show="searchParams"
-        class="clear-btn"
-        @click.stop="resetSearchBar()">
-        <i class="iconfont icon-shanchubiaoqian"></i>
-      </div>
-      <div
         class="search-btn"
-        @click.stop="searchConversation">
+        @click.stop="searchConversation(searchParams)">
         <i class="iconfont icon-sousuo"></i>
       </div>
-    </form>
+    </div>
     <template v-if="conversations && conversations.length > 0">
       <conversation-list
         class="list-container"
@@ -64,6 +56,19 @@
           删除
         </div>
       </div>
+      <confirm-dialog
+        v-if="showConfirm"
+        :msg="confirmMsg"
+        @click="deleteItem">
+      </confirm-dialog>
+    </template>
+    <template v-if="conversations && conversations.length === 0">
+      <div class="empty-container">
+        <div class="img-container">
+          <img src="../../assets/noConversation.png">
+        </div>
+        <p>您还没发起任何会话呦~</p>
+      </div>
     </template>
   </section>
 </template>
@@ -71,19 +76,25 @@
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
   import ConversationList from '../../components/common/ConversatonList'
+  import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { mapGetters } from 'vuex'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         searchParams: '',
         token: getStore('user') ? getStore('user').authentication_token : '',
+        uuid: getStore('user') ? getStore('user').id : '',
         hasChecked: false,
         checkAll: false,
-        conversations: []
+        conversations: [],
+        showConfirm: false,
+        confirmMsg: '确定要删除选中的会话吗?'
       }
     },
     components: {
-      ConversationList
+      ConversationList,
+      ConfirmDialog
     },
     methods: {
       goBack () {
@@ -99,11 +110,24 @@
           this.resetSearchBar()
         }
       },
-      handleSearchBtn () {
+      resetSearchBar () {
+        this.searchParams = ''
+        this.hasChecked = false
+        this.hasSearch = false
+        this.getConversationList()
+      },
+      handleSearch () {
+        this.searchConversation(this.searchParams)
         document.activeElement.blur()
       },
-      searchConversation () {
-
+      searchConversation (params) {
+        let tmpArr = []
+        for (let i = 0; i < this.conversations.length; i++) {
+          if (this.conversations[i].remark.indexOf(params) > -1) {
+            tmpArr.push(this.conversations[i])
+          }
+        }
+        this.conversations = tmpArr
       },
       getConversationList () {
         this.$store.dispatch('commonAction', {
@@ -115,7 +139,7 @@
           target: this,
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
-            state.conversationList = this.handleConversations(res.data.conferences, state.leanCloudConversations)
+            state.conversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'))
             this.conversations = this.handleConverstaionList(state.conversationList)
           },
           reject: () => {
@@ -131,7 +155,8 @@
                 ...arr2[j],
                 linkType: arr1[i].link_type,
                 linkId: arr1[i].link_id,
-                remark: arr1[i].remark
+                remark: arr1[i].remark,
+                logoUrl: arr1[i].logo_url
               })
             }
           }
@@ -149,20 +174,78 @@
         return tmpArr
       },
       goChat (item) {
-        console.log(item)
+        if (item.linkType === 'Product') {
+          this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.linkId}})
+        }
       },
       handleItemCheck (item) {
         for (let i = 0; i < this.conversations.length; i++) {
           if (item.item.conversationId === this.conversations[i].conversationId) {
             this.conversations[i].checked = !item.checked
+            this.isAllChecked(this.conversations)
           }
         }
       },
-      handleAllCheck () {
-
+      isAllChecked (arr) {
+        let count = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].checked) {
+            count += 1
+          }
+        }
+        this.hasChecked = count > 0
+        this.checkAll = count === arr.length
+      },
+      handleAllCheck (items, bool) {
+        for (let i = 0; i < items.length; i++) {
+          items[i].checked = !bool
+        }
+        this.checkAll = this.hasChecked = !bool
       },
       deleteConfirm () {
-
+        this.showConfirm = true
+      },
+      deleteItem (bool) {
+        this.showConfirm = false
+        if (bool) {
+          this.handleDeleteConversations(this.conversations)
+        }
+      },
+      handleDeleteConversations (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].checked) {
+            tmpArr.push(arr[i].conversationId)
+          }
+        }
+        this.removeConversation(tmpArr)
+      },
+      removeConversation (ids) {
+        this.$store.dispatch('commonAction', {
+          url: '/im/conferences/all',
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            ids: ids
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.success) {
+              this.getConversationList()
+              Toast({
+                message: '删除成功',
+                duration: 500
+              })
+            }
+          },
+          reject: () => {
+            Toast({
+              message: '删除失败',
+              duration: 500
+            })
+          }
+        })
       }
     },
     mounted () {
@@ -232,19 +315,7 @@
       line-height: 1;
     }
     input[type=search]::-webkit-search-cancel-button {
-      -webkit-appearance: none; // 此处只是去掉默认的小×
-    }
-    .clear-btn {
-      position: absolute;
-      @include px2rem(right, 140px);
-      @include px2rem(height, 66px);
-      display: flex;
-      justify-content: flex-end;
-      i {
-        @include font-dpr(21px);
-        color: #D1D1D1;
-        @include px2rem(margin-top, -2px);
-      }
+      -webkit-appearance: none;
     }
     .search-btn {
       position: absolute;
@@ -312,6 +383,22 @@
     }
     .btn-disabled {
       background-color: #DEDEDE;
+    }
+  }
+  .empty-container {
+    @include pm2rem(padding, 176px, 0px, 0px, 0px);
+    .img-container {
+      @include pm2rem(padding, 90px, 0px, 40px, 0px);
+      text-align: center;
+      img {
+        @include px2rem(width, 266px);
+        @include px2rem(height, 342px);
+      }
+    }
+    p {
+      @include font-dpr(16px);
+      color: #A6A6A6;
+      text-align: center;
     }
   }
 </style>
