@@ -52,6 +52,7 @@
       return {
         headerName: '私人空间',
         p: this.$route.query.p || '',
+        cluster_id: this.$route.query.cluster_id || '',
         space_id: this.$route.params.space_id || '',
         user_id: this.$route.params.user_id || '',
         token: getStore('user') ? getStore('user').authentication_token : '',
@@ -68,13 +69,13 @@
     methods: {
       beforeGetData () {
         if (this.p) {
-          this.getData('/shares/zone', {p: this.p})
+          this.getData('/shares/zone', {p: this.p, cluster_id: this.cluster_id})
         } else {
           this.shouldLogin()
         }
       },
       albumClick (item) {
-        this.$router.push({path: `/photos/${item.id}`, query: {name: item.name}})
+        this.$router.push({path: `/photos/${item.id}`, query: {name: item.name, ...{p: this.p ? this.p : {}}}})
       },
       getData (url, params) {
         this.$store.dispatch('commonAction', {
