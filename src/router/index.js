@@ -1,37 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Spaces from '../views/privateSpace/Spaces'
-// import Folders from '../views/privateSpace/Folders'
-// import Photos from '../views/privateSpace/Photos'
-// import ProductDetail from '../views/products/ProductDetail'
-// import Report from '../views/report/Report'
-// import PersonCarte from '../views/carte/PersonCarte'
-// import EnterpriseCarte from '../views/carte/EnterpriseCarte'
-// import ComityCarte from '../views/carte/ComityCarte'
-// import EnterpriseDetail from '../views/carte/EnterpriseDetail'
-// import Login from '../views/user/Login'
-// import Register from '../views/user/Register'
-// import Protocol from '../views/user/Protocol'
-// import Home from '../views/home/Home'
-// import Download from '../views/download/Download'
-// import See from '../views/home/See'
-// import Mine from '../views/user/Mine'
-// import ChangePassword from '../views/user/ChangePassword'
-// import SearchEnterprise from '../views/home/SearchEnterprise'
-// import ForgetPassword from '../views/user/ForgetPassword'
-// import SetNewPassword from '../views/user/SetNewPassword'
-// import RegisterNext from '../views/user/RegisterNext'
-// import InformationFolders from '../views/carte/InformationFolders'
-// import EmptyEnterpriseCarte from '../views/carte/EmptyEnterpriseCarte'
-// import ReportExpired from '../views/report/ReportExpired'
-// import BeforeRegister from '../views/user/BeforeRegister'
-// import SetPassword from '../views/user/SetPassword'
-// import Chat from '../views/chat/Chat'
-// import Maps from '../views/map/Maps'
-// import Favorites from '../views/home/Favorites'
-// import ShoppingCart from '../views/home/ShoppingCart'
-// import Conversation from '../views/home/Conversation'
-// import SearchProducts from '../views/home/SearchProducts'
 const Spaces = resolve => require(['../views/privateSpace/Spaces'], resolve)
 const Folders = resolve => require(['../views/privateSpace/Folders'], resolve)
 const Photos = resolve => require(['../views/privateSpace/Photos'], resolve)
@@ -83,7 +51,7 @@ export default new Router({
       component: Report
     }, {
       path: '/card',
-      name: 'PersonCarte',
+      name: 'Card',
       component: PersonCarte
     }, {
       path: '/users/:user_id',
@@ -91,7 +59,7 @@ export default new Router({
       component: PersonCarte
     }, {
       path: '/zone',
-      name: 'Spaces',
+      name: 'Zone',
       component: Spaces
     }, {
       path: '/users/:user_id/spaces/:space_id',
@@ -99,7 +67,7 @@ export default new Router({
       component: Spaces
     }, {
       path: '/photos',
-      name: 'Folders',
+      name: 'FoldersPhotos',
       component: Folders
     }, {
       path: '/users/:user_id/folders/:id',
