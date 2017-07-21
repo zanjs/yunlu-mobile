@@ -4,7 +4,7 @@
       <img src="../../assets/homePageTopBg.png">
       <div class="search-input"
            @click="goRoute('SearchProducts', true)">
-        <div>任你搜 任意搜</div>
+        <a class="text">任你搜 任意搜</a>
         <i class="iconfont icon-sousuo"></i>
       </div>
       <i v-if="hasLogin"
@@ -25,7 +25,7 @@
           <span>流程</span>
         </div>
         <div class="row-item"
-             @click="goRoute('Download', true)">
+             @click="goRoute('Conversation', hasLogin)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
           </div>
@@ -242,17 +242,18 @@
       @include px2rem(height, 70px);
       @include pm2rem(padding, 22px, 0px, 22px, 0px);
       @include pm2rem(margin, 0px, 44px, 0px, 55px);
-      div {
+      @include px2rem(line-height, 70px);
+      .text {
         color: #C2C2C2;
         border: none;
         width: 100%;
+        display: block;
+        @include px2rem(height, 70px);
         @include px2rem(border-radius, 40px);
         @include pm2rem(padding, 0px, 20px, 0px, 102px);
         @include font-dpr(14px);
-        line-height: 1;
+        @include px2rem(line-height, 70px);
         background-color: $white;
-        display: flex;
-        align-items: center;
       }
       i {
         position: absolute;

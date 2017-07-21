@@ -146,7 +146,11 @@
       },
       goCarte (item) {
         if (!item.team_id) {
-          this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
+          if (this.$route.query.p) {
+            this.$router.push({path: '/zone', query: {p: this.$route.query.p, cluster_id: item.id}})
+          } else {
+            this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
+          }
         } else if (item.is_association) {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else {
