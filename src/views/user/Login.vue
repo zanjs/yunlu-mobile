@@ -176,19 +176,21 @@
         this.$router.push({name: 'ForgetPassword'})
       },
       countDown (seconds, speed = 1000) {
-        this.interval = setInterval(() => {
+        const count = () => {
           let minute = Math.floor(seconds / 60)
           let second = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
           if (seconds < 3600) {
             this.time = `${minute} : ${second}`
             seconds -= 1
-            if (this.time === '0 : 00') {
+            if (this.time === '0 : 00' && this.interval) {
               clearInterval(this.interval)
               this.closeDialog()
               return false
             }
           }
-        }, speed)
+        }
+        count()
+        this.interval = setInterval(count, speed)
       }
     }
   }
