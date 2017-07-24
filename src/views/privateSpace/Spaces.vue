@@ -158,6 +158,9 @@
         if (getStore('Spaces_goHome')) {
           removeStore('Spaces_goHome')
           this.$router.push({name: 'See'})
+        } else if (getStore('Zone_goHome')) { // 当前页面有两种方式进入，路由名称不一样
+          removeStore('Zone_goHome')
+          this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
         }
