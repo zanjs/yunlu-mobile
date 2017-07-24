@@ -32,6 +32,8 @@ const Favorites = resolve => require(['../views/home/Favorites'], resolve)
 const ShoppingCart = resolve => require(['../views/home/ShoppingCart'], resolve)
 const Conversation = resolve => require(['../views/home/Conversation'], resolve)
 const SearchProducts = resolve => require(['../views/home/SearchProducts'], resolve)
+const Help = resolve => require(['../views/user/Help'], resolve)
+const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
 
 Vue.use(Router)
 
@@ -180,6 +182,14 @@ export default new Router({
       path: '/searchproducts',
       name: 'SearchProducts',
       component: SearchProducts
+    }, {
+      path: '/help',
+      name: 'Help',
+      component: Help
+    }, {
+      path: '/helps/:id',
+      name: 'HelpDetail',
+      component: HelpDetail
     }
   ]
 })
