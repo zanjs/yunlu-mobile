@@ -1,14 +1,12 @@
 <template>
   <section>
-    <form
-      class="search-container"
-      action="#">
+    <div class="search-container">
       <slot name="input">
       </slot>
       <i
         class="iconfont icon-sousuo"
         @click.stop="handleClick"></i>
-    </form>
+    </div>
   </section>
 </template>
 
@@ -45,7 +43,6 @@
       @include px2rem(border-radius, 14px);
       color: #595959;
       @include font-dpr(14px);
-      @include pm2rem(padding, 2px, 0px, 0px, 0px);
       line-height: 1;
       @include px2rem(height, 58px);
       vertical-align: middle;
