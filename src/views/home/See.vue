@@ -242,17 +242,17 @@
       @include px2rem(height, 70px);
       @include pm2rem(padding, 22px, 0px, 22px, 0px);
       @include pm2rem(margin, 0px, 44px, 0px, 55px);
-      @include px2rem(line-height, 70px);
+      line-height: normal;
       .text {
         color: #C2C2C2;
         border: none;
-        width: 100%;
-        display: block;
+        display: flex;
+        flex: 1;
+        align-items: center;
         @include px2rem(height, 70px);
         @include px2rem(border-radius, 40px);
         @include pm2rem(padding, 0px, 20px, 0px, 102px);
         @include font-dpr(14px);
-        @include px2rem(line-height, 70px);
         background-color: $white;
       }
       i {
