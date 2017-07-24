@@ -69,13 +69,21 @@
     methods: {
       beforeGetData () {
         if (this.p) {
-          this.getData('/shares/zone', {p: this.p, cluster_id: this.cluster_id})
+          this.getData('/shares/zone', {
+            p: this.p,
+            ...(this.cluster_id ? {cluster_id: this.cluster_id} : {})
+          })
         } else {
           this.shouldLogin()
         }
       },
       albumClick (item) {
-        this.$router.push({path: `/photos/${item.id}`, query: {name: item.name, ...{p: this.p ? this.p : {}}}})
+        this.$router.push({path: `/photos/${item.id}`,
+          query: {
+            name: item.name,
+            ...(this.p ? {p: this.p} : {})
+          }
+        })
       },
       getData (url, params) {
         this.$store.dispatch('commonAction', {
