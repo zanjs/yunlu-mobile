@@ -14,7 +14,8 @@
         <input class="input"
                type="text"
                v-model="mobile"
-               placeholder="输入手机号">
+               placeholder="输入手机号"
+               ref="mobileInput">
       </div>
       <div class="row-item">
         <input
@@ -124,6 +125,7 @@
       }
     },
     mounted () {
+      this.$refs.mobileInput.focus()
     },
     computed: {
       ...mapGetters([

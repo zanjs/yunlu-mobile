@@ -1,24 +1,29 @@
 <template>
   <section>
-    <mt-header title="登录"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="登录"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input type="text"
-               v-model="mobile"
-               placeholder="输入手机号">
+        <input
+          type="text"
+          v-model="mobile"
+          placeholder="输入手机号"
+          ref="mobileInput">
       </div>
       <div class="input-container">
-        <input type="password"
-               v-model="password"
-               placeholder="请输入密码">
+        <input
+          type="password"
+          v-model="password"
+          placeholder="请输入密码">
       </div>
       <div class="login-btn">
         <a @click="login()">
@@ -192,6 +197,9 @@
         count()
         this.interval = setInterval(count, speed)
       }
+    },
+    mounted () {
+      this.$refs.mobileInput.focus()
     }
   }
 </script>

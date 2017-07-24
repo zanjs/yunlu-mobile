@@ -15,7 +15,9 @@
       @search="getEnterprises(searchParams)">
       <input
         slot="input"
-        type="text"
+        type="search"
+        @input="handleInput"
+        @keyup.enter="handleSearch(searchParams)"
         v-model="searchParams"
         :placeholder="placeholder">
     </search>
@@ -103,6 +105,21 @@
           }
         })
       },
+      resetSearchBar () {
+        this.searchParams = ''
+        this.hasSearch = false
+        this.pageIndex = 1
+        this.getEnterprises()
+      },
+      handleInput () {
+        if (this.searchParams === '') {
+          this.resetSearchBar()
+        }
+      },
+      handleSearch (q) {
+        this.getEnterprises(q)
+        document.activeElement.blur()
+      },
       goEnterpriseCarte (item) {
         if (!item.organization) {
           this.$router.push({name: 'EmptyEnterpriseCarte', query: {name: item.name}})
@@ -171,6 +188,9 @@
     i {
       @include font-dpr(20px);
     }
+  }
+  input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .list {
     @include px2rem(margin-top, 170px);
