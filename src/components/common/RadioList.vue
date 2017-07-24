@@ -20,19 +20,19 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
+  export default {
+    data () {
+      return {
 
-    }
-  },
-  props: ['store', 'value'],
-  methods: {
-    handleChecked (val) {
-      this.$emit('checked', val)
+      }
+    },
+    props: ['store', 'value'],
+    methods: {
+      handleChecked (val) {
+        this.$emit('checked', val)
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
