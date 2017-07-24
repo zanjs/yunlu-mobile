@@ -1,29 +1,35 @@
 <template>
   <section>
-    <mt-header title="注册"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="注册"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
     <div class="login-container">
       <div class="input-container">
-        <input class="input"
-               type="text"
-               disabled
-               v-model="mobile"
-               placeholder="输入手机号">
+        <input
+          class="input"
+          type="text"
+          disabled
+          v-model="mobile"
+          placeholder="输入手机号"
+          ref="mobileInput">
       </div>
       <div class="row-item">
-        <input class="input"
-                type="text"
-                v-model="code"
-                placeholder="请输入短信验证码">
-        <a @click="getCode()"
-           v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
+        <input
+          class="input"
+          type="text"
+          v-model="code"
+          placeholder="请输入短信验证码">
+        <a
+          @click="getCode()"
+          v-bind:class="{'active': disabled, 'normal': !disabled}">{{validBtnText}}</a>
       </div>
       <div class="next-btn">
         <a @click="next()">
@@ -119,6 +125,7 @@
     },
     mounted () {
       this.countDown()
+      this.$refs.mobileInput.focus()
     }
   }
 </script>
