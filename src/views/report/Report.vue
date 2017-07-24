@@ -1,11 +1,13 @@
 <template>
   <section>
-    <mt-header title="投诉"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
+    <mt-header
+      title="投诉"
+      fixed
+      class="header">
+      <mt-button
+        slot="left"
+        @click="goBack()"
+        class="button-text">
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
@@ -14,11 +16,11 @@
       <p>清洁共同家园，你我一致行动</p>
     </div>
     <div class="report-list">
-      <mt-checklist
-        v-model="values"
-        :max="1"
-        :options="options">
-      </mt-checklist>
+      <radio-list
+        :store="options"
+        :value="value"
+        @checked="checkItem">
+      </radio-list>
       <div class="text-title">举例补充说明(可选填)</div>
       <div class="textarea-container">
         <textarea
@@ -26,15 +28,29 @@
           placeholder="输入文字说明"></textarea>
       </div>
     </div>
-    <mt-button
-      type="primary"
-      @click="report()"
-      class="report-btn">提交</mt-button>
+    <div class="report-btn">
+      <a @click="beforeReport()">提交</a>
+    </div>
+    <template v-if="reportSuccess">
+      <div class="dialog-bg">
+      </div>
+      <div class="success-dialog">
+        <div class="img-container">
+          <img src="../../assets/reportSuccess.png">
+        </div>
+        <div class="content">
+          <p>感谢您的支持，我们会尽快处理。</p>
+          <p class="count">举报次数+1</p>
+          <a @click="closeDialog()">返回云视首页</a>
+        </div>
+      </div>
+    </template>
   </section>
 </template>
 
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
+  import RadioList from '../../components/common/RadioList'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -63,20 +79,35 @@
             value: 99
           }
         ],
-        values: [],
+        value: null,
         token: getStore('user') ? getStore('user').authentication_token : '',
         resourceId: this.$route.query.resourceId,
-        resourceClass: this.$route.query.resourceClass
+        resourceClass: this.$route.query.resourceClass,
+        reportSuccess: false
       }
     },
+    components: {
+      RadioList
+    },
     methods: {
+      beforeReport () {
+        if (!this.value) {
+          Toast({
+            message: '请选择投诉类型',
+            duration: 1000
+          })
+          return false
+        } else {
+          this.report()
+        }
+      },
       report () {
         this.$store.dispatch('commonAction', {
           url: '/reports',
           method: 'post',
           params: {
             ...(this.token ? {token: this.token} : {}),
-            clazz: this.values[0],
+            clazz: this.value,
             resource_id: this.resourceId,
             resourceClass: this.resourceClass,
             ...(this.description ? {description: this.description} : {})
@@ -84,22 +115,22 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.autoGoBack()
+              this.reportSuccess = true
             }
           },
           reject: () => {
           }
         })
       },
-      autoGoBack () {
-        let toast = Toast({
-          message: '举报成功',
-          duration: 2000
-        })
-        setTimeout(() => {
-          toast.close()
-          this.goBack()
-        }, 2000)
+      checkItem (val) {
+        this.value = val
+      },
+      closeDialog () {
+        this.reportSuccess = false
+        this.goHome()
+      },
+      goHome () {
+        this.$router.replace({name: 'See'})
       },
       goBack () {
         if (getStore('Report_goHome')) {
@@ -177,58 +208,75 @@
     background-color: #52CAA7;
     border-color: #52CAA7;
     @include font-dpr(15px);
-    width: 80%;
+    color: $white;
     position: fixed;
     @include px2rem(bottom, 20px);
     @include px2rem(height, 80px);
     left: 50%;
-    -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
-  }
-</style>
-
-<style lang="scss">
-  @import '../../styles/mixin';
-
-  .report-list {
-    .mint-checklist-title {
-      display: none;
-    }
-    .mint-cell {
-      background-image: none;
-    }
-    .mint-cell-wrapper {
-      background-image: none;
-      padding: 0;
-      .mint-checklist-label {
-        @include pm2rem(padding, 0px, 0px, 0px, 30px);
-      }
-      .mint-checkbox-label {
-        @include font-dpr(16px);
-        color: #262626;
-        @include px2rem(margin-left, 20px);
-      }
-    }
-    .mint-checkbox-core {
-      border: 1px solid #D1D1D1;
-      @include px2rem(width, 42px);
-      @include px2rem(height, 42px);
-    }
-    .mint-checkbox-input:checked+.mint-checkbox-core{
-      background-color: #52CAA7 !important;
-      border-color: #52CAA7 !important;
-    }
+    transform: translateX(-50%);
     a {
-      text-decoration: none;
-      & :hover {
-        text-decoration: none;
+      display: block;
+      @include px2rem(width, 600px);
+      text-align: center;
+      @include px2rem(line-height, 80px);
+    }
+    a:active {
+      background-color: rgba(82, 202, 167, .5);
+    }
+  }
+  .dialog-bg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1004;
+    background-color: rgba(0, 0, 0, .45);
+  }
+  .success-dialog {
+    @include px2rem(width, 562px);
+    position: fixed;
+    @include px2rem(top, 200px);
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 1005 !important;
+    .img-container {
+      @include px2rem(width, 562px);
+      @include px2rem(height, 213px);
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
-    .mint-checkbox-core::after {
-      @include px2rem(top, 8px);
-      @include px2rem(left, 16px);
-      @include px2rem(width, 8px);
-      @include px2rem(height, 16px);
+    .content {
+      background-color: $white;
+      text-align: center;
+      @include pm2rem(padding, 22px, 0px, 26px, 0px);
+      p {
+        @include font-dpr(15px);
+        color: #595959;
+        line-height: 1;
+      }
+      .count {
+        color: #FF0000;
+        @include font-dpr(14px);
+        @include px2rem(margin-top, 26px);
+      }
+      a {
+        display: block;
+        margin: 0 auto;
+        @include px2rem(margin-top, 38px);
+        background-color: #52CAA7;
+        color: $white;
+        @include px2rem(height, 66px);
+        @include px2rem(line-height, 66px);
+        @include font-dpr(14px);
+        @include px2rem(width, 310px);
+      }
+      a:active {
+        background-color: rgba(82, 202, 167, .5);
+      }
     }
   }
 </style>
