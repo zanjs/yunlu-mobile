@@ -9,8 +9,11 @@
         <i class="iconfont icon-fanhui"></i>
       </mt-button>
     </mt-header>
-    <div v-html="html">
-
+    <div class="content">
+      <iframe
+        class="iframe"
+        :src="html">
+      </iframe>
     </div>
   </section>
 </template>
@@ -57,6 +60,18 @@
     }
     i {
       @include font-dpr(20px);
+    }
+  }
+  .content {
+    position: fixed;
+    @include px2rem(top, 88px);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   }
 </style>
