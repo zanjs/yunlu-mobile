@@ -11,7 +11,7 @@
           class="normal">
         <img
           v-else
-          src="../../assets/noImg.png"
+          src="../../assets/imgLoading.png"
           class="empty">
          <div class="cover">
            <div class="wraper">
