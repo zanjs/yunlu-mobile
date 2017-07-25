@@ -23,7 +23,7 @@
       </template>
       <img
         v-else
-        src="../../assets/noImg.png">
+        src="../../assets/imgLoading3.jpg">
       <span v-if="productDetailFiles && productDetailFiles.length"
             class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
       <span v-else
@@ -880,6 +880,7 @@
     .name {
       @include font-dpr(17px);
       @include pm2rem(margin, 0px, 0px, 30px, 0px);
+      font-weight: 800;
     }
     .money {
       display: flex;
@@ -949,6 +950,9 @@
       @include px2remimportant(border-bottom-width, 10px);
       border-bottom-color: #52CAA7 !important;
       text-decoration: none !important;
+      .mint-tab-item {
+        color: #52CAA7 !important;
+      }
     }
     a:active, a:hover {
       text-decoration: none;
@@ -1083,7 +1087,7 @@
       width: 100%;
       line-height: 1;
       @include font-dpr(20px);
-      color: #A6A6A6;
+      color: #D1D1D1;
     }
   }
   .option-bar {
@@ -1361,6 +1365,13 @@
   .nav-bar {
     .mint-tab-item-label {
       @include font-dpr-important(15px);
+      font-weight: 500;
+      color: #595959;
+    }
+    .is-selected {
+      .mint-tab-item-label {
+        color: #52CAA7 !important;
+      }
     }
   }
   .prodcutdetail-price-item {
@@ -1376,7 +1387,7 @@
       @include pm2rem(padding, 4px, 0px, 40px, 0px);
       @include pm2rem(margin, 0px, 0px, 0px, -38px);
       @include font-dpr(20px);
-      color: #A6A6A6;
+      color: #D1D1D1;
       text-align: center;
       line-height: 1;
       width: 100%;
@@ -1448,7 +1459,7 @@
       width: 100%;
       line-height: 1;
       @include font-dpr(20px);
-      color: #A6A6A6;
+      color: #D1D1D1;
     }
   }
   .product-actionsheet {
