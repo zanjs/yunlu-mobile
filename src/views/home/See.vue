@@ -133,7 +133,10 @@
       },
       send () {
         if (this.hasLogin) {
-          Toast('暂未开放')
+          Toast({
+            message: '暂未开放',
+            duration: 500
+          })
         } else {
           this.$router.push({name: 'Login'})
         }
