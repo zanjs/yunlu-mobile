@@ -1,16 +1,9 @@
 <template>
   <section class="container">
-    <mt-header
-      title="购物车"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <template v-if="purchaseItems && purchaseItems.length > 0">
       <shopping-cart-list
         class="list-container"
@@ -68,6 +61,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
@@ -75,6 +69,7 @@
   export default {
     data () {
       return {
+        header: '购物车',
         token: getStore('user') ? getStore('user').authentication_token : null,
         purchaseItems: [],
         totalMoney: 0.00,
@@ -86,6 +81,7 @@
       }
     },
     components: {
+      CommonHeader,
       ShoppingCartList,
       ConfirmDialog
     },
@@ -453,23 +449,6 @@
     background-color: #FAFAFA;
     @include pm2rem(padding, 0px, 0px, 98px, 0px);
   }
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .list-container {
     @include pm2rem(padding, 88px, 0px, 0px, 0px);
     background-color: #E7E7E7;
@@ -477,8 +456,8 @@
   .option-bar {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     @include px2rem(height, 98px);
     line-height: 1;
     background-color: $white;

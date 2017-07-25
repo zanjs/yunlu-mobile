@@ -77,7 +77,19 @@
             self.showMenu = false
           }, 500)
         })
+        document.getElementById('fullscreen-cover').addEventListener('click', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
         document.getElementById('product-drop-menu').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
+        document.getElementById('product-drop-menu').addEventListener('click', (e) => {
           // e.preventDefault()
           setTimeout(() => {
             self.showMenu = false
@@ -124,6 +136,8 @@
     align-items: center;
     position: absolute;
     top: 0;
+    width: 100%;
+    max-width: 540px;
     z-index: 2;
     .icon-box {
       display: flex;
@@ -176,8 +190,8 @@
   .full-screen-cover {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     bottom: 0;
   }
   .product-drop-menu {

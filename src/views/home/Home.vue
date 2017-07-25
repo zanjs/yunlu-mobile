@@ -1,39 +1,44 @@
 <template>
   <section>
-    <mt-tabbar fixed
-               v-model="selected"
-               class="tab-bar">
+    <mt-tabbar
+      v-model="selected"
+      class="tab-bar">
       <mt-tab-item id="home">
-        <div class="tab-item"
-             @click="selectTab('See')">
+        <div
+          class="tab-item"
+          @click="selectTab('See')">
           <i class="iconfont icon-yunshi"></i>
           <span>云视</span>
         </div>
       </mt-tab-item>
       <mt-tab-item id="wareroom">
-        <div class="tab-item"
-             @click="selectTab('Download')">
+        <div
+          class="tab-item"
+          @click="selectTab('Download')">
           <i class="iconfont icon-yunku"></i>
           <span>云库</span>
         </div>
       </mt-tab-item>
       <mt-tab-item id="people">
-        <div class="tab-item"
-             @click="selectTab('Download')">
+        <div
+          class="tab-item"
+          @click="selectTab('Download')">
           <i class="iconfont icon-renmai"></i>
           <span>人脉</span>
         </div>
       </mt-tab-item>
       <mt-tab-item id="space">
-        <div class="tab-item"
-             @click="selectTab('Download')">
+        <div
+          class="tab-item"
+          @click="selectTab('Download')">
           <i class="iconfont icon-kongjian"></i>
           <span>空间</span>
         </div>
       </mt-tab-item>
     </mt-tabbar>
-    <transition name="fade"
-                mode="out-in">
+    <transition
+      name="fade"
+      mode="out-in">
       <router-view></router-view>
     </transition>
   </section>
@@ -69,14 +74,22 @@
   @import '../../styles/mixin';
 
   .tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 540px;
+    right: auto;
+    left: auto;
+    z-index: 1004 !important;
     .tab-item {
       @include px2rem(height, 97px);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: space-around;
       i {
         @include font-dpr(25px);
-        @include pm2rem(margin, 7px, 0px, 7px, 0px);
+        @include pm2rem(padding, 7px, 0px, 7px, 0px);
       }
       span {
         @include font-dpr(12px);

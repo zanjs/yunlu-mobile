@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="登录"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="login-container">
       <div class="input-container">
         <input
@@ -58,12 +51,14 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
+        header: '登录',
         mobile: '',
         password: '',
         deviceDelegate: null,
@@ -74,6 +69,9 @@
         user: null,
         interval: null
       }
+    },
+    components: {
+      CommonHeader
     },
     methods: {
       goBack () {
@@ -208,30 +206,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .login-container {
     position: fixed; // 不能用absolute,UC浏览器会白屏
     @include pm2rem(padding, 128px, 0px, 0px, 0px);
     bottom: 0;
-    left: 0;
-    right: 0;
     top: 0;
+    width: 100%;
+    max-width: 540px;
     background-color: $white;
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
@@ -283,8 +264,8 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     background-color: rgba(0, 0, 0, .45);
     z-index: 1004 !important;
     .dialog {

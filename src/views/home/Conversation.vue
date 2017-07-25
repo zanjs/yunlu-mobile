@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="会话"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="search-bar">
       <input
         type="search"
@@ -74,6 +67,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
@@ -82,6 +76,7 @@
   export default {
     data () {
       return {
+        header: '会话',
         searchParams: '',
         token: getStore('user') ? getStore('user').authentication_token : '',
         uuid: getStore('user') ? getStore('user').id : '',
@@ -93,6 +88,7 @@
       }
     },
     components: {
+      CommonHeader,
       ConversationList,
       ConfirmDialog
     },
@@ -284,13 +280,12 @@
     position: fixed;
     @include px2rem(height, 88px);
     @include px2rem(top, 88px);
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     display: flex;
     align-items: center;
     border-bottom: 1px solid #D1D1D1;
     background-color: $white;
-    @include pm2rem(padding, 0px, 32px, 0px, 32px);
     z-index: 2;
     input {
       width: 100%;
@@ -301,7 +296,8 @@
       background-color: #EDEDED;
       color: #595959;
       @include px2rem(height, 66px);
-      @include pm2rem(padding, 2px, 100px, 0px, 30px);
+      @include pm2rem(margin, 0px, 32px, 0px, 32px);
+      @include pm2rem(padding, 0px, 100px, 0px, 30px);
       vertical-align: middle;
       text-align: left;
     }
@@ -341,17 +337,16 @@
     justify-content: space-between;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     @include px2rem(height, 98px);
-    @include pm2rem(padding, 0px, 22px, 0px, 28px);
     background-color: $white;
     border-top: 1px solid #D1D1D1;
     .check-btn {
       display: flex;
       align-items: center;
       height: inherit;
-      @include px2rem(padding-right, 30px);
+      @include pm2rem(padding, 0px, 30px, 0px, 28px);
       line-height: 1;
       i {
         @include font-dpr(18px);
@@ -370,6 +365,7 @@
       @include px2rem(width, 150px);
       @include px2rem(height, 70px);
       @include px2rem(border-radius, 40px);
+      @include px2rem(margin-right, 28px);
       background-color: #52CAA7;
       color: $white;
       display: flex;

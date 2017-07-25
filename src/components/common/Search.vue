@@ -32,9 +32,9 @@
     @include pm2rem(padding, 12px, 32px, 12px, 32px);
     position: fixed;
     @include px2rem(top, 88px);
-    left: 0;
-    right: 0;
     z-index: 1001;
+    width: 100%;
+    max-width: 540px;
     border: none;
     box-sizing: border-box;
     input {
@@ -60,9 +60,11 @@
       position: absolute;
       @include px2rem(right, 60px);
       @include px2rem(height, 58px);
-      @include px2rem(top, 18px);
+      @include px2rem(padding-top, 8px);
       color: #B4B4B4;
       @include px2rem(line-height, 58px);
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 </style>

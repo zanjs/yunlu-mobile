@@ -290,6 +290,8 @@
     @include font-dpr(14px);
     @include pm2rem(padding, 0px, 80px, 0px, 30px);
     display: flex;
+    width: 100%;
+    max-width: 540px;
     justify-content: flex-start;
     align-items: center;
   }

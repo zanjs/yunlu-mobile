@@ -77,9 +77,9 @@ textarea { -webkit-appearance: none;}
 
 html,body{
     height: 100%;
-    width: 100%;
     background-color: #F5F5F5;
-    margin: 0;
+    max-width: 540px;
+    margin: 0 auto;
 }
 
 .clear:after{

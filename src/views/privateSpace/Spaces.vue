@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
+    <common-header
       :title="headerName"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+      @back="goBack()">
+    </common-header>
     <div class="card-container">
       <card
         :store="userCard"
@@ -41,6 +34,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import FoldersCover from '../../components/common/FoldersCover'
   import { mapGetters } from 'vuex'
@@ -62,6 +56,7 @@
       }
     },
     components: {
+      CommonHeader,
       Card,
       FoldersCover,
       PopDialog
@@ -203,37 +198,25 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    z-index: 1002 !important;
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .rope {
     position: absolute;
-    @include pm2rem(padding, 0px, 50px, 0px, 60px);
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     @include px2rem(top, 396px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     img {
       @include px2rem(width, 30px);
+    }
+    .left {
+      @include px2rem(margin-left, 60px);
+    }
+    .right {
+      @include px2rem(margin-right, 50px);
     }
   }
   .album-comtainer {

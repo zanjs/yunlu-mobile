@@ -1,23 +1,12 @@
 <template>
   <section>
-    <mt-header
+    <common-header
       :title="header"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-      <mt-button
-        slot="right"
-        @click="goReport(teams)"
-        class="button-text">
-        <i class="iconfont icon-jubao"></i>
-        投诉
-      </mt-button>
-    </mt-header>
+      :icon-class="iconClass"
+      :right-text="rightBtnText"
+      @right-click="goReport(teams)"
+      @back="goBack()">
+    </common-header>
     <div class="card-container">
       <enterprise-card
         :store="teams"
@@ -84,13 +73,10 @@
             </div>
           </template>
         </transition>
-        <div
+        <back-to-top
           v-if="showGoTopBtn"
-          class="cirlce-btn"
           @click="goTop()">
-          <i class="iconfont icon-dingzhi"></i>
-          <p>置顶</p>
-        </div>
+        </back-to-top>
       </div>
     </div>
     <search
@@ -119,6 +105,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import EnterpriseCard from '../../components/common/EnterpriseCard'
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
@@ -129,12 +116,15 @@
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
+  import BackToTop from '../../components/common/BackToTop'
   import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
         teamId: this.$route.params.id,
         header: '名片',
+        rightBtnText: '投诉',
+        iconClass: 'icon-jubao',
         height: 153,
         hasLogin: !!getStore('user'),
         hasSearch: false,
@@ -161,6 +151,7 @@
       }
     },
     components: {
+      CommonHeader,
       EnterpriseCard,
       ProductThumbnailMode,
       ProductListMode,
@@ -168,7 +159,8 @@
       ViewBigImg,
       PopDialog,
       Search,
-      Order
+      Order,
+      BackToTop
     },
     methods: {
       getEnterpriseDetail (teamId = this.teamId) {
@@ -507,23 +499,6 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
