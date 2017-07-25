@@ -650,6 +650,8 @@
               this.favoratesText = '已收藏'
               Toast({
                 message: '你已成功收藏该产品',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
                 duration: 1000
               })
             } else {
@@ -680,6 +682,8 @@
               this.favoratesText = '收藏'
               Toast({
                 message: '你已成功取消收藏',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
                 duration: 1000
               })
             } else {
@@ -738,6 +742,8 @@
               this.hasAddShoppingCar = true
               Toast({
                 message: '加入购物车成功',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
                 duration: 1000
               })
             } else {
@@ -1021,7 +1027,6 @@
       }
     }
   }
-
   .product-tab-bar {
     @include px2rem(height, 97px);
     display: -webkit-box;
@@ -1068,7 +1073,6 @@
   .bottom-btn-active {
     color: #F50E0E !important;
   }
-
   .productdetail-product-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1126,8 +1130,6 @@
       align-items: center;
     }
   }
-
-
   .full-screen-swiper {
     position: fixed;
     top: 0;
@@ -1140,7 +1142,6 @@
   .full-screen-bg {
     background-color: #000;
   }
-
   .product-popup-dialog {
     position: fixed;
     width: 100%;
@@ -1211,12 +1212,10 @@
       color: #595959;
     }
   }
-
   .slide-in-fwd-center {
     -webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
             animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   }
-
   .slide-out-bck-center {
     -webkit-animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
             animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
@@ -1286,7 +1285,6 @@
       background-color: $white;
     }
   }
-
   .nav-bar {
     .mint-tab-item-label {
       @include font-dpr-important(15px);
@@ -1417,6 +1415,22 @@
       @include font-dpr(16px);
       @include px2rem(height, 98px);
       @include px2rem(line-height, 98px);
+    }
+  }
+  .toast-icon-big {
+    @include font-dpr(36px);
+    @include pm2rem(margin, 0px, 0px, -20px, 0px);
+  }
+  .toast-content {
+    background-color: rgba(0, 0, 0, .7);
+    @include px2rem(width, 400px);
+    box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0.5);
+    @include pm2rem(margin, -20px, 0px, -10px, 0px);
+    padding: 0 !important;
+    @include px2rem(border-radius, 14px);
+    span {
+      @include font-dpr(16px);
+      @include px2rem(margin-bottom, 30px);
     }
   }
 </style>
