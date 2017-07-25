@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="注册"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="login-container">
       <div class="input-container">
         <input
@@ -41,17 +34,22 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { COUNT_DOWN_SECOND } from '../../constants/constant'
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
+        header: '注册',
         mobile: this.$route.query.mobile,
         code: '',
         validBtnText: '获取验证码',
         disabled: false
       }
+    },
+    components: {
+      CommonHeader
     },
     methods: {
       goBack () {
@@ -134,31 +132,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
-
   .login-container {
     position: fixed; // 不能用absolute,UC浏览器会白屏
     @include px2rem(top, 96px);
     @include pm2rem(padding, 40px, 0px, 0px, 0px);
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     background-color: $white;
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);

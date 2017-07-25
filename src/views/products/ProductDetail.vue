@@ -940,6 +940,9 @@
     .mint-tab-item {
       @include font-dpr-important(17px);
       border-bottom: 1px solid #D1D1D1 !important;
+      display: block;
+      padding: 0 !important;
+      @include px2remimportant(line-height, 100px);
       div {
         @include font-dpr-important(17px);
       }
@@ -1025,8 +1028,8 @@
     background-color: $white;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 540px;
     .btn-box {
       border-top: 1px solid #D1D1D1;
       border-bottom: 1px solid #D1D1D1;
@@ -1094,6 +1097,7 @@
     position: fixed;
     @include px2rem(top, 38px);
     width: 100%;
+    max-width: 540px;
     display: flex;
     align-items: center;
     z-index: 1004;
@@ -1127,8 +1131,8 @@
   .full-screen-swiper {
     position: fixed;
     top: 0;
-    left: 0;
     bottom: 0;
+    left: 0;
     right: 0;
     z-index: 1002;
     background-color: #000;
@@ -1268,85 +1272,6 @@
     }
   }
 
-  .more-price-show {animation:fadeInDown 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
-
-  .more-price-hide {animation:fadeOutUp 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both}
-
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translate3d(0, -100%, 0);
-    }
-
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @keyframes fadeOutUp {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-      transform: translate3d(0, -100%, 0);
-    }
-  }
-
-  .rotate-90-cw {
-    -webkit-animation: rotate-90-cw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: rotate-90-cw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  .rotate-90-ccw {
-    -webkit-animation: rotate-90-ccw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: rotate-90-ccw 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-
-  @-webkit-keyframes rotate-90-cw {
-    0% {
-      -webkit-transform: rotate(0);
-              transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(90deg);
-              transform: rotate(90deg);
-    }
-  }
-  @keyframes rotate-90-cw {
-    0% {
-      -webkit-transform: rotate(0);
-              transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(90deg);
-              transform: rotate(90deg);
-    }
-  }
-
-  @-webkit-keyframes rotate-90-ccw {
-    0% {
-      -webkit-transform: rotate(0);
-              transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(-90deg);
-              transform: rotate(-90deg);
-    }
-  }
-  @keyframes rotate-90-ccw {
-    0% {
-      -webkit-transform: rotate(0);
-              transform: rotate(0);
-    }
-    100% {
-      -webkit-transform: rotate(-90deg);
-              transform: rotate(-90deg);
-    }
-  }
-
 </style>
 
 <style lang="scss">
@@ -1367,6 +1292,7 @@
       @include font-dpr-important(15px);
       font-weight: 500;
       color: #595959;
+      line-height: inherit !important;
     }
     .is-selected {
       .mint-tab-item-label {
@@ -1464,6 +1390,9 @@
   }
   .product-actionsheet {
     background-color: transparent !important;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 540px;
     @include px2rem(margin-bottom, 12px);
     .mint-actionsheet-list {
       @include pm2rem(margin, 0px, 41px, 0px, 41px);

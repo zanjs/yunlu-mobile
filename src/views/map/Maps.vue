@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
+    <common-header
       :title="headerName"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+      @back="goBack()">
+    </common-header>
     <div
       class="map-container"
       id="aMapContainer"
@@ -20,6 +13,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
@@ -30,6 +24,9 @@
         longitude: this.$route.query.lng || '',
         address: this.$route.query.address || ''
       }
+    },
+    components: {
+      CommonHeader
     },
     methods: {
       goBack () {
@@ -98,23 +95,9 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .map-container {
     width: 100%;
+    max-width: 540px;
     position: absolute;
     @include px2rem(top, 88px);
     bottom: 0;

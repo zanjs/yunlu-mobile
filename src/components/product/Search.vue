@@ -52,6 +52,7 @@ export default {
     position: fixed;
     @include px2rem(height, 98px);
     width: 100%;
+    max-width: 540px;
     display: flex;
     align-items: center;
     border-bottom: 1px solid #D1D1D1;

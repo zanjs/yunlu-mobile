@@ -1,14 +1,9 @@
 <template>
   <section>
-    <mt-header title="资讯"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="gallery-container">
       <information-gallery
         :store="informationFolderArchives"
@@ -39,6 +34,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import InformationGallery from '../../components/common/InformationGallery'
   import { mapGetters } from 'vuex'
@@ -46,6 +42,7 @@
   export default {
     data () {
       return {
+        header: '资讯',
         teamId: this.$route.params.id,
         type: this.$route.query.type,
         token: getStore('user') ? getStore('user').authentication_token : '',
@@ -80,6 +77,7 @@
       }
     },
     components: {
+      CommonHeader,
       InformationGallery,
       swiper,
       swiperSlide
@@ -195,22 +193,6 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .gallery-container {
     @include px2rem(padding-top, 88px);
   }
@@ -218,6 +200,7 @@
     position: fixed;
     @include px2rem(top, 38px);
     width: 100%;
+    max-width: 540px;
     display: flex;
     align-items: center;
     z-index: 1004;
@@ -252,7 +235,6 @@
     top: 0;
     left: 0;
     bottom: 0;
-    right: 0;
     z-index: 1002;
     background-color: #000;
   }

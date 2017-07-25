@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="投诉"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="tips-container">
       <p>举报违法内容，拒绝恶意侵扰</p>
       <p>清洁共同家园，你我一致行动</p>
@@ -51,6 +44,7 @@
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
   import RadioList from '../../components/common/RadioList'
+  import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -79,6 +73,7 @@
             value: 99
           }
         ],
+        header: '投诉',
         value: null,
         token: getStore('user') ? getStore('user').authentication_token : '',
         resourceId: this.$route.query.resourceId,
@@ -87,6 +82,7 @@
       }
     },
     components: {
+      CommonHeader,
       RadioList
     },
     methods: {
@@ -147,22 +143,6 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .tips-container {
     background-color: #F2F2F2;
     @include px2rem(margin-top, 88px);

@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
+    <common-header
       :title="title"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+      @back="goBack()">
+    </common-header>
     <section
       v-if="type === 'Product'"
       class="product-info">
@@ -50,6 +43,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import Message from '../../components/chat/Message'
   import ChatInput from '../../components/chat/ChatInput'
   import { TextMessage } from 'leancloud-realtime'
@@ -76,6 +70,7 @@
       }
     },
     components: {
+      CommonHeader,
       Message,
       ChatInput
     },
@@ -263,34 +258,19 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin.scss';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .product-info {
     display: flex;
     position: fixed;
     width: 100%;
+    max-width: 540px;
     @include px2rem(top, 88px);
-    @include pm2rem(padding, 20px, 30px, 20px, 30px);
+    @include pm2rem(padding, 20px, 0px, 20px, 0px);
     background-color: $white;
     z-index: 1;
     .img-container {
       @include px2rem(width, 120px);
       @include px2rem(height, 120px);
-      @include px2rem(margin-right, 30px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
       img {
         width: 100%;
         height: 100%;
@@ -300,6 +280,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      @include px2rem(margin-right, 30px);
       .name {
         @include font-dpr(15px);
       }

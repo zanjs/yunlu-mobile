@@ -37,17 +37,18 @@ export default {
 .input-container {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  max-width: 540px;
   display: flex;
   @include px2rem(max-height, 400px);
-  @include pm2rem(padding, 10px, 10px, 10px, 10px);
+  @include pm2rem(padding, 10px, 0px, 10px, 0px);
   background-color: #E2E2E2;
   .input {
     @include font-dpr(15px);
     @include px2rem(line-height, 80px);
     @include px2rem(max-height, 300px);
     @include px2rem(height, 80px);
+    @include pm2rem(margin, 0px, 10px, 0px, 10px);
     color: #595959;
     flex: 1;
     background-color: #fdfdfd;
@@ -55,7 +56,7 @@ export default {
     resize: none;
   }
   .btn {
-    @include pm2rem(margin, 0px, 0px, 0px, 20px);
+    @include pm2rem(margin, 0px, 10px, 0px, 20px);
     display: flex;
     align-items: center;
     justify-content: center;
