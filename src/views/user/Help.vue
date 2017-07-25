@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="帮助手册"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="menu-list">
       <header>
         目录
@@ -29,10 +22,12 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
+        header: '帮助手册',
         menus: [
           {
             id: '001',
@@ -198,6 +193,9 @@
         ]
       }
     },
+    components: {
+      CommonHeader
+    },
     methods: {
       goBack () {
         if (getStore('Help_goHome')) {
@@ -217,22 +215,6 @@
 <style lang="scss" scoped>
    @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .menu-list {
     background-color: $white;
     @include px2rem(padding-top, 88px);

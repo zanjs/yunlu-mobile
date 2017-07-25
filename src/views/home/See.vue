@@ -2,14 +2,16 @@
   <section>
     <div class="search-bar">
       <img src="../../assets/homePageTopBg.png">
-      <div class="search-input"
-           @click="goRoute('SearchProducts', true)">
+      <div
+        class="search-input"
+        @click="goRoute('SearchProducts', true)">
         <a class="text">任你搜 任意搜</a>
         <i class="iconfont icon-sousuo"></i>
       </div>
-      <i v-if="hasLogin"
-         class="iconfont icon-geren icon-btn"
-         @click="goRoute('Mine', true)"></i>
+      <i
+        v-if="hasLogin"
+        class="iconfont icon-geren icon-btn"
+        @click="goRoute('Mine', true)"></i>
       <p v-else
          @click="goRoute('Login', false)"
          class="icon-btn login-btn">登录|注册</p>
@@ -222,14 +224,15 @@
     align-items: center;
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 999;
+    width: 100%;
+    max-width: 540px;
     img {
       position: fixed;
       top: 0;
       @include px2rem(height, 114px);
       width: 100%;
+      max-width: 540px;
       z-index: 999;
     }
     .search-input {
@@ -259,7 +262,6 @@
         position: absolute;
         color: #B4B4B4;
         @include font-dpr(21px);
-        @include px2rem(padding-top, 8px);
         @include px2rem(left, 40px);
         top: 50%;
         transform: translateY(-50%);

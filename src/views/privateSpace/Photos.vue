@@ -1,14 +1,9 @@
 <template>
   <section>
-    <mt-header :title="headerName"
-               fixed
-               class="header">
-      <mt-button slot="left"
-                 @click="goBack()"
-                 class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="headerName"
+      @back="goBack()">
+    </common-header>
     <section class="container">
       <mt-loadmore
         :top-method="loadPhotosTop"
@@ -29,25 +24,30 @@
     <template v-if="showPreview">
       <div class="option-bar">
         <div class="left">
-          <div class="close"
-               @click="closePreview()">
+          <div
+            class="close"
+            @click="closePreview()">
             <i class="iconfont icon-fanhui"></i>
           </div>
           <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
         </div>
-        <div class="report"
-             @click="goReport">
+        <div
+          class="report"
+          @click="goReport">
           <i class="iconfont icon-jubao"></i>
         </div>
       </div>
-      <swiper :options="swiperOption"
-              class="full-screen-swiper">
+      <swiper
+        :options="swiperOption"
+        class="full-screen-swiper">
         <!-- slides -->
-        <swiper-slide class="swiper-zoom-container full-screen-bg"
-                      v-for="(item, index) in photos"
-                      :key="item.url">
-          <img :src="item.url"
-               alt="">
+        <swiper-slide
+          class="swiper-zoom-container full-screen-bg"
+          v-for="(item, index) in photos"
+          :key="item.url">
+          <img
+            :src="item.url"
+            alt="">
         </swiper-slide>
       </swiper>
     </template>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
   import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -102,6 +103,7 @@
       }
     },
     components: {
+      CommonHeader,
       Gallery,
       swiper,
       swiperSlide
@@ -247,28 +249,14 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
-  .container {
+.container {
     @include px2rem(padding-top, 88px);
   }
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
     width: 100%;
+    max-width: 540px;
     z-index: 1004;
     display: flex;
     justify-content: space-between;

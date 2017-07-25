@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="企业"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="title"
+      @back="goBack()">
+    </common-header>
     <search
       @search="getEnterprises(searchParams)">
       <input
@@ -35,13 +28,10 @@
             @click="goEnterpriseCarte">
           </list>
         </mt-loadmore>
-        <div
+        <back-to-top
           v-if="showGoTopBtn"
-          class="cirlce-btn"
           @click="goTop()">
-          <i class="iconfont icon-dingzhi"></i>
-          <p>置顶</p>
-        </div>
+        </back-to-top>
       </template>
       <template v-if="allEnterprises && allEnterprises.length === 0">
         <div class="empty-products">
@@ -56,14 +46,17 @@
 </template>
 
 <script>
-  import Search from '../../components/common/Search.vue'
-  import List from '../../components/enterprise/List.vue'
+  import CommonHeader from '../../components/header/CommonHeader'
+  import Search from '../../components/common/Search'
+  import List from '../../components/enterprise/List'
+  import BackToTop from '../../components/common/BackToTop'
   import { mapGetters } from 'vuex'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
+        title: '企业',
         placeholder: '请输入企业名称',
         searchParams: this.$route.query.q || '',
         hasSearch: false,
@@ -77,7 +70,9 @@
     },
     components: {
       Search,
-      List
+      List,
+      CommonHeader,
+      BackToTop
     },
     methods: {
       getEnterprises (q = '') {
@@ -182,48 +177,38 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .list {
     @include px2rem(padding-top, 170px);
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    position: relative;
+    .float-btn {
       position: fixed;
       @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
+      display: block;
+      width: 100%;
+      max-width: 540px;
+      .cirlce-btn {
+        float: right;
+        @include px2rem(width, 100px);
+        @include px2rem(height, 100px);
+        @include px2rem(border-radius, 50px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        @include px2rem(margin-right, 40px);
+        color: $white;
+        background-color: rgba(0, 0, 0, .68);
+        line-height: 1;
+        z-index: 1004;
+        i {
+          @include font-dpr(21px);
+        }
+        p {
+          @include font-dpr(12px);
+        }
       }
     }
     .empty-products {

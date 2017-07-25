@@ -55,10 +55,10 @@ export default {
     align-items: center;
     position: fixed;
     @include px2rem(top, 169px);
-    left: 0;
-    right: 0;
     background-color: $white;
     z-index: 1001;
+    width: 100%;
+    max-width: 540px;
     .item {
       height: inherit;
       display: flex;
