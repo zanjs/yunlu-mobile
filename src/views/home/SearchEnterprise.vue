@@ -22,25 +22,35 @@
         :placeholder="placeholder">
     </search>
     <div class="list">
-      <mt-loadmore
-        :top-method="loadEnterpriseTop"
-        :bottom-method="loadEnterpriseBottom"
-        :bottom-pull-text="bottomPullText"
-        :bottom-drop-text="bottomDropText"
-        :auto-fill="false"
-        ref="loadMoreEnterprises">
-        <list
-          :store="allEnterprises"
-          @click="goEnterpriseCarte">
-        </list>
-      </mt-loadmore>
-      <div
-        v-if="showGoTopBtn"
-        class="cirlce-btn"
-        @click="goTop()">
-        <i class="iconfont icon-dingzhi"></i>
-        <p>置顶</p>
-      </div>
+      <template v-if="allEnterprises && allEnterprises.length > 0">
+        <mt-loadmore
+          :top-method="loadEnterpriseTop"
+          :bottom-method="loadEnterpriseBottom"
+          :bottom-pull-text="bottomPullText"
+          :bottom-drop-text="bottomDropText"
+          :auto-fill="false"
+          ref="loadMoreEnterprises">
+          <list
+            :store="allEnterprises"
+            @click="goEnterpriseCarte">
+          </list>
+        </mt-loadmore>
+        <div
+          v-if="showGoTopBtn"
+          class="cirlce-btn"
+          @click="goTop()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p>置顶</p>
+        </div>
+      </template>
+      <template v-if="allEnterprises && allEnterprises.length === 0">
+        <div class="empty-products">
+          <div class="img-container">
+            <img src="../../assets/noSearchProducts.png">
+          </div>
+          <p>SORRY! 暂没有找到符合条件的信息</p>
+        </div>
+      </template>
     </div>
   </section>
 </template>
@@ -193,7 +203,7 @@
     -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .list {
-    @include px2rem(margin-top, 170px);
+    @include px2rem(padding-top, 170px);
     .cirlce-btn {
       @include px2rem(width, 100px);
       @include px2rem(height, 100px);
@@ -214,6 +224,20 @@
       }
       p {
         @include font-dpr(12px);
+      }
+    }
+    .empty-products {
+      color: #A6A6A6;
+      .img-container {
+        text-align: center;
+        @include pm2rem(padding, 30px, 0px, 40px, 0px);
+        img {
+          width: 50%;
+        }
+      }
+      p {
+        @include font-dpr(16px);
+        text-align: center;
       }
     }
   }
