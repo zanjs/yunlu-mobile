@@ -20,7 +20,9 @@
           class="price">&yen;{{productPrice}}元</p>
       </div>
     </section>
-    <section class="container">
+    <section
+      class="container"
+      v-bind:class="{'product-container': type === 'Product'}">
       <div
         class="chat-content"
         ref="chatContent"
@@ -58,7 +60,10 @@
         targetUser: null,
         type: this.$route.query.type,
         teamId: '',
+        chatType: 'single', // 默认单聊（群聊:group）
         productId: this.$route.query.productId || '',
+        linkId: this.$route.query.linkId || '',
+        conversationId: this.$route.query.conversationId || '',
         productName: '',
         productPrice: '',
         productImg: '',
@@ -78,11 +83,33 @@
       beforeGetConferences () {
         if (this.type === 'Product') {
           this.getProductDetail()
+        } else if (this.conversationId) {
+          this.getConversations(this.conversationId)
         } else {
-          this.createConferences()
+          this.createConferences(this.teamId, this.productId, this.linkId)
         }
       },
-      createConferences (teamId = '', productId = '') {
+      getConversations (conversationId = '') {
+        this.$store.dispatch('commonAction', {
+          url: `/im/conferences/${conversationId}/detail`,
+          method: 'get',
+          params: {
+            token: this.token,
+            conv_id: conversationId
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.conferences = res.data.conferences
+            this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
+            this.title = res.data.conferences.clazz === 'group' ? `${res.data.conferences.remark}(${res.data.conferences.members.length})` : res.data.conferences.remark
+            this.targetUser = res.data.conferences.members[0]
+            this.init()
+          },
+          reject: () => {
+          }
+        })
+      },
+      createConferences (teamId = '', productId = '', linkId = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/conferences',
           method: 'post',
@@ -91,12 +118,14 @@
           data: {
             token: this.token,
             ...(teamId ? {team_id: teamId} : {}),
-            ...(productId ? {product_id: productId} : {})
+            ...(productId ? {product_id: productId} : {}),
+            ...(linkId ? {stranger_id: linkId} : {})
           },
           target: this,
           resolve: (state, res) => {
             this.conferences = res.data.conferences
             this.title = res.data.conferences.remark
+            this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
             this.targetUser = res.data.conferences.members[0]
             this.init()
           },
@@ -134,7 +163,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.createConferences(this.teamId, this.productId)
+            this.createConferences(this.teamId, this.productId, this.linkId)
             this.productImg = res.data.files[0].thumb_urls[0]
           },
           reject: () => {
@@ -218,12 +247,19 @@
       },
       handleHistoryMsg (arr) {
         for (let i = 0; i < arr.length; i++) {
+          let logoUrl = ''
+          for (let j = 0; j < this.conferences.members.length; j++) {
+            if (arr[i].from === this.conferences.members[j].uuid) {
+              logoUrl = this.conferences.members[j].avatar_url
+              break
+            }
+          }
           if (arr[i].from === this.uuid) {
             let tmpObj = {
               isSelf: true,
               content: arr[i].content._lctext,
               name: this.mySelf.home_name,
-              avatar: this.mySelf.avatar_url,
+              avatar: logoUrl,
               date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
             this.msgs.push(tmpObj)
@@ -232,7 +268,7 @@
               isSelf: false,
               content: arr[i].content._lctext,
               name: this.targetUser.display_name,
-              avatar: this.targetUser.avatar_url,
+              avatar: logoUrl,
               date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
             this.msgs.push(tmpObj)
@@ -290,7 +326,10 @@
     }
   }
   .container {
-    @include pm2rem(padding, 248px, 0px, 240px, 0px);
+    @include pm2rem(padding, 128px, 0px, 240px, 0px);
     background-color: #FAFAFA;
+  }
+  .product-container {
+    @include px2rem(padding-top, 248px);
   }
 </style>

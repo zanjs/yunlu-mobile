@@ -172,6 +172,8 @@
       goChat (item) {
         if (item.linkType === 'Product') {
           this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.linkId}})
+        } else if (item.linkType !== 'Product') {
+          this.$router.push({name: 'Chat', query: {type: item.linkType, linkId: item.linkId, conversationId: item.conversationId}})
         }
       },
       handleItemCheck (item) {
@@ -329,7 +331,7 @@
     }
   }
   .list-container {
-    @include px2rem(padding-top, 176px);
+    @include pm2rem(padding, 176px, 0px, 98px, 0px);
   }
   .option-bar {
     display: flex;

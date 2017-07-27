@@ -102,7 +102,7 @@
             </div>
           </template>
           <template v-if="activeIndex === 3">
-            <template v-if="hasLogin">
+            <template v-if="true">
               <template v-if="alumniBusiness && alumniBusiness.length > 0">
                 <mt-loadmore
                   key="person"
@@ -182,7 +182,7 @@
   import Order from '../../components/common/Order'
   import PopDialog from '../../components/common/PopDialog'
   import BackToTop from '../../components/common/BackToTop'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -449,9 +449,7 @@
                 this.$refs.loadMoreEnterprises.onBottomLoaded()
               }
             }
-            if (getStore('user')) {
-              this.getAlumniBusiness()
-            }
+            this.getAlumniBusiness()
           },
           reject: () => {
           }
@@ -464,7 +462,7 @@
           method: 'get',
           params: {
             team_id: this.teamId,
-            token: this.token,
+            ...(this.token ? {token: this.token} : {}),
             page: this.personPageIndex,
             per_page: this.personPageSize,
             keyword: q
@@ -614,18 +612,6 @@
             }
             break
         }
-      },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       showPopDialog (type, name, value) {
         this.message = {
