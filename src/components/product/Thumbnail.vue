@@ -7,11 +7,11 @@
            class="img-box">
         <img
           v-if="item.file_thumb_urls"
-          :src="item.file_thumb_urls"
+          v-lazy="item.file_thumb_urls"
           class="normal">
         <img
           v-else
-          src="../../assets/imgLoading.png"
+          src="../../assets/imgLoading3.jpg"
           class="empty">
          <div class="cover">
            <div class="wraper">
@@ -49,7 +49,6 @@
     display: flex;
     flex-wrap: wrap;
     .img-box {
-      // @include px2rem(height, 396px);
       @include px2rem(width, 346px);
       @include pm2rem(margin, 0px, 14px, 20px, 0px);
       position: relative;
@@ -59,14 +58,31 @@
       align-items: flex-start;
       border: 1px solid #E0E0E0;
       box-sizing: border-box;
+      img[lazy=loading] {
+        @include px2rem(height, 346px);
+        width: 100%;
+        background-position: center center!important;
+        background: url("../../assets/imgLoading3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=error] {
+        @include px2rem(height, 346px);
+        width: 100%;
+        background-position: center center!important;
+        background: url("../../assets/imgLoading3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=loaded] {
+        @include px2rem(height, 346px);
+        width: 100%;
+      }
       .normal {
         @include px2rem(height, 346px);
         width: 100%;
-        // @include px2rem(width, 346px);
       }
       .empty {
-        // width: 60%;
-        // height: 60%;
         @include px2rem(height, 346px);
         @include px2rem(width, 346px);
       }

@@ -1,11 +1,12 @@
 <template>
   <section>
     <div class="list-container">
-      <a v-for="(item, index) in store"
-         :key="index"
-         @click="handleClick(item.user.id)"
-         class="item">
-        <img :src="item.user.avatar_url">
+      <a
+        v-for="(item, index) in store"
+        :key="index"
+        @click="handleClick(item.user.id)"
+        class="item">
+        <img v-lazy="item.user.avatar_url">
         <p>{{item.user.name}}</p>
       </a>
     </div>
@@ -84,6 +85,29 @@
       background-color: #F2F2F2;
     }
     img {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+    }
+    img[lazy=loading] {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
       @include px2rem(width, 118px);
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
