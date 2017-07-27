@@ -9,20 +9,6 @@ import './styles/iconfont.css'
 import store from './vuex/store'
 import { setStore } from './config/mUtils'
 import realtime from './config/leancloud'
-// import './config/rem'
-// import FastClick from 'fastclick'
-
-// 快速点击，消除300ms延迟
-// if ('addEventListener' in document) {
-//   document.addEventListener('DOMContentLoaded', function () {
-//     FastClick.attach(document.body)
-//   }, false)
-// }
-
-// history.pushState(null, null, document.URL)
-// window.addEventListener('popstate', function () {
-//   history.pushState(null, null, document.URL)
-// })
 
 router.beforeEach((to, from, next) => {
   if (!from.name) {

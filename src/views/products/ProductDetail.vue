@@ -15,7 +15,7 @@
             v-for="(item, index) in productDetailFiles"
             :key="index">
             <img
-              :src="item.thumb_urls[0]"
+              v-lazy="item.thumb_urls[0]"
               @click="viewFullScreenPic(productDetailFiles)">
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
@@ -284,14 +284,17 @@
         </div>
         <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
-      <swiper :options="swiperOptionFullScreen"
-              class="full-screen-swiper">
+      <swiper
+        :options="swiperOptionFullScreen"
+        class="full-screen-swiper">
         <!-- slides -->
-        <swiper-slide class="swiper-zoom-container full-screen-bg"
-                      v-for="(item, index) in previewImgs"
-                      :key="index">
-          <img :src="item.url"
-               alt="">
+        <swiper-slide
+          class="swiper-zoom-container full-screen-bg"
+          v-for="(item, index) in previewImgs"
+          :key="index">
+          <img
+            v-lazy="item.url"
+            alt="">
         </swiper-slide>
       </swiper>
     </div>
@@ -868,6 +871,32 @@
       width: inherit;
       z-index: 1;
     }
+    img[lazy=loading] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+    }
   }
   .page-nav {
     position: absolute;
@@ -1138,6 +1167,32 @@
     right: 0;
     z-index: 1002;
     background-color: #000;
+    img[lazy=loading] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      max-width: 100%;
+      max-height: 100%;
+      width: inherit;
+      z-index: 1;
+    }
   }
   .full-screen-bg {
     background-color: #000;

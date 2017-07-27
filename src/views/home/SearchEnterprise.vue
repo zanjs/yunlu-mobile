@@ -114,7 +114,14 @@
         this.searchParams = ''
         this.hasSearch = false
         this.pageIndex = 1
-        this.getEnterprises()
+        this.throttle(this.getEnterprises, this)
+      },
+      // 节流函数
+      throttle (method, context) {
+        clearTimeout(method.tId)
+        method.tId = setTimeout(() => {
+          method.call(context)
+        }, 500)
       },
       handleInput () {
         if (this.searchParams === '') {

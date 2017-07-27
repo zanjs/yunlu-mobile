@@ -5,7 +5,7 @@
       :key="index"
       @click.stop="handleClick(item)"
       class="img-container">
-      <img :src="item.files[0].thumb_url">
+      <img v-lazy="item.files[0].thumb_url">
       <div class="cover">
         {{item.name}}（{{item.files.length}})
       </div>
@@ -41,6 +41,26 @@ export default {
       @include pm2rem(margin, 0px, 28px, 30px, 0px);
       position: relative;
       img {
+        width: 100%;
+        height: 100%;
+      }
+      img[lazy=loading] {
+        width: 100%;
+        height: 100%;
+        background-position: center center!important;
+        background: url("../../assets/imgLoading3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=error] {
+        width: 100%;
+        height: 100%;
+        background-position: center center!important;
+        background: url("../../assets/imgLoading3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=loaded] {
         width: 100%;
         height: 100%;
       }

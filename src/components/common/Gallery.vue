@@ -1,11 +1,12 @@
 <template>
   <section>
     <div class="gallery">
-      <img v-for="(item, index) in dataSource"
-           :key="index"
-           :src="item.thumb_url"
-           class="photo"
-           @click="handleClick(index)">
+      <img
+        v-for="(item, index) in dataSource"
+        :key="index"
+        v-lazy="item.thumb_url"
+        class="photo"
+        @click="handleClick(index)">
     </div>
   </section>
 </template>
@@ -41,6 +42,29 @@
       @include px2rem(width, 236px);
       @include px2rem(height, 236px);
       @include pm2rem(margin, 0px, 8px, 10px, 0px)
+    }
+    img[lazy=loading] {
+      @include px2rem(width, 236px);
+      @include px2rem(height, 236px);
+      @include pm2rem(margin, 0px, 8px, 10px, 0px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+     @include px2rem(width, 236px);
+      @include px2rem(height, 236px);
+      @include pm2rem(margin, 0px, 8px, 10px, 0px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      @include px2rem(width, 236px);
+      @include px2rem(height, 236px);
+      @include pm2rem(margin, 0px, 8px, 10px, 0px);
     }
   }
 </style>

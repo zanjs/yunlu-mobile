@@ -39,12 +39,12 @@
                 :auto-fill="false"
                 ref="loadMoreProducts">
                 <product-list-mode
-                  v-if="showList"
+                  v-show="showList"
                   :store="products"
                   @click="goProductDetail">
                 </product-list-mode>
                 <product-thumbnail-mode
-                  v-else
+                  v-show="!showList"
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>

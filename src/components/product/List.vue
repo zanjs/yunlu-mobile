@@ -8,10 +8,10 @@
         <div class="img-box">
           <img
             v-if="item.file_thumb_urls"
-            :src="item.file_thumb_urls">
+            v-lazy="item.file_thumb_urls">
           <img
             v-else
-            src="../../assets/noImg.png">
+            src="../../assets/imgLoading3.jpg">
         </div>
         <div class="content">
           <span class="name">{{item.name}}</span>
@@ -55,6 +55,26 @@
         @include px2rem(margin-right, 30px);
         display: block;
         img {
+          width: 100%;
+          height: 100%;
+        }
+        img[lazy=loading] {
+          width: 100%;
+          height: 100%;
+          background-position: center center!important;
+          background: url("../../assets/imgLoading3.jpg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        img[lazy=error] {
+          width: 100%;
+          height: 100%;
+          background-position: center center!important;
+          background: url("../../assets/imgLoading3.jpg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        img[lazy=loaded] {
           width: 100%;
           height: 100%;
         }
