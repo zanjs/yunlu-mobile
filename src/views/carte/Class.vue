@@ -183,7 +183,7 @@
   import Order from '../../components/common/Order'
   import PopDialog from '../../components/common/PopDialog'
   import BackToTop from '../../components/common/BackToTop'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -617,18 +617,6 @@
             }
             break
         }
-      },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       showPopDialog (type, name, value) {
         this.message = {
