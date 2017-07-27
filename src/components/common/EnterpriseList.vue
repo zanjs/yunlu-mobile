@@ -9,8 +9,8 @@
         <div class="content">
           <p>{{item.organization.name}}</p>
           <div>
-            <span class="type">{{item.organization.service_name}}</span>
-            <span class="address">{{item.organization.zone_name}}</span>
+            <span class="type">{{item.organization.service_name || item.organization.service.name}}</span>
+            <span class="address">{{item.organization.zone_name || item.organization.display_zone}}</span>
           </div>
         </div>
       </div>

@@ -137,6 +137,10 @@
           this.$router.push({name: 'EmptyEnterpriseCarte', query: {name: item.name}})
         } else if (item.organization.service.aliaz === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.organization.id}})
+        } else if (item.organization.service.aliaz === 'school') {
+          this.$router.push({name: 'Alumni', params: {id: item.organization.id}})
+        } else if (item.organization.service.aliaz === 'class') {
+          this.$router.push({name: 'Class', params: {id: item.organization.id}})
         } else {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.organization.id}})
         }
