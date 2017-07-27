@@ -533,10 +533,10 @@
             this.placeholder = '搜索资讯'
             break
           case 2:
-            this.placeholder = '搜索企业会员'
+            this.placeholder = '搜索校友班级'
             break
           case 3:
-            this.placeholder = '搜索个人会员'
+            this.placeholder = '搜索校友企业'
             break
           default:
             this.placeholder = '搜索产品'
@@ -573,10 +573,10 @@
             this.header = status ? '产品' : '名片'
           } else if (this.activeIndex === 2) {
             this.showSearchBar = status
-            this.header = status ? '企业会员' : '名片'
+            this.header = status ? '校友班级' : '名片'
           } else if (this.activeIndex === 3) {
             this.showSearchBar = status
-            this.header = status ? '个人会员' : '名片'
+            this.header = status ? '校友企业' : '名片'
           }
         }, this.height)
       },
@@ -595,24 +595,15 @@
       iconClick (item) {
         switch (item.type) {
           case 'email':
-            // this.linkToast('协会', '邮箱地址', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
-            // this.linkToast('协会', '微信号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
-            // this.linkToast('协会', '网址', item.value)
             window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
-            // this.showMessageBox(item.value)
             break
           case 'qq':
-            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('协会', 'QQ账号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':

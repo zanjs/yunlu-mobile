@@ -536,10 +536,10 @@
             this.placeholder = '搜索资讯'
             break
           case 2:
-            this.placeholder = '搜索企业会员'
+            this.placeholder = '搜索班级成员'
             break
           case 3:
-            this.placeholder = '搜索个人会员'
+            this.placeholder = '搜索同学企业'
             break
           default:
             this.placeholder = '搜索产品'
@@ -576,10 +576,10 @@
             this.header = status ? '产品' : '名片'
           } else if (this.activeIndex === 2) {
             this.showSearchBar = status
-            this.header = status ? '企业会员' : '名片'
+            this.header = status ? '班级成员' : '名片'
           } else if (this.activeIndex === 3) {
             this.showSearchBar = status
-            this.header = status ? '个人会员' : '名片'
+            this.header = status ? '同学企业' : '名片'
           }
         }, this.height)
       },
