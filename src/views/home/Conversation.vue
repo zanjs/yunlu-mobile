@@ -123,6 +123,7 @@
             tmpArr.push(this.conversations[i])
           }
         }
+        // this.$store.dispatch('searchConversation', params)
         this.conversations = tmpArr
       },
       getConversationList () {
@@ -136,7 +137,7 @@
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
             state.conversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'))
-            this.conversations = this.handleConverstaionList(state.conversationList)
+            this.conversations = [...state.conversationList]
           },
           reject: () => {
           }
@@ -152,20 +153,11 @@
                 linkType: arr1[i].link_type,
                 linkId: arr1[i].link_id,
                 remark: arr1[i].remark,
-                logoUrl: arr1[i].logo_url
+                logoUrl: arr1[i].logo_url,
+                checked: false
               })
             }
           }
-        }
-        return tmpArr
-      },
-      handleConverstaionList (arr) {
-        let tmpArr = []
-        for (let i = 0; i < arr.length; i++) {
-          tmpArr.push({
-            ...arr[i],
-            checked: false
-          })
         }
         return tmpArr
       },

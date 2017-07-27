@@ -30,6 +30,9 @@
              @click="goRoute('Conversation', hasLogin)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
+            <div
+              v-if="unReadeMsgs.length > 0"
+              class="dot"></div>
           </div>
           <span>会话</span>
         </div>
@@ -212,7 +215,7 @@
     computed: {
       ...mapGetters([
         'user',
-        // 'clientKeyWrods',
+        'unReadeMsgs',
         'seeCard'
       ])
     }
@@ -310,9 +313,19 @@
           justify-content: center;
           align-items: center;
           box-shadow: 0px 2px 6px rgba(128, 128, 128, .5);
+          position: relative;
           i {
             @include font-dpr(27px);
             color: $white;
+          }
+          .dot {
+            @include px2rem(width, 20px);
+            @include px2rem(height, 20px);
+            @include px2rem(border-radius, 10px);
+            background-color: #F75544;
+            position: absolute;
+            @include px2rem(top, 0px);
+            @include px2rem(right, -10px);
           }
         }
         span {
