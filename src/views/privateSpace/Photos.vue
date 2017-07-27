@@ -46,7 +46,7 @@
           v-for="(item, index) in photos"
           :key="item.url">
           <img
-            :src="item.url"
+            v-lazy="item.url"
             alt="">
         </swiper-slide>
       </swiper>
@@ -314,5 +314,31 @@
   }
   .full-screen-bg {
     background-color: #000;
+    img[lazy=loading] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   }
 </style>

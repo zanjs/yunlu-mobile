@@ -5,7 +5,7 @@
            :key="index"
            @click="handleClick(item.organization.id)"
            class="item">
-        <img :src="item.organization.logo">
+        <img v-lazy="item.organization.logo">
         <div class="content">
           <p>{{item.organization.name}}</p>
           <div>
@@ -107,6 +107,29 @@
       }
     }
     img {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+    }
+    img[lazy=loading] {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      @include px2rem(width, 118px);
+      @include px2rem(height, 118px);
+      @include px2rem(margin-right, 30px);
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
       @include px2rem(width, 118px);
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
