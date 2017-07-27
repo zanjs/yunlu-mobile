@@ -113,7 +113,7 @@
       resetSearchBar () {
         this.searchParams = ''
         this.hasSearch = false
-        this.pageIndex = 1
+        this.enterprisePageIndex = 1
         this.throttle(this.getEnterprises, this)
       },
       // 节流函数
@@ -127,6 +127,7 @@
         if (this.searchParams === '') {
           this.resetSearchBar()
         }
+        this.enterprisePageIndex = 1
       },
       handleSearch (q) {
         this.getEnterprises(q)
