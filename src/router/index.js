@@ -34,6 +34,8 @@ const Conversation = resolve => require(['../views/home/Conversation'], resolve)
 const SearchProducts = resolve => require(['../views/home/SearchProducts'], resolve)
 const Help = resolve => require(['../views/user/Help'], resolve)
 const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
+const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
+const Class = resolve => require(['../views/carte/Class'], resolve)
 
 Vue.use(Router)
 
@@ -190,6 +192,14 @@ export default new Router({
       path: '/helps/:id',
       name: 'HelpDetail',
       component: HelpDetail
+    }, {
+      path: '/alumnis/:id',
+      name: 'Alumni',
+      component: Alumni
+    }, {
+      path: '/classes/:id',
+      name: 'Class',
+      component: Class
     }
   ]
 })
