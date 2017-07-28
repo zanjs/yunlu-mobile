@@ -98,7 +98,7 @@
               class="link">
               <a
                 class="row"
-                @click="goComity(item.id)">
+                @click="goCarte(item)">
                 <span>{{item.name}}</span>
                 <i class="iconfont icon-fanhui"></i>
               </a>
@@ -163,8 +163,16 @@
           this.$router.go(-1)
         }
       },
-      goComity (id) {
-        this.$router.push({name: 'ComityCarte', params: {id: id}})
+      goCarte (item) {
+        if (item.service_name === '班级') {
+          this.$router.push({name: 'Class', params: {id: item.id}})
+        } else if (item.service_name === '协会') {
+          this.$router.push({name: 'ComityCarte', params: {id: item.id}})
+        } else if (item.service_name === '校友会') {
+          this.$router.push({name: 'Alumni', params: {id: item.id}})
+        } else {
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
+        }
       }
     },
     mounted () {
