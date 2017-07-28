@@ -150,7 +150,7 @@
         } else if (item.type === 'company') {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
         } else if (item.type === 'class') {
-          this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
+          this.$router.push({name: 'Class', params: {id: item.team_id}})
         } else if (item.type === 'school') {
           this.$router.push({name: 'Alumni', params: {id: item.team_id}})
         }
