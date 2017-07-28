@@ -65,7 +65,8 @@
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         height: 160, // 向上滚动到160px，就显示回到顶部按钮
-        showGoTopBtn: false
+        showGoTopBtn: false,
+        exclude_service_ids: [] // 企业搜索需要过滤掉班级,页面维护一套services数组，里面包含了所有服务类型
       }
     },
     components: {
@@ -75,6 +76,31 @@
       BackToTop
     },
     methods: {
+      getServices () {
+        this.$store.dispatch('commonAction', {
+          url: '/services',
+          method: 'get',
+          params: {
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.exclude_service_ids = this.handleExcludeServiceIds(res.data.services)
+            this.getEnterprises(this.searchParams)
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleExcludeServiceIds (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          // 只过滤班级(班级的别名为class)
+          if (arr[i].aliaz === 'class') {
+            tmpArr.push(arr[i].id)
+          }
+        }
+        return tmpArr
+      },
       getEnterprises (q = '') {
         this.$store.dispatch('commonAction', {
           url: '/enterprises',
@@ -82,7 +108,8 @@
           params: {
             page: this.enterprisePageIndex,
             per_page: this.enterprisePageSize,
-            keyword: q
+            keyword: q,
+            exclude_service_ids: this.exclude_service_ids
           },
           target: this,
           resolve: (state, res) => {
@@ -175,7 +202,7 @@
       }
     },
     mounted () {
-      this.getEnterprises(this.searchParams)
+      this.getServices()
       this.handleGoTopBtn()
     },
     computed: {
