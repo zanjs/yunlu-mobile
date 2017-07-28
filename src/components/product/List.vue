@@ -11,7 +11,7 @@
             v-lazy="item.file_thumb_urls">
           <img
             v-else
-            src="../../assets/imgLoading3.jpg">
+            src="../../assets/imgLoadingError.png">
         </div>
         <div class="content">
           <span class="name">{{item.name}}</span>
@@ -70,7 +70,7 @@
           width: 100%;
           height: 100%;
           background-position: center center!important;
-          background: url("../../assets/imgLoading3.jpg");
+          background: url("../../assets/imgLoadingError.png");
           background-repeat: no-repeat;
           background-size: cover;
         }

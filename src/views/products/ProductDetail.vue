@@ -23,7 +23,7 @@
       </template>
       <img
         v-else
-        src="../../assets/imgLoading3.jpg">
+        src="../../assets/imgLoadingError.png">
       <span v-if="productDetailFiles && productDetailFiles.length"
             class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
       <span v-else
@@ -256,7 +256,7 @@
               :src="productLinkFile.url">
             <img
               v-else
-              src="../../assets/imgLoading3.jpg">
+              src="../../assets/imgLoadingError.png">
             <div class="info">
               <p>{{productLink.name}}</p>
               <div>
@@ -887,7 +887,7 @@
       width: inherit;
       z-index: 1;
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }
@@ -1183,7 +1183,7 @@
       width: inherit;
       z-index: 1;
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }

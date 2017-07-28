@@ -11,7 +11,7 @@
           class="normal">
         <img
           v-else
-          src="../../assets/imgLoading3.jpg"
+          src="../../assets/imgLoadingError.png"
           class="empty">
          <div class="cover">
            <div class="wraper">
@@ -70,7 +70,7 @@
         @include px2rem(height, 346px);
         width: 100%;
         background-position: center center!important;
-        background: url("../../assets/imgLoading3.jpg");
+        background: url("../../assets/imgLoadingError.png");
         background-repeat: no-repeat;
         background-size: cover;
       }
