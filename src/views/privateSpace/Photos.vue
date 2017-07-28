@@ -111,7 +111,7 @@
     methods: {
       beforeGetData () {
         if (this.p) {
-          this.getData('/shares/photos', {p: this.p, id: this.id})
+          this.getData('/shares/photos', {p: this.p, id: this.id, page: this.pageIndex, per_page: this.pageSize})
         } else {
           this.shouldLogin()
         }
