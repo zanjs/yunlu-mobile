@@ -30,9 +30,10 @@
              @click="goRoute('Download', true)">
           <div class="icon-box box-2">
             <i class="iconfont icon-huihua"></i>
-            <div
+            <!-- 生产环境暂不显示 -->
+            <!-- <div
               v-if="unReadeMsgs.length > 0"
-              class="dot"></div>
+              class="dot"></div> -->
           </div>
           <span>会话</span>
         </div>
