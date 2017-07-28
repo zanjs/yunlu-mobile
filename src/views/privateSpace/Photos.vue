@@ -130,14 +130,7 @@
                 this.$refs.loadMorePhotos.onTopLoaded()
               }
             } else {
-              if (res.data.photos.length === 0 || url === '/shares/photos') {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              } else {
-                this.photos = [...this.photos, ...res.data.photos]
-              }
+              this.photos = [...this.photos, ...res.data.photos]
               if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
                 this.$refs.loadMorePhotos.onBottomLoaded()
               }
