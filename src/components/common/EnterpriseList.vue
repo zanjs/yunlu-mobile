@@ -9,8 +9,8 @@
         <div class="content">
           <p>{{item.organization.name}}</p>
           <div>
-            <span class="type">{{item.organization.service_name}}</span>
-            <span class="address">{{item.organization.zone_name}}</span>
+            <span class="type">{{item.organization.service_name || item.organization.service.name}}</span>
+            <span class="address">{{item.organization.zone_name || item.organization.display_zone}}</span>
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }

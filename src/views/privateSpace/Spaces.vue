@@ -17,13 +17,19 @@
       <img src="../../assets/shengzi@2x.png"
            class="right">
     </div>
-    <div v-if="thumbnails && thumbnails.length > 0"
-         class="album-comtainer">
+    <div
+      v-if="thumbnails && thumbnails.length > 0"
+      class="album-comtainer">
       <folders-cover
         :data-source="thumbnails"
         @click="albumClick">
       </folders-cover>
     </div>
+    <template v-else>
+      <div class="no-data">
+        <img src="../../assets/noFile.png">
+      </div>
+    </template>
     <template v-if="showDialog">
       <pop-dialog
         :store="message"
@@ -222,4 +228,16 @@
   .album-comtainer {
     @include pm2rem(padding, 24px, 22px, 0px, 22px);
   }
+  .no-data {
+    @include pm2rem(padding, 100px, 20px, 100px, 0px);
+    @include pm2rem(margin, 20px, 22px, 0px, 22px);
+    background-color: $white;
+    text-align: center;
+    border: 1px solid #D1D1D1;
+    img {
+      @include px2rem(width, 260px);
+      height: auto;
+    }
+  }
+
 </style>

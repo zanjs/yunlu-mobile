@@ -123,6 +123,7 @@
             tmpArr.push(this.conversations[i])
           }
         }
+        // this.$store.dispatch('searchConversation', params)
         this.conversations = tmpArr
       },
       getConversationList () {
@@ -136,7 +137,7 @@
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
             state.conversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'))
-            this.conversations = this.handleConverstaionList(state.conversationList)
+            this.conversations = [...state.conversationList]
           },
           reject: () => {
           }
@@ -152,26 +153,19 @@
                 linkType: arr1[i].link_type,
                 linkId: arr1[i].link_id,
                 remark: arr1[i].remark,
-                logoUrl: arr1[i].logo_url
+                logoUrl: arr1[i].logo_url,
+                checked: false
               })
             }
           }
         }
         return tmpArr
       },
-      handleConverstaionList (arr) {
-        let tmpArr = []
-        for (let i = 0; i < arr.length; i++) {
-          tmpArr.push({
-            ...arr[i],
-            checked: false
-          })
-        }
-        return tmpArr
-      },
       goChat (item) {
         if (item.linkType === 'Product') {
           this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.linkId}})
+        } else if (item.linkType !== 'Product') {
+          this.$router.push({name: 'Chat', query: {type: item.linkType, linkId: item.linkId, conversationId: item.conversationId}})
         }
       },
       handleItemCheck (item) {
@@ -329,7 +323,7 @@
     }
   }
   .list-container {
-    @include px2rem(padding-top, 176px);
+    @include pm2rem(padding, 176px, 0px, 98px, 0px);
   }
   .option-bar {
     display: flex;

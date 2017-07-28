@@ -111,7 +111,7 @@
     methods: {
       beforeGetData () {
         if (this.p) {
-          this.getData('/shares/photos', {p: this.p, id: this.id})
+          this.getData('/shares/photos', {p: this.p, id: this.id, page: this.pageIndex, per_page: this.pageSize})
         } else {
           this.shouldLogin()
         }
@@ -121,41 +121,6 @@
           url: url,
           method: 'get',
           params: params,
-          target: this,
-          resolve: (state, res) => {
-            if (this.pageIndex === 1) {
-              this.photos = res.data.photos
-              // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
-                this.$refs.loadMorePhotos.onTopLoaded()
-              }
-            } else {
-              if (res.data.photos.length === 0 || url === '/shares/photos') {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              } else {
-                this.photos = [...this.photos, ...res.data.photos]
-              }
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
-                this.$refs.loadMorePhotos.onBottomLoaded()
-              }
-            }
-          },
-          reject: () => {
-          }
-        })
-      },
-      getPhotos () {
-        this.$store.dispatch('commonAction', {
-          url: `/galleries/${this.id}/photos`,
-          method: 'get',
-          params: {
-            token: this.token,
-            page: this.pageIndex,
-            per_page: this.pageSize
-          },
           target: this,
           resolve: (state, res) => {
             if (this.pageIndex === 1) {
@@ -330,7 +295,7 @@
       max-height: 100%;
       object-fit: contain;
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }

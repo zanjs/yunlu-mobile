@@ -139,16 +139,20 @@
         })
       },
       goCarte (item) {
-        if (!item.team_id) {
+        if (item.type === 'personal') {
           if (this.$route.query.p) {
             this.$router.push({path: '/zone', query: {p: this.$route.query.p, cluster_id: item.id}})
           } else {
             this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
           }
-        } else if (item.is_association) {
+        } else if (item.type === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
-        } else {
+        } else if (item.type === 'company') {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
+        } else if (item.type === 'class') {
+          this.$router.push({name: 'Class', params: {id: item.team_id}})
+        } else if (item.type === 'school') {
+          this.$router.push({name: 'Alumni', params: {id: item.team_id}})
         }
       },
       goBack () {

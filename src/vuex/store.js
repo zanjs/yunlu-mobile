@@ -15,6 +15,7 @@ const state = {
   leanCloudConversations: [],
   yunLuConversations: [],
   conversationList: [],
+  unReadeMsgs: [], // 未读消息
   pageLoading: false,
   loadSuccess: false,
   user: null,
@@ -45,6 +46,7 @@ const getters = {
   leanCloudConversations: state => state.leanCloudConversations,
   yunLuConversations: state => state.yunLuConversations,
   conversationList: state => state.conversationList,
+  unReadeMsgs: state => state.unReadeMsgs,
   pageLoading: state => state.pageLoading,
   loadSuccess: state => state.loadSuccess,
   user: state => state.user,
@@ -82,6 +84,15 @@ const actions = {
   },
   updateLeanCouldConversations ({commit}, params) {
     commit(types.UPDATE_LEAN_CLOUD_CONVERSATIONS, {params})
+  },
+  updateUnReadMsgCount ({commit}, params) {
+    commit(types.UPDATE_UN_READ_MSG_COUNT, {params})
+  },
+  searchConversation ({commit}, params) {
+    commit(types.SEARCH_CONVERSATION, {params})
+  },
+  checkConversation ({commit}, params) {
+    commit(types.CHECK_CONVERSATION, {params})
   },
   receiveNewMessage ({commit}, params) {
     commit(types.RECEIVE_NEW_MESSAGE, {params})
@@ -144,6 +155,18 @@ const mutations = {
     }
     state.leanCloudConversations = tmpArr
     setStore('leanCloudConversations', tmpArr)
+  },
+
+  [types.UPDATE_UN_READ_MSG_COUNT] (state, {params}) {
+    state.unReadeMsgs = params
+  },
+
+  [types.SEARCH_CONVERSATION] (state, {params}) {
+    state.conversationList = state.conversationList.filter(i => i.remark.indexOf(params) > -1)
+  },
+
+  [types.CHECK_CONVERSATION] (state, {params}) {
+    // TODO: 将会话列表的状态管理移至vuex
   },
 
   [types.RECEIVE_NEW_MESSAGE] (state, {params}) {

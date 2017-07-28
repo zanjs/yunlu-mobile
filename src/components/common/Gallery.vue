@@ -57,7 +57,7 @@
       @include px2rem(height, 236px);
       @include pm2rem(margin, 0px, 8px, 10px, 0px);
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }

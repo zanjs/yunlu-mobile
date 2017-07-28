@@ -16,7 +16,8 @@
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
-        conversationList: []
+        conversationList: [],
+        acitve: false
       }
     },
     methods: {
@@ -65,27 +66,31 @@
         this.$store.state.deviceDelegate.on('message', message => {
           console.log('deviceDelegate', message)
         })
-        this.$store.state.userDelegate.on('message', message => {
-          console.log('userDelegate', message)
-          let tmpObj = {
-            conversationId: message.cid,
-            from: message.from,
-            id: message.id,
-            fromLogo: message._lcattrs.fromLogo,
-            fromName: message._lcattrs.fromName,
-            timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
-            clazz: message._lcattrs.clazz,
-            lastMessage: message._lctext,
-            isSelf: false
-          }
-          // 不在聊天页面，收到的新消息统一默认为未读消息
-          if (this.$route.name !== 'Chat') {
-            this.$store.dispatch('receiveNewMessage', tmpObj)
-          }
-        })
-        this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
-          console.log('未读消息记录', unreadMessagesCount)
-        })
+        if (!this.acitve) {
+          this.$store.state.userDelegate.on('message', message => {
+            this.acitve = true
+            console.log('userDelegate', message)
+            let tmpObj = {
+              conversationId: message.cid,
+              from: message.from,
+              id: message.id,
+              fromLogo: message._lcattrs.fromLogo,
+              fromName: message._lcattrs.fromName,
+              timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
+              clazz: message._lcattrs.clazz,
+              lastMessage: message._lctext,
+              isSelf: false
+            }
+            // 不在聊天页面，收到的新消息统一默认为未读消息
+            if (this.$route.name !== 'Chat') {
+              this.$store.dispatch('receiveNewMessage', tmpObj)
+            }
+          })
+          this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
+            console.log('未读消息记录', unreadMessagesCount)
+            this.$store.dispatch('updateUnReadMsgCount', unreadMessagesCount)
+          })
+        }
       }
     },
     updated () {
