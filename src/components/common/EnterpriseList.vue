@@ -125,7 +125,7 @@
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }

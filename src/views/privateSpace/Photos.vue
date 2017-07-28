@@ -295,7 +295,7 @@
       max-height: 100%;
       object-fit: contain;
       background-position: center center!important;
-      background: url("../../assets/imgLoading3.jpg");
+      background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
       background-size: cover;
     }
