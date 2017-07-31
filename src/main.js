@@ -14,6 +14,7 @@ router.beforeEach((to, from, next) => {
   if (!from.name) {
     setStore(`${to.name}_goHome`, 'true')
   }
+  store.dispatch('resetState')
   next()
   document.body.scrollTop = 0
 })
