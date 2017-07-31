@@ -100,6 +100,9 @@ const actions = {
   validCodeAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
     api.validCodeRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
+  },
+  resetState ({commit}) {
+    commit(types.RESET_STATE)
   }
 }
 
@@ -184,6 +187,22 @@ const mutations = {
     if (count === 0) {
       state.conversationList.push(params)
     }
+  },
+
+  [types.RESET_STATE] (state) {
+    state.products = []
+    state.productsThumbnails = []
+    state.productDetailFiles = []
+    state.allPriceProperties = []
+    state.archives = []
+    state.informationFolderArchives = []
+    state.enterpriseDocuments = []
+    state.enterpriseInfoFiles = []
+    state.enterpriseMembers = []
+    state.personMembers = []
+    state.productDetailTeam = []
+    state.clusters = []
+    state.clientKeyWrods = []
   }
 }
 
