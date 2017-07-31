@@ -189,7 +189,7 @@
         })
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo', backUrl: 'Photos'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
       shouldLogin () {
         if (!this.token) {

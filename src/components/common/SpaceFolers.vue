@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="load-more-container">
     <div
       v-for="(item, index) in store"
       :key="index"
@@ -9,13 +9,15 @@
         <span>{{item.name}}</span>
         <hr>
       </div>
-      <div class="gallery-container">
+      <div
+       v-if="item.photos && item.photos.length > 0"
+       class="gallery-container">
         <div
           v-for="(i, indexI) in item.photos"
           :key="indexI"
-          class="item">
-          <img
-            v-lazy="i.thumb_url">
+          class="item"
+          @click="viewFullScreen(item.count, item.photos, i.id, indexI)">
+          <img v-lazy="i.thumb_url">
         </div>
         <div
           v-if="item.count > 5"
@@ -27,29 +29,41 @@
           </div>
         </div>
       </div>
+      <div
+        v-else
+        class="empty-folder">
+        该文件夹暂无图片展示
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-
-    }
-  },
-  props: ['store'],
-  methods: {
-    handleClick (folderId, name) {
-      this.$emit('view-more', {id: folderId, name: name})
+  export default {
+    data () {
+      return {
+      }
+    },
+    props: ['store'],
+    methods: {
+      handleClick (folderId, name) {
+        this.$emit('view-more', {id: folderId, name: name})
+      },
+      viewFullScreen (count, photos, id, index) {
+        if (count <= 5) {
+          this.$emit('view-full-screen', {id: id, index: index, photos: photos})
+        }
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
+  .load-more-container {
+    @include px2rem(min-height, 660px);
+  }
   .container {
     @include px2rem(width, 705px);
     margin: 0 auto;
@@ -124,6 +138,15 @@ export default {
           }
         }
       }
+    }
+    .empty-folder {
+      background-color: $white;
+      @include pm2rem(padding, 32px, 20px, 32px, 20px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include font-dpr(15px);
+      color: #D1D1D1;
     }
   }
 </style>
