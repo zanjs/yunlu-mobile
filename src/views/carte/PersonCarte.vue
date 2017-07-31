@@ -178,7 +178,7 @@
         }
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
+        this.$router.push({name: 'Report', query: {resourceId: typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id, resourceClass: 'user'}})
       },
       goReportPhoto () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
@@ -222,7 +222,7 @@
             let firstSpace = this.handleFirstSpace(res.data.clusters)
             if (firstSpace && firstSpace.id) {
               this.header = firstSpace.name
-              this.getFirstSpace(firstSpace.id, res.data.cards.user_id)
+              this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', firstSpace.id, typeof res.data.cards.id === 'number' ? res.data.cards.user_id : res.data.cards.id, this.token, this.p)
             }
           },
           reject: () => {
@@ -240,16 +240,17 @@
         }
         return obj || null
       },
-      getFirstSpace (spaceId, userId) {
+      getFirstSpace (url, spaceId, userId, token, p) {
         this.targetSpaceId = spaceId
         this.targetUserId = userId
         this.$store.dispatch('commonAction', {
-          url: '/galleries',
+          url: url,
           method: 'get',
           params: {
-            token: this.token,
+            ...(token && !p ? {token: token} : {}),
+            ...(p ? {p: p} : {}),
             cluster_id: spaceId,
-            user_id: userId,
+            ...(p ? {} : {user_id: userId}),
             page: this.pageIndex,
             per_page: this.pageSize
           },
@@ -332,7 +333,7 @@
           //   this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
           // }
           this.header = item.name
-          this.getFirstSpace(item.id, this.$route.params.user_id)
+          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.id, this.token, this.p)
         } else if (item.type === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else if (item.type === 'company') {
@@ -380,11 +381,11 @@
       },
       loadFolderTop () {
         this.pageIndex = 1
-        this.getFirstSpace(this.targetSpaceId, this.targetUserId)
+        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
       },
       loadFolderBottom () {
         this.pageIndex += 1
-        this.getFirstSpace(this.targetSpaceId, this.targetUserId)
+        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
       }
     },
     mounted () {
@@ -410,7 +411,7 @@
     @include pm2rem(margin, 20px, 22px, 0px, 22px);
     background-color: $white;
     text-align: center;
-    border: 1px solid #D1D1D1;
+    border: 1px solid #EFEFEF;
     img {
       @include px2rem(width, 260px);
       height: auto;
@@ -421,8 +422,7 @@
     display: flex;
     overflow-x: scroll;
     @include px2rem(margin-top, 15px);
-    border-top: 1px solid #E0E0E0;
-    border-bottom: 1px solid #E0E0E0;
+    box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
     .item {
       display: flex;
       flex-direction: column;
@@ -548,7 +548,7 @@
     @include pm2rem(margin, 20px, 22px, 0px, 22px);
     background-color: $white;
     text-align: center;
-    border: 1px solid #D1D1D1;
+    border: 1px solid #EFEFEF;
     img {
       @include px2rem(width, 260px);
       height: auto;

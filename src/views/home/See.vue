@@ -397,7 +397,7 @@
   .card-container {
     @include px2rem(margin-top, 350px);
     @include pm2rem(padding, 28px, 26px, 100px, 26px);
-    border-top: 1px solid #DEDEDE;
+    border-top: 4px solid #EFEFEF;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

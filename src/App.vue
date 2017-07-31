@@ -111,8 +111,10 @@
   #app {
     background-color: $main-background;
     width: 100%;
-    height: 100%;
+    max-width: 540px;
+    min-height: 100%;
   }
+  // symbols （iconfont彩色图标）
   .icon {
     width: 1em; height: 1em;
     vertical-align: -0.15em;

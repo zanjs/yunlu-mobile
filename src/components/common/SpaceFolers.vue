@@ -32,7 +32,8 @@
       <div
         v-else
         class="empty-folder">
-        该文件夹暂无图片展示
+        <img src="../../assets/noFolderImages.png">
+        <p>该文件夹暂无图片</p>
       </div>
     </div>
   </section>
@@ -63,6 +64,7 @@
 
   .load-more-container {
     @include px2rem(min-height, 660px);
+    @include px2rem(margin-bottom, 20px);
   }
   .container {
     @include px2rem(width, 705px);
@@ -73,7 +75,7 @@
       align-items: center;
       @include px2rem(height, 62px);
       color: #595959;
-      @include font-dpr(14px);
+      @include font-dpr(15px);
       hr {
         @include px2rem(width, 60px);
         background-color: #E0E0E0;
@@ -86,43 +88,45 @@
     }
     .gallery-container {
       background-color: $white;
-      @include pm2rem(padding, 32px, 20px, 8px, 20px);
+      @include pm2rem(padding, 32px, 19px, 8px, 19px);
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
+      border: 1px solid #EFEFEF;
+      box-sizing: border-box;
       .item {
-        @include px2rem(width, 221px);
-        @include px2rem(height, 202px);
+        @include px2rem(width, 220px);
+        @include px2rem(height, 200px);
         @include pm2rem(margin, 0px, 0px, 24px, 0px);
         text-align: center;
         box-sizing: border-box;
         img {
-          @include px2rem(width, 202px);
-          @include px2rem(height, 202px);
+          @include px2rem(width, 200px);
+          @include px2rem(height, 200px);
         }
         img[lazy=loading] {
-          @include px2rem(width, 202px);
-          @include px2rem(height, 202px);
+          @include px2rem(width, 200px);
+          @include px2rem(height, 200px);
           background-position: center center!important;
           background: url("../../assets/imgLoading3.jpg");
           background-repeat: no-repeat;
           background-size: cover;
         }
         img[lazy=error] {
-          @include px2rem(width, 202px);
-          @include px2rem(height, 202px);
+          @include px2rem(width, 200px);
+          @include px2rem(height, 200px);
           background-position: center center!important;
           background: url("../../assets/imgLoadingError.png");
           background-repeat: no-repeat;
           background-size: cover;
         }
         img[lazy=loaded] {
-          @include px2rem(width, 202px);
-          @include px2rem(height, 202px);
+          @include px2rem(width, 200px);
+          @include px2rem(height, 200px);
         }
         .btn {
-          @include px2rem(width, 202px);
-          @include px2rem(height, 202px);
+          @include px2rem(width, 200px);
+          @include px2rem(height, 200px);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -143,10 +147,17 @@
       background-color: $white;
       @include pm2rem(padding, 32px, 20px, 32px, 20px);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       @include font-dpr(15px);
       color: #D1D1D1;
+      border: 1px solid #EFEFEF;
+      img {
+        @include px2rem(width, 263px);
+        @include px2rem(height, 159px);
+        @include px2rem(margin-bottom, 20px);
+      }
     }
   }
 </style>

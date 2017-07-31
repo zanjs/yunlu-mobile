@@ -75,7 +75,6 @@ export default {
       flex: 1;
       position: relative;
       @include px2rem(height, 70px);
-      border: 1px solid #C2C2C2;
       @include px2rem(border-radius, 14px);
       background-color: #EDEDED;
       .clear-btn {
