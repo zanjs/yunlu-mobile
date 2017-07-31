@@ -10,21 +10,53 @@
         @click="cardClick">
       </card>
     </div>
-    <div v-if="thumbnails && thumbnails.length > 0"
-         class="rope">
-      <img src="../../assets/shengzi@2x.png"
-           class="left">
-      <img src="../../assets/shengzi@2x.png"
-           class="right">
-    </div>
-    <div
-      v-if="thumbnails && thumbnails.length > 0"
-      class="album-comtainer">
-      <folders-cover
-        :data-source="thumbnails"
-        @click="albumClick">
-      </folders-cover>
-    </div>
+    <template v-if="folders && folders.length > 0">
+      <div class="space-container">
+        <mt-loadmore
+          :top-method="loadFolderTop"
+          :bottom-method="loadFolderBottom"
+          :bottom-pull-text="bottomPullText"
+          :bottom-drop-text="bottomDropText"
+          :auto-fill="false"
+          ref="loadMoreFolders">
+          <space-folders
+            :store="folders"
+            @view-more="goFolder"
+            @view-full-screen="showFullScreenPreview">
+          </space-folders>
+        </mt-loadmore>
+      </div>
+      <template v-if="showPreview">
+        <div class="option-bar">
+          <div class="left">
+            <div
+              class="close"
+              @click="closePreview()">
+              <i class="iconfont icon-fanhui"></i>
+            </div>
+            <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
+          </div>
+          <div
+            class="report"
+            @click="goReportPhoto">
+            <i class="iconfont icon-jubao"></i>
+          </div>
+        </div>
+        <swiper
+          :options="swiperOption"
+          class="full-screen-swiper">
+          <!-- slides -->
+          <swiper-slide
+            class="swiper-zoom-container full-screen-bg"
+            v-for="(item, index) in photos"
+            :key="item.url">
+            <img
+              v-lazy="item.url"
+              alt="">
+          </swiper-slide>
+        </swiper>
+      </template>
+    </template>
     <template v-else>
       <div class="no-data">
         <img src="../../assets/noFile.png">
@@ -46,6 +78,8 @@
   import { mapGetters } from 'vuex'
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast, MessageBox } from 'mint-ui'
+  import SpaceFolders from '../../components/common/SpaceFolers'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
   export default {
     data () {
@@ -58,49 +92,91 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         thumbnails: [],
         showDialog: false,
-        message: null
+        message: null,
+        folders: [],
+        pageIndex: 1,
+        pageSize: 5,
+        bottomPullText: '上拉加载更多',
+        bottomDropText: '释放加载',
+        targetSpaceId: '',
+        targetUserId: '',
+        photos: [],
+        currentIndex: 1,
+        showPreview: false,
+        swiperOption: {
+          notNextTick: false,
+          autoplay: 0,
+          direction: 'horizontal',
+          grabCursor: true,
+          setWrapperSize: true,
+          autoHeight: false,
+          paginationClickable: false,
+          prevButton: null,
+          nextButton: null,
+          mousewheelControl: true,
+          observeParents: true,
+          // 如果自行设计了插件，那么插件的一些配置相关参数，也应该出现在这个对象中，如下debugger
+          debugger: true,
+          preventClicks: false,
+          passiveListeners: false,
+          zoom: true,
+          height: window.innerHeight,
+          width: window.innerWidth,
+          touchAngle: 45,
+          initialSlide: 0,
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
+          }
+        }
       }
     },
     components: {
       CommonHeader,
       Card,
       FoldersCover,
-      PopDialog
+      PopDialog,
+      SpaceFolders,
+      swiper,
+      swiperSlide
     },
     methods: {
-      beforeGetData () {
-        if (this.p) {
-          this.getData('/shares/zone', {
-            p: this.p,
-            ...(this.cluster_id ? {cluster_id: this.cluster_id} : {})
-          })
-        } else {
-          this.shouldLogin()
-        }
-      },
-      albumClick (item) {
+      goFolder (item) {
         this.$router.push({path: `/photos/${item.id}`,
           query: {
             name: item.name,
-            ...(this.p ? {p: this.p} : {})
+            p: this.p
           }
         })
       },
-      getData (url, params) {
+      getData () {
         this.$store.dispatch('commonAction', {
-          url: url,
+          url: '/shares/zone',
           method: 'get',
-          params: params,
+          params: {
+            p: this.p,
+            page: this.pageIndex,
+            per_page: this.pageSize
+          },
           target: this,
           resolve: (state, res) => {
-            if (url === '/business_cards') {
-              state.userCard = res.data.cards
-              state.clusters = res.data.clusters
-              this.handleName(this.space_id, res.data.clusters)
+            state.userCard = res.data.cards
+            this.headerName = res.data.cluster
+            if (this.pageIndex === 1) {
+              this.folders = res.data.gallery
+              // folders为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onTopLoaded) {
+                this.$refs.loadMoreFolders.onTopLoaded()
+              }
             } else {
-              this.thumbnails = res.data.gallery
-              if (url === '/shares/zone') {
-                state.userCard = res.data.cards
+              if (res.data.gallery.length === 0) {
+                Toast({
+                  message: '没有更多数据了',
+                  duration: 1000
+                })
+              }
+              this.folders = [...this.folders, ...res.data.gallery]
+              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onBottomLoaded) {
+                this.$refs.loadMoreFolders.onBottomLoaded()
               }
             }
           },
@@ -108,14 +184,6 @@
             this.$router.replace({name: 'ReportExpired'})
           }
         })
-      },
-      handleName (id, arr) {
-        for (let i = 0; i < arr.length; i++) {
-          if (id === arr[i].id) {
-            this.headerName = arr[i].name
-            return true
-          }
-        }
       },
       cardClick (item) {
         switch (item.type) {
@@ -174,23 +242,47 @@
           this.$router.go(-1)
         }
       },
-      shouldLogin () {
-        if (!this.token) {
-          let toast = Toast({
-            message: `您未登录，正在转入登录页`
-          })
-          setTimeout(() => {
-            toast.close()
-            this.$router.push({name: 'Login'})
-          }, 2000)
-        } else {
-          this.getData('/business_cards', {token: this.token, user_id: this.user_id})
-          this.getData('/galleries', {token: this.token, cluster_id: this.space_id, user_id: this.user_id})
-        }
+      goReportPhoto () {
+        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
+      },
+      showFullScreenPreview (item) {
+        this.photos = [...item.photos]
+        this.currentIndex = item.index + 1
+        this.swiperOption.initialSlide = item.index
+        this.showPreview = true
+        this.stopTouchMove()
+      },
+      closePreview () {
+        this.showPreview = false
+        this.allowTouchMove()
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault()
+          }
+        })
+      },
+      loadFolderTop () {
+        this.pageIndex = 1
+        this.getData()
+      },
+      loadFolderBottom () {
+        this.pageIndex += 1
+        this.getData()
       }
     },
     mounted () {
-      this.beforeGetData()
+      this.getData()
     },
     computed: {
       ...mapGetters([
@@ -207,26 +299,94 @@
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
-  .rope {
-    position: absolute;
+  .option-bar {
+    position: fixed;
+    @include px2rem(top, 38px);
     width: 100%;
     max-width: 540px;
-    @include px2rem(top, 396px);
+    z-index: 1004;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    img {
-      @include px2rem(width, 30px);
-    }
     .left {
-      @include px2rem(margin-left, 60px);
+      display: flex;
+      align-items: center;
+      .page-nav {
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        @include font-dpr(20px);
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .close {
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        @include pm2rem(margin, 0px, 30px, 0px, 30px);
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        display: flex;
+        align-items: center;
+        i {
+          @include font-dpr(20px);
+        }
+      }
     }
-    .right {
-      @include px2rem(margin-right, 50px);
+    .report {
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(border-radius, 10px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      background-color: rgba(0, 0, 0, .5);
+      color: white;
+      z-index: 1003;
+      display: flex;
+      align-items: center;
+      i {
+        @include font-dpr(20px);
+      }
     }
   }
-  .album-comtainer {
-    @include pm2rem(padding, 24px, 22px, 0px, 22px);
+  .full-screen-swiper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1002;
+    background-color: #000;
+  }
+  .full-screen-bg {
+    background-color: #000;
+    img[lazy=loading] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoadingError.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   }
   .no-data {
     @include pm2rem(padding, 100px, 20px, 100px, 0px);

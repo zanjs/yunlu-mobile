@@ -85,7 +85,7 @@
   @import '../../styles/mixin';
 
   .card {
-    border: 1px solid #D1D1D1;
+    border: 1px solid #E0E0E0;
     background: $white;
     @include px2rem(padding-top, 24px);
     .user-info {
@@ -113,7 +113,7 @@
       @include px2rem(height, 100px);
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
       align-items: center;
-      border-top: 1px solid #d1d1d1;
+      border-top: 1px solid #E0E0E0;
       a {
         text-decoration: none;
         @include px2rem(width, 108px);
