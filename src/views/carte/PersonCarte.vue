@@ -430,6 +430,7 @@
       align-items: center;
       @include px2rem(width, 250px);
       @include px2rem(max-width, 250px);
+      @include px2rem(min-width, 250px);
       img {
         @include pm2rem(margin, 20px, 0px, 20px, 0px);
         @include px2rem(width, 92px);
