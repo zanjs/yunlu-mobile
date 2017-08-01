@@ -220,7 +220,7 @@
     -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .list {
-    @include px2rem(padding-top, 170px);
+    @include px2rem(padding-top, 176px);
     position: relative;
     .float-btn {
       position: fixed;

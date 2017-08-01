@@ -56,8 +56,8 @@ export default {
     display: flex;
     align-items: center;
     @include px2rem(height, 74px);
-    border-top: 1px solid #D1D1D1;
-    border-bottom: 1px solid #D1D1D1;
+    border-top: 1px solid #E7E7E7;
+    border-bottom: 1px solid #E7E7E7;
     background-color: $white;
     .item {
       flex: 1;

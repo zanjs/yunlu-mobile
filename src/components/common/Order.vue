@@ -54,7 +54,7 @@ export default {
     justify-content: center;
     align-items: center;
     position: fixed;
-    @include px2rem(top, 169px);
+    @include px2rem(top, 176px);
     background-color: $white;
     z-index: 1001;
     width: 100%;

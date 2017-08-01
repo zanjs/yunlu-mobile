@@ -1000,12 +1000,12 @@
     }
   }
   .nav-bar-container {
-    border-bottom: 1px solid #DEDEDE;
+    border-bottom: 1px solid #E7E7E7;
   }
   .company-info {
     @include pm2rem(margin, 22px, 0px, 0px, 0px);
     @include pm2rem(padding, 24px, 24px, 124px, 24px);
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #E7E7E7;
     background-color: $white;
     line-height: 1;
     .wraper {

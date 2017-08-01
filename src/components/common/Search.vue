@@ -43,18 +43,23 @@
       @include px2rem(border-radius, 14px);
       color: #595959;
       @include font-dpr(14px);
-      line-height: 1;
-      @include px2rem(height, 58px);
+      line-height: normal;
+      @include px2rem(height, 66px);
       vertical-align: middle;
       text-align: center;
       border: none;
+      display: flex;
+      align-items: center;
     }
     ::-webkit-input-placeholder{
       color: #A6A6A6;
-      @include px2rem(height, 58px);
+      @include px2rem(height, 66px);
+      line-height: normal;
       vertical-align: middle;
       text-align: center;
       border: none;
+      display: flex;
+      align-items: center;
     }
     i {
       position: absolute;
