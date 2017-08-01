@@ -333,7 +333,7 @@
           //   this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
           // }
           this.header = item.name
-          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.id, this.token, this.p)
+          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.user_id, this.token, this.p)
         } else if (item.type === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else if (item.type === 'company') {
