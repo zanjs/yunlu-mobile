@@ -451,7 +451,7 @@
   }
   .list-container {
     @include pm2rem(padding, 88px, 0px, 0px, 0px);
-    background-color: #E7E7E7;
+    background-color: #EFEFEF;
   }
   .option-bar {
     position: fixed;
@@ -463,8 +463,8 @@
     background-color: $white;
     display: flex;
     align-items: center;
-    border-top: 1px solid #D1D1D1;
-    border-bottom: 1px solid #D1D1D1;
+    border-top: 1px solid #E7E7E7;
+    border-bottom: 1px solid #E7E7E7;
     .check-all-box {
       @include px2rem(padding-left, 28px);
       display: flex;

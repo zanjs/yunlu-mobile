@@ -84,14 +84,14 @@
   }
   .list-container {
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #E7E7E7;
     box-sizing: border-box;
     .item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       color: #262626;
-      border-bottom: 1px solid #D1D1D1;
+      border-bottom: 1px solid #E7E7E7;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
         display: flex;

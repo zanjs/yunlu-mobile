@@ -71,14 +71,14 @@
   }
   .list-container {
     background-color: $white;
-    border-top: 1px solid #E0E0E0;
+    border-top: 1px solid #E7E7E7;
     @include pm2rem(margin, 10px, 0px, 0px, 0px);
     @include px2rem(min-height, 600px);
     .item {
       display: flex;
       align-items: center;
       color: #262626;
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 1px solid #E7E7E7;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
         display: flex;

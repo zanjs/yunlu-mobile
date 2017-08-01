@@ -144,7 +144,6 @@ export default {
   @import "../../styles/mixin";
 
   .item-list {
-    border-bottom: 1px solid #E7E7E7;
     @include px2rem(margin-bottom, 10px);
     background-color: #E7E7E7;
     .title {

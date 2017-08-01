@@ -92,7 +92,7 @@
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
-      border: 1px solid #EFEFEF;
+      border: 1px solid #E7E7E7;
       box-sizing: border-box;
       .item {
         @include px2rem(width, 220px);
@@ -152,7 +152,7 @@
       align-items: center;
       @include font-dpr(15px);
       color: #D1D1D1;
-      border: 1px solid #EFEFEF;
+      border: 1px solid #E7E7E7;
       img {
         @include px2rem(width, 263px);
         @include px2rem(height, 159px);

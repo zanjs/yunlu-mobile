@@ -396,7 +396,7 @@
     max-width: 540px;
     @include px2rem(height, 98px);
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #E7E7E7;
     .check-btn {
       display: flex;
       align-items: center;

@@ -560,7 +560,7 @@
       @include pm2rem(margin, 20px, 22px, 0px, 22px);
       background-color: $white;
       text-align: center;
-      border: 1px solid #EFEFEF;
+      border: 1px solid #E7E7E7;
       img {
         @include px2rem(width, 260px);
         height: auto;
