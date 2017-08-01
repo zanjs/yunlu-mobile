@@ -11,7 +11,7 @@
         class="search-input"
         v-model="searchParams"
         @input="handleInput"
-        @keyup.enter="handleSearchBtn"
+        @keyup.enter.prevent="handleSearchBtn"
         placeholder="搜一搜"
         ref="searchInput">
     </product-search-bar>
@@ -292,6 +292,7 @@
     display: flex;
     width: 100%;
     max-width: 540px;
+    line-height: normal;
     justify-content: flex-start;
     align-items: center;
   }
@@ -302,7 +303,7 @@
     text-align: left;
     border: none;
     @include font-dpr(14px);
-    @include px2rem(padding-top, 4px);
+    line-height: normal;
   }
   input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: none; // 此处只是去掉默认的小×

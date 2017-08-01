@@ -10,7 +10,7 @@
         slot="input"
         type="search"
         @input="handleInput"
-        @keyup.enter="handleSearch(searchParams)"
+        @keyup.enter.prevent="handleSearch(searchParams)"
         v-model="searchParams"
         :placeholder="placeholder">
     </search>

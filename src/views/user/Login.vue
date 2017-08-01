@@ -224,7 +224,7 @@
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
         color: #595959;
         @include font-dpr(14px);
-        line-height: 1;
+        line-height: normal;
         border: none;
         background-color: #EFEFEF;
         flex: 1;

@@ -1,12 +1,19 @@
 <template>
   <section>
-    <div class="search-container">
+    <form
+      class="search-container"
+      action=""
+      target="iframe">
       <slot name="input">
       </slot>
       <i
         class="iconfont icon-sousuo"
         @click.stop="handleClick"></i>
-    </div>
+      <iframe
+        name="iframe"
+        style="display: none;">
+      </iframe>
+    </form>
   </section>
 </template>
 
@@ -45,21 +52,15 @@
       @include font-dpr(14px);
       line-height: normal;
       @include px2rem(height, 66px);
-      vertical-align: middle;
       text-align: center;
       border: none;
-      display: flex;
-      align-items: center;
     }
     ::-webkit-input-placeholder{
       color: #A6A6A6;
       @include px2rem(height, 66px);
       line-height: normal;
-      vertical-align: middle;
       text-align: center;
       border: none;
-      display: flex;
-      align-items: center;
     }
     i {
       position: absolute;
