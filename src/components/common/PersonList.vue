@@ -6,7 +6,11 @@
         :key="index"
         @click="handleClick(item.user.id)"
         class="item">
-        <img v-lazy="item.user.avatar_url">
+        <img v-lazy="{
+              src: item.user.avatar_url,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }">
         <p>{{item.user.name}}</p>
       </a>
     </div>

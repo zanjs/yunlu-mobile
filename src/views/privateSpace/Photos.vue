@@ -46,7 +46,11 @@
           v-for="(item, index) in photos"
           :key="item.url">
           <img
-            v-lazy="item.url"
+            v-lazy="{
+              src: item.url,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }"
             alt="">
         </swiper-slide>
       </swiper>

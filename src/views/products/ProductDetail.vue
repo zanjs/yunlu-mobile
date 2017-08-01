@@ -15,7 +15,11 @@
             v-for="(item, index) in productDetailFiles"
             :key="index">
             <img
-              v-lazy="item.thumb_urls[0]"
+              v-lazy="{
+                src: item.thumb_urls[0],
+                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+              }"
               @click="viewFullScreenPic(productDetailFiles)">
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
@@ -24,53 +28,66 @@
       <img
         v-else
         src="../../assets/imgLoadingError.png">
-      <span v-if="productDetailFiles && productDetailFiles.length"
-            class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
-      <span v-else
-            class="page-nav">0/0</span>
+      <span
+        v-if="productDetailFiles && productDetailFiles.length"
+        class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
+      <span
+        v-else
+        class="page-nav">0/0</span>
     </div>
     <section class="info-container">
-      <div v-if="productDetail && productDetail.name"
-           class="name">{{productDetail.name}}</div>
-      <div v-else
-           class="name">*****</div>
+      <div
+        v-if="productDetail && productDetail.name"
+        class="name">{{productDetail.name}}</div>
+      <div
+        v-else
+        class="name">*****</div>
       <div class="money">
         <div>
-          <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-                class="number">{{currentPrice.money}}</span>
-          <span v-else
-                class="number">0.00</span>
-          <span v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
-                class="unit">元</span>
+          <span
+            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+            class="number">{{currentPrice.money}}</span>
+          <span
+            v-else
+            class="number">0.00</span>
+          <span
+            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
+            class="unit">元</span>
         </div>
         <div @click="expandMorePrice()">
           <span class="more">更多价格</span>
-          <div class="icon-box"
-               v-bind:class="{'up': morePrice}">
+          <div
+            class="icon-box"
+            v-bind:class="{'up': morePrice}">
             <i class="iconfont icon-gengduo more-icon"></i>
           </div>
         </div>
-        <div v-show="morePrice"
-             class="more-price">
-          <p v-for="(item, index) in productDetail.prices"
-             :key="item.id"
-             @click="changePrice(item)">
+        <div
+          v-show="morePrice"
+          class="more-price">
+          <p
+            v-for="(item, index) in productDetail.prices"
+            :key="item.id"
+            @click="changePrice(item)">
             {{item.money}}
           </p>
         </div>
       </div>
-      <div v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-           class="inventory">
+      <div
+        v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+        class="inventory">
         库存 ：{{productDetail.prices[0].amount}}
       </div>
-      <div v-else
-           class="inventory">
+      <div
+        v-else
+        class="inventory">
         库存 ：0
       </div>
     </section>
     <section>
-      <mt-navbar v-model="selected"
-                 class="nav-bar">
+      <mt-navbar
+        v-model="selected"
+        class="nav-bar">
         <mt-tab-item id="1">价格参数</mt-tab-item>
         <mt-tab-item id="2">产品参数</mt-tab-item>
         <mt-tab-item id="3">关联信息</mt-tab-item>
@@ -82,12 +99,14 @@
           id="1"
           class="prodcutdetail-price-item">
           <template v-if="currentPriceProperties && currentPriceProperties.length > 0">
-            <span v-for="(item, index) in currentPriceProperties"
-                  :key="index"
-                  class="row-item">{{item.key}} : {{item.value}}</span>
+            <span
+              v-for="(item, index) in currentPriceProperties"
+              :key="index"
+              class="row-item">{{item.key}} : {{item.value}}</span>
           </template>
-          <div v-else
-               class="no-price">该产品暂无价格参数</div>
+          <div
+            v-else
+            class="no-price">该产品暂无价格参数</div>
         </mt-tab-container-item>
         <mt-tab-container-item
           id="2"
@@ -149,13 +168,15 @@
           id="3"
           class="productdetail-product-tags">
           <template v-if="archives && archives.length > 0">
-            <div v-for="(item, index) in archives"
-               :key="index"
-               @click="viewArchives(item)"
-               class="tag">{{item.name}}</div>
+            <div
+              v-for="(item, index) in archives"
+              :key="index"
+              @click="viewArchives(item)"
+              class="tag">{{item.name}}</div>
           </template>
-          <div v-else
-               class="no-info">该产品暂无关联信息</div>
+          <div
+            v-else
+            class="no-info">该产品暂无关联信息</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
@@ -164,10 +185,12 @@
       @click="goEnterprise()">
       <div class="wraper">
         <div class="company-img">
-          <img v-if="productDetailTeam && productDetailTeam.logo"
-              :src="productDetailTeam.logo">
-          <img v-else
-              src="../../assets/blank.jpg">
+          <img
+            v-if="productDetailTeam && productDetailTeam.logo"
+            :src="productDetailTeam.logo">
+          <img
+            v-else
+            src="../../assets/blank.jpg">
         </div>
          <div class="content-wraper">
           <div class="company-content">
@@ -190,30 +213,37 @@
       </div>
     </section>
     <section class="product-tab-bar">
-      <div class="btn-box"
-           @click="share()">
+      <div
+        class="btn-box"
+        @click="share()">
         <i class="iconfont icon-fenxiang"></i>
         <span>分享</span>
       </div>
-      <div class="btn-box"
-           @click="addFavorites()">
-        <i class="iconfont icon-shoucang1"
-           v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
+      <div
+        class="btn-box"
+        @click="addFavorites()">
+        <i
+          class="iconfont icon-shoucang1"
+          v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
         <span v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
       </div>
-      <div class="btn-box"
-           @click="openIm()">
+      <div
+        class="btn-box"
+        @click="openIm()">
         <i class="iconfont icon-kefu"></i>
         <span>客服</span>
       </div>
-      <div class="btn-box btn-shopping-car"
-           @click="addShoppingCar()">
-        <i class="iconfont icon-gouwuche1"
-           v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
+      <div
+        class="btn-box btn-shopping-car"
+        @click="addShoppingCar()">
+        <i
+          class="iconfont icon-gouwuche1"
+          v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
         <span v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
       </div>
-      <div class="btn-box btn-buy"
-           @click="buyNow()">
+      <div
+        class="btn-box btn-buy"
+        @click="buyNow()">
         <span>立即购买</span>
       </div>
     </section>
@@ -270,16 +300,18 @@
             </div>
           </div>
         </div>
-        <div class="footer"
-             @click="closePopup()">
+        <div
+          class="footer"
+          @click="closePopup()">
           <span>取消</span>
         </div>
       </div>
     </section>
     <div v-if="showPreview">
       <div class="option-bar">
-        <div class="close"
-             @click="closePreview()">
+        <div
+          class="close"
+          @click="closePreview()">
           <i class="iconfont icon-fanhui"></i>
         </div>
         <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
@@ -293,7 +325,11 @@
           v-for="(item, index) in previewImgs"
           :key="index">
           <img
-            v-lazy="item.url"
+            v-lazy="{
+              src: item.url,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }"
             alt="">
         </swiper-slide>
       </swiper>

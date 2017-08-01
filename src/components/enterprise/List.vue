@@ -1,13 +1,18 @@
 <template>
   <section>
     <div class="list-container">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click="handleClick(item)"
-           class="item">
+      <div
+        v-for="(item, index) in store"
+        :key="index"
+        @click="handleClick(item)"
+        class="item">
         <img
           v-if="item.organization && item.organization.logo"
-          v-lazy="item.organization.logo">
+          v-lazy="{
+            src: item.organization.logo,
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }">
         <img
           v-else
           src="../../assets/blank.jpg">
