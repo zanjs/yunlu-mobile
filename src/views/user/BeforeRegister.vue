@@ -141,8 +141,8 @@
 
   .login-container {
     position: fixed; // 不能用absolute,UC浏览器会白屏
-    @include px2rem(top, 96px);
-    @include pm2rem(padding, 40px, 0px, 0px, 0px);
+    @include pm2rem(padding, 120px, 0px, 0px, 0px);
+    top: 0;
     bottom: 0;
     width: 100%;
     max-width: 540px;
@@ -157,7 +157,7 @@
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
         color: #595959;
         @include font-dpr(14px);
-        @include px2rem(line-height, 80px);
+        line-height: normal;
         border: none;
         background-color: #EFEFEF;
         width: 100%;
@@ -173,7 +173,7 @@
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         color: #595959;
         @include font-dpr(14px);
-        @include px2rem(line-height, 80px);
+        line-height: normal;
         border: none;
         background-color: #EFEFEF;
         @include px2rem(width, 326px);

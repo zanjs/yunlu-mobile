@@ -143,8 +143,9 @@
         @search="search(queryParams)">
         <input
           slot="input"
-          type="text"
+          type="search"
           v-model="queryParams"
+          @keyup.enter.prevent="search(queryParams)"
           :placeholder="placeholder">
       </search>
       <order
@@ -548,6 +549,7 @@
         this.handleSearchBar()
       },
       search (res) {
+        document.activeElement.blur()
         switch (this.activeIndex) {
           case 0:
             this.getProducts(res)
@@ -698,6 +700,9 @@
   }
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
+  }
+  input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .nav-tabs {
     @include pm2rem(margin, 20px, 0px, 10px, 0px);

@@ -4,19 +4,26 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="search-bar">
+    <form
+      class="search-bar"
+      action=""
+      target="iframe">
       <input
         type="search"
         v-model="searchParams"
         @input="handleInput"
-        @keyup.enter="handleSearchBtn"
+        @keyup.enter.prevent="handleSearchBtn"
         placeholder="搜一搜">
       <div
         class="search-btn"
         @click.stop="searchFavorites">
         <i class="iconfont icon-sousuo"></i>
       </div>
-    </div>
+      <iframe
+        name="iframe"
+        style="display: none;">
+      </iframe>
+    </form>
     <template v-if="favorites && favorites.length > 0">
       <section class="list-container">
         <mt-loadmore

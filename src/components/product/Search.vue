@@ -5,17 +5,22 @@
       @click="handleBack()">
       <i class="iconfont icon-fanhui"></i>
     </div>
-    <div class="input-container">
+    <form
+      class="input-container"
+      action=""
+      target="iframe">
       <slot name="input"></slot>
-      <!--<input
-        placeholder="搜一搜">-->
       <div
         v-show="canClear"
         class="clear-btn"
         @click.stop="handleClick()">
         <i class="iconfont icon-shanchubiaoqian"></i>
       </div>
-    </div>
+      <iframe
+        name="iframe"
+        style="display: none;">
+      </iframe>
+    </form>
     <a
       class="search-btn"
       @click="handleSearch()">搜索</a>
