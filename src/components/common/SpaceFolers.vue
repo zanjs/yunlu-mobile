@@ -17,7 +17,11 @@
           :key="indexI"
           class="item"
           @click="viewFullScreen(item.count, item.photos, i.id, indexI)">
-          <img v-lazy="i.thumb_url">
+          <img v-lazy="{
+                src: i.thumb_url,
+                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+              }">
         </div>
         <div
           v-if="item.count > 5"

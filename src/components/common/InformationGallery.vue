@@ -5,7 +5,11 @@
       :key="index"
       @click.stop="handleClick(item)"
       class="img-container">
-      <img v-lazy="item.files[0].thumb_url">
+      <img v-lazy="{
+            src: item.files[0].thumb_url,
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }">
       <div class="cover">
         {{item.name}}（{{item.files.length}})
       </div>

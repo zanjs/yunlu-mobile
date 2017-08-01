@@ -8,7 +8,11 @@
         <div class="img-box">
           <img
             v-if="item.file_thumb_urls"
-            v-lazy="item.file_thumb_urls">
+            v-lazy="{
+              src: item.file_thumb_urls,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }">
           <img
             v-else
             src="../../assets/imgLoadingError.png">
