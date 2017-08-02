@@ -1,28 +1,23 @@
 <template>
   <section>
-    <mt-header
-      title="资信"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-      <router-link to="/" slot="right">
-        <mt-button>
-          <i class="iconfont icon-zhuye"></i>
-        </mt-button>
-      </router-link>
-    </mt-header>
+    <common-header
+      :title="header"
+      :icon-class="iconClass"
+      :right-text="rightBtnText"
+      @right-click="goHome()"
+      @back="goBack()">
+    </common-header>
     <div class="container">
-      <div class="detail-container">
-        <div class="name-info">
-          <p v-if="comityDetail && comityDetail.name">{{comityDetail.name}}</p>
-          <p v-else>胖胖的云庐君</p>
+      <div class="detail-container white-bg">
+        <div class="name-info font-15">
+          <p
+            v-if="comityDetail && comityDetail.name"
+            class="primary-text">{{comityDetail.name}}</p>
+          <p
+            v-else
+            class="primary-text">胖胖的云庐君</p>
           <div
-            class="rate"
+            class="rate third-text"
             v-if="comityDetail.organization && comityDetail.organization.state">
             <i
               v-for="(item, index) in starLevelComputed"
@@ -89,18 +84,18 @@
         </div>
         <div
           v-if="comityDetail && comityDetail.organization &&  comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length > 0"
-          class="link-container">
+          class="link-container font-14">
           <div class="label">社会认证</div>
-          <div class="link-item">
+          <div class="link-item flex-1">
             <div
               v-for="(item, index) in comityDetail.organization.guild_organizations"
               :key="index"
-              class="link">
+              class="link flex-1">
               <a
-                class="row"
+                class="flex-between row"
                 @click="goCarte(item)">
                 <span>{{item.name}}</span>
-                <i class="iconfont icon-fanhui"></i>
+                <i class="iconfont icon-fanhui primary font-15"></i>
               </a>
             </div>
           </div>
@@ -108,7 +103,6 @@
       </div>
     </div>
     <div
-      class="tab-container"
       v-if="!(comityDetail.enttype || comityDetail.legal_person || comityDetail.info_id  ||comityDetail.address || comityDetail.reg_org || comityDetail.reg_no || comityDetail.id_no) && (comityDetail.organization && comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length === 0)">
       <div class="no-data">
         <img src="../../assets/noFile.png">
@@ -118,15 +112,22 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
+        header: '资信',
+        iconClass: 'icon-zhuye',
+        rightBtnText: '',
         token: getStore('user') ? getStore('user').authentication_token : '',
         teamId: this.$route.params.id,
         starLevel: []
       }
+    },
+    components: {
+      CommonHeader
     },
     methods: {
       getEnterpriseDetail () {
@@ -173,6 +174,9 @@
         } else {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
         }
+      },
+      goHome () {
+        this.$router.push({name: 'See'})
       }
     },
     mounted () {
@@ -192,42 +196,17 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .container {
     @include px2rem(padding-top, 88px);
   }
   .detail-container {
     @include pm2rem(margin, 20px, 30px, 0px, 30px);
     @include pm2rem(padding, 38px, 22px, 0px, 22px);
-    background-color: $white;
     .name-info {
       @include px2rem(padding-bottom, 18px);
-      p {
-        @include font-dpr(15px);
-        color: #262626;
-        line-height: 1;
-      }
+      line-height: 1;
       .rate {
         @include pm2rem(margin, 32px, 0px, 22px, 0px);
-        @include font-dpr(15px);
-        line-height: 1;
-        color: #A6A6A6;
         i {
           @include px2rem(margin-right, 12px);
         }
@@ -237,7 +216,6 @@
       }
       .level {
         @include font-dpr(25px);
-        line-height: 1;
       }
     }
     .item {
@@ -257,7 +235,6 @@
     }
     .link-container {
       border-top: 1px dashed #D1D1D1;
-      @include font-dpr(14px);
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -266,21 +243,15 @@
       }
       .link-item {
         display: flex;
-        flex: 1;
         flex-direction: column;
         justify-content: center;
         .link {
-          flex: 1;
           .row {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
             @include pm2rem(padding, 20px, 0px, 20px, 0px);
           }
           i {
             transform: rotateY(180deg);
-            @include font-dpr(15px);
-            color: #52CAA7;
           }
           a {
             text-decoration: none;
@@ -289,18 +260,6 @@
             background-color: #F2F2F2;
           }
         }
-      }
-    }
-  }
-  .tab-container {
-    .no-data {
-      @include pm2rem(padding, 100px, 20px, 100px, 0px);
-      @include pm2rem(margin, 20px, 22px, 0px, 22px);
-      background-color: $white;
-      text-align: center;
-      img {
-        @include px2rem(width, 260px);
-        height: auto;
       }
     }
   }

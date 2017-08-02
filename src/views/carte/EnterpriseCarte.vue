@@ -14,14 +14,16 @@
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
-    <div class="nav-tabs">
-      <div class="tab-bar">
-        <div class="left"
-             v-bind:class="{'active': showProduct}"
-             @click.prevent="tabClick(0)">产品</div>
-        <div class="right"
-             v-bind:class="{'active': !showProduct}"
-             @click.prevent="tabClick(1)">资讯</div>
+    <div class="four-nav-tabs white-bg">
+      <div class="tab-bar primary flex font-17">
+        <div
+          class="left flex-1"
+          v-bind:class="{'primary-bg white': showProduct}"
+          @click.prevent="tabClick(0)">产品</div>
+        <div
+          class="middle right flex-1"
+          v-bind:class="{'primary-bg white': !showProduct}"
+          @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
         <transition
@@ -501,94 +503,4 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
-  input[type=search]::-webkit-search-cancel-button {
-    -webkit-appearance: none; // 此处只是去掉默认的小×
-  }
-  .nav-tabs {
-    @include pm2rem(margin, 20px, 0px, 10px, 0px);
-    background-color: $white;
-    .tab-bar {
-      color: #52CAA7;
-      @include px2rem(height, 84px);
-      @include pm2rem(padding, 0px, 22px, 0px, 22px);
-      div {
-        height: 100%;
-        width: 50%;
-        box-sizing: border-box;
-        @include px2rem(line-height, 84px);
-        text-align: center;
-        @include font-dpr(17px);
-        color: #52CAA7;
-        border: 1px solid #52CAA7;
-      }
-      .left {
-        @include px2rem(border-top-left-radius, 14px);
-        @include px2rem(border-bottom-left-radius, 14px);
-        color: #52CAA7;
-      }
-      .active {
-        background-color: #52CAA7;
-        color: $white;
-      }
-      .right {
-        @include px2rem(border-top-right-radius, 14px);
-        @include px2rem(border-bottom-right-radius, 14px);
-      }
-    }
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
-      }
-    }
-    .no-data {
-      @include pm2rem(padding, 100px, 20px, 100px, 0px);
-      @include pm2rem(margin, 20px, 22px, 0px, 22px);
-      background-color: $white;
-      text-align: center;
-      border: 1px solid #E7E7E7;
-      img {
-        @include px2rem(width, 260px);
-        height: auto;
-      }
-    }
-  }
-
-  .fade-enter {
-    opacity: 0;
-  }
-  .fade-enter-to {
-    opacity: 1;
-  }
-  .fade-enter-active {
-    transition: .5s ease-in;
-  }
-  .fade-leave {
-    opacity: 1;
-  }
-  .fade-leave-active {
-    transition: .5s ease-out;
-  }
-  .fade-leave-to {
-    opacity: 0
-  }
 </style>

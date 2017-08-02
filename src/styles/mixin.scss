@@ -4,65 +4,7 @@ $main-background: #FAFAFA;
 $grey: #A6A6A6;
 $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的不同而变化*/
 
-/*定位全屏*/
-@mixin allcover{
-	position:absolute;
-	top:0;
-	right:0;
-}
-
-/*定位上下左右居中*/
-@mixin center {
-	position: absolute;
-	top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-}
-
-/*定位上下居中*/
-@mixin ct {
-	position: absolute;
-	top: 50%;
-    -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-}
-
-/*定位左右居中*/
-@mixin cl {
-	position: absolute;
-	left: 50%;
-    -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
-}
-
-/*宽高*/
-@mixin wh($width, $height){
-	width: $width;
-	height: $height;
-}
-
-/*字体大小、行高、字体*/
-@mixin font($size, $line-height, $family: 'Microsoft YaHei') {
-	font: #{$size}/#{$line-height} $family;
-}
-
-/*字体大小，颜色*/
-@mixin sc($size, $color){
-	font-size: $size;
-	color: $color;
-}
-
-/*flex 布局和 子元素 对其方式*/
-@mixin fj($type: space-between){
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: $type;
-	    -ms-flex-pack: $type;
-	        justify-content: $type;
-
-}
+@import "./variables";
 
 /*px2rem 设计稿px转rem*/
 @mixin px2rem($property, $px-values){
@@ -183,10 +125,3 @@ $base-fonts-default: 75px; /* html基准字体大小(iphone6),会根据设备的
     line-height: $line-height * 4;
   }
 }
-
-/* @mixin placeholder {*/
-/*   ::-webkit-input-placeholder {@content}*/
-/*   :-moz-placeholder           {@content}*/
-/*   ::-moz-placeholder          {@content}*/
-/*   :-ms-input-placeholder      {@content}*/
-/* }*/

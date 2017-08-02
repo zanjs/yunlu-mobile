@@ -16,31 +16,31 @@
         @go-organization="goOrganization"
         @go-product-detail="goProductDetail">
       </shopping-cart-list>
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <a
           class="check-all-box"
           @click="handleAllCheck">
           <i
             v-if="checkAll"
-            class="iconfont icon-xuanzhong checked"></i>
+            class="iconfont icon-xuanzhong font-21 third-text primary"></i>
           <i
             v-if="!checkAll"
-            class="iconfont icon-weixuanzhong"></i>
-          <span>全选</span>
+            class="iconfont icon-weixuanzhong font-21 third-text"></i>
+          <span class="font-14 second-text">全选</span>
         </a>
         <a
-          class="delete"
+          class="delete font-14 second-text"
           v-bind:class="{'disabled': !hasCheckItems}"
           @click="deleteConfirm()">删除</a>
-        <p>合计&nbsp;&nbsp;&yen;：{{totalMoney}}</p>
+        <p class="font-14 second">合计&nbsp;&nbsp;&yen;：{{totalMoney}}</p>
         <div
           v-if="!hasCheckItems"
-          class="pay-btn pay-btn-disabled">
+          class="pay-btn white absolute-vertical flex font-15 pay-btn-disabled">
           支付
         </div>
         <a
           v-if="hasCheckItems"
-          class="pay-btn"
+          class="pay-btn white absolute-vertical flex font-15"
           @click="pay()">支付</a>
       </div>
       <confirm-dialog
@@ -54,7 +54,7 @@
         <div class="img-container">
           <img src="../../assets/empryShoppingCart.png">
         </div>
-        <p>您的购物车还没有宝贝呦~</p>
+        <p class="font-16 third-text">您的购物车还没有宝贝呦~</p>
       </div>
     </template>
   </section>
@@ -446,25 +446,23 @@
   @import "../../styles/mixin";
 
   .container {
-    background-color: #FAFAFA;
+    background-color: $sixth-grey;
     @include pm2rem(padding, 0px, 0px, 98px, 0px);
   }
   .list-container {
     @include pm2rem(padding, 88px, 0px, 0px, 0px);
-    background-color: #EFEFEF;
+    background-color: $primary-grey;
   }
   .option-bar {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     @include px2rem(height, 98px);
     line-height: 1;
     background-color: $white;
     display: flex;
     align-items: center;
-    border-top: 1px solid #E7E7E7;
-    border-bottom: 1px solid #E7E7E7;
+    border-top: 1px solid $third-grey;
+    border-bottom: 1px solid $third-grey;
     .check-all-box {
       @include px2rem(padding-left, 28px);
       display: flex;
@@ -473,21 +471,10 @@
       @include px2rem(margin-right, 48px);
       line-height: 1;
       i {
-        @include font-dpr(21px);
-        color: #A6A6A6;
         @include px2rem(margin-right, 12px);
-      }
-      span {
-        @include font-dpr(14px);
-        color: #595959;
-      }
-      .checked {
-        color: #52CAA7;
       }
     }
     .delete {
-      @include font-dpr(14px);
-      color: #595959;
       @include px2rem(margin-right, 34px);
       height: inherit;
       display: flex;
@@ -495,33 +482,20 @@
       line-height: 1;
     }
     .disabled {
-      color: #DEDEDE;
+      color: $fourth-grey;
     }
     p {
-      @include font-dpr(14px);
       font-weight: bold;
-      color: #F75544;
-    }
-    .checked {
-      color: #52CAA7;
     }
     .pay-btn {
       @include px2rem(width, 150px);
       @include px2rem(height, 70px);
       @include px2rem(border-radius, 35px);
-      color: $white;
-      @include font-dpr(15px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       @include px2rem(right, 28px);
       background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
     }
     .pay-btn-disabled {
-      background: #DEDEDE;
+      background: $fourth-grey;
     }
   }
    .empty-container {
@@ -535,8 +509,6 @@
       }
     }
     p {
-      @include font-dpr(16px);
-      color: #A6A6A6;
       text-align: center;
     }
   }

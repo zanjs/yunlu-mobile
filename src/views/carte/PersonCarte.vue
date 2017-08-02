@@ -14,16 +14,16 @@
     </div>
     <div
       v-if="clusters && clusters.length === 0"
-      class="no-carte">
+      class="no-data">
       <img src="../../assets/noPersonCarte.png">
     </div>
     <template v-else>
-      <div class="carte-container">
+      <div class="carte-container white-bg">
         <a
           v-for="(item, index) in clusters"
           :key="index"
           @click="goCarte(item)"
-          class="item">
+          class="flex item">
           <img
             v-if="item.type === 'personal'"
             src="../../assets/spaceLogo.png">
@@ -39,7 +39,7 @@
           <img
             v-if="item.type === 'school'"
             src="../../assets/alumniLogo.png">
-          <span>{{item.name}}</span>
+          <span class="ellipsis second-text font-13">{{item.name}}</span>
         </a>
       </div>
       <template v-if="folders && folders.length > 0">
@@ -59,19 +59,19 @@
           </mt-loadmore>
         </div>
         <template v-if="showPreview">
-          <div class="option-bar">
+          <div class="flex-between option-bar full-width">
             <div class="left">
               <div
-                class="close"
+                class="flex close white"
                 @click="closePreview()">
-                <i class="iconfont icon-fanhui"></i>
+                <i class="iconfont icon-fanhui font-20"></i>
               </div>
               <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
             </div>
             <div
-              class="report"
+              class="report flex white"
               @click="goReportPhoto">
-              <i class="iconfont icon-jubao"></i>
+              <i class="iconfont icon-jubao font-20"></i>
             </div>
           </div>
           <swiper
@@ -407,31 +407,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
-  .no-carte {
-    @include pm2rem(padding, 100px, 20px, 100px, 0px);
-    @include pm2rem(margin, 20px, 22px, 0px, 22px);
-    background-color: $white;
-    text-align: center;
-    border: 1px solid #E7E7E7;
-    img {
-      @include px2rem(width, 260px);
-      height: auto;
-    }
-  }
   .carte-container {
-    background-color: $white;
     display: flex;
     overflow-x: scroll;
     @include px2rem(margin-top, 15px);
     box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
     .item {
-      display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       @include px2rem(width, 250px);
       @include px2rem(max-width, 250px);
       @include px2rem(min-width, 250px);
@@ -444,16 +426,8 @@
         @include px2rem(width, 200px);
         @include pm2rem(margin, 0px, 25px, 20px, 25px);
         line-height: 1;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         text-align: center;
-        @include font-dpr(13px);
-        color: #595959;
       }
-    }
-    a {
-      text-decoration: none;
     }
     a:active {
       background-color: #F2F2F2;
@@ -462,11 +436,7 @@
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
-    width: 100%;
-    max-width: 540px;
     z-index: 1004;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
     .left {
       display: flex;
@@ -487,13 +457,7 @@
         @include px2rem(border-radius, 10px);
         @include pm2rem(margin, 0px, 30px, 0px, 30px);
         background-color: rgba(0, 0, 0, .5);
-        color: white;
         z-index: 1003;
-        display: flex;
-        align-items: center;
-        i {
-          @include font-dpr(20px);
-        }
       }
     }
     .report {
@@ -501,13 +465,7 @@
       @include px2rem(border-radius, 10px);
       @include pm2rem(margin, 0px, 30px, 0px, 30px);
       background-color: rgba(0, 0, 0, .5);
-      color: white;
       z-index: 1003;
-      display: flex;
-      align-items: center;
-      i {
-        @include font-dpr(20px);
-      }
     }
   }
   .full-screen-swiper {
@@ -546,17 +504,6 @@
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-    }
-  }
-  .no-data {
-    @include pm2rem(padding, 100px, 20px, 100px, 0px);
-    @include pm2rem(margin, 20px, 22px, 0px, 22px);
-    background-color: $white;
-    text-align: center;
-    border: 1px solid #E7E7E7;
-    img {
-      @include px2rem(width, 260px);
-      height: auto;
     }
   }
 </style>

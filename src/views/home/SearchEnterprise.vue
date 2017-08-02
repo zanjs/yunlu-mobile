@@ -38,7 +38,7 @@
           <div class="img-container">
             <img src="../../assets/noSearchProducts.png">
           </div>
-          <p>SORRY! 暂没有找到符合条件的信息</p>
+          <p class="third-text font-16">SORRY! 暂没有找到符合条件的信息</p>
         </div>
       </template>
     </div>
@@ -216,52 +216,16 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  input[type=search]::-webkit-search-cancel-button {
-    -webkit-appearance: none; // 此处只是去掉默认的小×
-  }
   .list {
     @include px2rem(padding-top, 176px);
     position: relative;
-    .float-btn {
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      display: block;
-      width: 100%;
-      max-width: 540px;
-      .cirlce-btn {
-        float: right;
-        @include px2rem(width, 100px);
-        @include px2rem(height, 100px);
-        @include px2rem(border-radius, 50px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        @include px2rem(margin-right, 40px);
-        color: $white;
-        background-color: rgba(0, 0, 0, .68);
-        line-height: 1;
-        z-index: 1004;
-        i {
-          @include font-dpr(21px);
-        }
-        p {
-          @include font-dpr(12px);
-        }
-      }
-    }
     .empty-products {
-      color: #A6A6A6;
+      text-align: center;
       .img-container {
-        text-align: center;
         @include pm2rem(padding, 30px, 0px, 40px, 0px);
         img {
           width: 50%;
         }
-      }
-      p {
-        @include font-dpr(16px);
-        text-align: center;
       }
     }
   }

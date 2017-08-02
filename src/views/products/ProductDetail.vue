@@ -30,41 +30,41 @@
         src="../../assets/imgLoadingError.png">
       <span
         v-if="productDetailFiles && productDetailFiles.length"
-        class="page-nav">{{currentIndex}}/{{productDetailFiles.length}}</span>
+        class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
       <span
         v-else
-        class="page-nav">0/0</span>
+        class="page-nav white font-16">0/0</span>
     </div>
-    <section class="info-container">
+    <section class="info-container white-bg">
       <div
         v-if="productDetail && productDetail.name"
-        class="name">{{productDetail.name}}</div>
+        class="name font-17">{{productDetail.name}}</div>
       <div
         v-else
-        class="name">*****</div>
-      <div class="money">
+        class="name font-17">*****</div>
+      <div class="flex-between money">
         <div>
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-            class="number">{{currentPrice.money}}</span>
+            class="number font-26">{{currentPrice.money}}</span>
           <span
             v-else
-            class="number">0.00</span>
+            class="number font-26">0.00</span>
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
-            class="unit">元</span>
+            class="unit font-13">元</span>
         </div>
         <div @click="expandMorePrice()">
-          <span class="more">更多价格</span>
+          <span class="more font-14">更多价格</span>
           <div
             class="icon-box"
             v-bind:class="{'up': morePrice}">
-            <i class="iconfont icon-gengduo more-icon"></i>
+            <i class="iconfont icon-gengduo primary font-15"></i>
           </div>
         </div>
         <div
           v-show="morePrice"
-          class="more-price">
+          class="more-price white-bg font-16">
           <p
             v-for="(item, index) in productDetail.prices"
             :key="item.id"
@@ -75,12 +75,12 @@
       </div>
       <div
         v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-        class="inventory">
+        class="inventory font-13 second-text">
         库存 ：{{productDetail.prices[0].amount}}
       </div>
       <div
         v-else
-        class="inventory">
+        class="inventory font-13 second-text">
         库存 ：0
       </div>
     </section>
@@ -166,22 +166,22 @@
         </mt-tab-container-item>
         <mt-tab-container-item
           id="3"
-          class="productdetail-product-tags">
+          class="productdetail-product-tags white-bg">
           <template v-if="archives && archives.length > 0">
             <div
               v-for="(item, index) in archives"
               :key="index"
               @click="viewArchives(item)"
-              class="tag">{{item.name}}</div>
+              class="tag second-text font-14">{{item.name}}</div>
           </template>
           <div
             v-else
-            class="no-info">该产品暂无关联信息</div>
+            class="no-info font-20">该产品暂无关联信息</div>
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
     <section
-      class="company-info"
+      class="company-info white-bg"
       @click="goEnterprise()">
       <div class="wraper">
         <div class="company-img">
@@ -192,17 +192,17 @@
             v-else
             src="../../assets/blank.jpg">
         </div>
-         <div class="content-wraper">
+         <div class="content-wraper ellipsis">
           <div class="company-content">
             <div
               v-if="productDetailTeam && productDetailTeam.company"
-              class="title">
+              class="title ellipsis font-16">
               {{productDetailTeam.company}}
             </div>
             <span
               v-else
-              class="title">***</span>
-            <div class="info">
+              class="title ellipsis font-16">***</span>
+            <div class="info font-14">
               <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
               <span v-else>***</span>
               <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
@@ -212,55 +212,59 @@
          </div>
       </div>
     </section>
-    <section class="product-tab-bar">
+    <section class="product-tab-bar white-bg full-width">
       <div
-        class="btn-box"
+        class="flex btn-box"
         @click="share()">
-        <i class="iconfont icon-fenxiang"></i>
-        <span>分享</span>
+        <i class="iconfont icon-fenxiang font-17"></i>
+        <span class="font-12 second-text">分享</span>
       </div>
       <div
-        class="btn-box"
+        class="flex btn-box"
         @click="addFavorites()">
         <i
-          class="iconfont icon-shoucang1"
+          class="iconfont icon-shoucang1 font-17"
           v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
-        <span v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
+        <span
+          class="font-12 second-text"
+          v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
       </div>
       <div
-        class="btn-box"
+        class="flex btn-box"
         @click="openIm()">
-        <i class="iconfont icon-kefu"></i>
-        <span>客服</span>
+        <i class="iconfont icon-kefu font-17"></i>
+        <span class="font-12 second-text">客服</span>
       </div>
       <div
-        class="btn-box btn-shopping-car"
+        class="flex btn-box btn-shopping-car"
         @click="addShoppingCar()">
         <i
-          class="iconfont icon-gouwuche1"
+          class="iconfont icon-gouwuche1 font-18"
           v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
-        <span v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
+        <span
+           class="font-12 second-text"
+           v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
       </div>
       <div
-        class="btn-box btn-buy"
+        class="flex btn-box btn-buy"
         @click="buyNow()">
-        <span>立即购买</span>
+        <span class="font-14 white">立即购买</span>
       </div>
     </section>
     <mt-actionsheet
       :actions="actions"
       v-model="sheetVisible"
-      class="product-actionsheet">
+      class="product-actionsheet full-width">
     </mt-actionsheet>
     <section
       v-if="popUp"
       class="product-popup-dialog"
       v-bind:class="{'slide-in-fwd-center': cssAnimation, 'slide-out-bck-center': !cssAnimation}">
-      <div class="main">
-        <div class="title">
+      <div class="main absolute-horizontal">
+        <div class="title primary-bg white font-16">
           <span>购销渠道关系认证成功</span>
         </div>
-        <div class="content">
+        <div class="content white-bg">
           <div
             class="item"
             @click="goLinkEnterpriseDetail(teamLink)">
@@ -271,10 +275,10 @@
               v-else
               src="../../assets/blank.jpg">
             <div class="info">
-              <p>{{teamLink.company}}</p>
+              <p class="font-13 second-text">{{teamLink.company}}</p>
               <div>
-                <span>{{teamLink.service.name}}</span>
-                <span>{{teamLink.provice_name}}&middot;{{teamLink.city_name}}</span>
+                <span class="font-12 third-text">{{teamLink.service.name}}</span>
+                <span class="font-12 third-text">{{teamLink.provice_name}}&middot;{{teamLink.city_name}}</span>
               </div>
             </div>
           </div>
@@ -301,20 +305,20 @@
           </div>
         </div>
         <div
-          class="footer"
+          class="footer white-bg font-16 second-text"
           @click="closePopup()">
           <span>取消</span>
         </div>
       </div>
     </section>
     <div v-if="showPreview">
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <div
           class="close"
           @click="closePreview()">
-          <i class="iconfont icon-fanhui"></i>
+          <i class="iconfont icon-fanhui font-20"></i>
         </div>
-        <span class="preview-page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
+        <span class="preview-page-nav white flex font-20">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
       <swiper
         :options="swiperOptionFullScreen"
@@ -938,45 +942,32 @@
     position: absolute;
     @include px2rem(bottom, 16px);
     @include px2rem(right, 16px);
-    color: $white;
-    @include font-dpr(16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
     background-color: rgba(0, 0, 0, .5);
     z-index: 1;
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
-    background-color: $white;
-    border-bottom: 1px solid #D1D1D1;
+    border-bottom: 1px solid $fifth-grey;
     .name {
-      @include font-dpr(17px);
       @include pm2rem(margin, 0px, 0px, 30px, 0px);
       font-weight: 800;
     }
     .money {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
       position: relative;
       @include pm2rem(padding, 0px, 70px, 0px, 0px);
       .number {
         color: #FF0000;
-        @include font-dpr(26px);
       }
       .unit {
         color: #343434;
-        @include font-dpr(13px);
       }
       .more {
         color: #000;
-        @include font-dpr(14px);
       }
       .icon-box {
         display: inline-block;
-      }
-      .more-icon {
-        color: #52CAA7;
-        @include font-dpr(15px);
       }
       .up {
         transform: rotate(-90deg);
@@ -988,12 +979,10 @@
         @include px2rem(top, 60px);
         text-align: center;
         color: #FF0000;
-        background-color: $white;
-        @include font-dpr(16px);
-        border-top: 1px solid #D1D1D1;
+        border-top: 1px solid $fifth-grey;
         z-index: 1002;
         p {
-          border: 1px solid #D1D1D1;
+          border: 1px solid $fifth-grey;
           border-top: none;
           box-sizing: border-box;
           @include pm2rem(padding, 8px, 10px, 8px, 10px);
@@ -1001,8 +990,6 @@
       }
     }
     .inventory {
-      color: #595959;
-      @include font-dpr(13px);
       @include pm2rem(padding, 0px, 0px, 22px, 0px);
     }
   }
@@ -1019,13 +1006,13 @@
       }
     }
     .is-selected {
-      color: #52CAA7 !important;
+      color: $green !important;
       margin-bottom: 0 !important;
       @include px2remimportant(border-bottom-width, 10px);
-      border-bottom-color: #52CAA7 !important;
+      border-bottom-color: $green !important;
       text-decoration: none !important;
       .mint-tab-item {
-        color: #52CAA7 !important;
+        color: $green !important;
       }
     }
     a:active, a:hover {
@@ -1036,20 +1023,17 @@
     }
   }
   .nav-bar-container {
-    border-bottom: 1px solid #E7E7E7;
+    border-bottom: 1px solid $third-grey;
   }
   .company-info {
     @include pm2rem(margin, 22px, 0px, 0px, 0px);
     @include pm2rem(padding, 24px, 24px, 124px, 24px);
-    border-top: 1px solid #E7E7E7;
-    background-color: $white;
+    border-top: 1px solid $third-grey;
     line-height: 1;
     .wraper {
-      // box-sizing: border-box;
       display: flex;
       align-items: center;
       .company-img {
-        // @include pm2rem(padding, 2px, 24px, 0px, 0px);
         @include px2rem(width, 106px);
         height: inherit;
         display: block;
@@ -1061,9 +1045,6 @@
       .content-wraper {
         display: block;
         width: inherit;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         flex: 1;
         .company-content {
           height: inherit;
@@ -1072,18 +1053,13 @@
           flex: 1;
           width: inherit;
           .title {
-            @include font-dpr(16px);
             font-weight: 400;
             color: #ff5001;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
             width: 100%;
           }
           .info {
             @include pm2rem(margin, 28px, 0px, 0px, 0px);
             span {
-              @include font-dpr(14px);
               color: #535252;
               @include px2rem(margin-right, 50px);
             }
@@ -1095,42 +1071,24 @@
   .product-tab-bar {
     @include px2rem(height, 97px);
     display: -webkit-box;
-    background-color: $white;
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     .btn-box {
-      border-top: 1px solid #D1D1D1;
-      border-bottom: 1px solid #D1D1D1;
+      border-top: 1px solid $fifth-grey;
+      border-bottom: 1px solid $fifth-grey;
       width: 17.6%;
-      border-right: 1px solid #D1D1D1;
+      border-right: 1px solid $fifth-grey;
       box-sizing: border-box;
-      display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      i {
-        @include font-dpr(17px);
-      }
-      span {
-        @include font-dpr(12px);
-        color: #595959;
-      }
     }
     .btn-shopping-car {
       width: 23.6%;
-      i {
-        @include font-dpr(18px);
-      }
     }
     .btn-buy {
       width: 23.6%;
       background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
       border: none;
       span {
-        @include font-dpr(14px);
-        color: $white;
         @include px2rem(line-height, 97px);
       }
     }
@@ -1142,15 +1100,12 @@
     display: flex;
     flex-wrap: wrap;
     @include pm2rem(padding, 20px, 0px, 0px, 20px);
-    background-color: $white;
     .tag {
       @include px2rem(border-radius, 7px);
-      border: 1px solid #E0E0E0;
+      border: 1px solid $second-grey;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       @include pm2rem(margin, 0px, 20px, 20px, 0px);
       line-height: 1;
-      @include font-dpr(14px);
-      color: #595959;
     }
     .no-info {
       @include pm2rem(padding, 20px, 0px, 40px, 0px);
@@ -1158,15 +1113,12 @@
       text-align: center;
       width: 100%;
       line-height: 1;
-      @include font-dpr(20px);
-      color: #D1D1D1;
+      color: $fifth-grey;
     }
   }
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
-    width: 100%;
-    max-width: 540px;
     display: flex;
     align-items: center;
     z-index: 1004;
@@ -1179,20 +1131,12 @@
       z-index: 1003;
       display: flex;
       align-items: center;
-      i {
-         @include font-dpr(20px);
-      }
     }
     .preview-page-nav {
       background-color: rgba(0, 0, 0, .5);
       @include px2rem(border-radius, 10px);
-      color: white;
       z-index: 1003;
-      @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
   }
   .full-screen-swiper {
@@ -1241,28 +1185,19 @@
     z-index: 1001;
     top: 0;
     .main {
-      position: absolute;
       @include px2rem(width, 562px);
       @include px2rem(top, 200px);
-      position: absolute;
-	    left: 50%;
-      -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
     }
     .title {
-      background-color: #52CAA7;
-      color: $white;
-      @include font-dpr(16px);
       @include px2rem(height, 80px);
       text-align: center;
       @include px2rem(line-height, 80px);
     }
     .content {
-      background-color: $white;
       @include px2rem(min-height, 500px);
-      border-bottom: 1px solid #D1D1D1;
+      border-bottom: 1px solid $fifth-grey;
       .item {
-        border-bottom: 1px solid #D1D1D1;
+        border-bottom: 1px solid $fifth-grey;
         @include px2rem(height, 108px);
         display: flex;
         align-items: center;
@@ -1278,15 +1213,11 @@
             line-height: 1;
           }
           p {
-            @include font-dpr(13px);
             line-height: 1;
-            color: #595959;
             @include px2rem(margin-bottom, 20px);
           }
           span {
-            @include font-dpr(12px);
             @include px2rem(margin-right, 50px);
-            color: #A6A6A6;
           }
           .product-price {
             color: #F50E0E;
@@ -1296,11 +1227,8 @@
     }
     .footer {
       @include px2rem(height, 80px);
-      background-color: $white;
       @include px2rem(line-height, 80px);
       text-align: center;
-      @include font-dpr(16px);
-      color: #595959;
     }
   }
   .slide-in-fwd-center {
@@ -1380,12 +1308,12 @@
     .mint-tab-item-label {
       @include font-dpr-important(15px);
       font-weight: 500;
-      color: #595959;
+      color: $second-dark;
       line-height: inherit !important;
     }
     .is-selected {
       .mint-tab-item-label {
-        color: #52CAA7 !important;
+        color: $green !important;
       }
     }
   }
@@ -1396,13 +1324,13 @@
       display: block;
       @include pm2rem(margin, 0px, 0px, 36px, 0px);
       @include font-dpr(14px);
-      color: #595959;
+      color: $second-dark;
     }
     .no-price {
       @include pm2rem(padding, 4px, 0px, 40px, 0px);
       @include pm2rem(margin, 0px, 0px, 0px, -38px);
       @include font-dpr(20px);
-      color: #D1D1D1;
+      color: $fifth-grey;
       text-align: center;
       line-height: 1;
       width: 100%;
@@ -1419,7 +1347,7 @@
         @include font-dpr(13px);
         @include line-height(31px);
         @include pm2rem(padding, 15px, 54px, 8px, 24px);
-        border-bottom: 1px solid #DEDEDE;
+        border-bottom: 1px solid $fourth-grey;
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
@@ -1474,14 +1402,12 @@
       width: 100%;
       line-height: 1;
       @include font-dpr(20px);
-      color: #D1D1D1;
+      color: $fifth-grey;
     }
   }
   .product-actionsheet {
     background-color: transparent !important;
     margin: 0 auto;
-    width: 100%;
-    max-width: 540px;
     @include px2rem(margin-bottom, 12px);
     .mint-actionsheet-list {
       @include pm2rem(margin, 0px, 41px, 0px, 41px);
@@ -1499,7 +1425,7 @@
       @include pm2rem(margin, 28px, 41px, 0px, 41px);
       @include px2rem(border-radius, 10px);
       width: auto;
-      color:#004BBD;
+      color: #004BBD;
     }
     .mint-actionsheet-listitem {
       color: #004BBD;
