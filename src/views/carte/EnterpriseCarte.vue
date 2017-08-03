@@ -177,31 +177,26 @@
           this.getProducts()
         }
       },
-      getProducts (q = this.queryParams, order = this.productOrder) {
+      async getProducts (q = this.queryParams, order = this.productOrder) {
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
-        this.$store.dispatch('commonAction', {
+        let {res} = await requestFn({
           url: '/products',
-          method: 'get',
           params: {
             team_id: this.teamId,
             page: this.productPageIndex,
             per_page: this.productPageSize,
             sort: order || '',
             q: q || ''
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = q !== ''
-            this.productLoaded = false
-            // this.queryParams = ''
-            let tmppArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmppArr, res.data.products, q)
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = q !== ''
+          this.productLoaded = false
+          let tmppArr = this.handleProductThumbnails(res.data.products)
+          this.getFilesPublisheds(tmppArr, res.data.products, q)
+        }
       },
       // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
@@ -308,43 +303,39 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr, q) {
-        this.$store.dispatch('commonAction', {
+      async getFilesPublisheds (ids, arr, q) {
+        let {state, res} = await requestFn({
           url: '/links/files/publisheds',
-          method: 'get',
           params: {
             type: 'product',
             team_id: this.teamId,
             thumbs: ['general'],
             ids: ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            if (this.productPageIndex === 1) {
-              state.products = this.handleProducts(arr, res.data.files)
-              state.productsThumbnails = res.data.files
-              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-                this.$refs.loadMoreProducts.onTopLoaded()
-              }
-            } else {
-              if (res.data.files.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
-              state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-                this.$refs.loadMoreProducts.onBottomLoaded()
-              }
-            }
-            this.getEnterpriseDocument()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          if (this.productPageIndex === 1) {
+            state.products = this.handleProducts(arr, res.data.files)
+            state.productsThumbnails = res.data.files
+            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
+              this.$refs.loadMoreProducts.onTopLoaded()
+            }
+          } else {
+            if (res.data.files.length === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
+            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
+              this.$refs.loadMoreProducts.onBottomLoaded()
+            }
+          }
+          this.getEnterpriseDocument()
+        }
       },
       goBack () {
         if (this.hasSearch) {

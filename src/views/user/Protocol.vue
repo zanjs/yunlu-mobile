@@ -20,7 +20,7 @@
     data () {
       return {
         header: '使用条款和隐私政策',
-        html: 'http://api.yunlu6.com/service_protocol.html'
+        html: 'https://api.yunlu6.com/service_protocol.html'
       }
     },
     components: {
