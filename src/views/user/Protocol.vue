@@ -4,7 +4,7 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="content">
+    <div class="content full-width">
       <iframe
         class="iframe"
         :src="html">
@@ -48,8 +48,6 @@
   .content {
     position: fixed;
     @include px2rem(top, 88px);
-    width: 100%;
-    max-width: 540px;
     bottom: 0;
     .iframe {
       width: 100%;

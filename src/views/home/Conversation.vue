@@ -12,7 +12,7 @@
         @keyup.enter="handleSearch"
         placeholder="搜索会话">
       <div
-        class="search-btn"
+        class="search-btn absolute-vertical flex"
         @click.stop="searchConversation(searchParams)">
         <i class="iconfont icon-sousuo"></i>
       </div>
@@ -24,7 +24,7 @@
         @click="goChat"
         @check="handleItemCheck">
       </conversation-list>
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <div
           class="check-btn"
           @click="handleAllCheck(conversations, checkAll)">
@@ -39,13 +39,13 @@
         </div>
         <a
           v-show="hasChecked"
-          class="text-btn"
+          class="flex text-btn"
           @click="deleteConfirm()">
           删除
         </a>
         <div
           v-show="!hasChecked"
-          class="text-btn btn-disabled">
+          class="flex text-btn btn-disabled">
           删除
         </div>
       </div>
@@ -278,7 +278,7 @@
     max-width: 540px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #D1D1D1;
+    border-bottom: 1px solid $fifth-grey;
     background-color: $white;
     z-index: 2;
     input {
@@ -287,8 +287,8 @@
       @include font-dpr(14px);
       @include px2rem(border-radius, 14px);
       line-height: 1;
-      background-color: #EDEDED;
-      color: #595959;
+      background-color: $ninth-grey;
+      color: $second-dark;
       @include px2rem(height, 66px);
       @include pm2rem(margin, 0px, 32px, 0px, 32px);
       @include pm2rem(padding, 0px, 100px, 0px, 30px);
@@ -296,7 +296,7 @@
       text-align: left;
     }
     ::-webkit-input-placeholder{
-      color: #C2C2C2;
+      color: $eighth-grey;
       @include px2rem(height, 66px);
       vertical-align: middle;
       text-align: left;
@@ -308,15 +308,9 @@
       -webkit-appearance: none;
     }
     .search-btn {
-      position: absolute;
       @include px2rem(right, 60px);
       @include px2rem(height, 66px);
-      top: 50%;
-      transform: translateY(-50%);
-      color: #B4B4B4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      color: $eleventh-grey;
       i {
         @include px2rem(padding-top, 4px);
       }
@@ -331,11 +325,9 @@
     justify-content: space-between;
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     @include px2rem(height, 98px);
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid $fifth-grey;
     .check-btn {
       display: flex;
       align-items: center;
@@ -344,15 +336,15 @@
       line-height: 1;
       i {
         @include font-dpr(18px);
-        color: #D1D1D1;
+        color: $fifth-grey;
         @include px2rem(margin-right, 12px);
       }
       p {
         @include font-dpr(16px);
-        color: #595959;
+        color: $second-dark;
       }
       .checked {
-        color: #52CAA7;
+        color: $green;
       }
     }
     .text-btn {
@@ -360,11 +352,8 @@
       @include px2rem(height, 70px);
       @include px2rem(border-radius, 40px);
       @include px2rem(margin-right, 28px);
-      background-color: #52CAA7;
+      background-color: $green;
       color: $white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       line-height: 1;
       @include font-dpr(15px);
     }
@@ -372,7 +361,7 @@
       background-color: rgba(82, 202, 167, .5);
     }
     .btn-disabled {
-      background-color: #DEDEDE;
+      background-color: $fourth-grey;
     }
   }
   .empty-container {
@@ -387,7 +376,7 @@
     }
     p {
       @include font-dpr(16px);
-      color: #A6A6A6;
+      color: $third-dark;
       text-align: center;
     }
   }

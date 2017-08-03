@@ -1,12 +1,12 @@
 <template>
   <section>
     <div
-      class="pop-bg"
+      class="pop-bg full-width"
       @click.stop="handleClick">
     </div>
     <div class="pop-dialog">
       <div
-        class="close-btn"
+        class="close-btn flex"
         @click.stop="handleClick">
         <i class="iconfont icon-guanbi"></i>
       </div>
@@ -55,8 +55,6 @@ export default {
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     z-index: 1004;
     background-color: rgba(0, 0, 0, .45);
   }
@@ -74,9 +72,6 @@ export default {
       @include px2rem(width, 70px);
       @include px2rem(height, 70px);
       @include px2rem(right, 20px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       i {
         @include font-dpr(32px);
         color: $white;
@@ -105,12 +100,12 @@ export default {
         line-height: 1;
         .name {
           @include font-dpr(16px);
-          color: #595959;
+          color: $second-dark;
           @include px2rem(margin-bottom, 20px);
         }
         .value {
           @include font-dpr(15px);
-          color: #F75544;
+          color: $red;
         }
       }
     }

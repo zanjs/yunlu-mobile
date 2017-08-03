@@ -144,7 +144,7 @@
   @import '../../styles/mixin';
 
   .tips-container {
-    background-color: #F2F2F2;
+    background-color: $tenth-grey;
     @include px2rem(margin-top, 88px);
     @include px2rem(height, 116px);
     display: flex;
@@ -153,40 +153,40 @@
     align-items: center;
     p {
       @include font-dpr(14px);
-      color: #A6A6A6;
+      color: $third-dark;
     }
   }
   .report-list {
     background-color: $white;
     .text-title {
       @include font-dpr(15px);
-      color: #A6A6A6;
+      color: $third-dark;
       @include pm2rem(margin, 30px, 0px, 0px, 30px);
       @include px2rem(padding-bottom, 20px);
     }
     .textarea-container {
       @include pm2rem(padding, 30px, 30px, 170px, 30px);
-      background-color: #FAFAFA;
+      background-color: $sixth-grey;
       @include px2rem(margin-bottom, -140px);
       .textarea {
         @include px2rem(height, 300px);
         border: none;
-        background-color: #FAFAFA;
+        background-color: $sixth-grey;
         @include px2rem(height, 300px);
         @include font-dpr(15px);
-        color: #A6A6A6;
+        color: $third-dark;
         overflow: auto;
         width: 100%;
         resize: none;
       }
       ::-webkit-input-placeholder{
-        color: #A6A6A6;
+        color: $third-dark;
       }
     }
   }
   .report-btn {
-    background-color: #52CAA7;
-    border-color: #52CAA7;
+    background-color: $green;
+    border-color: $green;
     @include font-dpr(15px);
     color: $white;
     position: fixed;
@@ -235,7 +235,7 @@
       @include pm2rem(padding, 22px, 0px, 26px, 0px);
       p {
         @include font-dpr(15px);
-        color: #595959;
+        color: $second-dark;
         line-height: 1;
       }
       .count {
@@ -247,7 +247,7 @@
         display: block;
         margin: 0 auto;
         @include px2rem(margin-top, 38px);
-        background-color: #52CAA7;
+        background-color: $green;
         color: $white;
         @include px2rem(height, 66px);
         @include px2rem(line-height, 66px);

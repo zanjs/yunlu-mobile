@@ -60,7 +60,7 @@ export default {
     max-width: 540px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #D1D1D1;
+    border-bottom: 1px solid $fifth-grey;
     background-color: $white;
     z-index: 2;
     .icon-box {
@@ -70,7 +70,7 @@ export default {
       justify-content: center;
       i {
         @include font-dpr(19px);
-        color: #595959;
+        color: $second-dark;
         line-height: 1;
       }
     }
@@ -81,7 +81,7 @@ export default {
       position: relative;
       @include px2rem(height, 70px);
       @include px2rem(border-radius, 14px);
-      background-color: #EDEDED;
+      background-color: $ninth-grey;
       .clear-btn {
         position: absolute;
         @include px2rem(right, 20px);
@@ -91,7 +91,7 @@ export default {
         justify-content: flex-end;
         i {
           @include font-dpr(21px);
-          color: #D1D1D1;
+          color: $fifth-grey;
           @include px2rem(margin-top, -4px);
         }
       }

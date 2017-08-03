@@ -62,7 +62,9 @@
       </a>
     </div>
     <div class="logout-btn">
-      <a @click="logOut()">
+      <a
+        class="flex"
+        @click="logOut()">
         退出登录
       </a>
     </div>
@@ -168,19 +170,19 @@
   }
   .menu-container {
     background-color: $white;
-    border-top: 1px solid #DEDEDE;
+    border-top: 1px solid $fourth-grey;
     @include px2rem(margin-top, 16px);
     .row-item {
       @include px2rem(height, 88px);
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #DEDEDE;
+      border-bottom: 1px solid $fourth-grey;
       box-sizing: border-box;
       .box {
         @include px2rem(width, 36px);
         @include pm2rem(margin, 0px, 20px, 0px, 30px);
         @include font-dpr(18px);
-        color: #595959;
+        color: $second-dark;
       }
       .item {
         display: flex;
@@ -189,12 +191,12 @@
         flex: 1;
         span {
           @include font-dpr(14px);
-          color: #595959;
+          color: $second-dark;
           line-height: 1;
         }
         .arrow {
           transform: rotate(180deg);
-          color: #A6A6A6;
+          color: $third-dark;
           @include font-dpr(18px);
           @include px2rem(margin-right, 30px);
         }
@@ -210,12 +212,9 @@
     text-align: center;
     a {
       margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       @include px2rem(width, 520px);
       @include px2rem(height,70px);
-      background-color: #52CAA7;
+      background-color: $green;
       @include font-dpr(15px);
     }
     a:active {

@@ -62,7 +62,7 @@ export default {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: #A6A6A6;
+      color: $third-dark;
     }
   }
   .msg-row {
@@ -76,7 +76,7 @@ export default {
       @include px2rem(min-height, 80px);
       .bubble {
         position: relative;
-        background-color: #52CAA7;
+        background-color: $green;
         @include pm2rem(padding, 15px, 30px, 15px, 30px);
         @include px2rem(border-radius, 20px);
         display: flex;
@@ -87,7 +87,7 @@ export default {
           @include line-height(20px);
           @include px2rem(max-width, 320px);
           word-wrap: break-word;
-          color: #595959;
+          color: $second-dark;
           text-align: left;
         }
       }
@@ -95,13 +95,13 @@ export default {
         @include px2rem(right, 20px);
         @include px2rem(margin-right, 20px);
         .content {
-          color: #FFF;
+          color: $white;
         }
       }
       .bubble-right {
         @include px2rem(left, 20px);
         @include px2rem(margin-left, 20px);
-        background-color: #D1D1D1;
+        background-color: $fifth-grey;
       }
       .arrow {
         position: absolute;
@@ -115,13 +115,13 @@ export default {
       .arrow-left {
         @include px2rem(left, 20px);
         @include px2rem(border-right-width, 26px);
-        border-right-color: #D1D1D1;
+        border-right-color: $fifth-grey;
         border-left: none;
       }
       .arrow-right {
         @include px2rem(right, 20px);
         @include px2rem(border-left-width, 26px);
-        border-left-color: #52CAA7;
+        border-left-color: $green;
         border-right: none;
       }
     }

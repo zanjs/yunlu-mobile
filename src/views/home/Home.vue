@@ -2,10 +2,10 @@
   <section>
     <mt-tabbar
       v-model="selected"
-      class="tab-bar">
+      class="tab-bar full-width">
       <mt-tab-item id="home">
         <div
-          class="tab-item"
+          class="flex-between tab-item"
           @click="selectTab('See')">
           <i class="iconfont icon-yunshi"></i>
           <span>云视</span>
@@ -13,7 +13,7 @@
       </mt-tab-item>
       <mt-tab-item id="wareroom">
         <div
-          class="tab-item"
+          class="flex-between tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-yunku"></i>
           <span>云库</span>
@@ -21,7 +21,7 @@
       </mt-tab-item>
       <mt-tab-item id="people">
         <div
-          class="tab-item"
+          class="flex-between tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-renmai"></i>
           <span>人脉</span>
@@ -29,7 +29,7 @@
       </mt-tab-item>
       <mt-tab-item id="space">
         <div
-          class="tab-item"
+          class="flex-between tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-kongjian"></i>
           <span>空间</span>
@@ -76,17 +76,13 @@
   .tab-bar {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     right: auto;
     left: auto;
     z-index: 1004 !important;
     .tab-item {
       @include px2rem(height, 97px);
-      display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
       i {
         @include font-dpr(25px);
         @include pm2rem(padding, 7px, 0px, 7px, 0px);
@@ -98,10 +94,10 @@
     }
     .mint-tab-item {
       padding: 0 !important;
-      color: #7F7F7F !important;
+      color: $seventh-grey !important;
     }
     .is-selected {
-      color: #52CAA7 !important;
+      color: $green !important;
     }
   }
 </style>

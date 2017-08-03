@@ -1,18 +1,18 @@
 <template>
   <section>
-    <div class="confirm-bg">
-      <div class="confirm-dialog">
+    <div class="confirm-bg full-width">
+      <div class="confirm-dialog absolute-horizontal">
         <div class="msg">
           {{msg}}
         </div>
         <div class="btn-group">
           <a
-            class="cancel-btn"
+            class="cancel-btn flex"
             @click="handleClick(false)">
             取消
           </a>
           <a
-            class="confirm-btn"
+            class="confirm-btn flex"
             @click="handleClick(true)">
             确定
           </a>
@@ -45,18 +45,13 @@ export default {
   .confirm-bg {
     position: fixed;
     top: 0;
-    width: 100%;
-    max-width: 540px;
     bottom: 0;
     background-color: rgba(0, 0, 0, .45);
     z-index: 1002;
     .confirm-dialog {
-      position: absolute;
       background-color: $white;
       @include px2rem(top, 400px);
       @include px2rem(width, 562px);
-      left: 50%;
-      transform: translateX(-50%);
       @include px2rem(border-radius, 14px);
       @include px2rem(height, 240px);
       .msg {
@@ -65,23 +60,20 @@ export default {
         @include px2rem(padding-top, 56px);
         line-height: 1;
         @include font-dpr(15px);
-        color: #262626;
+        color: $primary-dark;
       }
       .btn-group {
         display: flex;
         align-items: center;
         @include px2rem(height, 88px);
-        border-top: 1px solid #E0E0E0;
+        border-top: 1px solid $second-grey;
         a {
           flex: 1;
           line-height: 1;
           @include  font-dpr(16px);
-          color: #595959;
-          border-right: 1px solid #E0E0E0;
+          color: $second-dark;
+          border-right: 1px solid $second-grey;
           height: inherit;
-          display: flex;
-          align-items: center;
-          justify-content: center;
         }
         a:active {
           background-color: rgba(239, 234, 234, .5);

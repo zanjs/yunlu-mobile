@@ -4,7 +4,7 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="login-container">
+    <div class="login-container full-width">
       <div class="input-container">
         <input
           type="password"
@@ -109,8 +109,6 @@
     position: fixed; // 不能用absolute,UC浏览器会白屏
     @include pm2rem(padding, 128px, 0px, 0px, 0px);
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     top: 0;
     background-color: $white;
     .input-container {
@@ -121,16 +119,16 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: #A6A6A6;
+        color: $third-dark;
         @include font-dpr(14px);
         line-height: 1;
         border: none;
-        background-color: #EFEFEF;
+        background-color: $primary-grey;
         flex: 1;
       }
     }
     ::-webkit-input-placeholder{
-      color: #A6A6A6;
+      color: $third-dark;
     }
     .login-btn {
       a {
@@ -140,7 +138,7 @@
         @include px2rem(height, 80px);
         @include px2rem(margin-top, 28px);
         @include px2rem(margin-bottom, 46px);
-        background-color: #52CAA7;
+        background-color: $green;
         color: $white;
         @include font-dpr(16px);
         @include px2rem(line-height, 80px);

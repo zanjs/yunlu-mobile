@@ -27,7 +27,7 @@
         </mt-loadmore>
       </div>
       <template v-if="showPreview">
-        <div class="option-bar">
+        <div class="option-bar full-width">
           <div class="left">
             <div
               class="close"
@@ -78,7 +78,6 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import FoldersCover from '../../components/common/FoldersCover'
   import { mapGetters } from 'vuex'
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast, MessageBox } from 'mint-ui'
@@ -137,7 +136,6 @@
     components: {
       CommonHeader,
       Card,
-      FoldersCover,
       PopDialog,
       SpaceFolders,
       swiper,
@@ -306,8 +304,6 @@
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
-    width: 100%;
-    max-width: 540px;
     z-index: 1004;
     display: flex;
     justify-content: space-between;
@@ -361,10 +357,10 @@
     bottom: 0;
     right: 0;
     z-index: 1002;
-    background-color: #000;
+    background-color: $dark;
   }
   .full-screen-bg {
-    background-color: #000;
+    background-color: $dark;
     img[lazy=loading] {
       width: inherit;
       max-width: 100%;
@@ -397,7 +393,7 @@
     @include pm2rem(margin, 20px, 22px, 0px, 22px);
     background-color: $white;
     text-align: center;
-    border: 1px solid #D1D1D1;
+    border: 1px solid $fifth-grey;
     img {
       @include px2rem(width, 260px);
       height: auto;

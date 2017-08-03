@@ -79,7 +79,7 @@
       display: flex;
       align-items: center;
       @include px2rem(height, 140px);
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 1px solid $second-grey;
       .check-box {
         @include px2rem(width, 74);
         @include px2rem(padding-left, 28px);
@@ -88,10 +88,10 @@
         align-items: center;
         i {
           @include font-dpr(21px);
-          color: #D1D1D1;
+          color: $fifth-grey;
         }
         .checked {
-          color: #52CAA7;
+          color: $green;
         }
       }
       .container {
@@ -127,19 +127,19 @@
                 overflow: hidden;
                 white-space: nowrap;
                 @include font-dpr(16px);
-                color: #595959;
+                color: $second-dark;
                 @include px2rem(width, 260px);
               }
               .date {
                 @include font-dpr(14px);
-                color: #A6A6A6;
+                color: $third-dark;
                 @include px2rem(width, 200px);
                 text-align: right;
               }
             }
             .msg {
               @include font-dpr(14px);
-              color: #A6A6A6;
+              color: $third-dark;
             }
           }
         }
