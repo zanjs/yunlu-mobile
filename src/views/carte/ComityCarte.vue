@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="white-bg">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -14,20 +14,24 @@
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
-    <div class="nav-tabs">
-      <div class="tab-bar">
-        <div class="left"
-             v-bind:class="{'active': activeIndex === 0}"
-             @click.prevent="tabClick(0)">产品</div>
-        <div class="middle"
-             v-bind:class="{'active': activeIndex === 1}"
-             @click.prevent="tabClick(1)">资讯</div>
-        <div class="middle"
-             v-bind:class="{'active': activeIndex === 2}"
-             @click.prevent="tabClick(2)">企业会员</div>
-        <div class="right"
-             v-bind:class="{'active': activeIndex === 3}"
-             @click.prevent="tabClick(3)">个人会员</div>
+    <div class="four-nav-tabs">
+      <div class="tab-bar primary flex font-17">
+        <div
+          class="left flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 0}"
+          @click.prevent="tabClick(0)">产品</div>
+        <div
+          class="middle flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 1}"
+          @click.prevent="tabClick(1)">资讯</div>
+        <div
+          class="middle flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 2}"
+          @click.prevent="tabClick(2)">企业会员</div>
+        <div
+          class="middle right flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 3}"
+          @click.prevent="tabClick(3)">个人会员</div>
       </div>
       <div class="tab-container">
         <transition
@@ -128,10 +132,12 @@
             <template v-else>
               <div
                 key="noLogin"
-                class="tips-container">
-                <p>登录后才能查看</p>
+                class="tab-tips-container">
+                <p class="second-text">登录后才能查看</p>
                 <div class="login-btn">
-                  <a @click="goLogin()">登录</a>
+                  <a
+                    @click="goLogin()"
+                    class="primary-bg white font-13">登录</a>
                 </div>
               </div>
             </template>
@@ -178,7 +184,6 @@
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
   import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
-  import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -227,7 +232,6 @@
       InformationList,
       EnterpriseList,
       PersonList,
-      ViewBigImg,
       PopDialog,
       Search,
       Order,
@@ -716,131 +720,4 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .container {
-    background-color: $white;
-  }
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
-  .nav-tabs {
-    @include pm2rem(margin, 20px, 0px, 10px, 0px);
-    background-color: $white;
-    input[type=search]::-webkit-search-cancel-button {
-      -webkit-appearance: none; // 此处只是去掉默认的小×
-    }
-    .tab-bar {
-      color: #52CAA7;
-      @include px2rem(height, 84px);
-      @include pm2rem(padding, 0px, 22px, 0px, 22px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
-      div {
-        height: 100%;
-        flex: 1;
-        box-sizing: border-box;
-        @include px2rem(line-height, 84px);
-        text-align: center;
-        @include font-dpr(17px);
-        color: #52CAA7;
-        border: 1px solid #52CAA7;
-      }
-      .left {
-        @include px2rem(border-top-left-radius, 14px);
-        @include px2rem(border-bottom-left-radius, 14px);
-        color: #52CAA7;
-      }
-      .middle {
-        border-left: none;
-      }
-      .active {
-        background-color: #52CAA7;
-        color: $white;
-      }
-      .right {
-        @include px2rem(border-top-right-radius, 14px);
-        @include px2rem(border-bottom-right-radius, 14px);
-        border-left: none;
-      }
-    }
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
-      }
-    }
-    .no-data {
-      @include pm2rem(padding, 100px, 20px, 100px, 0px);
-      @include pm2rem(margin, 20px, 22px, 0px, 22px);
-      background-color: $white;
-      text-align: center;
-      border: 1px solid #E7E7E7;
-      img {
-        @include px2rem(width, 260px);
-        height: auto;
-      }
-    }
-  }
-  .tips-container {
-    background-color: $white;
-    @include pm2rem(padding, 100px, 0px, 100px, 0px);
-     p {
-        color: grey;
-        text-align: center;
-        display: block;
-      }
-    .login-btn {
-      text-align: center;
-      margin: 0 auto;
-      @include px2rem(margin-top,60px);
-      a {
-        color: $white;
-        display: block;
-        margin: 0 auto;
-        @include px2rem(height, 70px);
-        @include px2rem(line-height, 70px);
-        @include font-dpr(13px);
-        background-color: #52CAA7;
-        @include px2rem(width, 550px);
-      }
-      a:active {
-        background-color: rgba(82, 202, 167, .5);
-      }
-    }
-  }
-  .fade-enter {
-    opacity: 0;
-  }
-  .fade-enter-to {
-    opacity: 1;
-  }
-  .fade-enter-active {
-    transition: .5s ease-in;
-  }
-  .fade-leave {
-    opacity: 1;
-  }
-  .fade-leave-active {
-    transition: .5s ease-out;
-  }
-  .fade-leave-to {
-    opacity: 0
-  }
 </style>

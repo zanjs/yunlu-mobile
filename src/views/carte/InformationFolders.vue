@@ -11,12 +11,12 @@
       </information-gallery>
     </div>
     <div v-if="showPreview">
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <div class="close"
             @click="closePreview()">
           <i class="iconfont icon-fanhui"></i>
         </div>
-        <span class="page-nav">{{currentIndex}}/{{previewImgs.length}}</span>
+        <span class="page-nav flex">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
       <swiper
         :options="swiperOption"
@@ -199,8 +199,6 @@
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
-    width: 100%;
-    max-width: 540px;
     display: flex;
     align-items: center;
     z-index: 1004;
@@ -211,9 +209,6 @@
       @include font-dpr(20px);
       @include pm2rem(padding, 4px, 10px, 4px, 10px);
       @include px2rem(border-radius, 10px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .close {
       @include px2rem(border-radius, 10px);
@@ -236,6 +231,6 @@
     left: 0;
     bottom: 0;
     z-index: 1002;
-    background-color: #000;
+    background-color: $dark;
   }
 </style>

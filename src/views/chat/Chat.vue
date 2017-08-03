@@ -321,13 +321,13 @@
         @include font-dpr(15px);
       }
       .price {
-        color: red;
+        color: $red;
       }
     }
   }
   .container {
     @include pm2rem(padding, 128px, 0px, 240px, 0px);
-    background-color: #FAFAFA;
+    background-color: $sixth-grey;
   }
   .product-container {
     @include px2rem(padding-top, 248px);

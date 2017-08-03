@@ -145,7 +145,7 @@ export default {
 
   .item-list {
     @include px2rem(margin-bottom, 10px);
-    background-color: #E7E7E7;
+    background-color: $third-grey;
     .title {
       @include px2rem(height, 88px);
       display: flex;
@@ -159,11 +159,11 @@ export default {
         @include px2rem(padding-left, 28px);
         i {
           @include font-dpr(21px);
-          color: #A6A6A6;
+          color: $third-dark;
           line-height: 1;
         }
         .checked {
-          color: #52CAA7;
+          color: $green;
         }
       }
       .title-container {
@@ -180,12 +180,12 @@ export default {
         p {
           @include font-dpr(14px);
           line-height: 1;
-          color: #262626;
+          color: $primary-dark;
         }
       }
     }
     .row-item {
-      border-top: 1px solid #E0E0E0;
+      border-top: 1px solid $second-grey;
       @include px2rem(height, 140px);
       display: flex;
       align-items: center;
@@ -198,11 +198,11 @@ export default {
         height: inherit;
         i {
           @include font-dpr(21px);
-          color: #A6A6A6;
+          color: $third-dark;
           line-height: 1;
         }
         .checked {
-          color: #52CAA7;
+          color: $green;
         }
       }
       .container {
@@ -228,7 +228,7 @@ export default {
           p {
             line-height: 1;
             @include font-dpr(14px);
-            color: #595959;
+            color: $second-dark;
             -webkit-line-clamp: 2;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -243,7 +243,7 @@ export default {
             line-height: 1;
             .price {
               @include px2rem(width, 160px);
-              color: #F75544;
+              color: $red;
               line-height: 1;
               @include font-dpr(15px);
             }
@@ -254,7 +254,7 @@ export default {
                 display: block;
                 @include px2rem(width, 64px);
                 @include font-dpr(14px);
-                color: #595959;
+                color: $second-dark;
                 line-height: 1;
                 text-align: center;
                 input {
@@ -264,7 +264,7 @@ export default {
                 }
               }
               i {
-                color: #595959;
+                color: $second-dark;
                 @include font-dpr(21px);
                 line-height: 1;
               }

@@ -30,8 +30,8 @@
     </div>
     <div
       v-show="showDialog"
-      class="popup-dialog">
-      <div class="dialog">
+      class="popup-dialog full-width">
+      <div class="dialog absolute-horizontal">
         <header>
           {{title}}
         </header>
@@ -222,16 +222,16 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: #595959;
+        color: $second-dark;
         @include font-dpr(14px);
         line-height: normal;
         border: none;
-        background-color: #EFEFEF;
+        background-color: $primary-grey;
         flex: 1;
       }
     }
     ::-webkit-input-placeholder{
-      color: #A6A6A6;
+      color: $third-dark;
     }
     .login-btn {
       a {
@@ -241,7 +241,7 @@
         @include px2rem(height, 80px);
         @include px2rem(margin-top, 28px);
         @include px2rem(margin-bottom, 46px);
-        background-color: #52CAA7;
+        background-color: $green;
         color: $white;
         @include font-dpr(16px);
         @include px2rem(line-height, 80px);
@@ -252,7 +252,7 @@
       }
     }
     .text-btn {
-      color: #A6A6A6;
+      color: $third-dark;
       @include font-dpr(14px);
       @include pm2rem(margin, 0px, 54px, 0px, 54px);
       display: flex;
@@ -264,19 +264,14 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     background-color: rgba(0, 0, 0, .45);
     z-index: 1004 !important;
     .dialog {
       @include px2rem(width, 500px);
-      position: absolute;
       @include px2rem(top, 300px);
-      left: 50%;
-      transform: translateX(-50%);
       background-color: $white;
       header {
-        background-color: #52CAA7;
+        background-color: $green;
         color: $white;
         @include px2rem(height, 80px);
         text-align: center;
@@ -287,13 +282,13 @@
         background-color: $white;
         p {
           @include font-dpr(13px);
-          color: #262626;
+          color: $primary-dark;
           text-align: center;
           @include pm2rem(padding, 40px, 0px, 30px, 0px);
         }
         div {
           text-align: center;
-          color: #52CAA7;
+          color: $green;
           @include pm2rem(padding, 0px, 0px, 30px, 0px);
           i {
             @include font-dpr(14px);
@@ -306,10 +301,10 @@
       footer {
         text-align: center;
         line-height: 1;
-        border-top: 1px solid #E0E0E0;
+        border-top: 1px solid $second-grey;
         @include pm2rem(padding, 20px, 0px, 20px, 0px);
         @include font-dpr(15px);
-        color: #262626;
+        color: $primary-dark;
       }
     }
   }

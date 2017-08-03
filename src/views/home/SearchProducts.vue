@@ -41,13 +41,10 @@
             @click="goProductDetail">
           </product-list-mode>
         </mt-loadmore>
-        <div
+        <back-to-top
           v-if="showGoTopBtn"
-          class="cirlce-btn"
           @click="goTop()">
-          <i class="iconfont icon-dingzhi"></i>
-          <p>置顶</p>
-        </div>
+        </back-to-top>
       </template>
       <template v-if="hasSearch && products && products.length === 0">
         <search-products-order
@@ -70,6 +67,7 @@
   import ProductSearchBar from '../../components/product/Search'
   import HotTags from '../../components/product/HotTags'
   import ProductListMode from '../../components/product/List'
+  import BackToTop from '../../components/common/BackToTop'
   import SearchProductsOrder from '../../components/product/Order'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
@@ -117,6 +115,7 @@
       ProductSearchBar,
       HotTags,
       ProductListMode,
+      BackToTop,
       SearchProductsOrder
     },
     methods: {
@@ -284,9 +283,9 @@
     flex: 1;
     border: none;
     @include px2rem(height, 68px);
-    background-color: #EDEDED;
+    background-color: $ninth-grey;
     @include px2rem(border-radius, 14px);
-    color: #595959;
+    color: $second-dark;
     @include font-dpr(14px);
     @include pm2rem(padding, 0px, 80px, 0px, 30px);
     display: flex;
@@ -297,7 +296,7 @@
     align-items: center;
   }
   ::-webkit-input-placeholder{
-    color: #C2C2C2;
+    color: $eighth-grey;
     @include px2rem(height, 70px);
     vertical-align: middle;
     text-align: left;
@@ -320,7 +319,7 @@
       z-index: 2;
     }
     .empty-products {
-      color: #A6A6A6;
+      color: $third-dark;
       .img-container {
         text-align: center;
         @include pm2rem(padding, 30px, 0px, 40px, 0px);
@@ -331,28 +330,6 @@
       p {
         @include font-dpr(16px);
         text-align: center;
-      }
-    }
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
       }
     }
   }

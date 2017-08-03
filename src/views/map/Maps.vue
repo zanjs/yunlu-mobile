@@ -4,7 +4,7 @@
       :title="headerName"
       @back="goBack()">
     </common-header>
-    <div class="i-frame-container">
+    <div class="i-frame-container full-width">
       <iframe
         v-if="url"
         :src="url"></iframe>
@@ -81,8 +81,6 @@
     position: fixed;
     @include px2rem(top, 88px);
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     iframe {
       width: 100%;
       height: 100%;

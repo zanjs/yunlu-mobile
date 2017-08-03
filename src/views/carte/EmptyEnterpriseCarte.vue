@@ -1,37 +1,34 @@
 <template>
   <section>
-    <mt-header
-      title="名片"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="card-container">
       <enterprise-card
         :store="teams"
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
-    <div class="tips-container">
-      <p>{{tips}}</p>
+    <div class="tips-container white-bg">
+      <p class="font-15">{{tips}}</p>
       <div class="btn">
-        <a @click="claim()">确认主权</a>
+        <a
+          @click="claim()"
+          class="flex white primary-bg font-14">确认主权</a>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import EnterpriseCard from '../../components/common/EnterpriseCard'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
+        header: '名片',
         teams: {
           id: null,
           company: this.$route.query.name
@@ -40,6 +37,7 @@
       }
     },
     components: {
+      CommonHeader,
       EnterpriseCard
     },
     methods: {
@@ -64,48 +62,20 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
   .tips-container {
-    background-color: $white;
     @include pm2rem(margin, 20px, 22px, 0px, 22px);
     @include pm2rem(padding, 80px, 30px, 200px, 30px);
     p {
       color: #E87171;
-      @include font-dpr(15px);
     }
     .btn {
       text-align: center;
       margin: 0 auto;
       @include px2rem(margin-top, 200px);
       a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         margin: 0 auto;
         @include px2rem(width, 400px);
         @include px2rem(height, 70px);
-        @include font-dpr(14px);
-        color: $white;
-        background-color: #52CAA7;
         @include px2rem(border-radius, 10px);
         line-height: 1;
       }

@@ -109,7 +109,7 @@
     opacity: 0;
 	}
   #app {
-    background-color: $main-background;
+    background-color: $sixth-grey;
     width: 100%;
     max-width: 540px;
     min-height: 100%;

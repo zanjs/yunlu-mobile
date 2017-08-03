@@ -31,7 +31,7 @@
 
   .container {
     @include pm2rem(padding, 26px, 0px, 0px, 26px);
-    border: 1px solid #D1D1D1;
+    border: 1px solid $fifth-grey;
     display: flex;
     flex-wrap: wrap;
     .album {
