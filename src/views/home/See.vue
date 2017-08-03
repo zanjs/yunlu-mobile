@@ -12,11 +12,11 @@
       </div>
       <i
         v-if="hasLogin"
-        class="iconfont icon-geren icon-btn font-26 white"
+        class="iconfont icon-geren icon-btn white"
         @click="goRoute('Mine', true)"></i>
       <p v-else
          @click="goRoute('Login', false)"
-         class="icon-btn font-14 white">登录|注册</p>
+         class="icon-btn login-btn white">登录|注册</p>
     </div>
     <div class="option-bars">
       <img src="../../assets/seeBg.png">
@@ -271,8 +271,12 @@
       }
     }
     .icon-btn {
+      @include font-dpr(26px);
       z-index: 1000;
       @include pm2rem(margin, 0px, 30px, 0px, 0px);
+    }
+    .login-btn {
+      @include font-dpr(14px);
     }
   }
   .option-bars {
