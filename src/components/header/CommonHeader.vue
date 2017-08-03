@@ -1,12 +1,12 @@
 <template>
   <mt-header
     :title="title"
-    class="header full-width font-17">
+    class="header full-width">
     <mt-button
       slot="left"
       @click="handleClick()"
       class="font-15">
-      <i class="iconfont icon-fanhui font-20"></i>
+      <i class="iconfont icon-fanhui"></i>
     </mt-button>
     <mt-button
       v-if="iconClass"
@@ -14,7 +14,7 @@
       @click="handleRightClick()"
       class="font-15 button-text">
       <i
-        class="iconfont font-20"
+        class="iconfont"
         v-bind:class="iconClass"></i>
       {{rightText | textFilter}}
     </mt-button>
@@ -55,11 +55,15 @@
     position: fixed;
     top: 0;
     z-index: 1002 !important;
+    @include font-dpr(17px);
     h1 {
       @include font-dpr(17px);
     }
     .button-text {
       @include font-dpr(15px);
+    }
+    i {
+      @include font-dpr(20px);
     }
   }
 </style>

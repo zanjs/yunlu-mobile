@@ -8,7 +8,7 @@
       <input
         slot="input"
         type="search"
-        class="search-input"
+        class="search-input full-width"
         v-model="searchParams"
         @input="handleInput"
         @keyup.enter.prevent="handleSearchBtn"
@@ -71,6 +71,7 @@
   import SearchProductsOrder from '../../components/product/Order'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -148,25 +149,21 @@
           this.getProducts(sort, params)
         }
       },
-      getProducts (sort = this.sort, q = this.searchParams) {
+      async getProducts (sort = this.sort, q = this.searchParams) {
         this.sort = sort
-        this.$store.dispatch('commonAction', {
+        let {res} = await requestFn({
           url: '/products',
-          method: 'get',
           params: {
             page: this.pageIndex,
             per_page: this.pageSize,
             sort: sort,
             q: q
-          },
-          target: this,
-          resolve: (state, res) => {
-            let tmpArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmpArr, res.data.products)
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          let tmpArr = this.handleProductThumbnails(res.data.products)
+          this.getFilesPublisheds(tmpArr, res.data.products)
+        }
       },
       handleProductThumbnails (arr) {
         let tmpArr = []
@@ -175,43 +172,38 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr) {
-        this.$store.dispatch('commonAction', {
+      async getFilesPublisheds (ids, arr) {
+        let {res} = await requestFn({
           url: '/links/files/publisheds',
-          method: 'get',
           params: {
             type: 'product',
             thumbs: ['general'],
             ids: ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = true
-            if (this.pageIndex === 1) {
-              this.products = this.handleProducts(arr, res.data.files)
-              this.productsThumbnails = res.data.files
-              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-                this.$refs.loadMoreProducts.onTopLoaded()
-              }
-            } else {
-              if (res.data.files.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
-              this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-                this.$refs.loadMoreProducts.onBottomLoaded()
-              }
-            }
-            this.getEnterpriseDocument()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = true
+          if (this.pageIndex === 1) {
+            this.products = this.handleProducts(arr, res.data.files)
+            this.productsThumbnails = res.data.files
+            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
+              this.$refs.loadMoreProducts.onTopLoaded()
+            }
+          } else {
+            if (res.data.files.length === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
+            this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
+              this.$refs.loadMoreProducts.onBottomLoaded()
+            }
+          }
+        }
       },
        // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
@@ -289,8 +281,6 @@
     @include font-dpr(14px);
     @include pm2rem(padding, 0px, 80px, 0px, 30px);
     display: flex;
-    width: 100%;
-    max-width: 540px;
     line-height: normal;
     justify-content: flex-start;
     align-items: center;
@@ -303,9 +293,6 @@
     border: none;
     @include font-dpr(14px);
     line-height: normal;
-  }
-  input[type=search]::-webkit-search-cancel-button {
-    -webkit-appearance: none; // 此处只是去掉默认的小×
   }
   .tags-area {
     @include px2rem(padding-top, 98px);

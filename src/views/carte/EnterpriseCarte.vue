@@ -120,6 +120,7 @@
   import Order from '../../components/common/Order'
   import BackToTop from '../../components/common/BackToTop'
   import { Toast, MessageBox } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -164,21 +165,17 @@
       BackToTop
     },
     methods: {
-      getEnterpriseDetail (teamId = this.teamId) {
-        this.$store.dispatch('commonAction', {
+      async getEnterpriseDetail (teamId = this.teamId) {
+        let {state, res} = await requestFn({
           url: '/links/teams',
-          method: 'get',
           params: {
             ids: teamId
-          },
-          target: this,
-          resolve: (state, res) => {
-            state.teams = res.data.teams[0]
-            this.getProducts()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          state.teams = res.data.teams[0]
+          this.getProducts()
+        }
       },
       getProducts (q = this.queryParams, order = this.productOrder) {
         this.queryParams = q
