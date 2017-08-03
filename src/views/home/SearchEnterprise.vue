@@ -53,6 +53,7 @@
   import { mapGetters } from 'vuex'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -76,20 +77,12 @@
       BackToTop
     },
     methods: {
-      getServices () {
-        this.$store.dispatch('commonAction', {
-          url: '/services',
-          method: 'get',
-          params: {
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.exclude_service_ids = this.handleExcludeServiceIds(res.data.services)
-            this.getEnterprises(this.searchParams)
-          },
-          reject: () => {
-          }
-        })
+      async getServices () {
+        let {res} = await requestFn({url: '/services'})
+        if (res.data) {
+          this.exclude_service_ids = this.handleExcludeServiceIds(res.data.services)
+          this.getEnterprises(this.searchParams)
+        }
       },
       handleExcludeServiceIds (arr) {
         let tmpArr = []
@@ -101,41 +94,37 @@
         }
         return tmpArr
       },
-      getEnterprises (q = '') {
-        this.$store.dispatch('commonAction', {
+      async getEnterprises (q = '') {
+        let {state, res} = await requestFn({
           url: '/enterprises',
-          method: 'get',
           params: {
             page: this.enterprisePageIndex,
             per_page: this.enterprisePageSize,
             keyword: q,
             exclude_service_ids: this.exclude_service_ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = q !== ''
-            if (this.enterprisePageIndex === 1) {
-              document.body.scrollTop = 0
-              state.allEnterprises = res.data.enterprises
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
-                this.$refs.loadMoreEnterprises.onTopLoaded()
-              }
-            } else {
-              if (res.data.enterprises === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
-                this.$refs.loadMoreEnterprises.onBottomLoaded()
-              }
-            }
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = q !== ''
+          if (this.enterprisePageIndex === 1) {
+            document.body.scrollTop = 0
+            state.allEnterprises = res.data.enterprises
+            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
+              this.$refs.loadMoreEnterprises.onTopLoaded()
+            }
+          } else {
+            if (res.data.enterprises === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
+            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
+              this.$refs.loadMoreEnterprises.onBottomLoaded()
+            }
+          }
+        }
       },
       resetSearchBar () {
         this.searchParams = ''

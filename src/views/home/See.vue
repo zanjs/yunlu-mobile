@@ -8,7 +8,7 @@
         class="search-input"
         @click="goRoute('SearchProducts', true)">
         <a class="text font-14 white-bg">任你搜 任意搜</a>
-        <i class="iconfont icon-sousuo absolute-vertical font-21"></i>
+        <i class="iconfont icon-sousuo absolute-vertical"></i>
       </div>
       <i
         v-if="hasLogin"
@@ -24,14 +24,14 @@
         <div class="flex-between row-item"
              @click="goRoute('Download', true)">
           <div class="icon-box box-1 flex">
-            <i class="iconfont icon-liucheng font-27 white"></i>
+            <i class="iconfont icon-liucheng"></i>
           </div>
           <span class="font-14">流程</span>
         </div>
         <div class="flex-between row-item"
              @click="goRoute('Conversation', hasLogin)">
           <div class="icon-box box-2 flex">
-            <i class="iconfont icon-huihua font-27 white"></i>
+            <i class="iconfont icon-huihua"></i>
             <div
               v-if="unReadeMsgs.length > 0"
               class="dot second-bg"></div>
@@ -41,14 +41,14 @@
         <div class="flex-between row-item"
              @click="goRoute('ShoppingCart', hasLogin)">
           <div class="icon-box box-3 flex">
-            <i class="iconfont icon-gouwuche1 font-27 white"></i>
+            <i class="iconfont icon-gouwuche1"></i>
           </div>
           <span class="font-14">购物车</span>
         </div>
         <div class="flex-between row-item"
              @click="goRoute('Favorites', hasLogin)">
           <div class="icon-box box-4 flex">
-            <i class="iconfont icon-shoucang1 font-27 white"></i>
+            <i class="iconfont icon-shoucang1"></i>
           </div>
           <span class="font-14">收藏</span>
         </div>
@@ -266,6 +266,7 @@
       }
       i {
         color: $eleventh-grey;
+        @include font-dpr(21px);
         @include px2rem(left, 40px);
       }
     }
@@ -305,6 +306,10 @@
             position: absolute;
             @include px2rem(top, 0px);
             @include px2rem(right, -10px);
+          }
+          i {
+            @include font-dpr(27px);
+            color: $white;
           }
         }
         span {
