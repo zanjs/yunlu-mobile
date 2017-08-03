@@ -60,7 +60,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      border: 1px solid #E0E0E0;
+      border: 1px solid $second-grey;
       box-sizing: border-box;
       img[lazy=loading] {
         @include px2rem(height, 346px);
@@ -93,7 +93,7 @@
       .cover {
         @include px2rem(height, 110px);
         display: block;
-        color: #262626;
+        color: $primary-dark;
         @include font-dpr(14px);
         width: inherit;
         .wraper {

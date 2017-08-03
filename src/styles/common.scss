@@ -315,6 +315,10 @@ body {
   @include font-dpr(21px);
 }
 
+.font-25 {
+  @include font-dpr(25px);
+}
+
 .font-26 {
   @include font-dpr(26px);
 }

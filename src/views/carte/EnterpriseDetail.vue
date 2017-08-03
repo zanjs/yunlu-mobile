@@ -219,7 +219,7 @@
       }
     }
     .item {
-      border-top: 1px dashed #D1D1D1;
+      border-top: 1px dashed $fifth-grey;
       @include font-dpr(14px);
       @include px2rem(line-height, 78px);
       display: flex;
@@ -234,7 +234,7 @@
       }
     }
     .link-container {
-      border-top: 1px dashed #D1D1D1;
+      border-top: 1px dashed $fifth-grey;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -257,7 +257,7 @@
             text-decoration: none;
           }
           a:active {
-            background-color: #F2F2F2;
+            background-color: $tenth-grey;
           }
         }
       }

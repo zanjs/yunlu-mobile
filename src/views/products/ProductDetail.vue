@@ -964,7 +964,7 @@
         color: #343434;
       }
       .more {
-        color: #000;
+        color: $dark;
       }
       .icon-box {
         display: inline-block;
@@ -997,7 +997,7 @@
     @include px2rem(height, 100px);
     .mint-tab-item {
       @include font-dpr-important(17px);
-      border-bottom: 1px solid #D1D1D1 !important;
+      border-bottom: 1px solid $fifth-grey !important;
       display: block;
       padding: 0 !important;
       @include px2remimportant(line-height, 100px);
@@ -1146,7 +1146,7 @@
     left: 0;
     right: 0;
     z-index: 1002;
-    background-color: #000;
+    background-color: $dark;
     img[lazy=loading] {
       max-width: 100%;
       max-height: 100%;
@@ -1175,7 +1175,7 @@
     }
   }
   .full-screen-bg {
-    background-color: #000;
+    background-color: $dark;
   }
   .product-popup-dialog {
     position: fixed;

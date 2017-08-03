@@ -256,7 +256,7 @@
       @include pm2rem(padding, 22px, 0px, 22px, 0px);
       @include pm2rem(margin, 0px, 44px, 0px, 55px);
       .text {
-        color: #C2C2C2;
+        color: $eighth-grey;
         border: none;
         @include px2rem(line-height, 70px);
         display: block;
@@ -265,7 +265,7 @@
         @include pm2rem(padding, 0px, 20px, 0px, 102px);
       }
       i {
-        color: #B4B4B4;
+        color: $eleventh-grey;
         @include px2rem(left, 40px);
       }
     }

@@ -66,7 +66,7 @@
                 @click="closePreview()">
                 <i class="iconfont icon-fanhui font-20"></i>
               </div>
-              <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
+              <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
             </div>
             <div
               class="report flex white"
@@ -430,7 +430,7 @@
       }
     }
     a:active {
-      background-color: #F2F2F2;
+      background-color: $tenth-grey;
     }
   }
   .option-bar {
@@ -448,9 +448,6 @@
         @include font-dpr(20px);
         @include pm2rem(padding, 4px, 10px, 4px, 10px);
         @include px2rem(border-radius, 10px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
       .close {
         @include pm2rem(padding, 4px, 10px, 4px, 10px);
@@ -475,10 +472,10 @@
     bottom: 0;
     right: 0;
     z-index: 1002;
-    background-color: #000;
+    background-color: $dark;
   }
   .full-screen-bg {
-    background-color: #000;
+    background-color: $dark;
     img[lazy=loading] {
       width: inherit;
       max-width: 100%;

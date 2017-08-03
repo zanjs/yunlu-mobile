@@ -169,7 +169,6 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
-  import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -217,7 +216,6 @@
       ProductListMode,
       InformationList,
       EnterpriseList,
-      ViewBigImg,
       PopDialog,
       Search,
       Order,

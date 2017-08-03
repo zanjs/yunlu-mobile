@@ -39,7 +39,7 @@ export default {
     .title {
       @include font-dpr(15px);
       @include px2rem(margin-bottom, 30px);
-      color: #595959;
+      color: $second-dark;
     }
     .tags {
       display: flex;

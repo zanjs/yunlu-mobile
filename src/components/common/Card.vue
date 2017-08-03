@@ -1,5 +1,5 @@
 <template>
-  <section class="card">
+  <section class="card white-bg">
     <div class="user-info">
       <img
         v-if="store && store.avatar_url"
@@ -85,7 +85,7 @@
   @import '../../styles/mixin';
 
   .card {
-    border: 1px solid #E0E0E0;
+    border: 1px solid $second-grey;
     background: $white;
     @include px2rem(padding-top, 24px);
     .user-info {
@@ -113,7 +113,7 @@
       @include px2rem(height, 100px);
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
       align-items: center;
-      border-top: 1px solid #E0E0E0;
+      border-top: 1px solid $second-grey;
       a {
         text-decoration: none;
         @include px2rem(width, 108px);
@@ -132,7 +132,7 @@
         color: #4C8DE7;
       }
       .dingwei {
-        color: #F75544;
+        color: $red;
       }
       .weixin {
         color: #2EB6FC;
@@ -152,7 +152,7 @@
         height: inherit;
         line-height: 1;
         @include font-dpr(13px);
-        color: #A6A6A6;
+        color: $third-dark;
       }
     }
   }

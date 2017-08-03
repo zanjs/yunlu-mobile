@@ -7,7 +7,7 @@
       @back="goBack()">
     </common-header>
     <div class="container">
-      <div class="tip-icon-container">
+      <div class="tip-icon-container flex">
         <i class="iconfont icon-jinggao"></i>
       </div>
       <div class="tips-content">
@@ -69,9 +69,6 @@
     @include px2rem(padding-top, 88px);
     .tip-icon-container {
       @include pm2rem(margin, 132px, 268px, 118px, 268px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       i {
         color: #FF8D7F;
         @include font-dpr(107px);
@@ -82,7 +79,7 @@
       @include pm2rem(padding, 0px, 30px, 0px, 30px);
       p {
         @include font-dpr(16px);
-        color: #A6A6A6;
+        color: $third-dark;
       }
     }
   }

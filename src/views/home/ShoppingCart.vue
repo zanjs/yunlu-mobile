@@ -22,7 +22,7 @@
           @click="handleAllCheck">
           <i
             v-if="checkAll"
-            class="iconfont icon-xuanzhong font-21 third-text primary"></i>
+            class="iconfont icon-xuanzhong font-21 primary"></i>
           <i
             v-if="!checkAll"
             class="iconfont icon-weixuanzhong font-21 third-text"></i>

@@ -78,12 +78,12 @@
       justify-content: center;
       align-items: center;
       @include px2rem(height, 62px);
-      color: #595959;
+      color: $second-dark;
       @include font-dpr(15px);
       hr {
         @include px2rem(width, 60px);
-        background-color: #E0E0E0;
-        border-top: 1px solid #E0E0E0;
+        background-color: $second-grey;
+        border-top: 1px solid $second-grey;
         border-bottom: none;
       }
       span {
@@ -96,7 +96,7 @@
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
-      border: 1px solid #E7E7E7;
+      border: 1px solid $third-grey;
       box-sizing: border-box;
       .item {
         @include px2rem(width, 220px);
@@ -155,8 +155,8 @@
       justify-content: center;
       align-items: center;
       @include font-dpr(15px);
-      color: #D1D1D1;
-      border: 1px solid #E7E7E7;
+      color: $fifth-grey;
+      border: 1px solid $third-grey;
       img {
         @include px2rem(width, 263px);
         @include px2rem(height, 159px);

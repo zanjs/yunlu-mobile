@@ -49,7 +49,7 @@
   .gallery-list {
     background-color: $white;
     .item {
-      border-bottom: 1px solid #E7E7E7;
+      border-bottom: 1px solid $third-grey;
       @include pm2rem(padding, 10px, 10px, 10px, 10px);
       display: flex;
       align-items: center;
@@ -90,7 +90,7 @@
         flex: 1;
         .name {
           @include font-dpr(15px);
-          color: #262626;
+          color: $primary-dark;
           @include px2rem(margin-bottom, 22px);
           line-height: 1;
           -webkit-line-clamp: 2;
@@ -103,7 +103,7 @@
         .money {
           font-weight: bold;
           line-height: 1;
-          color: #F75544;
+          color: $red;
           @include font-dpr(13px);
         }
       }

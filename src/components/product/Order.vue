@@ -56,15 +56,15 @@ export default {
     display: flex;
     align-items: center;
     @include px2rem(height, 74px);
-    border-top: 1px solid #E7E7E7;
-    border-bottom: 1px solid #E7E7E7;
+    border-top: 1px solid $third-grey;
+    border-bottom: 1px solid $third-grey;
     background-color: $white;
     .item {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #595959;
+      color: $second-dark;
       @include font-dpr(14px);
       a:active {
         color: rgba(0, 0, 0, .5);
@@ -78,14 +78,14 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        color: #A6A6A6;
+        color: $third-dark;
         i {
           @include font-dpr(12px);
           line-height: 1;
         }
       }
       .active {
-        color: #52CAA7;
+        color: $green;
       }
     }
   }
