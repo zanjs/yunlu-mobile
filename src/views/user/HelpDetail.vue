@@ -25,7 +25,7 @@
   export default {
     data () {
       return {
-        html: `https://www.360stones.com/docs/topic-${this.$route.params.id}.html`
+        html: `http://www.360stones.com/docs/topic-${this.$route.params.id}.html`
       }
     },
     methods: {
