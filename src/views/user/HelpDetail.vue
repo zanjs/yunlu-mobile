@@ -1,16 +1,9 @@
 <template>
   <section>
-    <mt-header
-      title="帮助手册"
-      fixed
-      class="header">
-      <mt-button
-        slot="left"
-        @click="goBack()"
-        class="button-text">
-        <i class="iconfont icon-fanhui"></i>
-      </mt-button>
-    </mt-header>
+    <common-header
+      :title="header"
+      @back="goBack()">
+    </common-header>
     <div class="content">
       <iframe
         class="iframe"
@@ -21,12 +14,17 @@
 </template>
 
 <script>
+  import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
-        html: `http://www.360stones.com/docs/topic-${this.$route.params.id}.html`
+        header: '帮助手册',
+        html: `https://api.360stones.com/docs/topic-${this.$route.params.id}.html`
       }
+    },
+    components: {
+      CommonHeader
     },
     methods: {
       goBack () {
@@ -44,22 +42,6 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .content {
     position: fixed;
     @include px2rem(top, 88px);
