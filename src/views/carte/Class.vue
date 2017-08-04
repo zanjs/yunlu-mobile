@@ -10,6 +10,7 @@
     <div class="card-container">
       <enterprise-card
         :store="teams"
+        :products="products"
         @icon-click="iconClick"
         @click="goEnterpriseDetail">
       </enterprise-card>
@@ -599,6 +600,14 @@
       },
       iconClick (item) {
         switch (item.type) {
+          case 'chat':
+            if (!this.hasLogin) {
+              setStore('beforeLogin', 'true')
+              this.$router.push({name: 'Login'})
+            } else {
+              this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.value}})
+            }
+            break
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break

@@ -62,6 +62,12 @@
     </div>
     <div class="icons">
       <a
+        v-if="products && products.length > 0"
+        @click="handleIconClick({type: 'chat', value: products[0].id})"
+        class="icon-box">
+        <i class="iconfont icon-huihua1 huihua"></i>
+      </a>
+      <a
         v-if="store && store.mobile"
         :href="'tel:' + store.mobile"
         class="icon-box">
@@ -98,7 +104,7 @@
         <i class="iconfont icon-qq qq"></i>
       </a>
       <div
-        v-if="!store || !(store.mobile || store.email || store.address || store.longitude || store.latitude || store.wechat || store.website || store.qq)"
+        v-if="!hasLink"
         class="tips">暂无联系方式</div>
     </div>
   </section>
@@ -109,7 +115,7 @@
     data () {
       return {}
     },
-    props: ['store'],
+    props: ['store', 'products'],
     methods: {
       handleClick (item) {
         this.$emit('click', item.enterprise_id)
@@ -118,8 +124,10 @@
         this.$emit('icon-click', obj)
       }
     },
-    mountd: {
-
+    computed: {
+      hasLink () {
+        return (this.products && this.products.length > 0) || (this.store && (this.store.mobile || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+      }
     }
   }
 </script>
@@ -189,6 +197,9 @@
       }
       i {
         @include font-dpr(24px);
+      }
+      .huihua {
+        color: #d52eff;
       }
       .dianhua {
         color: #31C27C;
