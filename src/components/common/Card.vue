@@ -27,6 +27,11 @@
       </div>
     </div>
     <div class="icons">
+      <a v-if="store && store.id"
+         @click="handleClick({'type': 'chat', 'value': store.id, 'inContact': typeof store.id === 'number'})"
+         class="icon-box">
+        <i class="iconfont icon-huihua1 huihua"></i>
+      </a>
       <a v-if="store && store.mobiles && store.mobiles.length > 0"
          :href="'tel:' + store.mobiles[0]"
          class="icon-box">
@@ -124,6 +129,9 @@
       }
       i {
         @include font-dpr(24px);
+      }
+      .huihua {
+        color: #d52eff;
       }
       .dianhua {
         color: #31C27C;
