@@ -68,10 +68,16 @@
         <i class="iconfont icon-huihua1 huihua"></i>
       </a>
       <a
-        v-if="store && store.mobile"
+        v-if="isOnPc(store && store.mobile)"
         :href="'tel:' + store.mobile"
         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
+      </a>
+      <a
+        v-if="store && store.qq"
+        @click="handleIconClick({type: 'qq', value: store.qq})"
+        class="icon-box">
+        <i class="iconfont icon-qq qq"></i>
       </a>
       <a
         v-if="store && store.email"
@@ -85,23 +91,17 @@
         class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <a
+      <!-- <a
         v-if="store && store.wechat"
         @click="handleIconClick({type: 'wechat', value: store.wechat})"
         class="icon-box">
         <i class="iconfont icon-weixin weixin"></i>
-      </a>
+      </a> -->
       <a
         v-if="store && store.website"
         @click="handleIconClick({type: 'website', value: store.website})"
         class="icon-box">
         <i class="iconfont icon-wangluo wangluo"></i>
-      </a>
-      <a
-        v-if="store && store.qq"
-        @click="handleIconClick({type: 'qq', value: store.qq})"
-        class="icon-box">
-        <i class="iconfont icon-qq qq"></i>
       </a>
       <div
         v-if="!hasLink"
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+  import { isPc } from '../../config/mUtils'
   export default {
     data () {
       return {}
@@ -122,6 +123,9 @@
       },
       handleIconClick (obj) {
         this.$emit('icon-click', obj)
+      },
+      isOnPc (bool) {
+        return !isPc() && bool
       }
     },
     computed: {
