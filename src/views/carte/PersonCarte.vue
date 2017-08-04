@@ -286,6 +286,9 @@
       },
       cardClick (item) {
         switch (item.type) {
+          case 'chat':
+            this.$router.push({name: 'Chat', query: {type: item.inContact ? 'Stranger' : 'User', linkId: item.value}})
+            break
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
