@@ -225,6 +225,7 @@ const mutations = {
     state.productDetailTeam = []
     state.clusters = []
     state.clientKeyWrods = []
+    state.teams = null
   }
 }
 

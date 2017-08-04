@@ -5,7 +5,7 @@
       class="tab-bar full-width">
       <mt-tab-item id="home">
         <div
-          class="flex-between tab-item"
+          class="tab-item"
           @click="selectTab('See')">
           <i class="iconfont icon-yunshi"></i>
           <span>云视</span>
@@ -13,7 +13,7 @@
       </mt-tab-item>
       <mt-tab-item id="wareroom">
         <div
-          class="flex-between tab-item"
+          class="tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-yunku"></i>
           <span>云库</span>
@@ -21,7 +21,7 @@
       </mt-tab-item>
       <mt-tab-item id="people">
         <div
-          class="flex-between tab-item"
+          class="tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-renmai"></i>
           <span>人脉</span>
@@ -29,7 +29,7 @@
       </mt-tab-item>
       <mt-tab-item id="space">
         <div
-          class="flex-between tab-item"
+          class="tab-item"
           @click="selectTab('Download')">
           <i class="iconfont icon-kongjian"></i>
           <span>空间</span>
@@ -81,6 +81,8 @@
     z-index: 1004 !important;
     .tab-item {
       @include px2rem(height, 97px);
+      display: flex;
+      justify-content: space-around;
       flex-direction: column;
       align-items: center;
       i {

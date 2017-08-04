@@ -64,14 +64,14 @@
               <div
                 class="flex close white"
                 @click="closePreview()">
-                <i class="iconfont icon-fanhui font-20"></i>
+                <i class="iconfont icon-fanhui"></i>
               </div>
               <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
             </div>
             <div
               class="report flex white"
               @click="goReportPhoto">
-              <i class="iconfont icon-jubao font-20"></i>
+              <i class="iconfont icon-jubao"></i>
             </div>
           </div>
           <swiper
@@ -458,6 +458,9 @@
         @include pm2rem(margin, 0px, 30px, 0px, 30px);
         background-color: rgba(0, 0, 0, .5);
         z-index: 1003;
+        i {
+          @include font-dpr(20px);
+        }
       }
     }
     .report {
@@ -466,6 +469,9 @@
       @include pm2rem(margin, 0px, 30px, 0px, 30px);
       background-color: rgba(0, 0, 0, .5);
       z-index: 1003;
+      i {
+        @include font-dpr(20px);
+      }
     }
   }
   .full-screen-swiper {
