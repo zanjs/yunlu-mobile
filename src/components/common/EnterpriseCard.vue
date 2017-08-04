@@ -130,7 +130,7 @@
     },
     computed: {
       hasLink () {
-        return (this.products && this.products.length > 0) || (this.store && (this.store.mobile || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+        return (!isPc() && this.products && this.products.length > 0) || (this.store && (this.store.mobile || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
       }
     }
   }

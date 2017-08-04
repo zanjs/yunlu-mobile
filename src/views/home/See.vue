@@ -304,9 +304,9 @@
           box-shadow: 0px 2px 6px rgba(128, 128, 128, .5);
           position: relative;
           .dot {
-            @include px2rem(width, 20px);
-            @include px2rem(height, 20px);
-            @include px2rem(border-radius, 10px);
+            @include px2rem(width, 16px);
+            @include px2rem(height, 16px);
+            @include px2rem(border-radius, 8px);
             position: absolute;
             @include px2rem(top, 0px);
             @include px2rem(right, -10px);
