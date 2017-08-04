@@ -79,7 +79,7 @@ export default {
         justify-content: center;
         color: $white;
         @include font-dpr(13px);
-        @include line-height(26px);
+        align-items: center;
       }
     }
   }

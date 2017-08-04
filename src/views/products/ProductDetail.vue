@@ -316,7 +316,7 @@
         <div
           class="close"
           @click="closePreview()">
-          <i class="iconfont icon-fanhui font-20"></i>
+          <i class="iconfont icon-fanhui"></i>
         </div>
         <span class="preview-page-nav white flex font-20">{{currentIndex}}/{{previewImgs.length}}</span>
       </div>
@@ -1131,6 +1131,9 @@
       z-index: 1003;
       display: flex;
       align-items: center;
+      i {
+        @include font-dpr(20px);
+      }
     }
     .preview-page-nav {
       background-color: rgba(0, 0, 0, .5);
