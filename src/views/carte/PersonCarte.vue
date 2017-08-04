@@ -18,7 +18,12 @@
       <img src="../../assets/noPersonCarte.png">
     </div>
     <template v-else>
-      <div class="carte-container white-bg">
+      <div
+        class="carte-container white-bg"
+        ref="dragTarget">
+        <div class="btn move-left">
+          <i class="iconfont icon-zuo"></i>
+        </div>
         <a
           v-for="(item, index) in clusters"
           :key="index"
@@ -41,6 +46,9 @@
             src="../../assets/alumniLogo.png">
           <span class="ellipsis second-text font-13">{{item.name}}</span>
         </a>
+        <div class="btn move-right">
+          <i class="iconfont icon-you"></i>
+        </div>
       </div>
       <template v-if="folders && folders.length > 0">
         <div class="space-container">
@@ -415,6 +423,30 @@
     overflow-x: scroll;
     @include px2rem(margin-top, 15px);
     box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
+    -webkit-user-select: none;
+    position: relative;
+    cursor: grab;
+    .btn {
+      position: absolute;
+      @include px2rem(width, 66px);
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, .3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      display: none; // TODO: 未完成暂时隐藏
+      i {
+        @include font-dpr(20px);
+        color: $white;
+      }
+    }
+    .move-left {
+      left: 0;
+    }
+    .move-right {
+      right: 0;
+    }
     .item {
       flex-direction: column;
       @include px2rem(width, 250px);

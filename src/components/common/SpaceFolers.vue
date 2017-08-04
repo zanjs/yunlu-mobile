@@ -1,45 +1,48 @@
 <template>
   <section class="load-more-container">
-    <div
-      v-for="(item, index) in store"
-      :key="index"
-      class="container">
-      <div class="title">
-        <hr>
-        <span>{{item.name}}</span>
-        <hr>
-      </div>
+    <template
+      v-for="(item, index) in store">
       <div
-       v-if="item.photos && item.photos.length > 0"
-       class="gallery-container">
-        <div
-          v-for="(i, indexI) in item.photos"
-          :key="indexI"
-          class="item"
-          @click="viewFullScreen(item.count, item.photos, i.id, indexI)">
-          <img v-lazy="{
-                src: i.thumb_url,
-                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-              }">
+        :key="index"
+        v-if="item.photos.length > 0"
+        class="container">
+        <div class="title">
+          <hr>
+          <span>{{item.name}}</span>
+          <hr>
         </div>
         <div
-          v-if="item.count > 5"
-          class="item"
-          @click="handleClick(item.id, item.name)">
-          <div class="btn">
-            <i class="iconfont icon-tubiaolunkuohua34"></i>
-            <span>查看更多</span>
+          v-if="item.photos && item.photos.length > 0"
+          class="gallery-container">
+          <div
+            v-for="(i, indexI) in item.photos"
+            :key="indexI"
+            class="item"
+            @click="viewFullScreen(item.count, item.photos, i.id, indexI)">
+            <img v-lazy="{
+                  src: i.thumb_url,
+                  error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                  loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+                }">
+          </div>
+          <div
+            v-if="item.count > 5"
+            class="item"
+            @click="handleClick(item.id, item.name)">
+            <div class="btn">
+              <i class="iconfont icon-tubiaolunkuohua34"></i>
+              <span>查看更多</span>
+            </div>
           </div>
         </div>
+        <div
+          v-else
+          class="empty-folder">
+          <img src="../../assets/noFolderImages.png">
+          <p>该文件夹暂无图片</p>
+        </div>
       </div>
-      <div
-        v-else
-        class="empty-folder">
-        <img src="../../assets/noFolderImages.png">
-        <p>该文件夹暂无图片</p>
-      </div>
-    </div>
+    </template>
   </section>
 </template>
 
