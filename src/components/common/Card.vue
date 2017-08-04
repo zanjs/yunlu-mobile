@@ -64,7 +64,7 @@
         <i class="iconfont icon-weibo weibo"></i>
       </a> -->
       <div
-        v-if="!store || (!store.mobiles || store.mobiles.length === 0) && !store.email && !store.address && !store.wechat && !store.weibo && !store.qq"
+        v-if="!hasLink"
         class="tips">暂无联系方式</div>
     </div>
   </section>
@@ -86,6 +86,11 @@
       }
     },
     mountd: {
+    },
+    computed: {
+      hasLink () {
+        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.email || this.store.address || this.store.qq)
+      }
     }
   }
 </script>
