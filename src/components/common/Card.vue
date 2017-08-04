@@ -32,10 +32,16 @@
          class="icon-box">
         <i class="iconfont icon-huihua1 huihua"></i>
       </a>
-      <a v-if="store && store.mobiles && store.mobiles.length > 0"
-         :href="'tel:' + store.mobiles[0]"
-         class="icon-box">
+      <a
+        v-if="isOnPc(store && store.mobiles && store.mobiles.length > 0)"
+        :href="'tel:' + store.mobiles[0]"
+        class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
+      </a>
+      <a v-if="store && store.qq"
+         class="icon-box"
+         @click="handleClick({'type': 'qq', 'value': store.qq})">
+        <i class="iconfont icon-qq qq"></i>
       </a>
       <a v-if="store && store.email"
          class="icon-box"
@@ -47,7 +53,7 @@
          @click="handleClick({'type': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <a v-if="store && store.wechat"
+      <!-- <a v-if="store && store.wechat"
          class="icon-box"
          @click="handleClick({'type': 'wechat', 'value': store.wechat})">
         <i class="iconfont icon-weixin weixin"></i>
@@ -56,12 +62,7 @@
          class="icon-box"
          @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
-      </a>
-      <a v-if="store && store.qq"
-         class="icon-box"
-         @click="handleClick({'type': 'qq', 'value': store.qq})">
-        <i class="iconfont icon-qq qq"></i>
-      </a>
+      </a> -->
       <div
         v-if="!store || (!store.mobiles || store.mobiles.length === 0) && !store.email && !store.address && !store.wechat && !store.weibo && !store.qq"
         class="tips">暂无联系方式</div>
@@ -70,6 +71,7 @@
 </template>
 
 <script>
+  import { isPc } from '../../config/mUtils'
   export default {
     data () {
       return {}
@@ -78,10 +80,12 @@
     methods: {
       handleClick (obj) {
         this.$emit('click', obj)
+      },
+      isOnPc (bool) {
+        return !isPc() && bool
       }
     },
     mountd: {
-
     }
   }
 </script>
