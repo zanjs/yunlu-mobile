@@ -432,6 +432,9 @@
         text-align: center;
       }
     }
+    a:hover {
+      cursor: pointer;
+    }
     a:active {
       background-color: $tenth-grey;
     }
