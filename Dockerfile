@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:6-alpine
 MAINTAINER Lyndon <snakeliwei@gmail.com>
 
 RUN apk --update --no-cache add make git \
