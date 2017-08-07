@@ -18,36 +18,52 @@
       <img src="../../assets/noPersonCarte.png">
     </div>
     <template v-else>
-      <div
-        class="carte-container white-bg"
-        ref="dragTarget">
-        <div class="btn move-left">
-          <i class="iconfont icon-zuo"></i>
+      <div class="scroll-container">
+        <div
+          class="hover move-left"
+          ref="hoverLeft">
+          <div
+            v-show="showScrollBtn"
+            class="btn move-left"
+            @click="scrollHorizontal(false)">
+            <i class="iconfont icon-zuo"></i>
+          </div>
         </div>
-        <a
-          v-for="(item, index) in clusters"
-          :key="index"
-          @click="goCarte(item)"
-          class="flex item">
-          <img
-            v-if="item.type === 'personal'"
-            src="../../assets/spaceLogo.png">
-          <img
-            v-if="item.type === 'company'"
-            src="../../assets/enterpriseLogo.png">
-          <img
-            v-if="item.type === 'association'"
-            src="../../assets/associationLogo.png">
-          <img
-            v-if="item.type === 'class'"
-            src="../../assets/classLogo.png">
-          <img
-            v-if="item.type === 'school'"
-            src="../../assets/alumniLogo.png">
-          <span class="ellipsis second-text font-13">{{item.name}}</span>
-        </a>
-        <div class="btn move-right">
-          <i class="iconfont icon-you"></i>
+        <div
+          class="carte-container white-bg"
+          ref="scrollTarget">
+          <a
+            v-for="(item, index) in clusters"
+            :key="index"
+            @click="goCarte(item)"
+            class="flex item">
+            <img
+              v-if="item.type === 'personal'"
+              src="../../assets/spaceLogo.png">
+            <img
+              v-if="item.type === 'company'"
+              src="../../assets/enterpriseLogo.png">
+            <img
+              v-if="item.type === 'association'"
+              src="../../assets/associationLogo.png">
+            <img
+              v-if="item.type === 'class'"
+              src="../../assets/classLogo.png">
+            <img
+              v-if="item.type === 'school'"
+              src="../../assets/alumniLogo.png">
+            <span class="ellipsis second-text font-13">{{item.name}}</span>
+          </a>
+        </div>
+        <div
+          class="hover move-right"
+          ref="hoverRight">
+          <div
+            v-show="showScrollBtn"
+            class="btn move-right"
+            @click="scrollHorizontal(true)">
+            <i class="iconfont icon-you"></i>
+          </div>
         </div>
       </div>
       <template v-if="folders && folders.length > 0">
@@ -170,7 +186,10 @@
           onSlideChangeEnd: (swiper) => {
             this.currentIndex = swiper.activeIndex + 1
           }
-        }
+        },
+        showScrollBtn: false,
+        scrollLeftListener: false,
+        scrollRightListener: false
       }
     },
     components: {
@@ -231,6 +250,10 @@
           resolve: (state, res) => {
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
+            this.$nextTick(() => {
+              this.showScrollBtnFn('hoverLeft')
+              this.showScrollBtnFn('hoverRight')
+            })
             let firstSpace = this.handleFirstSpace(res.data.clusters)
             if (firstSpace && firstSpace.id) {
               this.header = firstSpace.name
@@ -401,6 +424,24 @@
       loadFolderBottom () {
         this.pageIndex += 1
         this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
+      },
+      scrollHorizontal (bool) {
+        this.$refs.scrollTarget.scrollLeft += bool ? -250 : 250
+      },
+      showScrollBtnFn (target) {
+        let dom = this.$refs[target]
+        if (!this[`${target}Listener`]) {
+          dom.addEventListener('mouseenter', e => {
+            this.showScrollBtn = true
+          })
+          dom.addEventListener('mouseover', e => {
+            this.showScrollBtn = true
+          })
+          dom.addEventListener('mouseleave', e => {
+            this.showScrollBtn = false
+          })
+          this[`${target}Listener`] = true
+        }
       }
     },
     mounted () {
@@ -418,27 +459,34 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .carte-container {
-    display: flex;
+  .scroll-container {
     overflow-x: scroll;
     @include px2rem(margin-top, 15px);
     box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
     -webkit-user-select: none;
     position: relative;
     cursor: grab;
-    .btn {
+    position: relative;
+    .hover {
       position: absolute;
+      display: block;
       @include px2rem(width, 66px);
       top: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, .3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      display: none; // TODO: 未完成暂时隐藏
-      i {
-        @include font-dpr(20px);
-        color: $white;
+      z-index: 1001;
+      .btn {
+        position: absolute;
+        @include px2rem(width, 66px);
+        top: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, .3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+          @include font-dpr(20px);
+          color: $white;
+        }
       }
     }
     .move-left {
@@ -447,6 +495,15 @@
     .move-right {
       right: 0;
     }
+  }
+  .carte-container {
+    display: flex;
+    overflow-x: scroll;
+    // @include px2rem(margin-top, 15px);
+    // box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
+    -webkit-user-select: none;
+    // position: relative;
+    // cursor: grab;
     .item {
       flex-direction: column;
       @include px2rem(width, 250px);
