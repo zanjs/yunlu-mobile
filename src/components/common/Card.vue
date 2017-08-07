@@ -89,7 +89,7 @@
     },
     computed: {
       hasLink () {
-        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.email || this.store.address || this.store.qq)
+        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.id || this.store.email || this.store.address || this.store.qq)
       }
     }
   }
