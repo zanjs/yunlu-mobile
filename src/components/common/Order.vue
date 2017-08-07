@@ -48,13 +48,13 @@ export default {
 
   .option-bar {
     @include px2rem(height, 74px);
-    border-top: 1px solid #D1D1D1;
-    border-bottom: 1px solid #D1D1D1;
+    border-top: 1px solid $fifth-grey;
+    border-bottom: 1px solid $fifth-grey;
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    @include px2rem(top, 169px);
+    @include px2rem(top, 176px);
     background-color: $white;
     z-index: 1001;
     width: 100%;
@@ -80,7 +80,7 @@ export default {
         line-height: 1;
         @include px2rem(padding-right, 50px);
         @include px2rem(margin-right, -40px);
-        color: #595959;
+        color: $second-dark;
       }
     }
     .icon-box {
@@ -91,10 +91,10 @@ export default {
       align-items: center;
     }
     .icon-actinve {
-      color: #52CAA7;
+      color: $green;
     }
     .icon-inactive {
-      color: #A6A6A6;
+      color: $third-dark;
     }
   }
 </style>

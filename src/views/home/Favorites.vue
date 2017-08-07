@@ -4,19 +4,26 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="search-bar">
+    <form
+      class="search-bar"
+      action=""
+      target="iframe">
       <input
         type="search"
         v-model="searchParams"
         @input="handleInput"
-        @keyup.enter="handleSearchBtn"
+        @keyup.enter.prevent="handleSearchBtn"
         placeholder="搜一搜">
       <div
-        class="search-btn"
+        class="absolute-vertical flex search-btn"
         @click.stop="searchFavorites">
         <i class="iconfont icon-sousuo"></i>
       </div>
-    </div>
+      <iframe
+        name="iframe"
+        style="display: none;">
+      </iframe>
+    </form>
     <template v-if="favorites && favorites.length > 0">
       <section class="list-container">
         <mt-loadmore
@@ -33,7 +40,7 @@
           </favorites-list>
         </mt-loadmore>
       </section>
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <div
           class="check-btn"
           @click="handleAllCheck(favorites, checkAll)">
@@ -48,13 +55,13 @@
         </div>
         <a
           v-show="hasChecked"
-          class="text-btn"
+          class="flex text-btn"
           @click="deleteConfirm()">
           移出收藏夹
         </a>
         <div
           v-show="!hasChecked"
-          class="text-btn btn-disabled">
+          class="flex text-btn btn-disabled">
           移出收藏夹
         </div>
       </div>
@@ -327,7 +334,7 @@
     max-width: 540px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #D1D1D1;
+    border-bottom: 1px solid $fifth-grey;
     background-color: $white;
     z-index: 2;
     input {
@@ -337,15 +344,15 @@
       @include px2rem(border-radius, 14px);
       @include pm2rem(margin, 0px, 32px, 0px, 32px);
       line-height: 1;
-      background-color: #EDEDED;
-      color: #595959;
+      background-color: $ninth-grey;
+      color: $second-dark;
       @include px2rem(height, 66px);
       @include pm2rem(padding, 2px, 100px, 0px, 30px);
       vertical-align: middle;
       text-align: left;
     }
     ::-webkit-input-placeholder{
-      color: #C2C2C2;
+      color: $eighth-grey;
       @include px2rem(height, 66px);
       vertical-align: middle;
       text-align: left;
@@ -364,20 +371,14 @@
       justify-content: flex-end;
       i {
         @include font-dpr(21px);
-        color: #D1D1D1;
+        color: $fifth-grey;
         @include px2rem(margin-top, -2px);
       }
     }
     .search-btn {
-      position: absolute;
       @include px2rem(right, 60px);
       @include px2rem(height, 66px);
-      top: 50%;
-      transform: translateY(-50%);
-      color: #B4B4B4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      color: $eleventh-grey;
       i {
         @include px2rem(padding-top, 4px);
       }
@@ -392,11 +393,9 @@
     justify-content: space-between;
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     @include px2rem(height, 98px);
     background-color: $white;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid $third-grey;
     .check-btn {
       display: flex;
       align-items: center;
@@ -405,26 +404,23 @@
       line-height: 1;
       i {
         @include font-dpr(18px);
-        color: #A6A6A6;
+        color: $third-dark;
         @include px2rem(margin-right, 12px);
       }
       p {
         @include font-dpr(16px);
-        color: #595959;
+        color: $second-dark;
       }
       .checked {
-        color: #52CAA7;
+        color: $green;
       }
     }
     .text-btn {
       @include px2rem(width, 206px);
       @include px2rem(height, 70px);
       @include px2rem(border-radius, 40px);
-      background-color: #52CAA7;
+      background-color: $green;
       color: $white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       line-height: 1;
       @include font-dpr(15px);
       @include px2rem(margin-right, 28px);
@@ -433,7 +429,7 @@
       background-color: rgba(82, 202, 167, .5);
     }
     .btn-disabled {
-      background-color: #DEDEDE;
+      background-color: $fourth-grey;
     }
   }
   .empty-container {
@@ -448,7 +444,7 @@
     }
     p {
       @include font-dpr(16px);
-      color: #A6A6A6;
+      color: $third-dark;
       text-align: center;
     }
   }

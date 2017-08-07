@@ -12,28 +12,117 @@
         :store="userCard"
         @click="cardClick"></card>
     </div>
-    <div v-if="clusters && clusters.length > 0"
-         class="rope">
-      <img src="../../assets/shengzi@2x.png"
-           class="left">
-      <img src="../../assets/shengzi@2x.png"
-           class="right">
-    </div>
     <div
-      v-else
-      class="no-carte">
+      v-if="clusters && clusters.length === 0"
+      class="no-data">
       <img src="../../assets/noPersonCarte.png">
     </div>
-    <div class="carte-container">
-      <a
-        v-for="(item, index) in clusters"
-        :key="index"
-        @click="goCarte(item)"
-        class="item">
-        <span>{{item.name}}</span>
-        <i class="iconfont icon-fanhui"></i>
-      </a>
-    </div>
+    <template v-else>
+      <div class="scroll-container">
+        <div
+          class="hover move-left"
+          ref="hoverLeft">
+          <div
+            v-show="showScrollBtn"
+            class="btn move-left"
+            @click="scrollHorizontal(false)">
+            <i class="iconfont icon-zuo"></i>
+          </div>
+        </div>
+        <div
+          class="carte-container white-bg"
+          ref="scrollTarget">
+          <a
+            v-for="(item, index) in clusters"
+            :key="index"
+            @click="goCarte(item)"
+            class="flex item">
+            <img
+              v-if="item.type === 'personal'"
+              src="../../assets/spaceLogo.png">
+            <img
+              v-if="item.type === 'company'"
+              src="../../assets/enterpriseLogo.png">
+            <img
+              v-if="item.type === 'association'"
+              src="../../assets/associationLogo.png">
+            <img
+              v-if="item.type === 'class'"
+              src="../../assets/classLogo.png">
+            <img
+              v-if="item.type === 'school'"
+              src="../../assets/alumniLogo.png">
+            <span class="ellipsis second-text font-13">{{item.name}}</span>
+          </a>
+        </div>
+        <div
+          class="hover move-right"
+          ref="hoverRight">
+          <div
+            v-show="showScrollBtn"
+            class="btn move-right"
+            @click="scrollHorizontal(true)">
+            <i class="iconfont icon-you"></i>
+          </div>
+        </div>
+      </div>
+      <template v-if="folders && folders.length > 0">
+        <div class="space-container">
+          <mt-loadmore
+            :top-method="loadFolderTop"
+            :bottom-method="loadFolderBottom"
+            :bottom-pull-text="bottomPullText"
+            :bottom-drop-text="bottomDropText"
+            :auto-fill="false"
+            ref="loadMoreFolders">
+            <space-folders
+              :store="folders"
+              @view-more="goFolder"
+              @view-full-screen="showFullScreenPreview">
+            </space-folders>
+          </mt-loadmore>
+        </div>
+        <template v-if="showPreview">
+          <div class="flex-between option-bar full-width">
+            <div class="left">
+              <div
+                class="flex close white"
+                @click="closePreview()">
+                <i class="iconfont icon-fanhui"></i>
+              </div>
+              <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
+            </div>
+            <div
+              class="report flex white"
+              @click="goReportPhoto">
+              <i class="iconfont icon-jubao"></i>
+            </div>
+          </div>
+          <swiper
+            :options="swiperOption"
+            class="full-screen-swiper">
+            <!-- slides -->
+            <swiper-slide
+              class="swiper-zoom-container full-screen-bg"
+              v-for="(item, index) in photos"
+              :key="item.url">
+              <img
+                v-lazy="{
+                  src: item.url,
+                  error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                  loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+                }"
+                alt="">
+            </swiper-slide>
+          </swiper>
+        </template>
+      </template>
+      <template v-else>
+        <div class="no-data">
+          <img src="../../assets/noFile.png">
+        </div>
+      </template>
+    </template>
     <template v-if="showDialog">
       <pop-dialog
         :store="message"
@@ -46,10 +135,12 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
+  import SpaceFolders from '../../components/common/SpaceFolers'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     data () {
       return {
@@ -60,13 +151,54 @@
         p: this.$route.query.p || '',
         token: getStore('user') ? getStore('user').authentication_token : null,
         showDialog: false,
-        message: null
+        message: null,
+        folders: [],
+        pageIndex: 1,
+        pageSize: 5,
+        bottomPullText: '上拉加载更多',
+        bottomDropText: '释放加载',
+        targetSpaceId: '',
+        targetUserId: '',
+        photos: [],
+        currentIndex: 1,
+        showPreview: false,
+        swiperOption: {
+          notNextTick: false,
+          autoplay: 0,
+          direction: 'horizontal',
+          grabCursor: true,
+          setWrapperSize: true,
+          autoHeight: false,
+          paginationClickable: false,
+          prevButton: null,
+          nextButton: null,
+          mousewheelControl: true,
+          observeParents: true,
+          // 如果自行设计了插件，那么插件的一些配置相关参数，也应该出现在这个对象中，如下debugger
+          debugger: true,
+          preventClicks: false,
+          passiveListeners: false,
+          zoom: true,
+          height: window.innerHeight,
+          width: window.innerWidth,
+          touchAngle: 45,
+          initialSlide: 0,
+          onSlideChangeEnd: (swiper) => {
+            this.currentIndex = swiper.activeIndex + 1
+          }
+        },
+        showScrollBtn: false,
+        scrollLeftListener: false,
+        scrollRightListener: false
       }
     },
     components: {
       CommonHeader,
       Card,
-      PopDialog
+      PopDialog,
+      SpaceFolders,
+      swiper,
+      swiperSlide
     },
     methods: {
       beforeGetData () {
@@ -77,7 +209,37 @@
         }
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.$store.state.userCard.id, resourceClass: 'user'}})
+        this.$router.push({name: 'Report', query: {resourceId: typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id, resourceClass: 'user'}})
+      },
+      goReportPhoto () {
+        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
+      },
+      showFullScreenPreview (item) {
+        this.photos = [...item.photos]
+        this.currentIndex = item.index + 1
+        this.swiperOption.initialSlide = item.index
+        this.showPreview = true
+        this.stopTouchMove()
+      },
+      closePreview () {
+        this.showPreview = false
+        this.allowTouchMove()
+      },
+      stopTouchMove () {
+        let self = this
+        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+          }
+        })
+      },
+      allowTouchMove () {
+        let self = this
+        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
+          if (self.showPreview) {
+            e.preventDefault()
+          }
+        })
       },
       getPersonDetail (url, params) {
         this.$store.dispatch('commonAction', {
@@ -88,7 +250,65 @@
           resolve: (state, res) => {
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
-            setStore('userCard', res.data.cards)
+            this.$nextTick(() => {
+              this.showScrollBtnFn('hoverLeft')
+              this.showScrollBtnFn('hoverRight')
+            })
+            let firstSpace = this.handleFirstSpace(res.data.clusters)
+            if (firstSpace && firstSpace.id) {
+              this.header = firstSpace.name
+              this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', firstSpace.id, typeof res.data.cards.id === 'number' ? res.data.cards.user_id : res.data.cards.id, this.token, this.p)
+            }
+          },
+          reject: () => {
+            this.$router.replace({name: 'ReportExpired'})
+          }
+        })
+      },
+      handleFirstSpace (arr) {
+        let obj = null
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].type === 'personal') {
+            obj = arr[i]
+            break
+          }
+        }
+        return obj || null
+      },
+      getFirstSpace (url, spaceId, userId, token, p) {
+        this.targetSpaceId = spaceId
+        this.targetUserId = userId
+        this.$store.dispatch('commonAction', {
+          url: url,
+          method: 'get',
+          params: {
+            ...(token && !p ? {token: token} : {}),
+            ...(p ? {p: p} : {}),
+            cluster_id: spaceId,
+            ...(p ? {} : {user_id: userId}),
+            page: this.pageIndex,
+            per_page: this.pageSize
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (this.pageIndex === 1) {
+              this.folders = res.data.gallery
+              // folders为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onTopLoaded) {
+                this.$refs.loadMoreFolders.onTopLoaded()
+              }
+            } else {
+              if (res.data.gallery.length === 0) {
+                Toast({
+                  message: '没有更多数据了',
+                  duration: 1000
+                })
+              }
+              this.folders = [...this.folders, ...res.data.gallery]
+              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onBottomLoaded) {
+                this.$refs.loadMoreFolders.onBottomLoaded()
+              }
+            }
           },
           reject: () => {
             this.$router.replace({name: 'ReportExpired'})
@@ -97,6 +317,9 @@
       },
       cardClick (item) {
         switch (item.type) {
+          case 'chat':
+            this.$router.push({name: 'Chat', query: {type: item.inContact ? 'Stranger' : 'User', linkId: item.value}})
+            break
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
@@ -139,12 +362,16 @@
         })
       },
       goCarte (item) {
+        this.pageIndex = 1
         if (item.type === 'personal') {
-          if (this.$route.query.p) {
-            this.$router.push({path: '/zone', query: {p: this.$route.query.p, cluster_id: item.id}})
-          } else {
-            this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
-          }
+          // 如果点击的是个人空间，则不跳转页面，在当前页面切换显示
+          // if (this.$route.query.p) {
+          //   this.$router.push({path: '/zone', query: {p: this.$route.query.p, cluster_id: item.id}})
+          // } else {
+          //   this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
+          // }
+          this.header = item.name
+          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.user_id, this.token, this.p)
         } else if (item.type === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else if (item.type === 'company') {
@@ -154,6 +381,14 @@
         } else if (item.type === 'school') {
           this.$router.push({name: 'Alumni', params: {id: item.team_id}})
         }
+      },
+      goFolder (item) {
+        this.$router.push({path: `/photos/${item.id}`,
+          query: {
+            name: item.name,
+            ...(this.p ? {p: this.p} : {})
+          }
+        })
       },
       goBack () {
         if (getStore('PersonCarte_goHome')) {
@@ -181,6 +416,32 @@
       },
       closeDialog () {
         this.showDialog = false
+      },
+      loadFolderTop () {
+        this.pageIndex = 1
+        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
+      },
+      loadFolderBottom () {
+        this.pageIndex += 1
+        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
+      },
+      scrollHorizontal (bool) {
+        this.$refs.scrollTarget.scrollLeft += bool ? -250 : 250
+      },
+      showScrollBtnFn (target) {
+        let dom = this.$refs[target]
+        if (!this[`${target}Listener`]) {
+          dom.addEventListener('mouseenter', e => {
+            this.showScrollBtn = true
+          })
+          dom.addEventListener('mouseover', e => {
+            this.showScrollBtn = true
+          })
+          dom.addEventListener('mouseleave', e => {
+            this.showScrollBtn = false
+          })
+          this[`${target}Listener`] = true
+        }
       }
     },
     mounted () {
@@ -198,72 +459,149 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
-  .rope {
-    position: absolute;
-    width: 100%;
-    max-width: 540px;
-    @include px2rem(top, 396px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    img {
-      @include px2rem(width, 30px);
+  .scroll-container {
+    overflow-x: scroll;
+    @include px2rem(margin-top, 15px);
+    box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
+    -webkit-user-select: none;
+    position: relative;
+    cursor: grab;
+    position: relative;
+    .hover {
+      position: absolute;
+      display: block;
+      @include px2rem(width, 66px);
+      top: 0;
+      bottom: 0;
+      z-index: 1001;
+      .btn {
+        position: absolute;
+        @include px2rem(width, 66px);
+        top: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, .3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+          @include font-dpr(20px);
+          color: $white;
+        }
+      }
     }
-    .left {
-      @include px2rem(margin-left, 60px);
+    .move-left {
+      left: 0;
     }
-    .right {
-      @include px2rem(margin-right, 50px);
-    }
-  }
-  .no-carte {
-    @include pm2rem(padding, 100px, 20px, 100px, 0px);
-    @include pm2rem(margin, 20px, 22px, 0px, 22px);
-    background-color: $white;
-    text-align: center;
-    border: 1px solid #D1D1D1;
-    img {
-      @include px2rem(width, 260px);
-      height: auto;
+    .move-right {
+      right: 0;
     }
   }
   .carte-container {
-    background-color: $white;
-    @include pm2rem(padding, 0px, 22px, 30px, 22px);
-    @include pm2rem(margin, 20px, 0px, 0px, 0px);
+    display: flex;
+    overflow-x: scroll;
+    // @include px2rem(margin-top, 15px);
+    // box-shadow: 0px 2px 12px 3px rgba(220, 223, 223, .45);
+    -webkit-user-select: none;
+    // position: relative;
+    // cursor: grab;
     .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid #D1D1D1;
-      border-left: 1px solid #D1D1D1;
-      border-right: 1px solid #D1D1D1;
-      box-sizing: border-box;
-      @include px2rem(height, 94px);
-      @include pm2rem(padding, 0px, 40px, 0px, 40px);
-      i {
-        color: #52CAA7;
-        @include font-dpr(17px);
-        border: none;
-        transform: rotate(180deg);
+      flex-direction: column;
+      @include px2rem(width, 250px);
+      @include px2rem(max-width, 250px);
+      @include px2rem(min-width, 250px);
+      img {
+        @include pm2rem(margin, 20px, 0px, 20px, 0px);
+        @include px2rem(width, 92px);
+        @include px2rem(height, 87px);
       }
       span {
-        border: none;
-        @include font-dpr(17px);
-        color: #595959;
+        @include px2rem(width, 200px);
+        @include pm2rem(margin, 0px, 25px, 20px, 25px);
+        line-height: 1;
+        text-align: center;
       }
     }
-    a {
-      text-decoration: none;
+    a:hover {
+      cursor: pointer;
     }
     a:active {
-      background-color: #F2F2F2;
+      background-color: $tenth-grey;
     }
-    & :last-child{
-      border-bottom: 1px solid #D1D1D1;
+  }
+  .option-bar {
+    position: fixed;
+    @include px2rem(top, 38px);
+    z-index: 1004;
+    align-items: center;
+    .left {
+      display: flex;
+      align-items: center;
+      .page-nav {
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+        z-index: 1003;
+        @include font-dpr(20px);
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+      }
+      .close {
+        @include pm2rem(padding, 4px, 10px, 4px, 10px);
+        @include px2rem(border-radius, 10px);
+        @include pm2rem(margin, 0px, 30px, 0px, 30px);
+        background-color: rgba(0, 0, 0, .5);
+        z-index: 1003;
+        i {
+          @include font-dpr(20px);
+        }
+      }
+    }
+    .report {
+      @include pm2rem(padding, 4px, 10px, 4px, 10px);
+      @include px2rem(border-radius, 10px);
+      @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      background-color: rgba(0, 0, 0, .5);
+      z-index: 1003;
+      i {
+        @include font-dpr(20px);
+      }
+    }
+  }
+  .full-screen-swiper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1002;
+    background-color: $dark;
+  }
+  .full-screen-bg {
+    background-color: $dark;
+    img[lazy=loading] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoading3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=error] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-position: center center!important;
+      background: url("../../assets/imgLoadingError.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    img[lazy=loaded] {
+      width: inherit;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
   }
 </style>

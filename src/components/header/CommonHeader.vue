@@ -1,18 +1,18 @@
 <template>
   <mt-header
     :title="title"
-    class="header">
+    class="header full-width">
     <mt-button
       slot="left"
       @click="handleClick()"
-      class="button-text">
+      class="font-15">
       <i class="iconfont icon-fanhui"></i>
     </mt-button>
     <mt-button
       v-if="iconClass"
       slot="right"
       @click="handleRightClick()"
-      class="button-text">
+      class="font-15 button-text">
       <i
         class="iconfont"
         v-bind:class="iconClass"></i>
@@ -52,12 +52,10 @@
     background-color: $green;
     @include px2rem(height, 88px);
     @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
     position: fixed;
     top: 0;
-    width: 100%;
-    max-width: 540px;
     z-index: 1002 !important;
+    @include font-dpr(17px);
     h1 {
       @include font-dpr(17px);
     }

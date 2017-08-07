@@ -1,12 +1,19 @@
 <template>
   <section>
-    <div class="search-container">
+    <form
+      class="search-container full-width"
+      action=""
+      target="iframe">
       <slot name="input">
       </slot>
       <i
-        class="iconfont icon-sousuo"
+        class="iconfont icon-sousuo absolute-vertical"
         @click.stop="handleClick"></i>
-    </div>
+      <iframe
+        name="iframe"
+        style="display: none;">
+      </iframe>
+    </form>
   </section>
 </template>
 
@@ -33,38 +40,32 @@
     position: fixed;
     @include px2rem(top, 88px);
     z-index: 1001;
-    width: 100%;
-    max-width: 540px;
     border: none;
     box-sizing: border-box;
     input {
-      background-color: #EDEDED;
+      background-color: $ninth-grey;
       width: 100%;
       @include px2rem(border-radius, 14px);
-      color: #595959;
+      color: $second-dark;
       @include font-dpr(14px);
-      line-height: 1;
-      @include px2rem(height, 58px);
-      vertical-align: middle;
+      line-height: normal;
+      @include px2rem(height, 66px);
       text-align: center;
       border: none;
     }
     ::-webkit-input-placeholder{
-      color: #A6A6A6;
-      @include px2rem(height, 58px);
-      vertical-align: middle;
+      color: $third-dark;
+      @include px2rem(height, 66px);
+      line-height: normal;
       text-align: center;
       border: none;
     }
     i {
-      position: absolute;
       @include px2rem(right, 60px);
       @include px2rem(height, 58px);
       @include px2rem(padding-top, 8px);
-      color: #B4B4B4;
+      color: $eleventh-grey;
       @include px2rem(line-height, 58px);
-      top: 50%;
-      transform: translateY(-50%);
     }
   }
 </style>

@@ -1,40 +1,44 @@
 <template>
-  <section class="card">
+  <section class="card white-bg">
     <div class="user-info"
          @click.stop="handleClick(store)">
-      <div class="img-container">
+      <div class="img-container flex">
         <img v-if="store && store.logo"
              :src="store.logo"/>
         <img v-else
              src="../../assets/blank.jpg">
       </div>
-      <div class="content">
-        <p v-if="store && store.company">{{store.company}}</p>
-        <p v-else>胖胖的云庐君</p>
+      <div class="flex-between content">
+        <p
+          v-if="store && store.company"
+          class="font-17 ellipsis">{{store.company}}</p>
+        <p
+          v-else
+          class="font-17 ellipsis">胖胖的云庐君</p>
         <div v-if="true"
           class="icon-container">
           <template v-if="store && store.state && store.state !== 'approved'">
             <svg
-              class="icon big"
+              class="icon font-25"
               aria-hidden="true">
               <use xlink:href="#icon-v4"></use>
             </svg>
           </template>
           <template v-if="store && store.state && store.state === 'approved'">
             <svg
-              class="icon big"
+              class="icon font-25"
               aria-hidden="true">
               <use xlink:href="#icon-V2"></use>
             </svg>
           </template>
           <template v-if="false">
-            <svg class="icon" aria-hidden="true">
+            <svg class="icon font-20" aria-hidden="true">
               <use xlink:href="#icon-D3"></use>
             </svg>
-            <svg class="icon" aria-hidden="true">
+            <svg class="icon font-20" aria-hidden="true">
               <use xlink:href="#icon-J"></use>
             </svg>
-            <svg class="icon" aria-hidden="true">
+            <svg class="icon font-20" aria-hidden="true">
               <use xlink:href="#icon-Z4"></use>
             </svg>
           </template>
@@ -45,23 +49,35 @@
         </div>
         <div class="address-container">
           <span
-            class="address"
+            class="address font-13 second"
             v-if="store && store.provice_name && store.city_name">{{store.provice_name}}&middot;{{store.city_name}}</span>
           <span
             v-else
-            class="address">&nbsp;</span>
+            class="address font-13 second">&nbsp;</span>
           <span
             v-if="store && store.service && store.service.name"
-            class="tag">{{store.service.name}}</span>
+            class="tag white primary-bg font-12">{{store.service.name}}</span>
         </div>
       </div>
     </div>
     <div class="icons">
       <a
-        v-if="store && store.mobile"
+        v-if="products && products.length > 0 && store.service.name !== '协会' && store.service.name !== '校友会' && store.service.name !== '班级'"
+        @click="handleIconClick({type: 'chat', value: products[0].id})"
+        class="icon-box">
+        <i class="iconfont icon-huihua1 huihua"></i>
+      </a>
+      <a
+        v-if="isOnPc(store && store.mobile)"
         :href="'tel:' + store.mobile"
         class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
+      </a>
+      <a
+        v-if="store && store.qq"
+        @click="handleIconClick({type: 'qq', value: store.qq})"
+        class="icon-box">
+        <i class="iconfont icon-qq qq"></i>
       </a>
       <a
         v-if="store && store.email"
@@ -75,47 +91,47 @@
         class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <a
+      <!-- <a
         v-if="store && store.wechat"
         @click="handleIconClick({type: 'wechat', value: store.wechat})"
         class="icon-box">
         <i class="iconfont icon-weixin weixin"></i>
-      </a>
+      </a> -->
       <a
         v-if="store && store.website"
         @click="handleIconClick({type: 'website', value: store.website})"
         class="icon-box">
         <i class="iconfont icon-wangluo wangluo"></i>
       </a>
-      <a
-        v-if="store && store.qq"
-        @click="handleIconClick({type: 'qq', value: store.qq})"
-        class="icon-box">
-        <i class="iconfont icon-qq qq"></i>
-      </a>
       <div
-        v-if="!store || !(store.mobile || store.email || store.address || store.longitude || store.latitude || store.wechat || store.website || store.qq)"
+        v-if="!hasLink"
         class="tips">暂无联系方式</div>
     </div>
   </section>
 </template>
 
 <script>
+  import { isPc } from '../../config/mUtils'
   export default {
     data () {
       return {}
     },
-    props: ['store'],
+    props: ['store', 'products'],
     methods: {
       handleClick (item) {
         this.$emit('click', item.enterprise_id)
       },
       handleIconClick (obj) {
         this.$emit('icon-click', obj)
+      },
+      isOnPc (bool) {
+        return !isPc() && bool
       }
     },
-    mountd: {
-
+    computed: {
+      hasLink () {
+        return (this.products && this.products.length > 0 && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || (this.store && ((this.store.mobile && !isPc()) || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+      }
     }
   }
 </script>
@@ -124,16 +140,12 @@
   @import '../../styles/mixin';
 
   .card {
-    border: 1px solid #D1D1D1;
-    background: $white;
+    border: 1px solid $third-grey;
     @include px2rem(padding-top, 40px);
     .user-info {
       display: flex;
       @include pm2rem(padding, 0px, 26px, 40px, 26px);
       .img-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         @include px2rem(width, 180px);
         @include px2rem(height, 180px);
         img {
@@ -145,42 +157,25 @@
       }
       .content {
         flex: 1;
-        display: flex;
         @include px2rem(margin-left, 26px);
         @include px2rem(width, 448px);
         @include px2rem(height, 185px);
         flex-direction: column;
-        justify-content: space-between;
-        p {
-          @include font-dpr(17px);
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-        }
         .icon-container {
           display: flex;
           align-items: center
         }
-        .big {
-          @include font-dpr(25px);
-        }
         svg {
-          @include font-dpr(20px);
           @include pm2rem(margin, 20px, 16px, 30px, 0px);
         }
         .address-container {
           .address {
-            @include font-dpr(13px);
-            color: #F75544;
             @include px2rem(margin-right, 40px);
           }
           .tag {
             @include px2rem(height, 40px);
             @include pm2rem(padding, 0px, 10px, 0px, 10px);
             @include px2rem(border-radius, 10px);
-            background-color: #52CAA7;
-            color: $white;
-            @include font-dpr(12px);
             display: inline-block;
             @include px2rem(line-height, 42px);
             text-align: center;
@@ -195,7 +190,7 @@
       @include pm2rem(padding, 0px, 27px, 0px, 27px);
       justify-content: flex-start;
       align-items: center;
-      border-top: 1px solid #d1d1d1;
+      border-top: 1px solid $third-grey;
       a {
         text-decoration: none;
         @include px2rem(width, 108px);
@@ -207,6 +202,9 @@
       i {
         @include font-dpr(24px);
       }
+      .huihua {
+        color: #d52eff;
+      }
       .dianhua {
         color: #31C27C;
       }
@@ -214,7 +212,7 @@
         color: #4C8DE7;
       }
       .dingwei {
-        color: #F75544;
+        color: $red;
       }
       .weixin {
         color: #2EB6FC;
@@ -234,7 +232,7 @@
         height: inherit;
         line-height: 1;
         @include font-dpr(13px);
-        color: #A6A6A6;
+        color: $third-dark;
       }
     }
   }

@@ -1,3 +1,7 @@
+// 全局通用(仅用于async await)
+export const REQUEST_BEGIN = 'REQUEST_BEGIN'
+export const REQUEST_SUCCESS = 'REQUEST_SUCCESS'
+export const REQUEST_FAILED = 'REQUEST_FAILED'
 // 全局通用
 export const FETCH_BEGIN = 'FETCH_BEGIN'
 export const FETCH_SUCCESS = 'FETCH_SUCCESS'
@@ -16,3 +20,5 @@ export const UPDATE_UN_READ_MSG_COUNT = 'UPDATE_UN_READ_MSG_COUNT'
 export const SEARCH_CONVERSATION = 'SEARCH_CONVERSATION'
 // 选中/取消选中会话
 export const CHECK_CONVERSATION = 'CHECK_CONVERSATION'
+// 切换路由时，重置某些state中的数组，避免数据未加载时，显示上一次获取的数据
+export const RESET_STATE = 'RESET_STATE'

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as types from './mutation-types'
 import api from '../api/api'
-// import { Indicator } from 'mint-ui'
 import moment from 'moment'
 import { getStore, setStore } from '../config/mUtils'
 
@@ -72,6 +71,10 @@ const getters = {
 }
 
 const actions = {
+  action ({commit}, params) {
+    commit(types.REQUEST_BEGIN, params)
+    api.commonRequest(params, res => commit(types.REQUEST_SUCCESS, {params, res}), err => commit(types.REQUEST_FAILED, {params, err}))
+  },
   commonAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
     api.commonRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
@@ -100,19 +103,42 @@ const actions = {
   validCodeAction ({commit}, params) {
     commit(types.FETCH_BEGIN, params)
     api.validCodeRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
+  },
+  resetState ({commit}) {
+    commit(types.RESET_STATE)
   }
 }
 
 const mutations = {
+  [types.REQUEST_BEGIN] (state) {
+    state.pageLoading = true
+    state.loadSuccess = false
+  },
+
+  [types.REQUEST_SUCCESS] (state, {params, res}) {
+    state.pageLoading = false
+    if (res.data) {
+      state.loadSuccess = true
+      params.resolveFn(state, res)
+    } else {
+      state.loadSuccess = false
+      params.rejectFn(state, res)
+    }
+  },
+
+  [types.REQUEST_FAILED] (state, {params, err}) {
+    state.pageLoading = false
+    state.loadSuccess = false
+    params.rejectFn(state, err)
+  },
+
   [types.FETCH_BEGIN] (state) {
     state.pageLoading = true
     state.loadSuccess = false
-    // Indicator.open()
   },
 
   [types.FETCH_SUCCESS] (state, {params, res}) {
     state.pageLoading = false
-    // Indicator.close()
     if (res.data) {
       state.loadSuccess = true
       params.resolve(state, res)
@@ -123,7 +149,6 @@ const mutations = {
   },
 
   [types.FETCH_FAILED] (state, {params, err}) {
-    // Indicator.close()
     state.pageLoading = false
     state.loadSuccess = false
     params.reject(state, err)
@@ -184,6 +209,23 @@ const mutations = {
     if (count === 0) {
       state.conversationList.push(params)
     }
+  },
+
+  [types.RESET_STATE] (state) {
+    state.products = []
+    state.productsThumbnails = []
+    state.productDetailFiles = []
+    state.allPriceProperties = []
+    state.archives = []
+    state.informationFolderArchives = []
+    state.enterpriseDocuments = []
+    state.enterpriseInfoFiles = []
+    state.enterpriseMembers = []
+    state.personMembers = []
+    state.productDetailTeam = []
+    state.clusters = []
+    state.clientKeyWrods = []
+    state.teams = null
   }
 }
 

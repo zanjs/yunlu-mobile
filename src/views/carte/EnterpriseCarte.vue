@@ -10,18 +10,21 @@
     <div class="card-container">
       <enterprise-card
         :store="teams"
+        :products="products"
         @icon-click="iconClick"
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
-    <div class="nav-tabs">
-      <div class="tab-bar">
-        <div class="left"
-             v-bind:class="{'active': showProduct}"
-             @click.prevent="tabClick(0)">产品</div>
-        <div class="right"
-             v-bind:class="{'active': !showProduct}"
-             @click.prevent="tabClick(1)">资讯</div>
+    <div class="four-nav-tabs white-bg">
+      <div class="tab-bar primary flex font-17">
+        <div
+          class="left flex-1"
+          v-bind:class="{'primary-bg white': showProduct}"
+          @click.prevent="tabClick(0)">产品</div>
+        <div
+          class="middle right flex-1"
+          v-bind:class="{'primary-bg white': !showProduct}"
+          @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
         <transition
@@ -84,8 +87,9 @@
       @search="search(queryParams)">
       <input
         slot="input"
-        type="text"
+        type="search"
         v-model="queryParams"
+        @keyup.enter.prevent="search(queryParams)"
         :placeholder="placeholder">
     </search>
     <order
@@ -111,13 +115,13 @@
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
-  import ViewBigImg from '../../components/common/ViewBigImg'
   import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import BackToTop from '../../components/common/BackToTop'
   import { Toast, MessageBox } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -156,54 +160,44 @@
       ProductThumbnailMode,
       ProductListMode,
       InformationList,
-      ViewBigImg,
       PopDialog,
       Search,
       Order,
       BackToTop
     },
     methods: {
-      getEnterpriseDetail (teamId = this.teamId) {
-        this.$store.dispatch('commonAction', {
+      async getEnterpriseDetail (teamId = this.teamId) {
+        let {state, res} = await requestFn({
           url: '/links/teams',
-          method: 'get',
           params: {
             ids: teamId
-          },
-          target: this,
-          resolve: (state, res) => {
-            state.teams = res.data.teams[0]
-            this.getProducts()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          state.teams = res.data.teams[0]
+          this.getProducts()
+        }
       },
-      getProducts (q = this.queryParams, order = this.productOrder) {
+      async getProducts (q = this.queryParams, order = this.productOrder) {
         this.queryParams = q
         this.productOrder = order
         this.productLoaded = false
-        this.$store.dispatch('commonAction', {
+        let {res} = await requestFn({
           url: '/products',
-          method: 'get',
           params: {
             team_id: this.teamId,
             page: this.productPageIndex,
             per_page: this.productPageSize,
             sort: order || '',
             q: q || ''
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = q !== ''
-            this.productLoaded = false
-            // this.queryParams = ''
-            let tmppArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmppArr, res.data.products, q)
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = q !== ''
+          this.productLoaded = false
+          let tmppArr = this.handleProductThumbnails(res.data.products)
+          this.getFilesPublisheds(tmppArr, res.data.products, q)
+        }
       },
       // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
@@ -310,43 +304,39 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr, q) {
-        this.$store.dispatch('commonAction', {
+      async getFilesPublisheds (ids, arr, q) {
+        let {state, res} = await requestFn({
           url: '/links/files/publisheds',
-          method: 'get',
           params: {
             type: 'product',
             team_id: this.teamId,
             thumbs: ['general'],
             ids: ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            if (this.productPageIndex === 1) {
-              state.products = this.handleProducts(arr, res.data.files)
-              state.productsThumbnails = res.data.files
-              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-                this.$refs.loadMoreProducts.onTopLoaded()
-              }
-            } else {
-              if (res.data.files.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
-              state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-                this.$refs.loadMoreProducts.onBottomLoaded()
-              }
-            }
-            this.getEnterpriseDocument()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          if (this.productPageIndex === 1) {
+            state.products = this.handleProducts(arr, res.data.files)
+            state.productsThumbnails = res.data.files
+            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
+              this.$refs.loadMoreProducts.onTopLoaded()
+            }
+          } else {
+            if (res.data.files.length === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
+            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
+              this.$refs.loadMoreProducts.onBottomLoaded()
+            }
+          }
+          this.getEnterpriseDocument()
+        }
       },
       goBack () {
         if (this.hasSearch) {
@@ -370,6 +360,7 @@
         this.handleSearchBar()
       },
       search (res) {
+        document.activeElement.blur()
         if (this.showProduct) {
           this.getProducts(res)
         }
@@ -404,6 +395,14 @@
       },
       iconClick (item) {
         switch (item.type) {
+          case 'chat':
+            if (!this.hasLogin) {
+              setStore('beforeLogin', 'true')
+              this.$router.push({name: 'Login'})
+            } else {
+              this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.value}})
+            }
+            break
           case 'email':
             // this.linkToast('企业', '邮箱地址', item.value)
             // this.showMessageBox(item.value)
@@ -499,91 +498,4 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .card-container {
-    @include pm2rem(padding, 96px, 22px, 0px, 22px);
-  }
-  .nav-tabs {
-    @include pm2rem(margin, 20px, 0px, 10px, 0px);
-    background-color: $white;
-    .tab-bar {
-      color: #52CAA7;
-      @include px2rem(height, 84px);
-      @include pm2rem(padding, 0px, 22px, 0px, 22px);
-      div {
-        height: 100%;
-        width: 50%;
-        box-sizing: border-box;
-        @include px2rem(line-height, 84px);
-        text-align: center;
-        @include font-dpr(17px);
-        color: #52CAA7;
-        border: 1px solid #52CAA7;
-      }
-      .left {
-        @include px2rem(border-top-left-radius, 14px);
-        @include px2rem(border-bottom-left-radius, 14px);
-        color: #52CAA7;
-      }
-      .active {
-        background-color: #52CAA7;
-        color: $white;
-      }
-      .right {
-        @include px2rem(border-top-right-radius, 14px);
-        @include px2rem(border-bottom-right-radius, 14px);
-      }
-    }
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
-      }
-    }
-    .no-data {
-      @include pm2rem(padding, 100px, 20px, 100px, 0px);
-      @include pm2rem(margin, 20px, 22px, 0px, 22px);
-      background-color: $white;
-      text-align: center;
-      border: 1px solid #D1D1D1;
-      img {
-        @include px2rem(width, 260px);
-        height: auto;
-      }
-    }
-  }
-
-  .fade-enter {
-    opacity: 0;
-  }
-  .fade-enter-to {
-    opacity: 1;
-  }
-  .fade-enter-active {
-    transition: .5s ease-in;
-  }
-  .fade-leave {
-    opacity: 1;
-  }
-  .fade-leave-active {
-    transition: .5s ease-out;
-  }
-  .fade-leave-to {
-    opacity: 0
-  }
 </style>

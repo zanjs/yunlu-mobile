@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="input-container">
+    <div class="input-container full-width">
       <textarea
         class="input"
         v-model="content">
@@ -37,8 +37,6 @@ export default {
 .input-container {
   position: fixed;
   bottom: 0;
-  width: 100%;
-  max-width: 540px;
   display: flex;
   @include px2rem(max-height, 400px);
   @include pm2rem(padding, 10px, 0px, 10px, 0px);
@@ -49,7 +47,7 @@ export default {
     @include px2rem(max-height, 300px);
     @include px2rem(height, 80px);
     @include pm2rem(margin, 0px, 10px, 0px, 10px);
-    color: #595959;
+    color: $second-dark;
     flex: 1;
     background-color: #fdfdfd;
     border: none;
@@ -60,7 +58,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FFF;
+    color: $white;
     @include font-dpr(16px);
     a {
       display: flex;

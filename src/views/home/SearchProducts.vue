@@ -8,10 +8,10 @@
       <input
         slot="input"
         type="search"
-        class="search-input"
+        class="search-input full-width"
         v-model="searchParams"
         @input="handleInput"
-        @keyup.enter="handleSearchBtn"
+        @keyup.enter.prevent="handleSearchBtn"
         placeholder="搜一搜"
         ref="searchInput">
     </product-search-bar>
@@ -41,13 +41,10 @@
             @click="goProductDetail">
           </product-list-mode>
         </mt-loadmore>
-        <div
+        <back-to-top
           v-if="showGoTopBtn"
-          class="cirlce-btn"
           @click="goTop()">
-          <i class="iconfont icon-dingzhi"></i>
-          <p>置顶</p>
-        </div>
+        </back-to-top>
       </template>
       <template v-if="hasSearch && products && products.length === 0">
         <search-products-order
@@ -70,9 +67,11 @@
   import ProductSearchBar from '../../components/product/Search'
   import HotTags from '../../components/product/HotTags'
   import ProductListMode from '../../components/product/List'
+  import BackToTop from '../../components/common/BackToTop'
   import SearchProductsOrder from '../../components/product/Order'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -117,6 +116,7 @@
       ProductSearchBar,
       HotTags,
       ProductListMode,
+      BackToTop,
       SearchProductsOrder
     },
     methods: {
@@ -149,25 +149,21 @@
           this.getProducts(sort, params)
         }
       },
-      getProducts (sort = this.sort, q = this.searchParams) {
+      async getProducts (sort = this.sort, q = this.searchParams) {
         this.sort = sort
-        this.$store.dispatch('commonAction', {
+        let {res} = await requestFn({
           url: '/products',
-          method: 'get',
           params: {
             page: this.pageIndex,
             per_page: this.pageSize,
             sort: sort,
             q: q
-          },
-          target: this,
-          resolve: (state, res) => {
-            let tmpArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmpArr, res.data.products)
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          let tmpArr = this.handleProductThumbnails(res.data.products)
+          this.getFilesPublisheds(tmpArr, res.data.products)
+        }
       },
       handleProductThumbnails (arr) {
         let tmpArr = []
@@ -176,43 +172,38 @@
         }
         return tmpArr
       },
-      getFilesPublisheds (ids, arr) {
-        this.$store.dispatch('commonAction', {
+      async getFilesPublisheds (ids, arr) {
+        let {res} = await requestFn({
           url: '/links/files/publisheds',
-          method: 'get',
           params: {
             type: 'product',
             thumbs: ['general'],
             ids: ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = true
-            if (this.pageIndex === 1) {
-              this.products = this.handleProducts(arr, res.data.files)
-              this.productsThumbnails = res.data.files
-              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-                this.$refs.loadMoreProducts.onTopLoaded()
-              }
-            } else {
-              if (res.data.files.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
-              this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-                this.$refs.loadMoreProducts.onBottomLoaded()
-              }
-            }
-            this.getEnterpriseDocument()
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = true
+          if (this.pageIndex === 1) {
+            this.products = this.handleProducts(arr, res.data.files)
+            this.productsThumbnails = res.data.files
+            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
+              this.$refs.loadMoreProducts.onTopLoaded()
+            }
+          } else {
+            if (res.data.files.length === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
+            this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
+            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
+              this.$refs.loadMoreProducts.onBottomLoaded()
+            }
+          }
+        }
       },
        // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
@@ -284,28 +275,24 @@
     flex: 1;
     border: none;
     @include px2rem(height, 68px);
-    background-color: #EDEDED;
+    background-color: $ninth-grey;
     @include px2rem(border-radius, 14px);
-    color: #595959;
+    color: $second-dark;
     @include font-dpr(14px);
     @include pm2rem(padding, 0px, 80px, 0px, 30px);
     display: flex;
-    width: 100%;
-    max-width: 540px;
+    line-height: normal;
     justify-content: flex-start;
     align-items: center;
   }
   ::-webkit-input-placeholder{
-    color: #C2C2C2;
+    color: $eighth-grey;
     @include px2rem(height, 70px);
     vertical-align: middle;
     text-align: left;
     border: none;
     @include font-dpr(14px);
-    @include px2rem(padding-top, 4px);
-  }
-  input[type=search]::-webkit-search-cancel-button {
-    -webkit-appearance: none; // 此处只是去掉默认的小×
+    line-height: normal;
   }
   .tags-area {
     @include px2rem(padding-top, 98px);
@@ -319,7 +306,7 @@
       z-index: 2;
     }
     .empty-products {
-      color: #A6A6A6;
+      color: $third-dark;
       .img-container {
         text-align: center;
         @include pm2rem(padding, 30px, 0px, 40px, 0px);
@@ -330,28 +317,6 @@
       p {
         @include font-dpr(16px);
         text-align: center;
-      }
-    }
-    .cirlce-btn {
-      @include px2rem(width, 100px);
-      @include px2rem(height, 100px);
-      @include px2rem(border-radius, 50px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      @include px2rem(right, 40px);
-      color: $white;
-      background-color: rgba(0, 0, 0, .68);
-      line-height: 1;
-      z-index: 1004;
-      i {
-        @include font-dpr(21px);
-      }
-      p {
-        @include font-dpr(12px);
       }
     }
   }

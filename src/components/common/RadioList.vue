@@ -51,14 +51,14 @@
       i {
         @include font-dpr(21px);
         @include pm2rem(margin, 0px, 20px, 0px, 30px);
-        color: #A6A6A6;
+        color: $third-dark;
       }
       p {
         @include font-dpr(16px);
-        color: #262626;
+        color: $primary-dark;
       }
       .checked {
-        color: #52CAA7;
+        color: $green;
       }
     }
   }

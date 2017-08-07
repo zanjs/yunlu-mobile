@@ -1,5 +1,5 @@
 <template>
-  <section class="card">
+  <section class="card white-bg">
     <div class="user-info">
       <img
         v-if="store && store.avatar_url"
@@ -27,10 +27,21 @@
       </div>
     </div>
     <div class="icons">
-      <a v-if="store && store.mobiles && store.mobiles.length > 0"
-         :href="'tel:' + store.mobiles[0]"
+      <a v-if="store && store.id"
+         @click="handleClick({'type': 'chat', 'value': store.id, 'inContact': typeof store.id === 'number'})"
          class="icon-box">
+        <i class="iconfont icon-huihua1 huihua"></i>
+      </a>
+      <a
+        v-if="isOnPc(store && store.mobiles && store.mobiles.length > 0)"
+        :href="'tel:' + store.mobiles[0]"
+        class="icon-box">
         <i class="iconfont icon-dianhua dianhua"></i>
+      </a>
+      <a v-if="store && store.qq"
+         class="icon-box"
+         @click="handleClick({'type': 'qq', 'value': store.qq})">
+        <i class="iconfont icon-qq qq"></i>
       </a>
       <a v-if="store && store.email"
          class="icon-box"
@@ -42,7 +53,7 @@
          @click="handleClick({'type': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <a v-if="store && store.wechat"
+      <!-- <a v-if="store && store.wechat"
          class="icon-box"
          @click="handleClick({'type': 'wechat', 'value': store.wechat})">
         <i class="iconfont icon-weixin weixin"></i>
@@ -51,20 +62,16 @@
          class="icon-box"
          @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
-      </a>
-      <a v-if="store && store.qq"
-         class="icon-box"
-         @click="handleClick({'type': 'qq', 'value': store.qq})">
-        <i class="iconfont icon-qq qq"></i>
-      </a>
+      </a> -->
       <div
-        v-if="!store || (!store.mobiles || store.mobiles.length === 0) && !store.email && !store.address && !store.wechat && !store.weibo && !store.qq"
+        v-if="!hasLink"
         class="tips">暂无联系方式</div>
     </div>
   </section>
 </template>
 
 <script>
+  import { isPc } from '../../config/mUtils'
   export default {
     data () {
       return {}
@@ -73,10 +80,17 @@
     methods: {
       handleClick (obj) {
         this.$emit('click', obj)
+      },
+      isOnPc (bool) {
+        return !isPc() && bool
       }
     },
     mountd: {
-
+    },
+    computed: {
+      hasLink () {
+        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.email || this.store.address || this.store.qq)
+      }
     }
   }
 </script>
@@ -85,7 +99,7 @@
   @import '../../styles/mixin';
 
   .card {
-    border: 1px solid #D1D1D1;
+    border: 1px solid $second-grey;
     background: $white;
     @include px2rem(padding-top, 24px);
     .user-info {
@@ -113,7 +127,7 @@
       @include px2rem(height, 100px);
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
       align-items: center;
-      border-top: 1px solid #d1d1d1;
+      border-top: 1px solid $second-grey;
       a {
         text-decoration: none;
         @include px2rem(width, 108px);
@@ -125,6 +139,9 @@
       i {
         @include font-dpr(24px);
       }
+      .huihua {
+        color: #d52eff;
+      }
       .dianhua {
         color: #31C27C;
       }
@@ -132,7 +149,7 @@
         color: #4C8DE7;
       }
       .dingwei {
-        color: #F75544;
+        color: $red;
       }
       .weixin {
         color: #2EB6FC;
@@ -152,7 +169,7 @@
         height: inherit;
         line-height: 1;
         @include font-dpr(13px);
-        color: #A6A6A6;
+        color: $third-dark;
       }
     }
   }

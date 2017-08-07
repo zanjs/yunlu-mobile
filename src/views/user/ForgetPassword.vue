@@ -4,7 +4,7 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="login-container">
+    <div class="login-container full-width">
       <div class="input-container">
         <input class="input"
                type="text"
@@ -144,8 +144,6 @@
     @include px2rem(top, 96px);
     @include pm2rem(padding, 40px, 0px, 0px, 0px);
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     background-color: $white;
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
@@ -155,11 +153,11 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
         @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: #A6A6A6;
+        color: $third-dark;
         @include font-dpr(14px);
         @include px2rem(line-height, 80px);
         border: none;
-        background-color: #EFEFEF;
+        background-color: $primary-grey;
         width: 100%;
       }
     }
@@ -171,19 +169,19 @@
         @include px2rem(border-radius, 40px);
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
-        color: #A6A6A6;
+        color: $third-dark;
         @include font-dpr(14px);
         @include px2rem(line-height, 80px);
         border: none;
-        background-color: #EFEFEF;
+        background-color: $primary-grey;
         @include px2rem(width, 326px);
       }
       a {
         float: right;
         @include px2rem(width, 228px);
         @include font-dpr(13px);
-        color: #52CAA7;
-        border-color: #52CAA7;
+        color: $green;
+        border-color: $green;
         @include px2rem(border-width, 3px);
         @include px2rem(border-radius, 40px);
         border-style: solid;
@@ -198,17 +196,17 @@
         border-color: rgba(82, 202, 167, .5);
       }
       .active {
-        color: #A6A6A6;
-        border-color: #DEDEDE;
-        background-color: #DEDEDE;
+        color: $third-dark;
+        border-color: $fourth-grey;
+        background-color: $fourth-grey;
       }
       .normal {
-        color: #52CAA7;
-        border-color: #52CAA7;
+        color: $green;
+        border-color: $green;
       }
     }
     ::-webkit-input-placeholder{
-      color: #A6A6A6;
+      color: $third-dark;
     }
     .next-btn {
       a {
@@ -218,7 +216,7 @@
         @include px2rem(height, 80px);
         @include px2rem(margin-top, 28px);
         @include px2rem(margin-bottom, 46px);
-        background-color: #52CAA7;
+        background-color: $green;
         color: $white;
         @include font-dpr(16px);
         @include px2rem(line-height, 80px);
@@ -229,11 +227,11 @@
       }
     }
     .text-btn {
-      color: #A6A6A6;
+      color: $third-dark;
       @include font-dpr(13px);
       text-align: center;
       a {
-        color: #52CAA7;
+        color: $green;
       }
     }
   }

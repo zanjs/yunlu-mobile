@@ -64,13 +64,13 @@
 
   .item-list {
     background-color: $white;
-    border-top: 1px solid #E0E0E0;
+    border-top: 1px solid $third-grey;
     box-sizing: border-box;
     .item {
       @include px2rem(height, 140px);
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 1px solid $third-grey;
       .icon-box {
         @include px2rem(width, 88px);
         height: inherit;
@@ -79,10 +79,10 @@
         justify-content: center;
         i {
           @include font-dpr(20px);
-          color: #A6A6A6;
+          color: $third-dark;
         }
         .checked {
-          color: #52CAA7;
+          color: $green;
         }
       }
       a:active {
@@ -106,11 +106,11 @@
           justify-content: space-around;
           .title {
             @include font-dpr(16px);
-            color: #595959;
+            color: $second-dark;
           }
           .type {
             @include font-dpr(14px);
-            color: #A6A6A6;
+            color: $third-dark;
           }
         }
       }

@@ -106,7 +106,7 @@
       @include px2rem(line-height, 86px);
       @include px2rem(width, 500px);
       @include font-dpr(16px);
-      background-color: #52CAA7;
+      background-color: $green;
       color: $white;
       @include px2rem(border-radius, 43px);
     }
@@ -118,7 +118,7 @@
     text-align: center;
     @include px2rem(margin-top, 255px);
     p {
-      color: #A6A6A6;
+      color: $third-dark;
       @include font-dpr(12px);
     }
     a {

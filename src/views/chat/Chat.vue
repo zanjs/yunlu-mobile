@@ -86,7 +86,7 @@
         } else if (this.conversationId) {
           this.getConversations(this.conversationId)
         } else {
-          this.createConferences(this.teamId, this.productId, this.linkId)
+          this.createConferences(this.teamId, this.productId, this.linkId, this.type)
         }
       },
       getConversations (conversationId = '') {
@@ -109,7 +109,13 @@
           }
         })
       },
-      createConferences (teamId = '', productId = '', linkId = '') {
+      createConferences (teamId = '', productId = '', linkId = '', type = this.type) {
+        let linkParams = {}
+        if (type === 'Stranger') {
+          linkParams = {...(linkId ? {stranger_id: linkId} : {})}
+        } else if (type === 'User') {
+          linkParams = {...(linkId ? {user_id: linkId} : {})}
+        }
         this.$store.dispatch('commonAction', {
           url: '/im/conferences',
           method: 'post',
@@ -119,7 +125,7 @@
             token: this.token,
             ...(teamId ? {team_id: teamId} : {}),
             ...(productId ? {product_id: productId} : {}),
-            ...(linkId ? {stranger_id: linkId} : {})
+            ...linkParams
           },
           target: this,
           resolve: (state, res) => {
@@ -163,7 +169,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.createConferences(this.teamId, this.productId, this.linkId)
+            this.createConferences(this.teamId, this.productId, this.linkId, this.type)
             this.productImg = res.data.files[0].thumb_urls[0]
           },
           reject: () => {
@@ -321,13 +327,13 @@
         @include font-dpr(15px);
       }
       .price {
-        color: red;
+        color: $red;
       }
     }
   }
   .container {
     @include pm2rem(padding, 128px, 0px, 240px, 0px);
-    background-color: #FAFAFA;
+    background-color: $sixth-grey;
   }
   .product-container {
     @include px2rem(padding-top, 248px);

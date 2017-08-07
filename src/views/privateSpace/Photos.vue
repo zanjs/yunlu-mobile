@@ -22,14 +22,14 @@
       </mt-loadmore>
     </section>
     <template v-if="showPreview">
-      <div class="option-bar">
+      <div class="option-bar full-width">
         <div class="left">
           <div
             class="close"
             @click="closePreview()">
             <i class="iconfont icon-fanhui"></i>
           </div>
-          <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
+          <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
         </div>
         <div
           class="report"
@@ -46,7 +46,11 @@
           v-for="(item, index) in photos"
           :key="item.url">
           <img
-            v-lazy="item.url"
+            v-lazy="{
+              src: item.url,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }"
             alt="">
         </swiper-slide>
       </swiper>
@@ -189,7 +193,7 @@
         })
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo', backUrl: 'Photos'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
       shouldLogin () {
         if (!this.token) {
@@ -220,8 +224,6 @@
   .option-bar {
     position: fixed;
     @include px2rem(top, 38px);
-    width: 100%;
-    max-width: 540px;
     z-index: 1004;
     display: flex;
     justify-content: space-between;
@@ -236,9 +238,6 @@
         @include font-dpr(20px);
         @include pm2rem(padding, 4px, 10px, 4px, 10px);
         @include px2rem(border-radius, 10px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
       .close {
         @include pm2rem(padding, 4px, 10px, 4px, 10px);
@@ -275,10 +274,10 @@
     bottom: 0;
     right: 0;
     z-index: 1002;
-    background-color: #000;
+    background-color: $dark;
   }
   .full-screen-bg {
-    background-color: #000;
+    background-color: $dark;
     img[lazy=loading] {
       width: inherit;
       max-width: 100%;

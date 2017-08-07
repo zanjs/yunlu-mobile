@@ -4,7 +4,11 @@
       <img
         v-for="(item, index) in dataSource"
         :key="index"
-        v-lazy="item.thumb_url"
+        v-lazy="{
+          src: item.thumb_url,
+          error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+          loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+        }"
         class="photo"
         @click="handleClick(index)">
     </div>

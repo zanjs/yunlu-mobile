@@ -7,7 +7,11 @@
            class="img-box">
         <img
           v-if="item.file_thumb_urls"
-          v-lazy="item.file_thumb_urls"
+          v-lazy="{
+            src: item.file_thumb_urls,
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }"
           class="normal">
         <img
           v-else
@@ -56,7 +60,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      border: 1px solid #E0E0E0;
+      border: 1px solid $second-grey;
       box-sizing: border-box;
       img[lazy=loading] {
         @include px2rem(height, 346px);
@@ -89,7 +93,7 @@
       .cover {
         @include px2rem(height, 110px);
         display: block;
-        color: #262626;
+        color: $primary-dark;
         @include font-dpr(14px);
         width: inherit;
         .wraper {

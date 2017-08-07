@@ -1,15 +1,15 @@
 <template>
-  <header class="head-product">
-    <div class="left icon-box"
+  <header class="head-product full-width">
+    <div class="left icon-box flex"
          @click="goBack()">
       <i class="iconfont icon-fanhui"></i>
     </div>
     <section class="right">
-      <div class="icon-box"
+      <div class="icon-box flex"
            @click="openShoppingCar()">
         <i class="iconfont icon-gouwuche1"></i>
       </div>
-      <div class="icon icon-box"
+      <div class="icon icon-box flex"
            @click="openDropMenu()">
         <i class="iconfont icon-fenlei"></i>
       </div>
@@ -129,20 +129,14 @@
 
   .head-product {
     background-color: transparent;
-    width: 100%;
     @include px2rem(height, 88px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: absolute;
     top: 0;
-    width: 100%;
-    max-width: 540px;
     z-index: 2;
     .icon-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       @include px2rem(border-radius, 35px);
       @include px2rem(width, 70px);
       @include px2rem(height, 70px);

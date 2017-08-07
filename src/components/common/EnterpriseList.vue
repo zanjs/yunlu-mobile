@@ -1,16 +1,21 @@
 <template>
   <section>
-    <div class="list-container">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click="handleClick(item.organization.id)"
-           class="item">
-        <img v-lazy="item.organization.logo">
-        <div class="content">
-          <p>{{item.organization.name}}</p>
-          <div>
-            <span class="type">{{item.organization.service_name || item.organization.service.name}}</span>
-            <span class="address">{{item.organization.zone_name || item.organization.display_zone}}</span>
+    <div class="list-container white-bg">
+      <div
+        v-for="(item, index) in store"
+        :key="index"
+        @click="handleClick(item.organization.id)"
+        class="flex-between item primary-text">
+        <img v-lazy="{
+              src: item.organization.logo,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }">
+        <div class="flex-between content flex-1 ellipsis">
+          <p class="font-15 ellipsis">{{item.organization.name}}</p>
+          <div class="font-13">
+            <span class="flex-1 third-text">{{item.organization.service_name || item.organization.service.name}}</span>
+            <span class="flex-1 second">{{item.organization.zone_name || item.organization.display_zone}}</span>
           </div>
         </div>
       </div>
@@ -39,70 +44,22 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .search-container {
-    background-color: $white;
-    @include pm2rem(padding, 12px, 32px, 12px, 32px);
-    position: fixed;
-    @include px2rem(top, 88px);
-    left: 0;
-    right: 0;
-    z-index: 1001;
-    input {
-      background-color: #EDEDED;
-      width: 100%;
-      @include px2rem(border-radius, 14px);
-      color: #C2C2C2;
-      @include font-dpr(14px);
-      @include px2rem(line-height, 58px);
-      @include px2rem(height, 58px);
-      text-align: center;
-      vertical-align: middle;
-      border: none;
-    }
-    ::-webkit-input-placeholder{
-      color: #C2C2C2;
-    }
-    i {
-      position: absolute;
-      @include px2rem(right, 60px);
-      @include px2rem(height, 10px);
-      @include px2rem(top, 16px);
-    }
-  }
   .list-container {
-    background-color: $white;
-    border-top: 1px solid #E0E0E0;
+    border-top: 1px solid $third-grey;
     @include pm2rem(margin, 10px, 0px, 0px, 0px);
     @include px2rem(min-height, 600px);
     .item {
-      display: flex;
       align-items: center;
-      color: #262626;
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 1px solid $third-grey;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
-        display: flex;
+        line-height: 1;
         flex-direction: column;
-        justify-content: space-between;
-        flex: 1;
         p {
-          @include font-dpr(15px);
-          line-height: 1;
           @include px2rem(margin-bottom, 22px);
         }
         div {
-          line-height: 1;
-          @include font-dpr(13px);
-          display: flex
-        }
-        .type {
-          flex: 1;
-          color: #A6A6A6;
-        }
-        .address {
-          color: #F75544;
-          flex: 1;
-          // @include px2rem(margin-left, 30px);
+          display: inherit
         }
       }
     }

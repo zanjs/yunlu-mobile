@@ -2,7 +2,7 @@
   <section>
     <mt-tabbar
       v-model="selected"
-      class="tab-bar">
+      class="tab-bar full-width">
       <mt-tab-item id="home">
         <div
           class="tab-item"
@@ -76,17 +76,15 @@
   .tab-bar {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    max-width: 540px;
     right: auto;
     left: auto;
     z-index: 1004 !important;
     .tab-item {
       @include px2rem(height, 97px);
       display: flex;
+      justify-content: space-around;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
       i {
         @include font-dpr(25px);
         @include pm2rem(padding, 7px, 0px, 7px, 0px);
@@ -98,10 +96,10 @@
     }
     .mint-tab-item {
       padding: 0 !important;
-      color: #7F7F7F !important;
+      color: $seventh-grey !important;
     }
     .is-selected {
-      color: #52CAA7 !important;
+      color: $green !important;
     }
   }
 </style>

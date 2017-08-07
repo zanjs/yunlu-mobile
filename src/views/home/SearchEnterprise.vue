@@ -10,7 +10,7 @@
         slot="input"
         type="search"
         @input="handleInput"
-        @keyup.enter="handleSearch(searchParams)"
+        @keyup.enter.prevent="handleSearch(searchParams)"
         v-model="searchParams"
         :placeholder="placeholder">
     </search>
@@ -38,7 +38,7 @@
           <div class="img-container">
             <img src="../../assets/noSearchProducts.png">
           </div>
-          <p>SORRY! 暂没有找到符合条件的信息</p>
+          <p class="third-text font-16">SORRY! 暂没有找到符合条件的信息</p>
         </div>
       </template>
     </div>
@@ -53,6 +53,7 @@
   import { mapGetters } from 'vuex'
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
+  import { requestFn } from '../../config/request'
   export default {
     data () {
       return {
@@ -76,20 +77,12 @@
       BackToTop
     },
     methods: {
-      getServices () {
-        this.$store.dispatch('commonAction', {
-          url: '/services',
-          method: 'get',
-          params: {
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.exclude_service_ids = this.handleExcludeServiceIds(res.data.services)
-            this.getEnterprises(this.searchParams)
-          },
-          reject: () => {
-          }
-        })
+      async getServices () {
+        let {res} = await requestFn({url: '/services'})
+        if (res.data) {
+          this.exclude_service_ids = this.handleExcludeServiceIds(res.data.services)
+          this.getEnterprises(this.searchParams)
+        }
       },
       handleExcludeServiceIds (arr) {
         let tmpArr = []
@@ -101,41 +94,37 @@
         }
         return tmpArr
       },
-      getEnterprises (q = '') {
-        this.$store.dispatch('commonAction', {
+      async getEnterprises (q = '') {
+        let {state, res} = await requestFn({
           url: '/enterprises',
-          method: 'get',
           params: {
             page: this.enterprisePageIndex,
             per_page: this.enterprisePageSize,
             keyword: q,
             exclude_service_ids: this.exclude_service_ids
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.hasSearch = q !== ''
-            if (this.enterprisePageIndex === 1) {
-              document.body.scrollTop = 0
-              state.allEnterprises = res.data.enterprises
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
-                this.$refs.loadMoreEnterprises.onTopLoaded()
-              }
-            } else {
-              if (res.data.enterprises === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
-              state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
-                this.$refs.loadMoreEnterprises.onBottomLoaded()
-              }
-            }
-          },
-          reject: () => {
           }
         })
+        if (res.data) {
+          this.hasSearch = q !== ''
+          if (this.enterprisePageIndex === 1) {
+            document.body.scrollTop = 0
+            state.allEnterprises = res.data.enterprises
+            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
+              this.$refs.loadMoreEnterprises.onTopLoaded()
+            }
+          } else {
+            if (res.data.enterprises === 0) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+            state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
+            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
+              this.$refs.loadMoreEnterprises.onBottomLoaded()
+            }
+          }
+        }
       },
       resetSearchBar () {
         this.searchParams = ''
@@ -216,52 +205,16 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  input[type=search]::-webkit-search-cancel-button {
-    -webkit-appearance: none; // 此处只是去掉默认的小×
-  }
   .list {
-    @include px2rem(padding-top, 170px);
+    @include px2rem(padding-top, 176px);
     position: relative;
-    .float-btn {
-      position: fixed;
-      @include px2rem(bottom, 76px);
-      display: block;
-      width: 100%;
-      max-width: 540px;
-      .cirlce-btn {
-        float: right;
-        @include px2rem(width, 100px);
-        @include px2rem(height, 100px);
-        @include px2rem(border-radius, 50px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        @include px2rem(margin-right, 40px);
-        color: $white;
-        background-color: rgba(0, 0, 0, .68);
-        line-height: 1;
-        z-index: 1004;
-        i {
-          @include font-dpr(21px);
-        }
-        p {
-          @include font-dpr(12px);
-        }
-      }
-    }
     .empty-products {
-      color: #A6A6A6;
+      text-align: center;
       .img-container {
-        text-align: center;
         @include pm2rem(padding, 30px, 0px, 40px, 0px);
         img {
           width: 50%;
         }
-      }
-      p {
-        @include font-dpr(16px);
-        text-align: center;
       }
     }
   }
