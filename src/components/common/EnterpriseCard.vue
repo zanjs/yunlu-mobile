@@ -62,7 +62,7 @@
     </div>
     <div class="icons">
       <a
-        v-if="products && products.length > 0"
+        v-if="products && products.length > 0 && store.service.name !== '协会' && store.service.name !== '校友会' && store.service.name !== '班级'"
         @click="handleIconClick({type: 'chat', value: products[0].id})"
         class="icon-box">
         <i class="iconfont icon-huihua1 huihua"></i>
@@ -130,7 +130,7 @@
     },
     computed: {
       hasLink () {
-        return (!isPc() && this.products && this.products.length > 0) || (this.store && (this.store.mobile || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+        return (this.products && this.products.length > 0 && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || (this.store && ((this.store.mobile && !isPc()) || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
       }
     }
   }
