@@ -1,10 +1,11 @@
 <template>
   <section>
     <div class="gallery">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click.stop="handleClick(item)"
-           class="img-box">
+      <div
+        v-for="(item, index) in store"
+        :key="index"
+        @click.stop="handleClick(item)"
+        class="img-box">
         <img
           v-if="item.file_thumb_urls"
           v-lazy="{

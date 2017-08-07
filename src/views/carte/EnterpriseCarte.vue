@@ -33,14 +33,7 @@
           mode="out-in">
           <template v-if="showProduct">
             <template v-if="products && products.length > 0">
-              <mt-loadmore
-                key="product"
-                :top-method="loadProductTop"
-                :bottom-method="loadProductBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMoreProducts">
+              <div>
                 <product-list-mode
                   v-show="showList"
                   :store="products"
@@ -51,7 +44,17 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </mt-loadmore>
+                <mugen-scroll :handler="loadProductBottom" :should-handle="!loading">
+                  <div class="loading">
+                    <mt-spinner
+                      v-if="loading"
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </mugen-scroll>
+              </div>
             </template>
             <div
               v-else
@@ -122,6 +125,7 @@
   import BackToTop from '../../components/common/BackToTop'
   import { Toast, MessageBox } from 'mint-ui'
   import { requestFn } from '../../config/request'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -137,7 +141,6 @@
         placeholder: '搜索产品',
         productPageIndex: 1,
         productPageSize: 10,
-        productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         personPageIndex: 1,
@@ -151,7 +154,8 @@
         currentIndex: 0,
         showGoTopBtn: false,
         showDialog: false,
-        message: null
+        message: null,
+        loading: false
       }
     },
     components: {
@@ -163,7 +167,8 @@
       PopDialog,
       Search,
       Order,
-      BackToTop
+      BackToTop,
+      MugenScroll
     },
     methods: {
       async getEnterpriseDetail (teamId = this.teamId) {
@@ -179,9 +184,9 @@
         }
       },
       async getProducts (q = this.queryParams, order = this.productOrder) {
+        this.loading = true
         this.queryParams = q
         this.productOrder = order
-        this.productLoaded = false
         let {res} = await requestFn({
           url: '/products',
           params: {
@@ -192,11 +197,23 @@
             q: q || ''
           }
         })
+
         if (res.data) {
           this.hasSearch = q !== ''
-          this.productLoaded = false
           let tmppArr = this.handleProductThumbnails(res.data.products)
-          this.getFilesPublisheds(tmppArr, res.data.products, q)
+          if (res.data.products.length === 0) {
+            this.loading = false
+            // 这里必须向上滚动大于等于50，否则会连发两次请求。
+            document.body.scrollTop -= 50
+            Toast({
+              message: '没有更多数据了',
+              duration: 1000
+            })
+          } else {
+            this.getFilesPublisheds(tmppArr, res.data.products, q)
+          }
+        } else {
+          this.loading = false
         }
       },
       // 手机QQ浏览器不支持array.findIndex方法
@@ -314,26 +331,14 @@
             ids: ids
           }
         })
+        this.loading = false
         if (res.data) {
           if (this.productPageIndex === 1) {
             state.products = this.handleProducts(arr, res.data.files)
             state.productsThumbnails = res.data.files
-            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-              this.$refs.loadMoreProducts.onTopLoaded()
-            }
           } else {
-            if (res.data.files.length === 0) {
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
-            }
             state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
             state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-              this.$refs.loadMoreProducts.onBottomLoaded()
-            }
           }
           this.getEnterpriseDocument()
         }
@@ -466,10 +471,6 @@
         this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
         this.getProducts(this.queryParams, this.productOrder)
       },
-      loadProductTop () {
-        this.productPageIndex = 1
-        this.getProducts()
-      },
       loadProductBottom () {
         this.productPageIndex += 1
         this.getProducts()
@@ -479,6 +480,7 @@
       }
     },
     mounted () {
+      document.body.scrollTop = 0
       this.getEnterpriseDetail(this.teamId)
       this.handleSearchBar()
     },
