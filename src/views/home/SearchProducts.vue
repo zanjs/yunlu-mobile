@@ -28,19 +28,24 @@
           :sort-type="sort"
           @sort="sortProducts">
         </search-products-order>
-        <mt-loadmore
-          :top-method="loadProductTop"
-          :bottom-method="loadProductBottom"
-          :bottom-pull-text="bottomPullText"
-          :bottom-drop-text="bottomDropText"
-          :auto-fill="false"
-          ref="loadMoreProducts">
-          <product-list-mode
-            :store="products"
-            class="product-list"
-            @click="goProductDetail">
-          </product-list-mode>
-        </mt-loadmore>
+        <product-list-mode
+          :store="products"
+          @click="goProductDetail">
+        </product-list-mode>
+        <mugen-scroll
+          :handler="loadProductBottom"
+          :handle-on-mount="false"
+          :should-handle="!loading">
+          <div
+            v-if="loading"
+            class="loading">
+            <mt-spinner
+              type="snake"
+              :size="18">
+            </mt-spinner>
+            <p>加载中...</p>
+          </div>
+        </mugen-scroll>
         <back-to-top
           v-if="showGoTopBtn"
           @click="goTop()">
@@ -72,6 +77,7 @@
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -109,7 +115,8 @@
             name: '携程',
             url: 'https://m.ctrip.com/'
           }
-        ]
+        ],
+        loading: true
       }
     },
     components: {
@@ -117,7 +124,8 @@
       HotTags,
       ProductListMode,
       BackToTop,
-      SearchProductsOrder
+      SearchProductsOrder,
+      MugenScroll
     },
     methods: {
       resetSearchBar () {
@@ -151,6 +159,7 @@
       },
       async getProducts (sort = this.sort, q = this.searchParams) {
         this.sort = sort
+        this.loading = true
         let {res} = await requestFn({
           url: '/products',
           params: {
@@ -161,8 +170,21 @@
           }
         })
         if (res.data) {
-          let tmpArr = this.handleProductThumbnails(res.data.products)
-          this.getFilesPublisheds(tmpArr, res.data.products)
+          if (res.data.products.length === 0) {
+            this.loading = false
+            document.body.scrollTop -= 20
+            if (this.pageIndex !== 1) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
+          } else {
+            let tmpArr = this.handleProductThumbnails(res.data.products)
+            this.getFilesPublisheds(tmpArr, res.data.products)
+          }
+        } else {
+          this.loading = false
         }
       },
       handleProductThumbnails (arr) {
@@ -183,26 +205,16 @@
         })
         if (res.data) {
           this.hasSearch = true
+          this.loading = false
           if (this.pageIndex === 1) {
             this.products = this.handleProducts(arr, res.data.files)
             this.productsThumbnails = res.data.files
-            // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-              this.$refs.loadMoreProducts.onTopLoaded()
-            }
           } else {
-            if (res.data.files.length === 0) {
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
-            }
             this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
             this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
-            if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-              this.$refs.loadMoreProducts.onBottomLoaded()
-            }
           }
+        } else {
+          this.loading = false
         }
       },
        // 手机QQ浏览器不支持array.findIndex方法
@@ -252,10 +264,6 @@
           this.showGoTopBtn = status
         }, this.height)
       },
-      loadProductTop () {
-        this.pageIndex = 1
-        this.getProducts(this.sort, this.searchParams)
-      },
       loadProductBottom () {
         this.pageIndex += 1
         this.getProducts(this.sort, this.searchParams)
@@ -298,11 +306,25 @@
     @include px2rem(padding-top, 98px);
   }
   .product-list-container {
-    @include px2rem(padding-top, 172px);
+    position: relative;
+    @include pm2rem(padding, 172px, 0px, 10px, 0px);
+    .loading {
+      height: 40px;
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
+      }
+    }
     .option-bar {
       position: fixed;
       @include px2rem(top, 98px);
       width: 100%;
+      max-width: 540px;
       z-index: 2;
     }
     .empty-products {

@@ -17,16 +17,17 @@
     <div class="list">
       <template v-if="allEnterprises && allEnterprises.length > 0">
         <list
-          :loading="loading"
           :store="allEnterprises"
           @click="goEnterpriseCarte">
         </list>
         <mugen-scroll
           :handler="loadEnterpriseBottom"
+          :handle-on-mount="true"
           :should-handle="!loading">
-          <div class="loading">
+          <div
+            v-if="loading"
+            class="loading">
             <mt-spinner
-              v-if="loading"
               type="snake"
               :size="18">
             </mt-spinner>
@@ -119,7 +120,7 @@
             state.allEnterprises = res.data.enterprises
           } else {
             if (res.data.enterprises.length === 0) {
-              document.body.scrollTop -= 41
+              // document.body.scrollTop -= 41
               Toast({
                 message: '没有更多数据了',
                 duration: 1000
@@ -206,7 +207,7 @@
   @import '../../styles/mixin';
 
   .list {
-    @include px2rem(padding-top, 176px);
+    @include pm2rem(padding, 176px, 0px, 10px, 0px);
     position: relative;
     .empty-products {
       text-align: center;
