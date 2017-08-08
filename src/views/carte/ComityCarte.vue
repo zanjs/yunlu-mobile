@@ -56,9 +56,10 @@
                   key="product"
                   :handler="loadProductBottom"
                   :should-handle="!productLoading">
-                  <div class="loading">
+                  <div
+                    v-if="productLoading"
+                    class="loading">
                     <mt-spinner
-                      v-if="productLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
@@ -100,9 +101,10 @@
                   key="enterprise"
                   :handler="loadEnterpriseBottom"
                   :should-handle="!enterpriseLoading">
-                  <div class="loading">
+                  <div
+                    v-if="enterpriseLoading"
+                    class="loading">
                     <mt-spinner
-                      v-if="enterpriseLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
@@ -127,19 +129,19 @@
                     @click="goPersonCarte">
                   </person-list>
                   <mugen-scroll
-                  key="person"
-                  :handler="loadPersonBottom"
-                  :should-handle="!personLoading">
-                  <div
-                    v-if="personLoading"
-                    class="loading">
-                    <mt-spinner
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>加载中...</p>
-                  </div>
-                </mugen-scroll>
+                    key="person"
+                    :handler="loadPersonBottom"
+                    :should-handle="!personLoading">
+                    <div
+                      v-if="personLoading"
+                      class="loading">
+                      <mt-spinner
+                        type="snake"
+                        :size="18">
+                      </mt-spinner>
+                      <p>加载中...</p>
+                    </div>
+                  </mugen-scroll>
                 </div>
               </template>
               <div

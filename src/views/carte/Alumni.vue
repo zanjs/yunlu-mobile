@@ -41,28 +41,7 @@
           mode="out-in">
           <template v-if="activeIndex === 0">
             <template v-if="products && products.length > 0">
-              <mt-loadmore
-                key="product"
-                :top-method="loadProductTop"
-                :bottom-method="loadProductBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMoreProducts">
-                <div
-                  v-infinite-scroll="loadProductBottom"
-                  infinite-scroll-disabled="productLoading"
-                  infinite-scroll-distance="10">
-                  <div
-                    v-if="productLoading"
-                    class="loading">
-                     <mt-spinner
-                       type="snake"
-                       :size="18">
-                     </mt-spinner>
-                    <p>加载中...</p>
-                  </div>
-                </div>
+              <div>
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -73,7 +52,21 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-              </mt-loadmore>
+                <mugen-scroll
+                  key="product"
+                  :handler="loadProductBottom"
+                  :should-handle="!productLoading">
+                  <div
+                    v-if="productLoading"
+                    class="loading">
+                    <mt-spinner
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </mugen-scroll>
+              </div>
             </template>
             <div
               v-else
@@ -99,19 +92,26 @@
           </template>
           <template v-if="activeIndex === 2">
             <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <mt-loadmore
-                key="enterprise"
-                :top-method="loadEnterpriseTop"
-                :bottom-method="loadEnterpriseBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMoreEnterprises">
+              <div>
                 <enterprise-list
                   :store="enterpriseMembers"
                   @click="goClass">
                 </enterprise-list>
-              </mt-loadmore>
+                <mugen-scroll
+                  key="enterprise"
+                  :handler="loadEnterpriseBottom"
+                  :should-handle="!enterpriseLoading">
+                  <div
+                    v-if="enterpriseLoading"
+                    class="loading">
+                    <mt-spinner
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </mugen-scroll>
+              </div>
             </template>
             <div
               v-else
@@ -122,19 +122,26 @@
           </template>
           <template v-if="activeIndex === 3">
             <template v-if="alumniBusiness && alumniBusiness.length > 0">
-              <mt-loadmore
-                key="person"
-                :top-method="loadPersonTop"
-                :bottom-method="loadPersonBottom"
-                :bottom-pull-text="bottomPullText"
-                :bottom-drop-text="bottomDropText"
-                :auto-fill="false"
-                ref="loadMorePeople">
+              <div>
                 <enterprise-list
                   :store="alumniBusiness"
                   @click="goEnterpriseCarte">
                 </enterprise-list>
-              </mt-loadmore>
+                <mugen-scroll
+                  key="person"
+                  :handler="loadPersonBottom"
+                  :should-handle="!personLoading">
+                  <div
+                    v-if="personLoading"
+                    class="loading">
+                    <mt-spinner
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </mugen-scroll>
+              </div>
             </template>
             <div
               v-else
@@ -190,6 +197,7 @@
   import PopDialog from '../../components/common/PopDialog'
   import BackToTop from '../../components/common/BackToTop'
   import { Toast } from 'mint-ui'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -207,7 +215,6 @@
         placeholder: '搜索产品',
         productPageIndex: 1,
         productPageSize: 10,
-        productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         personPageIndex: 1,
@@ -221,7 +228,10 @@
         activeIndex: 0,
         showGoTopBtn: false,
         showDialog: false,
-        message: null
+        message: null,
+        productLoading: false,
+        enterpriseLoading: false,
+        personLoading: false
       }
     },
     components: {
@@ -234,7 +244,8 @@
       PopDialog,
       Search,
       Order,
-      BackToTop
+      BackToTop,
+      MugenScroll
     },
     methods: {
       getEnterpriseDetail () {
@@ -424,6 +435,7 @@
       },
       getEnterpriseList (q = this.queryParams) {
         this.queryParams = q
+        this.enterpriseLoading = true
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/guilds`,
           method: 'get',
@@ -437,31 +449,29 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchEnterprise = q !== ''
+            this.enterpriseLoading = false
             if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
-                this.$refs.loadMoreEnterprises.onTopLoaded()
-              }
             } else {
               if (res.data.members.length === 0) {
+                document.body.scrollTop -= 50
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000
                 })
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
-              if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
-                this.$refs.loadMoreEnterprises.onBottomLoaded()
-              }
             }
             this.getAlumniBusiness()
           },
           reject: () => {
+            this.enterpriseLoading = false
           }
         })
       },
       getAlumniBusiness (q = this.queryParams) {
         this.queryParams = q
+        this.personLoading = true
         this.$store.dispatch('commonAction', {
           url: '/enterprises',
           method: 'get',
@@ -475,25 +485,22 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearchPerson = q !== ''
+            this.personLoading = false
             if (this.personPageIndex === 1) {
               this.alumniBusiness = res.data.enterprises
-              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onTopLoaded) {
-                this.$refs.loadMorePeople.onTopLoaded()
-              }
             } else {
               if (res.data.enterprises.length === 0) {
+                document.body.scrollTop -= 50
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000
                 })
               }
               this.alumniBusiness = [...this.alumniBusiness, ...res.data.enterprises]
-              if (this.$refs.loadMorePeople && this.$refs.loadMorePeople.onBottomLoaded) {
-                this.$refs.loadMorePeople.onBottomLoaded()
-              }
             }
           },
           reject: () => {
+            this.personLoading = false
           }
         })
       },
@@ -651,19 +658,9 @@
         this.productPageIndex += 1
         this.getProducts()
       },
-      loadEnterpriseTop () {
-        this.enterprisePageIndex = 1
-        this.getEnterpriseList()
-      },
       loadEnterpriseBottom () {
         this.enterprisePageIndex += 1
         this.getEnterpriseList()
-      },
-      loadPersonTop () {
-        this.personPageIndex = 1
-        if (getStore('user')) {
-          this.getAlumniBusiness()
-        }
       },
       loadPersonBottom () {
         this.personPageIndex += 1
