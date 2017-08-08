@@ -303,6 +303,7 @@
       position: fixed;
       @include px2rem(top, 98px);
       width: 100%;
+      max-width: 540px;
       z-index: 2;
     }
     .empty-products {
