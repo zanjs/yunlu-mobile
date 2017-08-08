@@ -165,6 +165,14 @@
                   <div
                     v-if="m.name && m.value"
                     class="title">{{m.name}} : {{m.value}}</div>
+                    <div
+                      v-for="(n, indexN) in m.children"
+                      :key="indexN"
+                      class="third-row-container">
+                      <div class="third-item">
+                        <div class="title">{{n.name}} : {{n.value}}</div>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -1442,7 +1450,18 @@
           flex: 1;
           @include font-dpr(13px);
           @include line-height(26px);
-          @include pm2rem(margin, 0px, 50px, 0px, 20px);
+          @include pm2rem(margin, 0px, 50px, 0px, 60px);
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+      .third-item {
+        display: block;
+        .title {
+          flex: 1;
+          @include font-dpr(13px);
+          @include line-height(26px);
+          @include pm2rem(margin, 0px, 50px, 0px, 100px);
           word-wrap: break-word;
           word-break: break-all;
         }
