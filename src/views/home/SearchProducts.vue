@@ -116,7 +116,7 @@
             url: 'https://m.ctrip.com/'
           }
         ],
-        loading: true
+        loading: false
       }
     },
     components: {
@@ -143,7 +143,7 @@
         this.pageIndex = 1
       },
       sortProducts (val) {
-        // 每次切换排序方式，都需要栋第一页开始，避免前面已加载的数据顺序异常
+        // 每次切换排序方式，都需要从第一页开始，避免前面已加载的数据顺序异常
         this.pageIndex = 1
         this.getProducts(val, this.searchParams)
       },
@@ -171,8 +171,10 @@
         })
         if (res.data) {
           if (res.data.products.length === 0) {
-            this.loading = false
             document.body.scrollTop -= 20
+            this.loading = false
+            this.hasSearch = true
+            this.products = [...res.data.products, ...this.products]
             if (this.pageIndex !== 1) {
               Toast({
                 message: '没有更多数据了',
@@ -256,6 +258,9 @@
         document.body.scrollTop = 0
       },
       handleSearchBtn () {
+        // 每次搜索需重置分页索引,并重置产品列表
+        this.pageIndex = 1
+        this.products = []
         this.searchProducts(this.sort, this.searchParams)
         document.activeElement.blur()
       },
@@ -271,7 +276,8 @@
     },
     mounted () {
       this.handleGoTopBtn()
-      this.$refs.searchInput.focus()
+      // 使用键盘上的搜索键，会再次进入mounted，导致键盘再次弹出来
+      // this.$refs.searchInput.focus()
     }
   }
 </script>
