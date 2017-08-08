@@ -70,7 +70,6 @@
   @import "../../styles/mixin";
 
   .load-more-container {
-    @include px2rem(min-height, 660px);
     @include px2rem(margin-bottom, 20px);
   }
   .container {

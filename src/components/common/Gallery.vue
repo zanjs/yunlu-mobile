@@ -35,13 +35,12 @@
   @import '../../styles/mixin';
 
   .gallery {
-    @include pm2rem(margin, 0px, 0px, 40px, 0px);
+    @include pm2rem(margin, 0px, 0px, 10px, 0px);
     @include pm2rem(padding, 10px, 4px, 0px, 12px);
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
     align-content: flex-start;
-    @include px2rem(min-height, 944px);
     .photo {
       @include px2rem(width, 236px);
       @include px2rem(height, 236px);
