@@ -44,7 +44,10 @@
                   :store="products"
                   @click="goProductDetail">
                 </product-thumbnail-mode>
-                <mugen-scroll :handler="loadProductBottom" :should-handle="!loading">
+                <mugen-scroll
+                  :handler="loadProductBottom"
+                  :handle-on-mount="false"
+                  :should-handle="!loading">
                   <div
                     v-if="loading"
                     class="loading">
@@ -206,10 +209,12 @@
             this.loading = false
             // 这里必须向上滚动大于等于50，否则会连发两次请求。
             document.body.scrollTop -= 50
-            Toast({
-              message: '没有更多数据了',
-              duration: 1000
-            })
+            if (this.productPageIndex !== 1) {
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            }
           } else {
             this.getFilesPublisheds(tmppArr, res.data.products, q)
           }

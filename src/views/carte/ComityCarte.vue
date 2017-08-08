@@ -55,10 +55,12 @@
                 <mugen-scroll
                   key="product"
                   :handler="loadProductBottom"
+                  :handle-on-mount="false"
                   :should-handle="!productLoading">
-                  <div class="loading">
+                  <div
+                    v-if="productLoading"
+                    class="loading">
                     <mt-spinner
-                      v-if="productLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
@@ -99,10 +101,12 @@
                 <mugen-scroll
                   key="enterprise"
                   :handler="loadEnterpriseBottom"
+                  :handle-on-mount="false"
                   :should-handle="!enterpriseLoading">
-                  <div class="loading">
+                  <div
+                    v-if="enterpriseLoading"
+                    class="loading">
                     <mt-spinner
-                      v-if="enterpriseLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
@@ -127,19 +131,20 @@
                     @click="goPersonCarte">
                   </person-list>
                   <mugen-scroll
-                  key="person"
-                  :handler="loadPersonBottom"
-                  :should-handle="!personLoading">
-                  <div
-                    v-if="personLoading"
-                    class="loading">
-                    <mt-spinner
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>加载中...</p>
-                  </div>
-                </mugen-scroll>
+                    key="person"
+                    :handler="loadPersonBottom"
+                    :handle-on-mount="false"
+                    :should-handle="!personLoading">
+                    <div
+                      v-if="personLoading"
+                      class="loading">
+                      <mt-spinner
+                        type="snake"
+                        :size="18">
+                      </mt-spinner>
+                      <p>加载中...</p>
+                    </div>
+                  </mugen-scroll>
                 </div>
               </template>
               <div
@@ -284,7 +289,7 @@
           url: '/products',
           method: 'get',
           params: {
-            team_id: this.teamId, // 生产环境的一个企业
+            team_id: this.teamId,
             page: this.productPageIndex,
             per_page: this.productPageSize,
             sort: order || '',
@@ -297,10 +302,12 @@
             if (res.data.products.length === 0) {
               this.productLoading = false
               document.body.scrollTop -= 50
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
+              if (this.productPageIndex !== 1) {
+                Toast({
+                  message: '没有更多数据了',
+                  duration: 1000
+                })
+              }
             } else {
               let tmpArr = this.handleProductThumbnails(res.data.products)
               this.getFilesPublisheds(tmpArr, res.data.products, q)
@@ -467,10 +474,12 @@
             } else {
               if (res.data.members.length === 0) {
                 document.body.scrollTop -= 50
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                if (this.enterprisePageIndex !== 1) {
+                  Toast({
+                    message: '没有更多数据了',
+                    duration: 1000
+                  })
+                }
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
             }
@@ -506,10 +515,12 @@
             } else {
               if (res.data.preps.length === 0) {
                 document.body.scrollTop -= 50
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                if (this.personPageIndex !== 1) {
+                  Toast({
+                    message: '没有更多数据了',
+                    duration: 1000
+                  })
+                }
               }
               state.personMembers = [...state.personMembers, ...res.data.preps]
             }
