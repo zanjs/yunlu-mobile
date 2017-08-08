@@ -12,19 +12,27 @@
     </div>
     <template v-if="folders && folders.length > 0">
       <div class="space-container">
-        <mt-loadmore
-          :top-method="loadFolderTop"
-          :bottom-method="loadFolderBottom"
-          :bottom-pull-text="bottomPullText"
-          :bottom-drop-text="bottomDropText"
-          :auto-fill="false"
-          ref="loadMoreFolders">
+        <div>
           <space-folders
             :store="folders"
             @view-more="goFolder"
             @view-full-screen="showFullScreenPreview">
           </space-folders>
-        </mt-loadmore>
+          <mugen-scroll
+            :handler="loadFolderBottom"
+            :handle-on-mount="false"
+            :should-handle="!loading">
+            <div
+              v-if="loading"
+              class="loading">
+              <mt-spinner
+                type="snake"
+                :size="18">
+              </mt-spinner>
+              <p>加载中...</p>
+            </div>
+          </mugen-scroll>
+        </div>
       </div>
       <template v-if="showPreview">
         <div class="option-bar full-width">
@@ -84,6 +92,7 @@
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -130,7 +139,8 @@
           onSlideChangeEnd: (swiper) => {
             this.currentIndex = swiper.activeIndex + 1
           }
-        }
+        },
+        loading: false
       }
     },
     components: {
@@ -139,7 +149,8 @@
       PopDialog,
       SpaceFolders,
       swiper,
-      swiperSlide
+      swiperSlide,
+      MugenScroll
     },
     methods: {
       goFolder (item) {
@@ -151,6 +162,7 @@
         })
       },
       getData () {
+        this.loading = true
         this.$store.dispatch('commonAction', {
           url: '/shares/zone',
           method: 'get',
@@ -161,28 +173,24 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.loading = false
             state.userCard = res.data.cards
             this.headerName = res.data.cluster
             if (this.pageIndex === 1) {
               this.folders = res.data.gallery
-              // folders为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onTopLoaded) {
-                this.$refs.loadMoreFolders.onTopLoaded()
-              }
             } else {
               if (res.data.gallery.length === 0) {
+                document.body.scrollTop -= 50
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000
                 })
               }
               this.folders = [...this.folders, ...res.data.gallery]
-              if (this.$refs.loadMoreFolders && this.$refs.loadMoreFolders.onBottomLoaded) {
-                this.$refs.loadMoreFolders.onBottomLoaded()
-              }
             }
           },
           reject: () => {
+            this.loading = false
             this.$router.replace({name: 'ReportExpired'})
           }
         })
@@ -274,10 +282,6 @@
           }
         })
       },
-      loadFolderTop () {
-        this.pageIndex = 1
-        this.getData()
-      },
       loadFolderBottom () {
         this.pageIndex += 1
         this.getData()
@@ -300,6 +304,18 @@
 
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
+  }
+  .loading {
+    height: 40px;
+    @include font-dpr(15px);
+    color: $second-dark;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+      @include px2rem(margin-left, 20px);
+    }
   }
   .option-bar {
     position: fixed;

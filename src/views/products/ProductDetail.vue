@@ -147,14 +147,33 @@
               <div
                 v-for="(i, indexI) in item.children"
                 :key="indexI"
-                class="title-container">
-                <i class="iconfont icon-circle dot"></i>
-                <div class="title">{{i.name}} : {{i.value}}</div>
-                <i
-                  v-for="(j, indexJ) in i.quotes"
-                  :key="indexJ"
-                  class="iconfont icon-guanlian"
-                  @click="openPopDialog(j)"></i>
+                class="row-container">
+                <div class="sub-row-title">
+                  <i class="iconfont icon-circle dot"></i>
+                  <div class="title">{{i.name}} : {{i.value}}</div>
+                  <i
+                    v-for="(j, indexJ) in i.quotes"
+                    :key="indexJ"
+                    class="iconfont icon-guanlian"
+                    @click="openPopDialog(j)">
+                  </i>
+                </div>
+                <div
+                  v-for="(m, indexM) in i.children"
+                  :key="indexM"
+                  class="sub-item">
+                  <div
+                    v-if="m.name && m.value"
+                    class="title">{{m.name}} : {{m.value}}</div>
+                    <div
+                      v-for="(n, indexN) in m.children"
+                      :key="indexN"
+                      class="third-row-container">
+                      <div class="third-item">
+                        <div class="title">{{n.name}} : {{n.value}}</div>
+                      </div>
+                    </div>
+                </div>
               </div>
             </div>
           </template>
@@ -1396,6 +1415,56 @@
         @include px2rem(margin-right, 10px);
         @include font-dpr(21px);
         @include line-height(30px);
+      }
+    }
+    .row-container {
+      position: relative;
+      display: block;
+      .sub-row-title {
+        display: flex;
+        align-items: flex-start;
+        .dot {
+          @include pm2rem(margin, 0px, -9px, 0px, -20px);
+          @include font-dpr(30px);
+          @include line-height(30px);
+          color: #ACACAC;
+        }
+        .title {
+          flex: 1;
+          @include font-dpr(15px);
+          @include line-height(30px);
+          @include px2rem(margin-right, 50px);
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+        i {
+          color: #F4B223;
+          @include px2rem(margin-right, 10px);
+          @include font-dpr(21px);
+          @include line-height(30px);
+        }
+      }
+      .sub-item {
+        display: block;
+        .title {
+          flex: 1;
+          @include font-dpr(13px);
+          @include line-height(26px);
+          @include pm2rem(margin, 0px, 50px, 0px, 60px);
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+      .third-item {
+        display: block;
+        .title {
+          flex: 1;
+          @include font-dpr(13px);
+          @include line-height(26px);
+          @include pm2rem(margin, 0px, 50px, 0px, 100px);
+          word-wrap: break-word;
+          word-break: break-all;
+        }
       }
     }
     .no-product-args {

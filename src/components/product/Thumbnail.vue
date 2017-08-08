@@ -1,10 +1,11 @@
 <template>
   <section>
     <div class="gallery">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click.stop="handleClick(item)"
-           class="img-box">
+      <div
+        v-for="(item, index) in store"
+        :key="index"
+        @click.stop="handleClick(item)"
+        class="img-box">
         <img
           v-if="item.file_thumb_urls"
           v-lazy="{
@@ -54,6 +55,7 @@
     flex-wrap: wrap;
     .img-box {
       @include px2rem(width, 346px);
+      @include px2rem(height, 460px);
       @include pm2rem(margin, 0px, 14px, 20px, 0px);
       position: relative;
       display: flex;

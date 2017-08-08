@@ -4,23 +4,38 @@
       :title="headerName"
       @back="goBack()">
     </common-header>
-    <section class="container">
-      <mt-loadmore
-        :top-method="loadPhotosTop"
-        :bottom-method="loadPhotosBottom"
-        :bottom-pull-text="bottomPullText"
-        :bottom-drop-text="bottomDropText"
-        :top-distance="topDistance"
-        :auto-fill="false"
-        ref="loadMorePhotos">
-        <div class="photos-container">
-          <gallery
-            :data-source="photos"
-            @click="showFullScreenPreview">
-          </gallery>
+    <transition
+      name="fade"
+      :appear="true"
+      mode="out-in">
+      <section
+        v-if="photos && photos.length > 0"
+        class="container">
+        <gallery
+          :data-source="photos"
+          @click="showFullScreenPreview">
+        </gallery>
+        <mugen-scroll
+          key="photos"
+          :handler="loadPhotosBottom"
+          :should-handle="!photoLoading">
+          <div
+            v-if="!photoLoading"
+            class="loading">
+            <mt-spinner
+              type="snake"
+              :size="18">
+            </mt-spinner>
+            <p>加载中...</p>
+          </div>
+        </mugen-scroll>
+      </section>
+      <template v-else>
+        <div class="no-data">
+          <img src="../../assets/noFile.png">
         </div>
-      </mt-loadmore>
-    </section>
+      </template>
+    </transition>
     <template v-if="showPreview">
       <div class="option-bar full-width">
         <div class="left">
@@ -64,6 +79,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -103,14 +119,16 @@
           onSlideChangeEnd: (swiper) => {
             this.currentIndex = swiper.activeIndex + 1
           }
-        }
+        },
+        photoLoading: false
       }
     },
     components: {
       CommonHeader,
       Gallery,
       swiper,
-      swiperSlide
+      swiperSlide,
+      MugenScroll
     },
     methods: {
       beforeGetData () {
@@ -121,32 +139,31 @@
         }
       },
       getData (url, params) {
+        this.photoLoading = true
         this.$store.dispatch('commonAction', {
           url: url,
           method: 'get',
           params: params,
           target: this,
           resolve: (state, res) => {
+            this.photoLoading = false
             if (this.pageIndex === 1) {
               this.photos = res.data.photos
-              // photos为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onTopLoaded) {
-                this.$refs.loadMorePhotos.onTopLoaded()
-              }
             } else {
               if (res.data.photos.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                document.body.scrollTop -= 10
+                if (this.pageIndex !== 1) {
+                  Toast({
+                    message: '没有更多数据了',
+                    duration: 1000
+                  })
+                }
               }
               this.photos = [...this.photos, ...res.data.photos]
-              if (this.$refs.loadMorePhotos && this.$refs.loadMorePhotos.onBottomLoaded) {
-                this.$refs.loadMorePhotos.onBottomLoaded()
-              }
             }
           },
           reject: () => {
+            this.photoLoading = false
           }
         })
       },
@@ -157,10 +174,6 @@
         } else {
           this.$router.go(-1)
         }
-      },
-      loadPhotosTop () {
-        this.pageIndex = 1
-        this.beforeGetData()
       },
       loadPhotosBottom () {
         this.pageIndex += 1
@@ -218,8 +231,20 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-.container {
+  .container {
     @include px2rem(padding-top, 88px);
+    .loading {
+      height: 40px;
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
+      }
+    }
   }
   .option-bar {
     position: fixed;

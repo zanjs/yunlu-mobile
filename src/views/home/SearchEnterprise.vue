@@ -16,18 +16,24 @@
     </search>
     <div class="list">
       <template v-if="allEnterprises && allEnterprises.length > 0">
-        <mt-loadmore
-          :top-method="loadEnterpriseTop"
-          :bottom-method="loadEnterpriseBottom"
-          :bottom-pull-text="bottomPullText"
-          :bottom-drop-text="bottomDropText"
-          :auto-fill="false"
-          ref="loadMoreEnterprises">
-          <list
-            :store="allEnterprises"
-            @click="goEnterpriseCarte">
-          </list>
-        </mt-loadmore>
+        <list
+          :store="allEnterprises"
+          @click="goEnterpriseCarte">
+        </list>
+        <mugen-scroll
+          :handler="loadEnterpriseBottom"
+          :handle-on-mount="true"
+          :should-handle="!loading">
+          <div
+            v-if="loading"
+            class="loading">
+            <mt-spinner
+              type="snake"
+              :size="18">
+            </mt-spinner>
+            <p>加载中...</p>
+          </div>
+        </mugen-scroll>
         <back-to-top
           v-if="showGoTopBtn"
           @click="goTop()">
@@ -54,6 +60,7 @@
   import { getStore, removeStore, showBack } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
+  import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
       return {
@@ -63,18 +70,18 @@
         hasSearch: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         height: 160, // 向上滚动到160px，就显示回到顶部按钮
         showGoTopBtn: false,
-        exclude_service_ids: [] // 企业搜索需要过滤掉班级,页面维护一套services数组，里面包含了所有服务类型
+        exclude_service_ids: [], // 企业搜索需要过滤掉班级,页面维护一套services数组，里面包含了所有服务类型
+        loading: false
       }
     },
     components: {
       Search,
       List,
       CommonHeader,
-      BackToTop
+      BackToTop,
+      MugenScroll
     },
     methods: {
       async getServices () {
@@ -95,6 +102,7 @@
         return tmpArr
       },
       async getEnterprises (q = '') {
+        this.loading = true
         let {state, res} = await requestFn({
           url: '/enterprises',
           params: {
@@ -104,25 +112,21 @@
             exclude_service_ids: this.exclude_service_ids
           }
         })
+        this.loading = false
         if (res.data) {
           this.hasSearch = q !== ''
           if (this.enterprisePageIndex === 1) {
             document.body.scrollTop = 0
             state.allEnterprises = res.data.enterprises
-            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onTopLoaded) {
-              this.$refs.loadMoreEnterprises.onTopLoaded()
-            }
           } else {
-            if (res.data.enterprises === 0) {
+            if (res.data.enterprises.length === 0) {
+              // document.body.scrollTop -= 41
               Toast({
                 message: '没有更多数据了',
                 duration: 1000
               })
             }
             state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
-            if (this.$refs.loadMoreEnterprises && this.$refs.loadMoreEnterprises.onBottomLoaded) {
-              this.$refs.loadMoreEnterprises.onBottomLoaded()
-            }
           }
         }
       },
@@ -181,16 +185,13 @@
           this.showGoTopBtn = status
         }, this.height)
       },
-      loadEnterpriseTop () {
-        this.enterprisePageIndex = 1
-        this.getEnterprises(this.searchParams)
-      },
       loadEnterpriseBottom () {
         this.enterprisePageIndex += 1
         this.getEnterprises(this.searchParams)
       }
     },
     mounted () {
+      this.goTop()
       this.getServices()
       this.handleGoTopBtn()
     },
@@ -206,7 +207,7 @@
   @import '../../styles/mixin';
 
   .list {
-    @include px2rem(padding-top, 176px);
+    @include pm2rem(padding, 176px, 0px, 10px, 0px);
     position: relative;
     .empty-products {
       text-align: center;
@@ -215,6 +216,18 @@
         img {
           width: 50%;
         }
+      }
+    }
+    .loading {
+      height: 40px;
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
       }
     }
   }
