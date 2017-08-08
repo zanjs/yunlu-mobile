@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import 'mint-ui/lib/style.css'
 import './styles/iconfont.css'
+import 'swiper/dist/css/swiper.css'
 import App from './App'
 import router from './router'
 import MintUI from 'mint-ui'
