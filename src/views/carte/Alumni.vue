@@ -49,6 +49,20 @@
                 :bottom-drop-text="bottomDropText"
                 :auto-fill="false"
                 ref="loadMoreProducts">
+                <div
+                  v-infinite-scroll="loadProductBottom"
+                  infinite-scroll-disabled="productLoading"
+                  infinite-scroll-distance="10">
+                  <div
+                    v-if="productLoading"
+                    class="loading">
+                     <mt-spinner
+                       type="snake"
+                       :size="18">
+                     </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </div>
                 <product-list-mode
                   v-if="showList"
                   :store="products"
@@ -242,7 +256,7 @@
       getProducts (q = this.queryParams, order = this.productOrder) {
         this.queryParams = q
         this.productOrder = order
-        this.productLoaded = false
+        this.productLoading = true
         this.$store.dispatch('commonAction', {
           url: '/products',
           method: 'get',
@@ -257,10 +271,20 @@
           resolve: (state, res) => {
             this.hasSearch = q !== ''
             // this.queryParams = ''
-            let tmpArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmpArr, res.data.products, q)
+            if (res.data.products.length === 0) {
+              this.productLoading = false
+              document.body.scrollTop -= 50
+              Toast({
+                message: '没有更多数据了',
+                duration: 1000
+              })
+            } else {
+              let tmpArr = this.handleProductThumbnails(res.data.products)
+              this.getFilesPublisheds(tmpArr, res.data.products, q)
+            }
           },
           reject: () => {
+            this.productLoading = false
           }
         })
       },
@@ -304,29 +328,18 @@
           },
           target: this,
           resolve: (state, res) => {
+            this.productLoading = false
             if (this.productPageIndex === 1) {
               state.products = this.handleProducts(arr, res.data.files)
               state.productsThumbnails = res.data.files
-              // products为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onTopLoaded) {
-                this.$refs.loadMoreProducts.onTopLoaded()
-              }
             } else {
-              if (res.data.files.length === 0) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
-              }
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
-              if (this.$refs.loadMoreProducts && this.$refs.loadMoreProducts.onBottomLoaded) {
-                this.$refs.loadMoreProducts.onBottomLoaded()
-              }
             }
             this.getEnterpriseDocument()
           },
           reject: (state, error) => {
+            this.productLoading = false
             console.log(state, error)
           }
         })
@@ -633,10 +646,6 @@
         this.productOrder = val ? 1 : -1
         this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
         this.getProducts(this.queryParams, this.productOrder)
-      },
-      loadProductTop () {
-        this.productPageIndex = 1
-        this.getProducts()
       },
       loadProductBottom () {
         this.productPageIndex += 1
