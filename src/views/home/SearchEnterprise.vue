@@ -143,8 +143,8 @@
           method.call(context)
         }, 500)
       },
-      handleInput () {
-        if (this.searchParams === '') {
+      handleInput (e) {
+        if (e.target.value === '') {
           this.resetSearchBar()
         }
         this.enterprisePageIndex = 1

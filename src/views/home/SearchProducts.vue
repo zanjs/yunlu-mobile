@@ -136,8 +136,8 @@
         this.pageIndex = 1
         this.productsThumbnails = []
       },
-      handleInput () {
-        if (this.searchParams === '') {
+      handleInput (e) {
+        if (e.target.value === '') {
           this.resetSearchBar()
         }
         this.pageIndex = 1
