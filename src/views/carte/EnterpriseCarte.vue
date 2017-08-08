@@ -45,9 +45,10 @@
                   @click="goProductDetail">
                 </product-thumbnail-mode>
                 <mugen-scroll :handler="loadProductBottom" :should-handle="!loading">
-                  <div class="loading">
+                  <div
+                    v-if="loading"
+                    class="loading">
                     <mt-spinner
-                      v-if="loading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
