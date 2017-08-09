@@ -16,9 +16,15 @@ export const UPDATE_LEAN_CLOUD_CONVERSATIONS = 'UPDATE_CONVERSATIONS'
 export const RECEIVE_NEW_MESSAGE = 'RECEIVE_NEW_MESSAGE'
 // 更新未读消息
 export const UPDATE_UN_READ_MSG_COUNT = 'UPDATE_UN_READ_MSG_COUNT'
+// 将某一条会话标为已读
+export const MARK_AS_READ = 'MARK_AS_READ'
 // 搜索会话(暂时只支持本地搜索)
 export const SEARCH_CONVERSATION = 'SEARCH_CONVERSATION'
 // 选中/取消选中会话
 export const CHECK_CONVERSATION = 'CHECK_CONVERSATION'
+// 全选/取消全选会话
+export const CHECK_ALL_CONVERSATION = 'CHECK_ALL_CONVERSATION'
+// 过滤出需要删除的会话
+export const HANDLE_DELETE_CONVERSATIONS = 'HANDLE_DELETE_CONVERSATIONS'
 // 切换路由时，重置某些state中的数组，避免数据未加载时，显示上一次获取的数据
 export const RESET_STATE = 'RESET_STATE'

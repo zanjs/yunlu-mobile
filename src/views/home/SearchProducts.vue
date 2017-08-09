@@ -88,8 +88,6 @@
         pageSize: 20,
         showGoTopBtn: false,
         height: 160, // 向上滚动到160px，就显示回到顶部按钮
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         products: [],
         productsThumbnails: [],
         tags: [
