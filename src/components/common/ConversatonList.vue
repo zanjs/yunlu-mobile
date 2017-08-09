@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="list-container">
+    <div class="list-wrapper">
       <div
         v-for="(item, index) in store"
         :key="index"
@@ -24,6 +24,9 @@
           <img
             v-else
             src="../../assets/userAvatarSmall.png">
+          <div
+            v-if="!item.hasRead"
+            class="dot"></div>
           <div class="content-wraper">
             <div class="content">
               <div class="top">
@@ -73,7 +76,7 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .list-container {
+  .list-wrapper {
     background-color: $white;
     .row-item {
       display: flex;
@@ -99,11 +102,21 @@
         display: flex;
         align-items: center;
         height: inherit;
+        position: relative;
         img {
           @include px2rem(width, 118px);
           @include px2rem(height, 118px);
           @include px2rem(border-radius, 59px);
           @include px2rem(margin-right, 30px);
+        }
+        .dot {
+          position: absolute;
+          @include px2rem(top, 12px);
+          @include px2rem(left, 110px);
+          background-color: $red;
+          @include px2rem(width, 18px);
+          @include px2rem(height, 18px);
+          @include px2rem(border-radius, 9px);
         }
         .content-wraper {
           display: block;

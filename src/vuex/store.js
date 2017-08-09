@@ -13,7 +13,8 @@ const state = {
   deviceDelegate: null,
   leanCloudConversations: [],
   yunLuConversations: [],
-  conversationList: [],
+  conversationList: [], // 消息列表，用于页面显示(显示搜索结果)
+  originConversationList: [], // 原始消息列表
   unReadeMsgs: [], // 未读消息
   pageLoading: false,
   loadSuccess: false,
@@ -45,6 +46,7 @@ const getters = {
   leanCloudConversations: state => state.leanCloudConversations,
   yunLuConversations: state => state.yunLuConversations,
   conversationList: state => state.conversationList,
+  originConversationList: state => state.originConversationList,
   unReadeMsgs: state => state.unReadeMsgs,
   pageLoading: state => state.pageLoading,
   loadSuccess: state => state.loadSuccess,
@@ -94,8 +96,17 @@ const actions = {
   searchConversation ({commit}, params) {
     commit(types.SEARCH_CONVERSATION, {params})
   },
+  markAsRead ({commit}, params) {
+    commit(types.MARK_AS_READ, {params})
+  },
   checkConversation ({commit}, params) {
     commit(types.CHECK_CONVERSATION, {params})
+  },
+  checkAllConversation ({commit}, params) {
+    commit(types.CHECK_ALL_CONVERSATION, {params})
+  },
+  handleDeleteConversations ({commit}, params) {
+    commit(types.HANDLE_DELETE_CONVERSATIONS, {params})
   },
   receiveNewMessage ({commit}, params) {
     commit(types.RECEIVE_NEW_MESSAGE, {params})
@@ -184,14 +195,93 @@ const mutations = {
 
   [types.UPDATE_UN_READ_MSG_COUNT] (state, {params}) {
     state.unReadeMsgs = params
+    let tmpArr = []
+    for (let i = 0; i < params.length; i++) {
+      tmpArr.push({id: params[i].id})
+    }
+    setStore('unReadMsgs', tmpArr)
   },
 
   [types.SEARCH_CONVERSATION] (state, {params}) {
-    state.conversationList = state.conversationList.filter(i => i.remark.indexOf(params) > -1)
+    state.conversationList = state.originConversationList.filter(i => i.remark.indexOf(params) > -1)
   },
 
   [types.CHECK_CONVERSATION] (state, {params}) {
-    // TODO: 将会话列表的状态管理移至vuex
+    let originalIndex = 0
+    let index = 0
+    for (let i = 0; i < state.originConversationList.length; i++) {
+      if (params.item.item.conversationId === state.originConversationList[i].conversationId) {
+        originalIndex = i
+        break
+      }
+    }
+    state.originConversationList[originalIndex].checked = !params.item.checked
+    for (let i = 0; i < state.conversationList.length; i++) {
+      if (params.item.item.conversationId === state.conversationList[i].conversationId) {
+        index = i
+        break
+      }
+    }
+    state.conversationList[index].checked = !params.item.checked
+    params.resolve(state.conversationList)
+  },
+
+  [types.CHECK_ALL_CONVERSATION] (state, {params}) {
+    /**
+     * 这里的params.item实际上就是页面上显示的会话列表(即state.conversationList)
+     * 全选时，需要同时改变原始会话列表和过滤后的会话列表的选中状态
+     */
+    for (let i = 0; i < state.originConversationList.length; i++) {
+      for (let j = 0; j < params.items.length; j++) {
+        if (state.originConversationList[i].conversationId === params.items[j].conversationId) {
+          state.originConversationList[i].checked = !params.checked
+        }
+      }
+    }
+    for (let i = 0; i < state.conversationList.length; i++) {
+      state.conversationList[i].checked = !params.checked
+    }
+  },
+
+  [types.HANDLE_DELETE_CONVERSATIONS] (state, {params}) {
+    let tmpArr = []
+    for (let i = 0; i < state.conversationList.length; i++) {
+      if (state.conversationList[i].checked) {
+        tmpArr.push(state.conversationList[i].conversationId)
+      }
+    }
+    params.resolve(tmpArr)
+  },
+
+  [types.MARK_AS_READ] (state, {params}) {
+    let index = 0
+    let tmpArr = []
+    for (let i = 0; i < state.originConversationList.length; i++) {
+      if (params.id === state.originConversationList[i].id) {
+        state.originConversationList[i].hasRead = true
+      }
+    }
+    state.conversationList = [...state.originConversationList]
+    for (let i = 0; i < state.originConversationList.length; i++) {
+      for (let j = 0; j < state.unReadeMsgs.length; j++) {
+        if (state.originConversationList[i].conversationId === state.unReadeMsgs[j].id) {
+          index = j
+          break
+        }
+      }
+    }
+    for (let i = 0; i < state.leanCloudConversations.length; i++) {
+      for (let j = 0; j < state.originConversationList.length; j++) {
+        if (state.leanCloudConversations[i].conversationId === state.originConversationList[j].conversationId) {
+          state.leanCloudConversations[i].hasRead = true
+        }
+      }
+    }
+    state.unReadeMsgs.splice(index, 1)
+    for (let i = 0; i < state.unReadeMsgs.length; i++) {
+      tmpArr.push({id: state.unReadeMsgs[i].id})
+    }
+    setStore('unReadMsgs', tmpArr)
   },
 
   [types.RECEIVE_NEW_MESSAGE] (state, {params}) {
@@ -209,6 +299,7 @@ const mutations = {
     if (count === 0) {
       state.conversationList.push(params)
     }
+    state.originConversationList = [...state.conversationList]
   },
 
   [types.RESET_STATE] (state) {

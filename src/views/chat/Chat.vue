@@ -203,7 +203,9 @@
           date: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
         }
         this.msgs.push(tmpObj)
-        document.body.scrollTop = document.body.scrollHeight
+        this.$nextTick(() => {
+          document.body.scrollTop = document.body.scrollHeight
+        })
       },
       async init () {
         this.currentUserDelegate = await this.$realtime.createIMClient(this.uuid, {
@@ -229,6 +231,9 @@
         if (this.conferences && this.conferences.conversation_id) {
           this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
           if (this.conversation) {
+            await this.conversation.read()
+            this.$store.dispatch('markAsRead', this.conversation)
+            console.log('进入聊天页面，将该会话相关的未读消息变为已读。')
             let msgHistory = await this.conversation.queryMessages({limit: 1000})
             if (msgHistory) {
               this.handleHistoryMsg(msgHistory)
@@ -246,8 +251,16 @@
               avatar: this.targetUser.avatar_url,
               date: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
+            if (this.conversation) {
+              this.conversation.read().then(conversation => {
+                this.$store.dispatch('markAsRead', this.conversation)
+                console.log('在聊天界面接收新消息，并将接收到的消息标为已读')
+              }).catch(console.error.bind(console))
+            }
             this.msgs.push(tmpObj)
-            document.body.scrollTop = document.body.scrollHeight
+            this.$nextTick(() => {
+              document.body.scrollTop = document.body.scrollHeight
+            })
           }
         })
       },
@@ -280,7 +293,9 @@
             this.msgs.push(tmpObj)
           }
         }
-        document.body.scrollTop = document.body.scrollHeight
+        this.$nextTick(() => {
+          document.body.scrollTop = document.body.scrollHeight
+        })
       },
       goBack () {
         if (getStore('Chat_goHome')) {

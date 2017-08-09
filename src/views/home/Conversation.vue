@@ -17,17 +17,17 @@
         <i class="iconfont icon-sousuo"></i>
       </div>
     </div>
-    <template v-if="conversations && conversations.length > 0">
+    <template v-if="conversationList && conversationList.length > 0">
       <conversation-list
         class="list-container"
-        :store="conversations"
+        :store="conversationList"
         @click="goChat"
         @check="handleItemCheck">
       </conversation-list>
       <div class="option-bar full-width">
         <div
           class="check-btn"
-          @click="handleAllCheck(conversations, checkAll)">
+          @click="handleAllCheck(conversationList, checkAll)">
           <i
             v-if="!checkAll"
             class="iconfont icon-weixuanzhong"></i>
@@ -55,7 +55,7 @@
         @click="deleteItem">
       </confirm-dialog>
     </template>
-    <template v-if="conversations && conversations.length === 0">
+    <template v-if="conversationList && conversationList.length === 0">
       <div class="empty-container">
         <div class="img-container">
           <img src="../../assets/noConversation.png">
@@ -101,8 +101,8 @@
           this.$router.go(-1)
         }
       },
-      handleInput () {
-        if (this.searchParams === '') {
+      handleInput (e) {
+        if (e.target.value === '') {
           this.resetSearchBar()
         }
       },
@@ -117,14 +117,7 @@
         document.activeElement.blur()
       },
       searchConversation (params) {
-        let tmpArr = []
-        for (let i = 0; i < this.conversations.length; i++) {
-          if (this.conversations[i].remark.indexOf(params) > -1) {
-            tmpArr.push(this.conversations[i])
-          }
-        }
-        // this.$store.dispatch('searchConversation', params)
-        this.conversations = tmpArr
+        this.$store.dispatch('searchConversation', params)
       },
       getConversationList () {
         this.$store.dispatch('commonAction', {
@@ -136,14 +129,14 @@
           target: this,
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
-            state.conversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'))
-            this.conversations = [...state.conversationList]
+            state.originConversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'), getStore('unReadMsgs') || [])
+            state.conversationList = [...state.originConversationList]
           },
           reject: () => {
           }
         })
       },
-      handleConversations (arr1, arr2) {
+      handleConversations (arr1, arr2, arr3) {
         let tmpArr = []
         for (let i = 0; i < arr1.length; i++) {
           for (let j = 0; j < arr2.length; j++) {
@@ -159,9 +152,18 @@
             }
           }
         }
+        for (let i = 0; i < arr3.length; i++) {
+          for (let j = 0; j < tmpArr.length; j++) {
+            if (arr3[i].id === tmpArr[j].conversationId) {
+              tmpArr[j].hasRead = false
+            }
+          }
+        }
         return tmpArr
       },
       goChat (item) {
+        // 不管改会话是不是已读，统一将全局状态标为已读。(leanCloud返回的会话列表是无状态的，不知道是否已读)
+        // this.$store.dispatch('markAsRead', item)
         if (item.linkType === 'Product') {
           this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.linkId}})
         } else if (item.linkType !== 'Product') {
@@ -169,27 +171,25 @@
         }
       },
       handleItemCheck (item) {
-        for (let i = 0; i < this.conversations.length; i++) {
-          if (item.item.conversationId === this.conversations[i].conversationId) {
-            this.conversations[i].checked = !item.checked
-            this.isAllChecked(this.conversations)
+        this.$store.dispatch('checkConversation', {
+          item: item,
+          resolve: (arr) => {
+            let count = 0
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i].checked) {
+                count += 1
+              }
+            }
+            this.hasChecked = count > 0
+            this.checkAll = count === arr.length
           }
-        }
-      },
-      isAllChecked (arr) {
-        let count = 0
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].checked) {
-            count += 1
-          }
-        }
-        this.hasChecked = count > 0
-        this.checkAll = count === arr.length
+        })
       },
       handleAllCheck (items, bool) {
-        for (let i = 0; i < items.length; i++) {
-          items[i].checked = !bool
-        }
+        this.$store.dispatch('checkAllConversation', {
+          items: items,
+          checked: bool
+        })
         this.checkAll = this.hasChecked = !bool
       },
       deleteConfirm () {
@@ -208,7 +208,11 @@
             tmpArr.push(arr[i].conversationId)
           }
         }
-        this.removeConversation(tmpArr)
+        this.$store.dispatch('handleDeleteConversations', {
+          resolve: arr => {
+            this.removeConversation(arr)
+          }
+        })
       },
       removeConversation (ids) {
         this.$store.dispatch('commonAction', {
