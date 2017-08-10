@@ -2,45 +2,51 @@
   <section>
     <div class="option-bar">
       <div class="item">
-        <div class="text"
-             @click="changeOrder(orderUp)">价格</div>
+        <div
+          class="text"
+          @click="changeOrder(orderUp)">
+          价格
+        </div>
         <div class="order-icon">
           <div class="icon-box">
-            <i class="iconfont icon-shang"
-               v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"></i>
+            <i
+              class="iconfont icon-shang"
+              v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"></i>
           </div>
           <div class="icon-box">
-            <i class="iconfont icon-xia"
-               v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"></i>
+            <i
+              class="iconfont icon-xia"
+              v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"></i>
           </div>
         </div>
       </div>
       <div class="item">
-        <i class="iconfont"
-           v-bind:class="{'icon-liebiao': !showList, 'icon-liebiao1': showList}"
-           @click="swithList(showList)"></i>
+        <i
+          class="iconfont"
+          v-bind:class="{'icon-liebiao': !showList, 'icon-liebiao1': showList}"
+          @click="swithList(showList)"></i>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
+  export default {
+    data () {
+      return {
 
-    }
-  },
-  props: ['orderUp', 'showList'],
-  methods: {
-    changeOrder (val) {
-      this.$emit('order-change', !val)
+      }
     },
-    swithList (val) {
-      this.$emit('switch', !val)
+    props: ['orderUp', 'showList'],
+    methods: {
+      changeOrder (val) {
+        this.$emit('order-change', !val)
+      },
+      swithList (val) {
+        this.$emit('switch', !val)
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

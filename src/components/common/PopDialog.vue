@@ -32,20 +32,20 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
+  export default {
+    data () {
+      return {
 
-    }
-  },
-  name: 'PopDialog',
-  props: ['store'],
-  methods: {
-    handleClick () {
-      this.$emit('close')
+      }
+    },
+    name: 'PopDialog',
+    props: ['store'],
+    methods: {
+      handleClick () {
+        this.$emit('close')
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

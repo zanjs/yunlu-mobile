@@ -1,16 +1,18 @@
 <template>
   <section id="informationList">
     <div class="gallery">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click.stop="handleClick(item)"
-           class="img-box">
-        <img v-lazy="{
-              src: item.thumb_urls[0],
-              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-            }">
-        <div class="cover">
+      <div
+        v-for="(item, index) in store"
+        :key="index"
+        @click.stop="handleClick(item)"
+        class="img-box">
+        <img
+          v-lazy="{
+            src: item.thumb_urls[0],
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }">
+        <div class="cover ellipsis">
           {{item.cnname}}（{{item.count}}）
         </div>
       </div>
@@ -79,11 +81,11 @@
         right: 0;
         background-color: rgba(0, 0, 0, .5);
         @include px2rem(height, 50px);
-        display: flex;
-        justify-content: center;
+        @include px2rem(width, 330px);
         color: $white;
         @include font-dpr(13px);
-        @include line-height(26px);
+        @include px2rem(line-height, 50px);
+        text-align: center;
       }
     }
   }
