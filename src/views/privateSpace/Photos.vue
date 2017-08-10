@@ -18,9 +18,10 @@
         <mugen-scroll
           key="photos"
           :handler="loadPhotosBottom"
+          :handle-on-mount="false"
           :should-handle="!photoLoading">
           <div
-            v-if="!photoLoading"
+            v-if="photoLoading"
             class="loading">
             <mt-spinner
               type="snake"
