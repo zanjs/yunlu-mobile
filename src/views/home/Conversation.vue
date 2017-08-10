@@ -176,7 +176,7 @@
       },
       handleItemCheck (item) {
         this.$store.dispatch('checkConversation', {
-          item: item,
+          item: {...item},
           resolve: (arr) => {
             let count = 0
             for (let i = 0; i < arr.length; i++) {
@@ -230,6 +230,7 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
+              this.markAsRead(ids)
               this.getConversationList()
               Toast({
                 message: '删除成功',
@@ -244,6 +245,12 @@
             })
           }
         })
+      },
+      // 若删除的是未读消息，需要把被删除的未读消息，变为已读
+      markAsRead (ids) {
+        for (let i = 0; i < ids.length; i++) {
+          this.$store.dispatch('markAsRead', ids[i])
+        }
       }
     },
     mounted () {

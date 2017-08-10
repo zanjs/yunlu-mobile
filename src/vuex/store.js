@@ -210,19 +210,20 @@ const mutations = {
     let originalIndex = 0
     let index = 0
     for (let i = 0; i < state.originConversationList.length; i++) {
-      if (params.item.item.conversationId === state.originConversationList[i].conversationId) {
+      if (params.item.conversationId === state.originConversationList[i].conversationId) {
         originalIndex = i
         break
       }
     }
     state.originConversationList[originalIndex].checked = !params.item.checked
     for (let i = 0; i < state.conversationList.length; i++) {
-      if (params.item.item.conversationId === state.conversationList[i].conversationId) {
+      if (params.item.conversationId === state.conversationList[i].conversationId) {
         index = i
         break
       }
     }
     state.conversationList[index].checked = !params.item.checked
+    Vue.set(state.conversationList, index, state.conversationList[index])
     params.resolve(state.conversationList)
   },
 
