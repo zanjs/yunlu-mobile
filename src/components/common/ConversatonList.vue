@@ -7,7 +7,7 @@
         class="row-item">
         <div
           class="check-box"
-          @click="handleChecked(item, item.checked)">
+          @click="handleChecked(item)">
           <i
             v-if="item.checked"
             class="iconfont icon-xuanzhong checked"></i>
@@ -59,8 +59,8 @@
       handleClick (item) {
         this.$emit('click', item)
       },
-      handleChecked (item, bool) {
-        this.$emit('check', {item: item, checked: bool})
+      handleChecked (item) {
+        this.$emit('check', item)
       }
     },
     filters: {
