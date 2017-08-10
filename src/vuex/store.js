@@ -299,6 +299,9 @@ const mutations = {
     if (count === 0) {
       state.conversationList.push(params)
     }
+    state.conversationList.sort((a, b) => {
+      return moment(b.timestamp).isAfter(a.timestamp)
+    })
     state.originConversationList = [...state.conversationList]
   },
 
