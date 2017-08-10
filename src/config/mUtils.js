@@ -18,7 +18,11 @@ export const getStore = name => {
   if (!name) {
     return false
   }
-  return JSON.parse(window.sessionStorage.getItem(name))
+  try {
+    return JSON.parse(window.sessionStorage.getItem(name))
+  } catch (error) {
+    return window.sessionStorage.getItem(name)
+  }
 }
 
 /**
