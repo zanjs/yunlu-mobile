@@ -72,6 +72,7 @@
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { mapGetters } from 'vuex'
+  import moment from 'moment'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -130,6 +131,9 @@
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
             state.originConversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'), getStore('unReadMsgs') || [])
+            state.originConversationList.sort((a, b) => {
+              return moment(b.timestamp).isAfter(a.timestamp)
+            })
             state.conversationList = [...state.originConversationList]
           },
           reject: () => {

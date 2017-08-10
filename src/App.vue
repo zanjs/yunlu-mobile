@@ -8,6 +8,7 @@
 
 <script>
   import { getStore } from './config/mUtils'
+  import { requestFn } from './config/request'
   import moment from 'moment'
   export default {
     name: 'app',
@@ -64,12 +65,12 @@
           this.$store.dispatch('updateLeanCouldConversations', conversations)
         })
         this.$store.state.deviceDelegate.on('message', message => {
-          console.log('deviceDelegate', message)
+          console.log('deviceDelegate, 设备uuid收到的消息，用于强制下线等操作', message)
         })
         if (!this.acitve) {
           this.$store.state.userDelegate.on('message', message => {
             this.acitve = true
-            console.log('userDelegate', message)
+            console.log('userDelegate, 用户uuid收到的消息，用于聊天等操作', message)
             let tmpObj = {
               conversationId: message.cid,
               from: message.from,
@@ -79,16 +80,48 @@
               timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
               clazz: message._lcattrs.clazz,
               lastMessage: message._lctext,
-              isSelf: false
+              isSelf: false,
+              remark: message._lcattrs.fromName,
+              logoUrl: message._lcattrs.fromLogo
             }
+            this.reOpenBanList(message.from, message._lcattrs.clazz, message.cid)
             // 不在聊天页面，收到的新消息统一默认为未读消息
-            if (this.$route.name !== 'Chat') {
+            if (this.$route.name !== 'Chat' && message.from !== getStore('user').id) {
               this.$store.dispatch('receiveNewMessage', tmpObj)
             }
           })
           this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
-            console.log('未读消息记录', unreadMessagesCount)
+            console.log('聊天未读消息记录', unreadMessagesCount)
             this.$store.dispatch('updateUnReadMsgCount', unreadMessagesCount)
+          })
+        }
+      },
+      async reOpenBanList (linkId, clazz, conversationId) {
+        let {res} = await requestFn({
+          url: '/im/conferences',
+          params: {
+            token: getStore('user').authentication_token,
+            closed: true
+          }
+        })
+        // 若收到的消息id(会话id)在被关闭的会话列表中，则需要开启会话
+        let flag = false
+        let conferencesLinkId = null
+        for (let i = 0; i < res.data.conferences.length; i++) {
+          if (conversationId === res.data.conferences[i].conversation_id) {
+            flag = true
+            break
+          }
+        }
+        if (flag) {
+          await requestFn({
+            url: '/im/conferences',
+            method: 'post',
+            data: {
+              token: getStore('user').authentication_token,
+              ...(conferencesLinkId ? {product_id: conferencesLinkId} : {}), // 如果是产品客服，需要产品id
+              user_id: linkId
+            }
           })
         }
       }
