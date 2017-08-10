@@ -212,7 +212,10 @@
     methods: {
       beforeGetData () {
         if (this.p) {
-          this.getPersonDetail('/shares/card', {p: this.p})
+          this.getPersonDetail('/shares/card', {
+            p: this.p,
+            ...(this.token ? {token: this.token} : {})
+          })
         } else {
           this.shouldLogin()
         }
