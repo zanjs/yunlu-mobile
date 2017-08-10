@@ -17,7 +17,6 @@
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
-        closedConversationList: [],
         acitve: false
       }
     },
@@ -98,8 +97,8 @@
         }
       },
       async getClosedConversationList () {
-        if (this.closedConversationList.length === 0) {
-          let {res} = await requestFn({
+        if (this.$store.state.closedConversationList.length === 0) {
+          let {state, res} = await requestFn({
             url: '/im/conferences',
             params: {
               token: getStore('user').authentication_token,
@@ -107,7 +106,7 @@
             }
           })
           if (res.data) {
-            this.closedConversationList = res.data.conferences
+            state.closedConversationList = res.data.conferences
           }
         }
       },
@@ -115,10 +114,10 @@
         // 若收到的消息id(会话id)在被关闭的会话列表中，则需要开启会话
         let flag = false
         let conferencesLinkId = null
-        for (let i = 0; i < this.closedConversationList.length; i++) {
-          if (conversationId === this.closedConversationList[i].conversation_id) {
+        for (let i = 0; i < this.$store.state.closedConversationList.length; i++) {
+          if (conversationId === this.$store.state.closedConversationList[i].conversation_id) {
             flag = true
-            conferencesLinkId = this.closedConversationList[i].link_id
+            conferencesLinkId = this.$store.state.closedConversationList[i].link_id
             break
           }
         }
@@ -132,6 +131,8 @@
               user_id: linkId
             }
           })
+          // 打开被关闭的会话后，要更细被关闭的会话列表
+          this.getClosedConversationList()
         }
       }
     },

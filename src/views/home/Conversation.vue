@@ -69,6 +69,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { requestFn } from '../../config/request'
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { mapGetters } from 'vuex'
@@ -139,6 +140,18 @@
           reject: () => {
           }
         })
+      },
+      async getClosedConversationList () {
+        let {state, res} = await requestFn({
+          url: '/im/conferences',
+          params: {
+            token: getStore('user').authentication_token,
+            closed: true
+          }
+        })
+        if (res.data) {
+          state.closedConversationList = res.data.conferences
+        }
       },
       handleConversations (arr1, arr2, arr3) {
         let tmpArr = []
@@ -232,6 +245,7 @@
             if (res.data.success) {
               this.markAsRead(ids)
               this.getConversationList()
+              this.getClosedConversationList()
               Toast({
                 message: '删除成功',
                 duration: 500

@@ -13,6 +13,7 @@ const state = {
   deviceDelegate: null,
   leanCloudConversations: [],
   yunLuConversations: [],
+  closedConversationList: [], // 被关闭的消息列表，用于再次打开
   conversationList: [], // 消息列表，用于页面显示(显示搜索结果)
   originConversationList: [], // 原始消息列表
   unReadeMsgs: [], // 未读消息
@@ -45,6 +46,7 @@ const getters = {
   deviceDelegate: state => state.deviceDelegate,
   leanCloudConversations: state => state.leanCloudConversations,
   yunLuConversations: state => state.yunLuConversations,
+  closedConversationList: state => state.closedConversationList,
   conversationList: state => state.conversationList,
   originConversationList: state => state.originConversationList,
   unReadeMsgs: state => state.unReadeMsgs,
