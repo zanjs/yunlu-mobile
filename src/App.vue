@@ -17,7 +17,6 @@
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
-        conversationList: [],
         acitve: false
       }
     },
@@ -25,6 +24,7 @@
       beforeInit () {
         // 登录后getStore('user')会发生变化，不能直接从data中取数据，data中的数据不是响应式的。
         if (getStore('user') && getStore('user').authentication_token) {
+          this.getClosedConversationList()
           this.init()
         } else {
           return false
@@ -96,20 +96,28 @@
           })
         }
       },
-      async reOpenBanList (linkId, clazz, conversationId) {
-        let {res} = await requestFn({
-          url: '/im/conferences',
-          params: {
-            token: getStore('user').authentication_token,
-            closed: true
+      async getClosedConversationList () {
+        if (this.$store.state.closedConversationList.length === 0) {
+          let {state, res} = await requestFn({
+            url: '/im/conferences',
+            params: {
+              token: getStore('user').authentication_token,
+              closed: true
+            }
+          })
+          if (res.data) {
+            state.closedConversationList = res.data.conferences
           }
-        })
+        }
+      },
+      async reOpenBanList (linkId, clazz, conversationId) {
         // 若收到的消息id(会话id)在被关闭的会话列表中，则需要开启会话
         let flag = false
         let conferencesLinkId = null
-        for (let i = 0; i < res.data.conferences.length; i++) {
-          if (conversationId === res.data.conferences[i].conversation_id) {
+        for (let i = 0; i < this.$store.state.closedConversationList.length; i++) {
+          if (conversationId === this.$store.state.closedConversationList[i].conversation_id) {
             flag = true
+            conferencesLinkId = this.$store.state.closedConversationList[i].link_id
             break
           }
         }
@@ -123,6 +131,8 @@
               user_id: linkId
             }
           })
+          // 打开被关闭的会话后，要更细被关闭的会话列表
+          this.getClosedConversationList()
         }
       }
     },
