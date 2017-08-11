@@ -29,13 +29,12 @@
           <span class="font-14">流程</span>
         </div>
         <div class="flex-between row-item"
-             @click="goRoute('Download', true)">
+             @click="goRoute('Conversation', hasLogin)">
           <div class="icon-box box-2 flex">
             <i class="iconfont icon-huihua"></i>
-            <!-- 生产环境暂不显示 -->
-            <!-- <div
+            <div
               v-if="unReadeMsgs.length > 0"
-              class="dot second-bg"></div> -->
+              class="dot second-bg"></div>
           </div>
           <span class="font-14">会话</span>
         </div>
