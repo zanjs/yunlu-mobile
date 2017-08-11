@@ -40,31 +40,40 @@
           this.$router.go(-1)
         }
       },
-      geocoder (address) {
+      geocoder (bool, params) {
         window.AMap.service('AMap.Geocoder', () => { // 回调函数
-          // 实例化Geocoder
           let geocoder = new window.AMap.Geocoder()
-          // 使用geocoder 对象完成相关功能
-          geocoder.getLocation(address, (status, result) => {
-            if (status === 'complete' && result.info === 'OK') {
-              this.latitude = result.geocodes[0].location.lat
-              this.longitude = result.geocodes[0].location.lng
-              this.url = `https://uri.amap.com/marker?position=${this.longitude},${this.latitude}&name=${this.headerName}&src=mypage&coordinate=gaode&callnative=0`
-            }else{
-              Toast({
-                message: '定位失败',
-                duration: 1000
-              })
-              this.url = `https://uri.amap.com/marker?position=${this.localLng},${this.localLat}&name=${this.headerName}&src=mypage&coordinate=gaode&callnative=0`
-            }
-          })
+          if (bool) {
+            geocoder.getAddress(params, (status, result) => {
+              if (status === 'complete' && result.info === 'OK') {
+                //获得了有效的地址信息:
+                this.url = `https://uri.amap.com/marker?position=${this.longitude},${this.latitude}&name=${result.regeocode.formattedAddress}&src=mypage&coordinate=gaode&callnative=0`
+              }else{
+                this.url = `https://uri.amap.com/marker?position=${this.longitude},${this.latitude}&name=${this.headerName}&src=mypage&coordinate=gaode&callnative=0`
+              }
+            })
+          } else {
+            geocoder.getLocation(address, (status, result) => {
+              if (status === 'complete' && result.info === 'OK') {
+                this.latitude = result.geocodes[0].location.lat
+                this.longitude = result.geocodes[0].location.lng
+                this.url = `https://uri.amap.com/marker?position=${this.longitude},${this.latitude}&name=${address}&src=mypage&coordinate=gaode&callnative=0`
+              }else{
+                Toast({
+                  message: '定位失败',
+                  duration: 1000
+                })
+                this.url = `https://uri.amap.com/marker?position=${this.localLng},${this.localLat}&name=${this.address}&src=mypage&coordinate=gaode&callnative=0`
+              }
+            })
+          }
         })
       },
       showGeocoder () {
         if (this.address && (!this.longitude || !this.latitude)) {
-          this.geocoder(this.address)
+          this.geocoder(false, this.address)
         } else {
-          this.url = `https://uri.amap.com/marker?position=${this.longitude},${this.latitude}&name=${this.headerName}&src=mypage&coordinate=gaode&callnative=0`
+          this.geocoder(true, [this.longitude, this.latitude])
         }
       }
     },
