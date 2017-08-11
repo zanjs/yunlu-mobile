@@ -141,7 +141,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
@@ -327,7 +327,11 @@
       cardClick (item) {
         switch (item.type) {
           case 'chat':
-            this.$router.push({name: 'Chat', query: {type: item.inContact ? 'Stranger' : 'User', linkId: item.value}})
+            if (!this.token) {
+              this.goLogin()
+            } else {
+              this.$router.push({name: 'Chat', query: {type: item.inContact ? 'Stranger' : 'User', linkId: item.value}})
+            }
             break
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
@@ -409,6 +413,10 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
       },
       shouldLogin () {
         if (!this.token) {
