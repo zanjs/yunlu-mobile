@@ -63,7 +63,7 @@
                   message: '定位失败',
                   duration: 1000
                 })
-                this.url = `https://uri.amap.com/marker?position=${this.localLng},${this.localLat}&name=${this.params}&src=mypage&coordinate=gaode&callnative=0`
+                this.url = `https://uri.amap.com/marker?position=${this.localLng},${this.localLat}&name=${params}&src=mypage&coordinate=gaode&callnative=0`
               }
             })
           }
