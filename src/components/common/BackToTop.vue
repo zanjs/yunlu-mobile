@@ -34,14 +34,17 @@
   .float-btn {
     position: fixed;
     @include px2rem(bottom, 76px);
+    @include px2rem(height, 0px);
     display: block;
     width: 100%;
     max-width: 540px;
     .cirlce-btn {
-      float: right;
+      right: 0;
+      bottom: 0;
       @include px2rem(width, 100px);
       @include px2rem(height, 100px);
       @include px2rem(border-radius, 50px);
+      position: absolute;
       display: flex;
       flex-direction: column;
       justify-content: center;
