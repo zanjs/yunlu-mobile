@@ -16,7 +16,6 @@
           @click="showFullScreenPreview">
         </gallery>
         <mugen-scroll
-          key="photos"
           :handler="loadPhotosBottom"
           :handle-on-mount="false"
           :should-handle="!photoLoading">
@@ -233,7 +232,7 @@
   @import '../../styles/mixin';
 
   .container {
-    @include px2rem(padding-top, 88px);
+    @include pm2rem(padding, 88px, 0px, 10px, 0px);
     .loading {
       height: 40px;
       @include font-dpr(15px);
