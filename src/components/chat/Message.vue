@@ -13,14 +13,24 @@
         <div class="arrow arrow-right"></div>
       </div>
       <div class="avatar">
-        <img :src="avatar">
+        <img
+          v-if="avatar"
+          :src="avatar">
+        <img
+          v-else
+          src="../../assets/userAvatarSmall.png">
       </div>
     </div>
     <div
       v-else
       class="msg-row">
       <div class="avatar">
-        <img :src="avatar">
+        <img
+          v-if="avatar"
+          :src="avatar">
+        <img
+          v-else
+          src="../../assets/userAvatarSmall.png">
       </div>
       <div class="msg-content">
         <div class="arrow arrow-left"></div>
