@@ -57,7 +57,6 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         uuid: getStore('user') ? getStore('user').id : '',
         mySelf: getStore('user') || null,
-        targetUser: null,
         type: this.$route.query.type,
         teamId: '',
         chatType: 'single', // 默认单聊（群聊:group）
@@ -103,7 +102,6 @@
             this.conferences = res.data.conferences
             this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
             this.title = res.data.conferences.clazz === 'group' ? `${res.data.conferences.remark}(${res.data.conferences.members.length})` : res.data.conferences.remark
-            this.targetUser = res.data.conferences.members[0]
             this.init()
           },
           reject: () => {
@@ -133,7 +131,6 @@
             this.conferences = res.data.conferences
             this.title = res.data.conferences.remark
             this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
-            this.targetUser = res.data.conferences.members[0]
             this.init()
           },
           reject: () => {
@@ -191,9 +188,7 @@
           clazz: 'user',
           conversationType: 0,
           fromName: this.mySelf.home_name,
-          iOS_toName: this.targetUser.display_name,
-          username: this.mySelf.home_name,
-          iOS_toURL: this.targetUser.avatar_url
+          username: this.mySelf.home_name
         })
         let result = await this.conversation.send(msg)
         let tmpObj = {
@@ -244,12 +239,12 @@
         this.currentUserDelegate.on('message', message => {
           if (message.from === this.uuid) {
             return false
-          } else {
+          } else if (this.conferences && this.conferences.conversation_id && message.cid === this.conferences.conversation_id) {
             let tmpObj = {
               isSelf: false,
               content: message.content._lctext,
-              name: message._lcattrs.fromName,
-              avatar: message._lcattrs.fromLogo,
+              name: message.content.clazz === 'group' ? message.content._lcattrs.name : message.content._lcattrs.fromName, // 早期部分群聊消息中没有fromName字段
+              avatar: message.content._lcattrs.fromLogo, // 早期部分群聊消息中没有fromLogo字段,需在组件中给出默认头像
               date: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
             if (this.conversation) {
@@ -264,6 +259,8 @@
             this.$nextTick(() => {
               document.body.scrollTop = document.body.scrollHeight
             })
+          } else {
+            // 非当前会话，不做处理
           }
         })
       },
@@ -289,7 +286,11 @@
             let tmpObj = {
               isSelf: false,
               content: arr[i].content._lctext,
-              name: this.targetUser.display_name,
+              /* 1.历史遗留问题,早期部分群聊消息体中，没有fromName和fromLogo字段。
+                 2.聊天记录中有图片时，消息类型为Message，此时没有自定义_lcattrs字段（消息类型为TextMessage时有此字段），取用content中的_lcattrs字段。
+                 3.当聊天类型为单聊时，消息体中没有name字段，用fromName代替。
+                 4.用户被移出群聊时，其聊天记录仍然存在，没有头像，需在组件中给出默认头像。 */
+              name: arr[i].content._lcattrs.clazz === 'group' ? arr[i].content._lcattrs.name : arr[i].content._lcattrs.fromName,
               avatar: logoUrl,
               date: moment(arr[i].timestamp).format('YYYY-MM-DD HH:mm:ss')
             }
