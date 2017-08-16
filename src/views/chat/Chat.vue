@@ -37,8 +37,7 @@
           :avatar="item.avatar">
         </message>
       </div>
-      <chat-input
-      @send="send">
+      <chat-input @send="send">
       </chat-input>
     </section>
   </section>
@@ -59,7 +58,6 @@
         mySelf: getStore('user') || null,
         type: this.$route.query.type,
         teamId: '',
-        chatType: 'single', // 默认单聊（群聊:group）
         productId: this.$route.query.productId || '',
         linkId: this.$route.query.linkId || '',
         conversationId: this.$route.query.conversationId || '',
@@ -100,7 +98,6 @@
           target: this,
           resolve: (state, res) => {
             this.conferences = res.data.conferences
-            this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
             this.title = res.data.conferences.clazz === 'group' ? `${res.data.conferences.remark}(${res.data.conferences.members.length})` : res.data.conferences.remark
             this.init()
           },
@@ -130,7 +127,6 @@
           resolve: (state, res) => {
             this.conferences = res.data.conferences
             this.title = res.data.conferences.remark
-            this.chatType = res.data.conferences.clazz === 'group' ? 'group' : 'single'
             this.init()
           },
           reject: () => {
