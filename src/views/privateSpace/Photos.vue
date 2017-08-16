@@ -31,8 +31,10 @@
         </mugen-scroll>
       </section>
       <template v-else>
-        <div class="no-data">
-          <img src="../../assets/noFile.png">
+        <div class="empty">
+          <div class="no-data">
+            <img src="../../assets/noFile.png">
+          </div>
         </div>
       </template>
     </transition>
@@ -245,6 +247,9 @@
         @include px2rem(margin-left, 20px);
       }
     }
+  }
+  .empty {
+    @include px2rem(padding-top, 88px);
   }
   .option-bar {
     position: fixed;
