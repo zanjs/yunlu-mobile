@@ -38,7 +38,7 @@
         </div>
       </template>
     </transition>
-    <template v-if="showPreview">
+    <div v-show="showPreview">
       <div class="option-bar full-width">
         <div class="left">
           <div
@@ -56,11 +56,12 @@
       </div>
       <swiper
         :options="swiperOption"
-        class="full-screen-swiper">
+        class="full-screen-swiper"
+        ref="mySwiper">
         <!-- slides -->
         <swiper-slide
           class="swiper-zoom-container full-screen-bg"
-          v-for="(item, index) in photos"
+          v-for="(item, index) in previewPhotos"
           :key="item.url">
           <img
             v-lazy="{
@@ -71,7 +72,7 @@
             alt="">
         </swiper-slide>
       </swiper>
-    </template>
+    </div>
   </section>
 </template>
 
@@ -92,6 +93,7 @@
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : '',
         photos: [],
+        previewPhotos: [],
         bottomPullText: '上拉加载更多',
         bottomDropText: '释放加载',
         topDistance: 10,
@@ -118,8 +120,38 @@
           width: window.innerWidth,
           touchAngle: 45,
           initialSlide: 0,
-          onSlideChangeEnd: (swiper) => {
-            this.currentIndex = swiper.activeIndex + 1
+          preloadImages: false,
+          onSlideNextEnd: (swiper) => {
+            this.currentIndex += 1
+            if (swiper.isEnd) {
+              if (this.photos.length - this.currentIndex >= this.pageSize - 2) {
+                this.previewPhotos = this.photos.slice(this.currentIndex - 2, this.currentIndex + this.pageSize - 2)
+                this.$refs.mySwiper.swiper.slideTo(1, 1, true)
+              } else if (this.photos.length - this.currentIndex < this.pageSize - 2 && this.photos.length - this.currentIndex > 0) {
+                this.previewPhotos = this.photos.slice(this.photos.length - this.pageSize, this.photos.length)
+                this.$refs.mySwiper.swiper.slideTo(this.pageSize + this.currentIndex - 1 - this.photos.length, 1, true)
+              } else if (this.photos.length - this.currentIndex === 0) {
+                // do nothing
+              } else {
+                console.error(new Error('this.previewPhotos配置出错'))
+              }
+            }
+          },
+          onSlidePrevEnd: (swiper) => {
+            this.currentIndex -= 1
+            if (swiper.isBeginning) {
+              if (this.currentIndex === 1 || this.photos.length <= this.pageSize) {
+                // do nothind
+              } else if (this.currentIndex <= this.pageSize && this.photos.length - this.currentIndex >= 1) {
+                this.previewPhotos = this.photos.slice(0, this.pageSize)
+                this.$refs.mySwiper.swiper.slideTo(this.currentIndex - 1, 1, true)
+              } else if (this.currentIndex > this.pageSize && this.photos.length - this.currentIndex > 1) {
+                this.previewPhotos = this.photos.slice(this.currentIndex - this.pageSize, this.currentIndex)
+                this.$refs.mySwiper.swiper.slideTo(this.currentIndex - 1, 1, true)
+              } else {
+                console.error(new Error('未知错误'))
+              }
+            }
           }
         },
         photoLoading: false
@@ -181,9 +213,34 @@
         this.pageIndex += 1
         this.beforeGetData()
       },
+      handlePreviewPhotos (index, arr, pageSize) {
+        let tmpArr = []
+        if (arr.length <= pageSize) {
+          tmpArr = [...arr]
+        } else if (index > 0 && arr.length - index >= pageSize) {
+          tmpArr = arr.slice(index - 1, index + pageSize - 1)
+        } else if (index === 0) {
+          tmpArr = arr.slice(index, index + pageSize)
+        } else if (index > 0 && arr.length - index < pageSize) {
+          tmpArr = arr.slice(arr.length - index + 1, pageSize + arr.length - index + 1)
+        }
+        return tmpArr
+      },
       showFullScreenPreview (index) {
         this.currentIndex = index + 1
-        this.swiperOption.initialSlide = index
+        if (this.photos.length <= this.pageSize) {
+          this.previewPhotos = [...this.photos]
+          this.$refs.mySwiper.swiper.slideTo(index, 1, true)
+        } else if (index > 0 && this.photos.length - index >= this.pageSize) {
+          this.previewPhotos = this.photos.slice(index - 1, index + this.pageSize - 1)
+          this.$refs.mySwiper.swiper.slideTo(1, 1, true)
+        } else if (index === 0) {
+          this.previewPhotos = this.photos.slice(index, index + this.pageSize)
+          this.$refs.mySwiper.swiper.slideTo(0, 1, true)
+        } else if (index > 0 && this.photos.length - index < this.pageSize) {
+          this.previewPhotos = this.photos.slice(this.photos.length - this.pageSize, this.photos.length)
+          this.$refs.mySwiper.swiper.slideTo(this.pageSize + index - this.photos.length, 1, true)
+        }
         this.showPreview = true
         this.stopTouchMove()
       },
