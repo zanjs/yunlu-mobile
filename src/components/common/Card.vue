@@ -13,14 +13,14 @@
         <template v-if="store && store.mobiles && store.mobiles.length > 0">
           <div class="level">
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-V1"></use>
+              <use xlink:href="#icon-zhenshi4"></use>
             </svg>
           </div>
         </template>
         <template v-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
           <div class="level">
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-v4"></use>
+              <use xlink:href="#icon-zhenshi3"></use>
             </svg>
           </div>
         </template>
@@ -116,7 +116,7 @@
         }
         .level {
           @include px2rem(margin-top, 20px);
-          @include font-dpr(25px);
+          @include font-dpr(23px);
           line-height: 1;
         }
       }
@@ -125,12 +125,13 @@
     .icons {
       display: flex;
       @include px2rem(height, 100px);
-      @include pm2rem(padding, 0px, 50px, 0px, 50px);
+      @include pm2rem(padding, 0px, 27px, 0px, 27px);
       align-items: center;
       border-top: 1px solid $second-grey;
       a {
         text-decoration: none;
         @include px2rem(width, 108px);
+        @include px2rem(max-width, 108px);
         display: flex;
         align-items: center;
         justify-content: center;
