@@ -19,27 +19,27 @@
           class="icon-container">
           <template v-if="store && store.state && store.state !== 'approved'">
             <svg
-              class="icon font-25"
+              class="icon large"
               aria-hidden="true">
-              <use xlink:href="#icon-v4"></use>
+              <use xlink:href="#icon-zhenshi3"></use>
             </svg>
           </template>
           <template v-if="store && store.state && store.state === 'approved'">
             <svg
-              class="icon font-25"
+              class="icon large"
               aria-hidden="true">
-              <use xlink:href="#icon-V2"></use>
+              <use xlink:href="#icon-zhenshi4"></use>
             </svg>
           </template>
           <template v-if="false">
-            <svg class="icon font-20" aria-hidden="true">
-              <use xlink:href="#icon-D3"></use>
+            <svg class="icon large" aria-hidden="true">
+              <use xlink:href="#icon-zhenshi3"></use>
             </svg>
-            <svg class="icon font-20" aria-hidden="true">
-              <use xlink:href="#icon-J"></use>
+            <svg class="icon large" aria-hidden="true">
+              <use xlink:href="#icon-zhenshi3"></use>
             </svg>
-            <svg class="icon font-20" aria-hidden="true">
-              <use xlink:href="#icon-Z4"></use>
+            <svg class="icon large" aria-hidden="true">
+              <use xlink:href="#icon-zhenshi3"></use>
             </svg>
           </template>
         </div>
@@ -48,14 +48,18 @@
           class="icon-container">
         </div>
         <div class="address-container">
+          <!-- 取消显示地址 -->
           <span
             class="address font-13 second"
-            v-if="store && store.provice_name && store.city_name">{{store.provice_name}}&middot;{{store.city_name}}</span>
+            v-if="false">
+            {{store.provice_name}}&middot;{{store.city_name}}
+          </span>
           <span
             v-else
             class="address font-13 second">&nbsp;</span>
+          <!-- 取消显示类型 -->
           <span
-            v-if="store && store.service && store.service.name"
+            v-if="false"
             class="tag white primary-bg font-12">{{store.service.name}}</span>
         </div>
       </div>
@@ -163,10 +167,14 @@
         flex-direction: column;
         .icon-container {
           display: flex;
-          align-items: center
+          align-items: center;
+          line-height: 1;
+          .large {
+            @include font-dpr(23px);
+          }
         }
         svg {
-          @include pm2rem(margin, 20px, 16px, 30px, 0px);
+          @include pm2rem(margin, 20px, 18px, 30px, 0px);
         }
         .address-container {
           .address {
