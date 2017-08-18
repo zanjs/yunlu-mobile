@@ -28,14 +28,14 @@
           <template v-if="comityDetail.organization && comityDetail.organization.state  && comityDetail.organization.state === 'approved'">
             <div class="level">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-V2"></use>
+                <use xlink:href="#icon-zhenshi4"></use>
               </svg>
             </div>
           </template>
           <template v-if="comityDetail.organization && comityDetail.organization.state  && comityDetail.organization.state !== 'approved'">
             <div class="level">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-v4"></use>
+                <use xlink:href="#icon-zhenshi3"></use>
               </svg>
             </div>
           </template>
@@ -215,7 +215,7 @@
         }
       }
       .level {
-        @include font-dpr(25px);
+        @include font-dpr(23px);
       }
     }
     .item {
