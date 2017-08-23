@@ -7,8 +7,9 @@
 </template>
 
 <script>
-  import { getStore } from './config/mUtils'
+  import { getStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
+  import { MessageBox } from 'mint-ui'
   import moment from 'moment'
   export default {
     name: 'app',
@@ -17,7 +18,8 @@
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
-        acitve: false
+        acitve: false,
+        showLogoffPopup: false
       }
     },
     methods: {
@@ -66,6 +68,14 @@
         })
         this.$store.state.deviceDelegate.on('message', message => {
           console.log('deviceDelegate, 设备uuid收到的消息，用于强制下线等操作', message)
+          if (message.from === 'system' && message._lcattrs.clazz === 'sign_devices.logoff') {
+            this.showLogoffPopup = true
+            MessageBox.alert('授权到期，主设备将当前设备下线').then(action => {
+              this.showLogoffPopup = false
+              removeAllStore()
+              this.$router.replace({name: 'See'})
+            })
+          }
         })
         if (!this.acitve) {
           this.$store.state.userDelegate.on('message', message => {
@@ -169,6 +179,18 @@
   }
   .mint-indicator-wrapper {
     z-index: 1004 !important;
+  }
+  .mint-msgbox-wrapper {
+    max-width: 440px !important;
+    .mint-msgbox {
+      max-width: 360px !important;
+    }
+  }
+  .mint-msgbox-confirm {
+    color: $green !important;
+  }
+  .mint-msgbox-confirm:active {
+    color: $green !important;
   }
   .mint-header-title {
     height: inherit !important;
