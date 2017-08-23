@@ -22,7 +22,7 @@
         </list>
         <mugen-scroll
           :handler="loadEnterpriseBottom"
-          :handle-on-mount="true"
+          :handle-on-mount="false"
           :should-handle="!loading">
           <div
             v-if="loading"
