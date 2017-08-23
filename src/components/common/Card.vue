@@ -13,7 +13,7 @@
         <template v-if="store && store.mobiles && store.mobiles.length > 0">
           <div class="level">
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-zhenshi4"></use>
+              <use xlink:href="#icon-zhenshi"></use>
             </svg>
           </div>
         </template>
