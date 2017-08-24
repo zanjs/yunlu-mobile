@@ -4,9 +4,10 @@
       <img
         v-if="store && store.avatar_url"
         :src="store.avatar_url">
-      <img
+      <div
         v-else
-        src="http://oatl31bw3.bkt.clouddn.com/735510dbjw8eoo1nn6h22j20m80m8t9t.jpg">
+        class="avatar-loading">
+      </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
         <p v-else>胖胖的云庐君</p>
@@ -108,6 +109,11 @@
       img {
         @include px2rem(width, 156px);
         @include px2rem(height, 156px);
+      }
+      .avatar-loading {
+        @include px2rem(width, 156px);
+        @include px2rem(height, 156px);
+        background-color: $sixth-grey;
       }
       .content {
         @include px2rem(margin-left, 26px);

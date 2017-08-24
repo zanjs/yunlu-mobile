@@ -447,7 +447,7 @@
       },
       showScrollBtnFn (target) {
         let dom = this.$refs[target]
-        if (!this[`${target}Listener`]) {
+        if (!this[`${target}Listener`] && dom) {
           dom.addEventListener('mouseenter', e => {
             this.showScrollBtn = true
           })
