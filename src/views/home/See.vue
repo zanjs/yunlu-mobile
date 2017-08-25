@@ -258,11 +258,12 @@
       .text {
         color: $eighth-grey;
         border: none;
-        @include px2rem(line-height, 70px);
-        display: block;
+        display: flex;
         @include px2rem(height, 70px);
         @include px2rem(border-radius, 40px);
         @include pm2rem(padding, 0px, 20px, 0px, 102px);
+        align-items: center;
+        line-height: normal;
       }
       i {
         color: $eleventh-grey;
