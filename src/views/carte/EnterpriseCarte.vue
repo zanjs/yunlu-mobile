@@ -91,12 +91,12 @@
     </div>
     <search
       v-show="showSearchBar"
-      @search="search(queryParams)">
+      @search="handleSearchBtn(queryParams)">
       <input
         slot="input"
         type="search"
         v-model="queryParams"
-        @keyup.enter.prevent="search(queryParams)"
+        @keyup.enter.prevent="handleSearchBtn(queryParams)"
         :placeholder="placeholder">
     </search>
     <order
@@ -201,7 +201,6 @@
             q: q || ''
           }
         })
-
         if (res.data) {
           this.hasSearch = q !== ''
           let tmppArr = this.handleProductThumbnails(res.data.products)
@@ -371,10 +370,16 @@
         this.handleSearchBar()
       },
       search (res) {
-        document.activeElement.blur()
         if (this.showProduct) {
           this.getProducts(res)
         }
+      },
+      handleSearchBtn (res) {
+        // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
+        this.productPageIndex = 1
+        document.body.scrollTop = 158
+        this.search(res)
+        document.activeElement.blur()
       },
       handleSearchBar () {
         showBack((status) => {

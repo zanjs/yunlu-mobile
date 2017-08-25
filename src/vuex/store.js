@@ -320,6 +320,7 @@ const mutations = {
     state.enterpriseMembers = []
     state.personMembers = []
     state.productDetailTeam = []
+    state.userCard = {}
     state.clusters = []
     state.clientKeyWrods = []
     state.teams = null

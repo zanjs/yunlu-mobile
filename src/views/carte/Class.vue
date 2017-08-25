@@ -17,18 +17,22 @@
     </div>
     <div class="four-nav-tabs">
       <div class="tab-bar primary flex font-17">
-        <div class="left flex-1"
-             v-bind:class="{'primary-bg white': activeIndex === 0}"
-             @click.prevent="tabClick(0)">产品</div>
-        <div class="middle flex-1"
-             v-bind:class="{'primary-bg white': activeIndex === 1}"
-             @click.prevent="tabClick(1)">资讯</div>
-        <div class="middle flex-1"
-             v-bind:class="{'primary-bg white': activeIndex === 2}"
-             @click.prevent="tabClick(2)">班级成员</div>
-        <div class="middle right flex-1"
-             v-bind:class="{'primary-bg white': activeIndex === 3}"
-             @click.prevent="tabClick(3)">同学企业</div>
+        <div
+          class="left flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 0}"
+          @click.prevent="tabClick(0)">产品</div>
+        <div
+          class="middle flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 1}"
+          @click.prevent="tabClick(1)">资讯</div>
+        <div
+          class="middle flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 2}"
+          @click.prevent="tabClick(2)">班级成员</div>
+        <div
+          class="middle right flex-1"
+          v-bind:class="{'primary-bg white': activeIndex === 3}"
+          @click.prevent="tabClick(3)">同学企业</div>
       </div>
       <div class="tab-container">
         <transition
@@ -167,12 +171,12 @@
       </div>
       <search
         v-show="showSearchBar"
-        @search="search(queryParams)">
+        @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
           type="search"
           v-model="queryParams"
-          @keyup.enter.prevent="search(queryParams)"
+          @keyup.enter.prevent="handleSearchBtn(queryParams)"
           :placeholder="placeholder">
       </search>
       <order
@@ -229,13 +233,10 @@
         placeholder: '搜索产品',
         productPageIndex: 1,
         productPageSize: 10,
-        productLoaded: false,
         enterprisePageIndex: 1,
         enterprisePageSize: 10,
         personPageIndex: 1,
         personPageSize: 20,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         queryParams: '',
         productOrder: 1,
         orderUp: true,
@@ -466,8 +467,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.hasSearchEnterprise = q !== ''
             this.enterpriseLoading = false
+            this.hasSearchEnterprise = q !== ''
             if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
             } else {
@@ -492,8 +493,8 @@
         })
       },
       getPersonList (q = this.queryParams) {
-        this.queryParams = q
         this.personLoading = true
+        this.queryParams = q
         this.$store.dispatch('commonAction', {
           url: `/team/${this.teamId}/members`,
           method: 'get',
@@ -507,8 +508,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.hasSearchPerson = q !== ''
             this.personLoading = false
+            this.hasSearchPerson = q !== ''
             if (this.personPageIndex === 1) {
               state.personMembers = res.data.preps
             } else {
@@ -539,9 +540,12 @@
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
           document.body.scrollTop = 0
+          this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
+          this.enterprisePageIndex = 1
+          this.personPageIndex = 1
           this.getProducts('', 'price')
-        } else if (getStore('ComityCarte_goHome')) {
-          removeStore('ComityCarte_goHome')
+        } else if (getStore('Class_goHome')) {
+          removeStore('Class_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -583,21 +587,30 @@
         document.activeElement.blur()
         switch (this.activeIndex) {
           case 0:
+            this.productPageIndex = 1
             this.getProducts(res)
             break
           case 1:
             break
           case 2:
+            this.enterprisePageIndex = 1
             this.getEnterpriseList(res)
             break
           case 3:
             if (getStore('user')) {
+              this.personPageIndex = 1
               this.getPersonList(res)
             }
             break
           default:
+            this.productPageIndex = 1
             this.getProducts(res)
         }
+      },
+      handleSearchBtn (res) {
+        // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
+        document.body.scrollTop = 158
+        this.search(res)
       },
       handleSearchBar () {
         showBack((status) => {

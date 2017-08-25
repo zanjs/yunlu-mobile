@@ -157,12 +157,12 @@
       </div>
       <search
         v-show="showSearchBar"
-        @search="search(queryParams)">
+        @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
           type="search"
           v-model="queryParams"
-          @keyup.enter.prevent="search(queryParams)"
+          @keyup.enter.prevent="handleSearchBtn(queryParams)"
           :placeholder="placeholder">
       </search>
       <order
@@ -222,8 +222,6 @@
         enterprisePageSize: 10,
         personPageIndex: 1,
         personPageSize: 20,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         queryParams: '',
         productOrder: 1,
         orderUp: true,
@@ -523,9 +521,12 @@
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
           document.body.scrollTop = 0
+          this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
+          this.enterprisePageIndex = 1
+          this.personPageIndex = 1
           this.getProducts('', 'price')
-        } else if (getStore('ComityCarte_goHome')) {
-          removeStore('ComityCarte_goHome')
+        } else if (getStore('Alumni_goHome')) {
+          removeStore('Alumni_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -567,21 +568,30 @@
         document.activeElement.blur()
         switch (this.activeIndex) {
           case 0:
+            this.productPageIndex = 1
             this.getProducts(res)
             break
           case 1:
             break
           case 2:
+            this.enterprisePageIndex = 1
             this.getEnterpriseList(res)
             break
           case 3:
             if (getStore('user')) {
+              this.personPageIndex = 1
               this.getAlumniBusiness(res)
             }
             break
           default:
+            this.productPageIndex = 1
             this.getProducts(res)
         }
+      },
+      handleSearchBtn (res) {
+        // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
+        document.body.scrollTop = 158
+        this.search(res)
       },
       handleSearchBar () {
         showBack((status) => {

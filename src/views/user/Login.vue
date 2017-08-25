@@ -54,7 +54,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { AUTHORIZATION_TIME } from '../../constants/constant'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
@@ -67,7 +67,8 @@
         tips: '登录请求已发送，请等待授权...',
         showDialog: false,
         user: null,
-        interval: null
+        interval: null,
+        showRejectPopup: false
       }
     },
     components: {
@@ -163,6 +164,12 @@
             setStore('user', this.user)
             this.getSignature(message.content._lcattrs.token)
             this.closeDialog()
+          } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
+            this.closeDialog()
+            this.showRejectPopup = true
+            MessageBox.alert('主控设备拒绝了您的登录请求！').then(action => {
+              this.showRejectPopup = false
+            })
           }
         })
       },
@@ -187,6 +194,11 @@
             seconds -= 1
             if (this.time === '0 : 00' && this.interval) {
               clearInterval(this.interval)
+              if (this.deviceDelegate) {
+                this.deviceDelegate.close().then(() => {
+                  // 下线成功（倒计时走完后，没有授权则注销，点击登录，重新登录leancloud）
+                }).catch(console.error.bind(console))
+              }
               this.closeDialog()
               return false
             }

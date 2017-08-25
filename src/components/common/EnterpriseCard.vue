@@ -5,8 +5,9 @@
       <div class="img-container flex">
         <img v-if="store && store.logo"
              :src="store.logo"/>
-        <img v-else
-             src="../../assets/blank.jpg">
+        <div v-else>
+
+        </div>
       </div>
       <div class="flex-between content">
         <p
@@ -152,7 +153,10 @@
       .img-container {
         @include px2rem(width, 180px);
         @include px2rem(height, 180px);
-        img {
+        div {
+          background-color: $sixth-grey;
+        }
+        div, img {
           @include px2rem(max-width, 180px);
           @include px2rem(max-height, 180px);
           width: 100%;

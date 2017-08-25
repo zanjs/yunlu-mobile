@@ -171,12 +171,12 @@
       </div>
       <search
         v-show="showSearchBar"
-        @search="search(queryParams)">
+        @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
           type="search"
           v-model="queryParams"
-          @keyup.enter.prevent="search(queryParams)"
+          @keyup.enter.prevent="handleSearchBtn(queryParams)"
           :placeholder="placeholder">
       </search>
       <order
@@ -214,7 +214,7 @@
   import Order from '../../components/common/Order'
   import PopDialog from '../../components/common/PopDialog'
   import BackToTop from '../../components/common/BackToTop'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
@@ -540,6 +540,9 @@
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
           document.body.scrollTop = 0
+          this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
+          this.enterprisePageIndex = 1
+          this.personPageIndex = 1
           this.getProducts('', 'price')
         } else if (getStore('ComityCarte_goHome')) {
           removeStore('ComityCarte_goHome')
@@ -584,21 +587,30 @@
         document.activeElement.blur()
         switch (this.activeIndex) {
           case 0:
+            this.productPageIndex = 1
             this.getProducts(res)
             break
           case 1:
             break
           case 2:
+            this.enterprisePageIndex = 1
             this.getEnterpriseList(res)
             break
           case 3:
             if (getStore('user')) {
+              this.personPageIndex = 1
               this.getPersonList(res)
             }
             break
           default:
+            this.productPageIndex = 1
             this.getProducts(res)
         }
+      },
+      handleSearchBtn (res) {
+        // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
+        document.body.scrollTop = 158
+        this.search(res)
       },
       handleSearchBar () {
         showBack((status) => {
@@ -640,24 +652,15 @@
             }
             break
           case 'email':
-            // this.linkToast('协会', '邮箱地址', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
-            // this.linkToast('协会', '微信号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
-            // this.linkToast('协会', '网址', item.value)
             window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
-            // this.showMessageBox(item.value)
             break
           case 'qq':
-            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('协会', 'QQ账号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
@@ -668,18 +671,6 @@
             }
             break
         }
-      },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       showPopDialog (type, name, value) {
         this.message = {

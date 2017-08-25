@@ -18,7 +18,7 @@
             v-for="(i, indexI) in item.photos"
             :key="indexI"
             class="item"
-            @click="viewFullScreen(item.count, item.photos, i.id, indexI)">
+            @click="viewFullScreen(item.count, item.photos, i.id, indexI, item.id, item.name)">
             <img v-lazy="{
                   src: i.thumb_url,
                   error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
@@ -57,9 +57,11 @@
       handleClick (folderId, name) {
         this.$emit('view-more', {id: folderId, name: name})
       },
-      viewFullScreen (count, photos, id, index) {
+      viewFullScreen (count, photos, id, index, folderId, name) {
         if (count <= 5) {
           this.$emit('view-full-screen', {id: id, index: index, photos: photos})
+        } else {
+          this.$emit('view-more', {id: folderId, name: name})
         }
       }
     }
