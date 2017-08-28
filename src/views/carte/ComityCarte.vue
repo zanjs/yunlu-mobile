@@ -28,11 +28,11 @@
         <div
           class="middle flex-1"
           v-bind:class="{'primary-bg white': activeIndex === 2}"
-          @click.prevent="tabClick(2)">企业会员</div>
+          @click.prevent="tabClick(2)">个人会员</div>
         <div
           class="middle right flex-1"
           v-bind:class="{'primary-bg white': activeIndex === 3}"
-          @click.prevent="tabClick(3)">个人会员</div>
+          @click.prevent="tabClick(3)">企业会员</div>
       </div>
       <div class="tab-container">
         <transition
@@ -92,37 +92,6 @@
             </div>
           </template>
           <template v-if="activeIndex === 2">
-            <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div>
-                <enterprise-list
-                  :store="enterpriseMembers"
-                  @click="goEnterpriseCarte">
-                </enterprise-list>
-                <mugen-scroll
-                  key="enterprise"
-                  :handler="loadEnterpriseBottom"
-                  :handle-on-mount="false"
-                  :should-handle="!enterpriseLoading">
-                  <div
-                    v-if="enterpriseLoading"
-                    class="loading">
-                    <mt-spinner
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>加载中...</p>
-                  </div>
-                </mugen-scroll>
-              </div>
-            </template>
-            <div
-              v-else
-              key="enterprise1"
-              class="no-data">
-              <img src="../../assets/noEnterprise.png">
-            </div>
-          </template>
-          <template v-if="activeIndex === 3">
             <template v-if="hasLogin">
               <template v-if="personMembers && personMembers.length > 0">
                 <div>
@@ -166,6 +135,37 @@
                 </div>
               </div>
             </template>
+          </template>
+          <template v-if="activeIndex === 3">
+            <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
+              <div>
+                <enterprise-list
+                  :store="enterpriseMembers"
+                  @click="goEnterpriseCarte">
+                </enterprise-list>
+                <mugen-scroll
+                  key="enterprise"
+                  :handler="loadEnterpriseBottom"
+                  :handle-on-mount="false"
+                  :should-handle="!enterpriseLoading">
+                  <div
+                    v-if="enterpriseLoading"
+                    class="loading">
+                    <mt-spinner
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>加载中...</p>
+                  </div>
+                </mugen-scroll>
+              </div>
+            </template>
+            <div
+              v-else
+              key="enterprise1"
+              class="no-data">
+              <img src="../../assets/noEnterprise.png">
+            </div>
           </template>
         </transition>
       </div>
@@ -593,14 +593,14 @@
           case 1:
             break
           case 2:
-            this.enterprisePageIndex = 1
-            this.getEnterpriseList(res)
-            break
-          case 3:
             if (getStore('user')) {
               this.personPageIndex = 1
               this.getPersonList(res)
             }
+            break
+          case 3:
+            this.enterprisePageIndex = 1
+            this.getEnterpriseList(res)
             break
           default:
             this.productPageIndex = 1
@@ -622,10 +622,10 @@
             this.header = status ? '产品' : '名片'
           } else if (this.activeIndex === 2) {
             this.showSearchBar = status
-            this.header = status ? '企业会员' : '名片'
+            this.header = status ? '个人会员' : '名片'
           } else if (this.activeIndex === 3) {
             this.showSearchBar = status
-            this.header = status ? '个人会员' : '名片'
+            this.header = status ? '企业会员' : '名片'
           }
         }, this.height)
       },
