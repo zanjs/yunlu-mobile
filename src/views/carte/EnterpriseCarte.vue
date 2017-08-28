@@ -402,7 +402,6 @@
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
-          // Toast('登录后才能查看企业详细信息')
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         } else {
@@ -420,28 +419,18 @@
             }
             break
           case 'email':
-            // this.linkToast('企业', '邮箱地址', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(2, '邮箱地址', item.value)
             break
           case 'weixin':
-            // this.linkToast('企业', '微信号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(1, '微信号', item.value)
             break
           case 'website':
-            // this.linkToast('企业', '网址', item.value)
-            // this.showMessageBox(item.value)
             window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
             break
           case 'qq':
-            // window.location.href = `http://wpa.qq.com/msgrd?v=3&uin=${item.value}&site=qq&menu=yes`
-            // this.linkToast('企业', 'QQ账号', item.value)
-            // this.showMessageBox(item.value)
             this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
-            // Toast('暂未开放')
             if (item.value.latitude && item.value.longitude) {
               this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
             } else {
