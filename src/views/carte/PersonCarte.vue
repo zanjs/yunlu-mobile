@@ -378,11 +378,6 @@
         this.pageIndex = 1
         if (item.type === 'personal') {
           // 如果点击的是个人空间，则不跳转页面，在当前页面切换显示
-          // if (this.$route.query.p) {
-          //   this.$router.push({path: '/zone', query: {p: this.$route.query.p, cluster_id: item.id}})
-          // } else {
-          //   this.$router.push({path: `/users/${this.user_id}/spaces/${item.id}`})
-          // }
           this.header = item.name
           this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.user_id, this.token, this.p)
         } else if (item.type === 'association') {

@@ -69,6 +69,7 @@
 </template>
 
 <script>
+  // 此文件保留，用以打开分享的单个私人空间文件夹。
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import Album from '../../components/common/Album'
