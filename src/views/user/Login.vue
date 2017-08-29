@@ -95,9 +95,9 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}`,
-        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}`,
-        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}/#/login&state=wechat&response_type=code&scope=snsapi_base#wechat_redirect%20`
+        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}%2F%23%2Flogin`,
+        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}%2F%23%2Flogin`,
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect`
       }
     },
     components: {
@@ -238,7 +238,7 @@
       },
       sendCode (code, state) {
         this.$store.dispatch('authAction', {
-          url: `/member/auth/${state}callback`,
+          url: `/member/auth/${state}/callback`,
           method: 'get',
           params: {
             code: code
@@ -262,11 +262,11 @@
         })
       },
       shouldSendCode () {
-        let codeStr = window.location.search.split('&')[0]
-        let stateStr = window.location.search.split('&')[1]
-        let state = stateStr.replace('state=', '')
-        let code = codeStr.replace('?code=', '')
-        if (code && state) {
+        if (window.location.search) {
+          let codeStr = window.location.search.split('&')[0]
+          let stateStr = window.location.search.split('&')[1]
+          let state = stateStr.replace('state=', '')
+          let code = codeStr.replace('?code=', '')
           this.sendCode(code, state)
         }
       }
