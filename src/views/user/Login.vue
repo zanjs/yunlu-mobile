@@ -104,18 +104,18 @@
       CommonHeader
     },
     methods: {
-      goBack () {
+      goBack (social = false) {
         if (getStore('afterRegistration')) {
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(-1) // beforeLogin优先级较高
+          this.$router.go(social ? -2 : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(-1)
+          this.$router.go(social ? -2 : -1)
         }
       },
       login () {
@@ -141,7 +141,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.getSignature(res.data.authentication_token)
+              this.getSignature(res.data.authentication_token, false)
             }
           },
           reject: () => {
@@ -149,7 +149,7 @@
           }
         })
       },
-      getSignature (token) {
+      getSignature (token, social = false) {
         this.$store.dispatch('commonAction', {
           url: '/im/sign',
           method: 'get',
@@ -159,7 +159,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            this.goBack()
+            this.goBack(social)
           },
           reject: () => {
           }
@@ -191,7 +191,7 @@
           if (message.from && message.from === 'system' && message.content && message.content._lcattrs && message.content._lcattrs.token) {
             this.user.authentication_token = message.content._lcattrs.token
             setStore('user', this.user)
-            this.getSignature(message.content._lcattrs.token)
+            this.getSignature(message.content._lcattrs.token, false)
             this.closeDialog()
           } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
             this.closeDialog()
@@ -253,7 +253,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.getSignature(res.data.authentication_token)
+              this.getSignature(res.data.authentication_token, true)
             }
           },
           rejectFn: () => {
