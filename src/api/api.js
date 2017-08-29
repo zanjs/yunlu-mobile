@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {URL_DEV, REQUEST_TIME_OUT} from '../constants/constant'
+import { URL_DEV, REQUEST_TIME_OUT, WEIXIN_LOGIN_REDIRECT_URL } from '../constants/constant'
 import Qs from 'qs'
 
 export default {
@@ -38,7 +38,7 @@ export default {
     return axios.request({
       url: params.url,
       method: params.method,
-      baseURL: `${URL_DEV}`,
+      baseURL: `${WEIXIN_LOGIN_REDIRECT_URL}`,
       params: params.params || {},
       paramsSerializer: function (params) {
         return Qs.stringify(params, {arrayFormat: 'brackets'})

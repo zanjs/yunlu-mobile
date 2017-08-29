@@ -97,7 +97,7 @@
         showRejectPopup: false,
         qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}`,
         weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}`,
-        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}&response_type=code&scope=snsapi_base#wechat_redirect%20`
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}/#/login&response_type=code&scope=snsapi_userinfo#wechat_redirect%20`
       }
     },
     components: {
@@ -235,7 +235,40 @@
         }
         count()
         this.interval = setInterval(count, speed)
+      },
+      sendCode (code) {
+        this.$store.dispatch('authAction', {
+          url: '/member/auth/wechat/callback',
+          method: 'get',
+          params: {
+            code: code
+          },
+          data: {},
+          target: this,
+          resolve: (state, res) => {
+            if (!res.data.authentication_token) {
+              this.user = res.data
+              this.countDown(AUTHORIZATION_TIME, 1000)
+              this.showDialog = true
+              this.initImClient(res.data.device_id)
+            } else {
+              setStore('user', res.data)
+              this.getSignature(res.data.authentication_token)
+            }
+          },
+          reject: () => {
+            Toast('授权登录出错')
+          }
+        })
+      },
+      shouldSendCode () {
+        if (this.$route.query.code) {
+          this.sendCode(this.$route.query.code)
+        }
       }
+    },
+    mounted () {
+      this.shouldSendCode()
     }
   }
 </script>
