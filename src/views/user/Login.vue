@@ -97,7 +97,7 @@
         showRejectPopup: false,
         qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}`,
         weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}`,
-        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}/#/login&response_type=code&scope=snsapi_userinfo#wechat_redirect%20`
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}/#/login&response_type=code&scope=snsapi_base#wechat_redirect%20`
       }
     },
     components: {
