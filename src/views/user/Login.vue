@@ -79,7 +79,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, QQ_LOGIN_REDIRECT_URL, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, WEIBO_LOGIN_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_LOGIN_APP_ID, WEIXIN_LOGIN_REDIRECT_URL } from '../../constants/constant'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
     data () {
       return {
@@ -95,8 +95,8 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}%2F%23%2Flogin`,
-        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}%2F%23%2Flogin`,
+        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}%2F%23%2Flogin&state=qq`,
+        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}%2F%23%2Flogin&state=weibo`,
         weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect`
       }
     },
@@ -159,9 +159,11 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
+            Indicator.close()
             this.goBack(social)
           },
           reject: () => {
+            Indicator.close()
           }
         })
       },
@@ -253,6 +255,10 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
+              Indicator.open({
+                text: '正在登录...',
+                spinnerType: 'fading-circle'
+              })
               this.getSignature(res.data.authentication_token, true)
             }
           },
@@ -268,6 +274,8 @@
           let state = stateStr.replace('state=', '')
           let code = codeStr.replace('?code=', '')
           this.sendCode(code, state)
+        } else if (this.$route.query.code && this.$route.query.state) {
+          this.sendCode(this.$route.query.code, this.$route.query.state)
         }
       }
     },
