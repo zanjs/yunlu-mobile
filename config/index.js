@@ -39,10 +39,6 @@ module.exports = {
       '/member/auth': {
         target: 'https://dev.yunlu6.com',
         changeOrigin: true
-      },
-      '/connect/oauth2/authorize': {
-        target: 'https://open.weixin.qq.com',
-        changeOrigin: true
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
