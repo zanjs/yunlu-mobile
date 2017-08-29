@@ -78,7 +78,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
-  import { AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, QQ_LOGIN_REDIRECT_URL, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, WEIBO_LOGIN_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_LOGIN_APP_ID } from '../../constants/constant'
+  import { AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, QQ_LOGIN_REDIRECT_URL, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, WEIBO_LOGIN_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_LOGIN_APP_ID, WEIXIN_LOGIN_REDIRECT_URL } from '../../constants/constant'
   import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
@@ -97,7 +97,7 @@
         showRejectPopup: false,
         qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}`,
         weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}`,
-        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${this.weixinRedirectUrl}&response_type=code&scope=snsapi_base#wechat_redirect%20`
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}&response_type=code&scope=snsapi_base#wechat_redirect%20`
       }
     },
     components: {
