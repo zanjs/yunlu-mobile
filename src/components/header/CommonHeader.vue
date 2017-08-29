@@ -9,13 +9,13 @@
       <i class="iconfont icon-fanhui"></i>
     </mt-button>
     <mt-button
-      v-if="iconClass"
+      v-if="iconClass || rightText"
       slot="right"
       @click="handleRightClick()"
       class="font-15 button-text">
       <i
         class="iconfont"
-        v-bind:class="iconClass"></i>
+        v-bind:class="iconClass || ''"></i>
       {{rightText | textFilter}}
     </mt-button>
   </mt-header>

@@ -19,13 +19,14 @@
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
         acitve: false,
-        showLogoffPopup: false
+        showLogoffPopup: false,
+        weixinRedirectUrl: ''
       }
     },
     methods: {
       beforeInit () {
         // 登录后getStore('user')会发生变化，不能直接从data中取数据，data中的数据不是响应式的。
-        if (getStore('user') && getStore('user').authentication_token) {
+        if (getStore('user') && getStore('user').authentication_token && !this.acitve) {
           this.getClosedConversationList()
           this.init()
         } else {
@@ -77,34 +78,32 @@
             })
           }
         })
-        if (!this.acitve) {
-          this.$store.state.userDelegate.on('message', message => {
-            this.acitve = true
-            console.log('userDelegate, 用户uuid收到的消息，用于聊天等操作', message)
-            let tmpObj = {
-              conversationId: message.cid,
-              from: message.from,
-              id: message.id,
-              fromLogo: message._lcattrs.fromLogo,
-              fromName: message._lcattrs.fromName,
-              timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
-              clazz: message._lcattrs.clazz,
-              lastMessage: message._lctext,
-              isSelf: false,
-              remark: message._lcattrs.fromName,
-              logoUrl: message._lcattrs.fromLogo
-            }
-            this.reOpenBanList(message.from, message._lcattrs.clazz, message.cid)
-            // 不在聊天页面，收到的新消息统一默认为未读消息
-            if (this.$route.name !== 'Chat' && message.from !== getStore('user').id) {
-              this.$store.dispatch('receiveNewMessage', tmpObj)
-            }
-          })
-          this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
-            console.log('聊天未读消息记录', unreadMessagesCount)
-            this.$store.dispatch('updateUnReadMsgCount', unreadMessagesCount)
-          })
-        }
+        this.$store.state.userDelegate.on('message', message => {
+          console.log('userDelegate, 用户uuid收到的消息，用于聊天等操作', message)
+          let tmpObj = {
+            conversationId: message.cid,
+            from: message.from,
+            id: message.id,
+            fromLogo: message._lcattrs.fromLogo,
+            fromName: message._lcattrs.fromName,
+            timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
+            clazz: message._lcattrs.clazz,
+            lastMessage: message._lctext,
+            isSelf: false,
+            remark: message._lcattrs.fromName,
+            logoUrl: message._lcattrs.fromLogo
+          }
+          this.reOpenBanList(message.from, message._lcattrs.clazz, message.cid)
+          // 不在聊天页面，收到的新消息统一默认为未读消息
+          if (this.$route.name !== 'Chat' && message.from !== getStore('user').id) {
+            this.$store.dispatch('receiveNewMessage', tmpObj)
+          }
+        })
+        this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
+          console.log('聊天未读消息记录', unreadMessagesCount)
+          this.$store.dispatch('updateUnReadMsgCount', unreadMessagesCount)
+        })
+        this.acitve = true
       },
       async getClosedConversationList () {
         if (this.$store.state.closedConversationList.length === 0) {
@@ -144,6 +143,18 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
+      },
+      wechatAuth () {
+        this.$store.dispatch('authAction', {
+          url: '/member/auth/wechat',
+          method: 'get',
+          target: this,
+          resolveFn: (state, res) => {
+            console.log(res)
+          },
+          rejectFn: () => {
+          }
+        })
       }
     },
     updated () {

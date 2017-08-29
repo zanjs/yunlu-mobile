@@ -1,10 +1,36 @@
 <template>
-  <section>
+  <section class="container">
     <common-header
       :title="header"
-      @back="goBack()">
+      @back="goBack()"
+      :right-text="rightBtnText"
+      @right-click="goRegister()">
     </common-header>
+    <div class="social-login">
+      <p>第三方账号登录</p>
+      <div class="icons">
+        <a
+          class="icon-box"
+          :href="qqLogin">
+          <img src="../../assets/qqLogin.png">
+          <span>QQ</span>
+        </a>
+        <a
+          class="icon-box"
+          :href="weixinLogin">
+          <img src="../../assets/weixinLogin.png">
+          <span>微信</span>
+        </a>
+        <a
+          class="icon-box"
+          :href="weiboLogin">
+          <img src="../../assets/weiboLogin.png">
+          <span>微博</span>
+        </a>
+      </div>
+    </div>
     <div class="login-container">
+      <p>手机号登录</p>
       <div class="input-container">
         <input
           type="text"
@@ -24,7 +50,6 @@
         </a>
       </div>
       <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
         <a @click="forgetPassword()">忘记密码?</a>
       </div>
     </div>
@@ -53,12 +78,13 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
-  import { AUTHORIZATION_TIME } from '../../constants/constant'
+  import { AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, QQ_LOGIN_REDIRECT_URL, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, WEIBO_LOGIN_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_LOGIN_APP_ID } from '../../constants/constant'
   import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
         header: '登录',
+        rightBtnText: '注册账号',
         mobile: '',
         password: '',
         deviceDelegate: null,
@@ -68,7 +94,10 @@
         showDialog: false,
         user: null,
         interval: null,
-        showRejectPopup: false
+        showRejectPopup: false,
+        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}`,
+        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}`,
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${this.weixinRedirectUrl}&response_type=code&scope=snsapi_base#wechat_redirect%20`
       }
     },
     components: {
@@ -207,25 +236,59 @@
         count()
         this.interval = setInterval(count, speed)
       }
-    },
-    mounted () {
-      this.$refs.mobileInput.focus()
     }
   }
 </script>
 
-
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .login-container {
-    position: fixed; // 不能用absolute,UC浏览器会白屏
-    @include pm2rem(padding, 128px, 0px, 0px, 0px);
-    bottom: 0;
+  .container {
+    background-color: $twelfth-grey;
+    position: absolute;;
     top: 0;
+    bottom: 0;
     width: 100%;
     max-width: 540px;
+  }
+  .social-login {
     background-color: $white;
+    @include px2rem(padding-top, 88px);
+    p {
+      @include font-dpr(16px);
+      color: $eleventh-grey;
+      @include pm2rem(margin, 42px, 0px, 42px, 0px);
+      text-align: center;
+    }
+    .icons {
+      display: flex;
+      @include pm2rem(padding, 0px, 96px, 0px, 96px);
+      justify-content: space-between;
+      .icon-box {
+        text-align: center;
+        display: block;
+        img {
+          @include px2rem(width, 86px);
+          @include px2rem(height, 86px);
+        }
+        span {
+          display: block;
+          @include pm2rem(margin, 16px, 0px, 50px, 0px);
+          @include font-dpr(13px);
+          color: $second-dark;
+        }
+      }
+    }
+  }
+  .login-container {
+    width: 100%;
+    max-width: 540px;
+    p {
+      @include font-dpr(16px);
+      color: $eleventh-grey;
+      @include pm2rem(margin, 42px, 0px, 42px, 0px);
+      text-align: center;
+    }
     .input-container {
       @include pm2rem(padding, 0px, 50px, 0px, 50px);
       display: flex;
@@ -233,25 +296,24 @@
         @include px2rem(border-radius, 40px);
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 34px, 0px, 34px);
-        @include pm2rem(margin, 0px, 0px, 26px, 0px);
+        @include pm2rem(margin, 0px, 0px, 40px, 0px);
         color: $second-dark;
         @include font-dpr(14px);
         line-height: normal;
-        border: none;
-        background-color: $primary-grey;
+        border: 1px solid $green;
+        background-color: $twelfth-grey;
         flex: 1;
       }
     }
     ::-webkit-input-placeholder{
-      color: $third-dark;
+      color: $fifth-grey;
     }
     .login-btn {
       a {
         display: block;
-        @include px2rem(width, 610px);
+        @include px2rem(width, 650px);
         margin: 0 auto;
         @include px2rem(height, 80px);
-        @include px2rem(margin-top, 28px);
         @include px2rem(margin-bottom, 46px);
         background-color: $green;
         color: $white;
@@ -264,11 +326,11 @@
       }
     }
     .text-btn {
-      color: $third-dark;
-      @include font-dpr(14px);
+      color: $green;
+      @include font-dpr(15px);
       @include pm2rem(margin, 0px, 54px, 0px, 54px);
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-content: center;
     }
   }
