@@ -104,22 +104,18 @@
       CommonHeader
     },
     methods: {
-      goBack (social = false) {
+      goBack (social = false, type) {
         if (getStore('afterRegistration')) {
-          console.log('111', social)
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
-          console.log('222', social)
           removeStore('beforeLogin')
           this.$router.go(social ? -2 : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
-          console.log('333', social)
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          console.log('444', social)
-          this.$router.go(social ? -2 : -1)
+          this.$router.go(social ? (type === 'qq_connect' ? -3 : -2) : -1)
         }
       },
       login () {
@@ -145,7 +141,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.getSignature(res.data.authentication_token, false)
+              this.getSignature(res.data.authentication_token, false, '')
             }
           },
           reject: () => {
@@ -153,7 +149,7 @@
           }
         })
       },
-      getSignature (token, social = false) {
+      getSignature (token, social = false, type = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/sign',
           method: 'get',
@@ -164,7 +160,7 @@
           resolve: (state, res) => {
             setStore('signature', res.data)
             Indicator.close()
-            this.goBack(social)
+            this.goBack(social, type)
           },
           reject: () => {
             Indicator.close()
@@ -197,7 +193,7 @@
           if (message.from && message.from === 'system' && message.content && message.content._lcattrs && message.content._lcattrs.token) {
             this.user.authentication_token = message.content._lcattrs.token
             setStore('user', this.user)
-            this.getSignature(message.content._lcattrs.token, false)
+            this.getSignature(message.content._lcattrs.token, false, '')
             this.closeDialog()
           } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
             this.closeDialog()
@@ -242,9 +238,9 @@
         count()
         this.interval = setInterval(count, speed)
       },
-      sendCode (code, state) {
+      sendCode (code, type) {
         this.$store.dispatch('authAction', {
-          url: `/member/auth/${state}/callback`,
+          url: `/member/auth/${type}/callback`,
           method: 'get',
           params: {
             code: code
@@ -264,7 +260,7 @@
                 text: '正在登录...',
                 spinnerType: 'fading-circle'
               })
-              this.getSignature(res.data.authentication_token, true)
+              this.getSignature(res.data.authentication_token, true, type)
             } else {
               Toast('授权登录出错')
             }
