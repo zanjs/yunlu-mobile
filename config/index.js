@@ -29,11 +29,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/v1': {
-        target: 'https://api.yunlu6.com',
+        target: 'https://dev.yunlu6.com',
         changeOrigin: true
       },
       '/captcha': {
-        target: 'https://api.yunlu6.com',
+        target: 'https://dev.yunlu6.com',
         changeOrigin: true
       },
       '/member/auth': {
