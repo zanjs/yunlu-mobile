@@ -95,7 +95,7 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}%2F%23%2Flogin&state=qq`,
+        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${QQ_LOGIN_REDIRECT_URL}%2F%23%2Flogin&state=qq_connect`,
         weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${WEIBO_LOGIN_REDIRECT_URL}%2F%23%2Flogin&state=weibo`,
         weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_LOGIN_APP_ID}&redirect_uri=${WEIXIN_LOGIN_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect`
       }
@@ -248,18 +248,21 @@
           data: {},
           target: this,
           resolveFn: (state, res) => {
-            if (!res.data.authentication_token) {
+            setStore('device_signature', res.data.sign)
+            if (!res.data.authentication_token && res.data.id) {
               this.user = res.data
               this.countDown(AUTHORIZATION_TIME, 1000)
               this.showDialog = true
               this.initImClient(res.data.device_id)
-            } else {
+            } else if (res.data.authentication_token && res.data.id) {
               setStore('user', res.data)
               Indicator.open({
                 text: '正在登录...',
                 spinnerType: 'fading-circle'
               })
               this.getSignature(res.data.authentication_token, true)
+            } else {
+              Toast('授权登录出错')
             }
           },
           rejectFn: () => {
