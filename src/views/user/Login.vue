@@ -106,19 +106,19 @@
     methods: {
       goBack (social = false) {
         if (getStore('afterRegistration')) {
-          console.log('111')
+          console.log('111', social)
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
-          console.log('222')
+          console.log('222', social)
           removeStore('beforeLogin')
           this.$router.go(social ? -2 : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
-          console.log('333')
+          console.log('333', social)
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          console.log('444')
+          console.log('444', social)
           this.$router.go(social ? -2 : -1)
         }
       },
