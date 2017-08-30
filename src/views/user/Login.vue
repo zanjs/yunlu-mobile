@@ -110,12 +110,12 @@
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(social ? -2 : -1) // beforeLogin优先级较高
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(social ? (type === 'qq_connect' ? -3 : -2) : -1)
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1)
         }
       },
       login () {
