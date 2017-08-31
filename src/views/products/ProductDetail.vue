@@ -13,9 +13,12 @@
       @report="goReport()"
       @open-shopping-car="openShoppingCar()"
       @search-near-by="searchNearBy()"
-      @home="goHome()">
+      @home="goHome()"
+      v-bind:class="{'header': !hideDownloadBar}">
     </product-header>
-    <div class="swipe">
+    <div
+      class="swipe"
+      v-bind:class="{'header': !hideDownloadBar}">
       <template v-if="productDetailFiles && productDetailFiles.length">
         <swiper :options="swiperOption">
           <swiper-slide
@@ -971,6 +974,9 @@
       z-index: 1;
     }
   }
+  .header {
+    @include px2rem(margin-top, 4px);
+  }
   .page-nav {
     position: absolute;
     @include px2rem(bottom, 16px);
@@ -1108,10 +1114,10 @@
     bottom: 0;
     .btn-box {
       border-top: 1px solid $fifth-grey;
-      border-bottom: 1px solid $fifth-grey;
       width: 17.6%;
       box-sizing: border-box;
       flex-direction: column;
+      line-height: normal;
       .kefu {
         color: #20A2E5;
       }
