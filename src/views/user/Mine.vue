@@ -20,18 +20,9 @@
       </div>
     </div>
     <div class="menu-container">
-      <a class="row-item"
-         @click="changePassword()">
-        <div class="box">
-          <i class="iconfont icon-xiugaimima"></i>
-        </div>
-        <div class="item">
-          <span>修改密码</span>
-          <i class="iconfont icon-fanhui arrow"></i>
-        </div>
-      </a>
-      <a class="row-item"
-         @click="contactUs()">
+      <a
+        class="row-item"
+        @click="contactUs()">
         <div class="box">
           <i class="iconfont icon-lianxifangshi"></i>
         </div>
@@ -40,8 +31,9 @@
           <i class="iconfont icon-fanhui arrow"></i>
         </div>
       </a>
-      <a class="row-item"
-         @click="helpCenter()">
+      <a
+        class="row-item"
+        @click="helpCenter()">
         <div class="box">
           <i class="iconfont icon-bangzhuzhongxin"></i>
         </div>
@@ -50,8 +42,9 @@
           <i class="iconfont icon-fanhui arrow"></i>
         </div>
       </a>
-      <a class="row-item"
-         @click="openProtocol()">
+      <a
+        class="row-item"
+        @click="openProtocol()">
         <div class="box">
           <i class="iconfont icon-fuwutiaokuan"></i>
         </div>
@@ -96,9 +89,6 @@
       logOut () {
         removeAllStore()
         this.$router.replace({name: 'See'})
-      },
-      changePassword () {
-        this.$router.push({name: 'ChangePassword'})
       },
       contactUs () {
         this.$router.push({name: 'Download'})
