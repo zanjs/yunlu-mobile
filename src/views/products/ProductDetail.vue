@@ -1120,6 +1120,9 @@
       width: 23.6%;
       background-color: #FFA800;
       color: $white;
+      span {
+        font-weight: bold;
+      }
     }
     .btn-buy {
       width: 23.6%;
@@ -1127,6 +1130,7 @@
       border: none;
       span {
         @include px2rem(line-height, 97px);
+        font-weight: bold;
       }
     }
   }
