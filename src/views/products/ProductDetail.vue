@@ -1,6 +1,13 @@
 <template>
   <section>
+    <template v-if="!hideDownloadBar">
+      <download-bar
+        @close="closeDownloadBar()"
+        @download="goDownload()">
+      </download-bar>
+    </template>
     <product-header
+      :show-download="!hideDownloadBar"
       @back="goBack()"
       @open-favorites="openFavorites()"
       @report="goReport()"
@@ -251,17 +258,14 @@
       <div
         class="flex btn-box"
         @click="openIm()">
-        <i class="iconfont icon-kefu font-17"></i>
-        <span class="font-12 second-text">客服</span>
+        <i class="iconfont icon-kefu font-17 kefu"></i>
+        <span class="font-12 kefu">客服</span>
       </div>
       <div
         class="flex btn-box btn-shopping-car"
         @click="addShoppingCar()">
-        <i
-          class="iconfont icon-gouwuche1 font-18"
-          v-bind:class="{'bottom-btn-active': hasAddShoppingCar}"></i>
         <span
-           class="font-12 second-text"
+           class="font-14"
            v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
       </div>
       <div
@@ -362,6 +366,7 @@
 
 <script>
   import ProductHeader from '../../components/header/Head'
+  import DownloadBar from '../../components/common/DownloadBar'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
@@ -444,15 +449,24 @@
             method: noServiceYet
           }
         ],
-        sheetVisible: false
+        sheetVisible: false,
+        hideDownloadBar: getStore('hideDownloadBar')
       }
     },
     components: {
       ProductHeader,
+      DownloadBar,
       swiper,
       swiperSlide
     },
     methods: {
+      closeDownloadBar () {
+        this.hideDownloadBar = true
+        setStore('hideDownloadBar', 'true')
+      },
+      goDownload () {
+        this.$router.push({name: 'Download'})
+      },
       getProductDetail (productId = this.productId) {
         this.$store.dispatch('commonAction', {
           url: `/products/${productId}`,
@@ -1096,16 +1110,20 @@
       border-top: 1px solid $fifth-grey;
       border-bottom: 1px solid $fifth-grey;
       width: 17.6%;
-      border-right: 1px solid $fifth-grey;
       box-sizing: border-box;
       flex-direction: column;
+      .kefu {
+        color: #20A2E5;
+      }
     }
     .btn-shopping-car {
       width: 23.6%;
+      background-color: #FFA800;
+      color: $white;
     }
     .btn-buy {
       width: 23.6%;
-      background: linear-gradient(to bottom right, #ff7f46 , #ff5001);
+      background-color: #FF4901;
       border: none;
       span {
         @include px2rem(line-height, 97px);
