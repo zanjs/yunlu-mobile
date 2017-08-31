@@ -280,10 +280,17 @@
         } else if (this.$route.query.code && this.$route.query.state) {
           this.sendCode(this.$route.query.code, this.$route.query.state)
         }
+      },
+      // 使用微博登录的时候，会改变路由栈(路由栈中有两个登录页面路由)，有时在本页面返回任然会跳转本页面，需要再次返回
+      autoGoBack () {
+        if (getStore('user') && getStore('user').authentication_token) {
+          this.goBack()
+        }
       }
     },
     mounted () {
       this.shouldSendCode()
+      this.autoGoBack()
     }
   }
 </script>
