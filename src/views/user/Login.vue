@@ -6,51 +6,53 @@
       :right-text="rightBtnText"
       @right-click="goRegister()">
     </common-header>
-    <div class="social-login">
-      <p>第三方账号登录</p>
-      <div class="icons">
-        <a
-          class="icon-box"
-          :href="qqLogin">
-          <img src="../../assets/qqLogin.png">
-          <span>QQ</span>
-        </a>
-        <a
-          class="icon-box"
-          :href="weixinLogin">
-          <img src="../../assets/weixinLogin.png">
-          <span>微信</span>
-        </a>
-        <a
-          class="icon-box"
-          :href="weiboLogin">
-          <img src="../../assets/weiboLogin.png">
-          <span>微博</span>
-        </a>
-      </div>
-    </div>
-    <div class="login-container">
-      <p>手机号登录</p>
-      <div class="input-container">
+    <div class="normal-login">
+      <div class="item top-item">
+        <img src="../../assets/inputName.png">
         <input
           type="text"
           v-model="mobile"
           placeholder="输入手机号"
           ref="mobileInput">
       </div>
-      <div class="input-container">
+      <div class="item">
+        <img src="../../assets/inputPassword.png">
         <input
           type="password"
           v-model="password"
           placeholder="请输入密码">
       </div>
-      <div class="login-btn">
-        <a @click="login()">
-          登录
-        </a>
+    </div>
+    <div class="text-btn">
+      <a @click="forgetPassword()">忘记密码?</a>
+    </div>
+    <div class="login-btn">
+      <a @click="login()">
+        登录
+      </a>
+    </div>
+    <div class="social-login">
+      <div class="title">
+        <hr size=1>
+        <p>第三方账号登录</p>
+        <hr size=1>
       </div>
-      <div class="text-btn">
-        <a @click="forgetPassword()">忘记密码?</a>
+      <div class="icons">
+        <a
+          class="icon-box"
+          :href="qqLogin">
+          <img src="../../assets/qqLogin.png">
+        </a>
+        <a
+          class="icon-box"
+          :href="weixinLogin">
+          <img src="../../assets/weixinLogin.png">
+        </a>
+        <a
+          class="icon-box"
+          :href="weiboLogin">
+          <img src="../../assets/weiboLogin.png">
+        </a>
       </div>
     </div>
     <div
@@ -306,87 +308,93 @@
     width: 100%;
     max-width: 540px;
   }
-  .social-login {
-    background-color: $white;
-    @include px2rem(padding-top, 88px);
-    p {
+  .normal-login {
+    @include px2rem(padding-top, 147px);
+    .item {
+      @include px2rem(width, 612px);
+      @include px2rem(height, 80px);
+      margin: 0 auto;
+      position: relative;
+      img {
+        position: absolute;
+        bottom: 0;
+        @include px2rem(width, 612px);
+        @include px2rem(height, 65px);
+      }
+      input {
+        position: absolute;
+        @include px2rem(left, 116px);
+        @include px2rem(height, 80px);
+        @include px2rem(width, 480px);
+        background-color: transparent;
+        border: none;
+        @include font-dpr(14px);
+        color: $second-dark;
+      }
+      ::-webkit-input-placeholder{
+        color: $thirteenth-grey;
+      }
+    }
+    .top-item {
+      @include px2rem(margin-bottom, 39px);
+    }
+  }
+  .text-btn {
+    color: $fourteenth-grey;
+    @include font-dpr(15px);
+    @include pm2rem(margin, 28px, 69px, 36px, 0px);
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    line-height: 1;
+  }
+  .login-btn {
+    a {
+      display: block;
+      @include px2rem(width, 650px);
+      margin: 0 auto;
+      @include px2rem(height, 86px);
+      @include px2rem(margin-bottom, 84px);
+      background-color: $green;
+      color: $white;
       @include font-dpr(16px);
-      color: $eleventh-grey;
-      @include pm2rem(margin, 42px, 0px, 42px, 0px);
+      @include px2rem(line-height, 86px);
       text-align: center;
+    }
+    a:active {
+      background-color: rgba(82, 202, 167, .5);
+    }
+  }
+  .social-login {
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include px2rem(margin-bottom, 34px);
+      color: $third-dark;
+      p {
+        @include font-dpr(15px);
+        @include pm2rem(margin, 0px, 34px, 0px, 34px);
+        text-align: center;
+      }
+      hr {
+        @include px2rem(width, 120px);
+      }
     }
     .icons {
       display: flex;
       @include pm2rem(padding, 0px, 96px, 0px, 96px);
-      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
       .icon-box {
         text-align: center;
         display: block;
+        @include px2rem(margin-bottom, 44px);
         img {
-          @include px2rem(width, 86px);
-          @include px2rem(height, 86px);
-        }
-        span {
-          display: block;
-          @include pm2rem(margin, 16px, 0px, 50px, 0px);
-          @include font-dpr(13px);
-          color: $second-dark;
+          @include px2rem(width, 400px);
+          @include px2rem(height, 74px);
         }
       }
-    }
-  }
-  .login-container {
-    width: 100%;
-    max-width: 540px;
-    p {
-      @include font-dpr(16px);
-      color: $eleventh-grey;
-      @include pm2rem(margin, 42px, 0px, 42px, 0px);
-      text-align: center;
-    }
-    .input-container {
-      @include pm2rem(padding, 0px, 50px, 0px, 50px);
-      display: flex;
-      input {
-        @include px2rem(border-radius, 40px);
-        @include px2rem(height, 80px);
-        @include pm2rem(padding, 0px, 34px, 0px, 34px);
-        @include pm2rem(margin, 0px, 0px, 40px, 0px);
-        color: $second-dark;
-        @include font-dpr(14px);
-        line-height: normal;
-        border: 1px solid $green;
-        background-color: $twelfth-grey;
-        flex: 1;
-      }
-    }
-    ::-webkit-input-placeholder{
-      color: $fifth-grey;
-    }
-    .login-btn {
-      a {
-        display: block;
-        @include px2rem(width, 650px);
-        margin: 0 auto;
-        @include px2rem(height, 80px);
-        @include px2rem(margin-bottom, 46px);
-        background-color: $green;
-        color: $white;
-        @include font-dpr(16px);
-        @include px2rem(line-height, 80px);
-        text-align: center;
-      }
-      a:active {
-        background-color: rgba(82, 202, 167, .5);
-      }
-    }
-    .text-btn {
-      color: $green;
-      @include font-dpr(15px);
-      @include pm2rem(margin, 0px, 54px, 0px, 54px);
-      display: flex;
-      justify-content: flex-end;
-      align-content: center;
     }
   }
   .popup-dialog {
