@@ -403,6 +403,7 @@
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
           setStore('beforeLogin', 'true')
+          setStore('beforeLoginPath', this.$route.fullPath)
           this.$router.push({name: 'Login'})
         } else {
           this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
