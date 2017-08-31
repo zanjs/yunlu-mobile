@@ -23,7 +23,8 @@
         </a>
         <a
           class="icon-box"
-          :href="weiboLogin">
+          :href="weiboLogin"
+          target="_blank">
           <img src="../../assets/weiboLogin.png">
           <span>微博</span>
         </a>
