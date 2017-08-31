@@ -66,6 +66,7 @@ export default {
       justify-content: center;
       color: $second-dark;
       @include font-dpr(14px);
+      font-weight: bold;
       a:active {
         color: rgba(0, 0, 0, .5);
       }

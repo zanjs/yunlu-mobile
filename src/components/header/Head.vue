@@ -216,6 +216,7 @@
         @include pm2rem(padding, 0px, 0px, 0px, 34px);
         @include px2rem(line-height, 96px);
         @include font-dpr(15px);
+        font-weight: bold;
         color: $white;
         i {
           @include px2rem(margin-right, 16px);
