@@ -108,10 +108,9 @@
         if (getStore('afterRegistration')) {
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
-        } else if (getStore('beforeLoginPath')) {
-          // removeStore('beforeLogin')
-          this.$router.replace(getStore('beforeLoginPath'))
-          // this.$router.go(social ? -3 : -1) // beforeLogin优先级较高
+        } else if (getStore('beforeLogin')) {
+          removeStore('beforeLogin')
+          this.$router.go(social ? -3 : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
