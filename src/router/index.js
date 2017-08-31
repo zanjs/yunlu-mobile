@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import { getStore, removeStore } from '../config/mUtils'
 const Spaces = resolve => require(['../views/privateSpace/Spaces'], resolve)
 const Folders = resolve => require(['../views/privateSpace/Folders'], resolve)
 const Photos = resolve => require(['../views/privateSpace/Photos'], resolve)
@@ -93,6 +94,12 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    }, {
+      path: '/auth',
+      name: 'Auth',
+      redirect: to => {
+        console.log(to)
+      }
     }, {
       path: '/register',
       name: 'Register',
