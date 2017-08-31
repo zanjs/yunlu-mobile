@@ -43,7 +43,7 @@
         <div
           class="item"
           @click.stop="goFavorites()">
-          <i class="iconfont icon-shoucang1"></i>
+          <i class="iconfont icon-shoucang"></i>
           <span>收藏夹</span>
         </div>
         <div
