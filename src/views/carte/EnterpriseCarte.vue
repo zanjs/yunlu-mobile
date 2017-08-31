@@ -403,7 +403,7 @@
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
           setStore('beforeLogin', 'true')
-          setStore('beforeLoginPath', this.$route.fullPath)
+          setStore('beforeLoginPath', this.$route.path)
           this.$router.push({name: 'Login'})
         } else {
           this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
@@ -481,6 +481,7 @@
       }
     },
     mounted () {
+      console.log(this.$route)
       document.body.scrollTop = 0
       this.getEnterpriseDetail(this.teamId)
       this.handleSearchBar()
