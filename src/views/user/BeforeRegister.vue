@@ -39,7 +39,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
-  import { URL_DEV, VALID_CODE_IMG_URL } from '../../constants/constant'
+  import { API_URL, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
     data () {
       return {
@@ -63,7 +63,7 @@
       },
       next () {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `${URL_DEV}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
+        xhr.open('GET', `${API_URL}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
         xhr.withCredentials = true
         xhr.onload = (e) => {
           console.log(e)
