@@ -31,8 +31,7 @@
         登录
       </a>
     </div>
-    <!-- TODO: 生产环境需要调整后台配置，暂时隐藏 -->
-    <!-- <div class="social-login">
+    <div class="social-login">
       <div class="title">
         <hr size=1>
         <p>第三方账号登录</p>
@@ -55,7 +54,7 @@
           <img src="../../assets/weiboLogin.png">
         </a>
       </div>
-    </div> -->
+    </div>
     <div
       v-show="showDialog"
       class="popup-dialog full-width">
