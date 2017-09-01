@@ -268,7 +268,7 @@
         class="flex btn-box btn-shopping-car"
         @click="addShoppingCar()">
         <span
-           class="font-14"
+           class="font-14 white"
            v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
       </div>
       <div
@@ -1125,7 +1125,7 @@
     .btn-shopping-car {
       width: 23.6%;
       background-color: #FFA800;
-      color: $white;
+      border: none;
       span {
         font-weight: bold;
       }
@@ -1135,7 +1135,6 @@
       background-color: #FF4901;
       border: none;
       span {
-        @include px2rem(line-height, 97px);
         font-weight: bold;
       }
     }
