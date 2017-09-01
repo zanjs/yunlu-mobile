@@ -19,8 +19,7 @@
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
         acitve: false,
-        showLogoffPopup: false,
-        weixinRedirectUrl: ''
+        showLogoffPopup: false
       }
     },
     methods: {
