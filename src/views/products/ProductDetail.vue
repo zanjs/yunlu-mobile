@@ -243,19 +243,19 @@
     </section>
     <section class="product-tab-bar white-bg full-width">
       <div
-        class="flex btn-box"
+        class="flex btn-box second-text"
         @click="share()">
         <i class="iconfont icon-fenxiang font-17"></i>
-        <span class="font-12 second-text">分享</span>
+        <span class="font-12">分享</span>
       </div>
       <div
-        class="flex btn-box"
+        class="flex btn-box second-text"
         @click="addFavorites()">
         <i
           class="iconfont icon-shoucang1 font-17"
           v-bind:class="{'bottom-btn-active': hasAddFavorites}"></i>
         <span
-          class="font-12 second-text"
+          class="font-12"
           v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
       </div>
       <div
@@ -267,9 +267,7 @@
       <div
         class="flex btn-box btn-shopping-car"
         @click="addShoppingCar()">
-        <span
-           class="font-14 white"
-           v-bind:class="{'bottom-btn-active': hasAddShoppingCar}">{{shoppingCarText}}</span>
+        <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
         class="flex btn-box btn-buy"
@@ -817,7 +815,6 @@
             // 该机构新增了一条访客记录
             if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
               // 加入购物车可以加入多次
-              this.shoppingCarText = '已加入购物车'
               this.hasAddShoppingCar = true
               Toast({
                 message: '加入购物车成功',
@@ -1138,9 +1135,6 @@
         font-weight: bold;
       }
     }
-  }
-  .bottom-btn-active {
-    color: #F50E0E !important;
   }
   .productdetail-product-tags {
     display: flex;
