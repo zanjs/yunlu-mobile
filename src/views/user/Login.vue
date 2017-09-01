@@ -31,7 +31,8 @@
         登录
       </a>
     </div>
-    <div class="social-login">
+    <!-- TODO: 生产环境需要调整后台配置，暂时隐藏 -->
+    <!-- <div class="social-login">
       <div class="title">
         <hr size=1>
         <p>第三方账号登录</p>
@@ -48,14 +49,13 @@
           :href="weixinLogin">
           <img src="../../assets/weixinLogin.png">
         </a>
-        <!-- TODO: 暂未调试通过，调试通过后上线 -->
-        <!-- <a
+        <a
           class="icon-box"
           :href="weiboLogin">
           <img src="../../assets/weiboLogin.png">
-        </a> -->
+        </a>
       </div>
-    </div>
+    </div> -->
     <div
       v-show="showDialog"
       class="popup-dialog full-width">
