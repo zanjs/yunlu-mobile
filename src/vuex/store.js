@@ -123,9 +123,6 @@ const actions = {
   authAction ({commit}, params) {
     commit(types.REQUEST_BEGIN, params)
     api.authRequest(params, res => commit(types.REQUEST_SUCCESS, {params, res}), err => commit(types.REQUEST_FAILED, {params, err}))
-  },
-  saveLastRoute ({commit}) {
-    commit(types.SAVE_ROUTE)
   }
 }
 
@@ -331,10 +328,6 @@ const mutations = {
     state.clusters = []
     state.clientKeyWrods = []
     state.teams = null
-  },
-
-  [types.SAVE_ROUTE] (state, {params}) {
-    console.log(params)
   }
 }
 

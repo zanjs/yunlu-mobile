@@ -28,5 +28,3 @@ export const CHECK_ALL_CONVERSATION = 'CHECK_ALL_CONVERSATION'
 export const HANDLE_DELETE_CONVERSATIONS = 'HANDLE_DELETE_CONVERSATIONS'
 // 切换路由时，重置某些state中的数组，避免数据未加载时，显示上一次获取的数据
 export const RESET_STATE = 'RESET_STATE'
-// 跳转第三方登录授权时，保存当前路由，授权成功后，调回重定向地址，根据缓存路由再次重定向到授权之前的页面。
-export const SAVE_ROUTE = 'SAVE_ROUTE'
