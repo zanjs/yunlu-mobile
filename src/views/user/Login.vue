@@ -48,12 +48,11 @@
           :href="weixinLogin">
           <img src="../../assets/weixinLogin.png">
         </a>
-        <!-- TODO: 暂未调试通过，调试通过后上线 -->
-        <!-- <a
+        <a
           class="icon-box"
           :href="weiboLogin">
           <img src="../../assets/weiboLogin.png">
-        </a> -->
+        </a>
       </div>
     </div>
     <div
