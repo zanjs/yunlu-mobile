@@ -23,17 +23,21 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8081,
+    port: 8082,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api/v1': {
-        target: 'https://test.yunlu6.com',
+        target: 'https://dev.yunlu6.com',
         changeOrigin: true
       },
       '/captcha': {
-        target: 'https://test.yunlu6.com',
+        target: 'https://dev.yunlu6.com',
+        changeOrigin: true
+      },
+      '/member/auth': {
+        target: 'https://dev.yunlu6.com',
         changeOrigin: true
       }
     },
