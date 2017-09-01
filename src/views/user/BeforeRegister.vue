@@ -6,11 +6,12 @@
     </common-header>
     <div class="login-container full-width">
       <div class="input-container">
-        <input class="input"
-               type="text"
-               v-model="mobile"
-               placeholder="输入手机号"
-               ref="mobileInput">
+        <input
+          class="input"
+          type="text"
+          v-model="mobile"
+          placeholder="输入手机号"
+          ref="mobileInput">
       </div>
       <div class="row-item">
         <input
@@ -39,7 +40,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
-  import { URL_DEV, VALID_CODE_IMG_URL } from '../../constants/constant'
+  import { API_URL, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
     data () {
       return {
@@ -63,10 +64,9 @@
       },
       next () {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `${URL_DEV}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
+        xhr.open('GET', `${API_URL}/api/v1/before_registrations?mobile=${this.mobile}&captcha=${this.captcha}`)
         xhr.withCredentials = true
         xhr.onload = (e) => {
-          console.log(e)
           if (e && e.target && e.target.readyState === 4 && e.target.status === 200 && JSON.parse(e.target.response) && JSON.parse(e.target.response).success) {
             this.$router.push({name: 'Register', query: {mobile: this.mobile}})
           } else if (e && e.target && JSON.parse(e.target.response) && JSON.parse(e.target.response).msg) {
@@ -83,47 +83,9 @@
             }, 1000)
           }
         }
-        // if (xhr.readyState === 4 && xhr.status === 200) {
-        //   this.$router.push({name: 'Register', query: {mobile: this.mobile}})
-        // } else {
-        //   this.getValidCode()
-        //   Toast(xhr.responseText)
-        // }
         xhr.send()
-
-        /* this.$store.dispatch('commonAction', {
-          url: '/before_registrations',
-          method: 'get',
-          params: {
-            mobile: this.mobile,
-            captcha: this.captcha
-          },
-          target: this,
-          resolve: (state, res) => {
-            if (res.data.success) {
-              this.$router.push({name: 'Register', query: {mobile: this.mobile}})
-            } else {
-              this.getValidCode()
-              Toast(res.data.msg)
-            }
-          },
-          reject: () => {
-          }
-        }) */
       },
       getValidCode () {
-        /* this.$store.dispatch('validCodeAction', {
-          url: '/captcha',
-          method: 'get',
-          params: {
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.imgSrc = window.URL.createObjectURL(res.data)
-          },
-          reject: () => {
-          }
-        }) */
         window.location.reload()
       },
       openProtocol () {

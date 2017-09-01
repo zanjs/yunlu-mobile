@@ -23,7 +23,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8081,
+    port: 8082,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -33,6 +33,10 @@ module.exports = {
         changeOrigin: true
       },
       '/captcha': {
+        target: 'https://api.yunlu6.com',
+        changeOrigin: true
+      },
+      '/member/auth': {
         target: 'https://api.yunlu6.com',
         changeOrigin: true
       }

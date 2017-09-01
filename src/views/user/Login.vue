@@ -1,31 +1,59 @@
 <template>
-  <section>
+  <section class="container">
     <common-header
       :title="header"
-      @back="goBack()">
+      @back="goBack()"
+      :right-text="rightBtnText"
+      @right-click="goRegister()">
     </common-header>
-    <div class="login-container">
-      <div class="input-container">
+    <div class="normal-login">
+      <div class="item top-item">
+        <img src="../../assets/inputName.png">
         <input
           type="text"
           v-model="mobile"
           placeholder="输入手机号"
           ref="mobileInput">
       </div>
-      <div class="input-container">
+      <div class="item">
+        <img src="../../assets/inputPassword.png">
         <input
           type="password"
           v-model="password"
           placeholder="请输入密码">
       </div>
-      <div class="login-btn">
-        <a @click="login()">
-          登录
-        </a>
+    </div>
+    <div class="text-btn">
+      <a @click="forgetPassword()">忘记密码?</a>
+    </div>
+    <div class="login-btn">
+      <a @click="login()">
+        登录
+      </a>
+    </div>
+    <div class="social-login">
+      <div class="title">
+        <hr size=1>
+        <p>第三方账号登录</p>
+        <hr size=1>
       </div>
-      <div class="text-btn">
-        <a @click="goRegister()">注册账号</a>
-        <a @click="forgetPassword()">忘记密码?</a>
+      <div class="icons">
+        <a
+          class="icon-box"
+          :href="qqLogin">
+          <img src="../../assets/qqLogin.png">
+        </a>
+        <a
+          class="icon-box"
+          :href="weixinLogin">
+          <img src="../../assets/weixinLogin.png">
+        </a>
+        <!-- TODO: 暂未调试通过，调试通过后上线 -->
+        <!-- <a
+          class="icon-box"
+          :href="weiboLogin">
+          <img src="../../assets/weiboLogin.png">
+        </a> -->
       </div>
     </div>
     <div
@@ -53,12 +81,13 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
-  import { AUTHORIZATION_TIME } from '../../constants/constant'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, AUTH_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_MP_LOGIN_APP_ID } from '../../constants/constant'
+  import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
     data () {
       return {
         header: '登录',
+        rightBtnText: '注册账号',
         mobile: '',
         password: '',
         deviceDelegate: null,
@@ -68,25 +97,28 @@
         showDialog: false,
         user: null,
         interval: null,
-        showRejectPopup: false
+        showRejectPopup: false,
+        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&state=qq_connect`,
+        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&state=weibo`,
+        weixinLogin: `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_MP_LOGIN_APP_ID}&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_userinfo&state=wechat#wechat_redirect`
       }
     },
     components: {
       CommonHeader
     },
     methods: {
-      goBack () {
+      goBack (social = false, type) {
         if (getStore('afterRegistration')) {
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(-1) // beforeLogin优先级较高
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(-1)
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1)
         }
       },
       login () {
@@ -112,7 +144,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.getSignature(res.data.authentication_token)
+              this.getSignature(res.data.authentication_token, false, '')
             }
           },
           reject: () => {
@@ -120,7 +152,7 @@
           }
         })
       },
-      getSignature (token) {
+      getSignature (token, social = false, type = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/sign',
           method: 'get',
@@ -130,9 +162,11 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            this.goBack()
+            Indicator.close()
+            this.goBack(social, type)
           },
           reject: () => {
+            Indicator.close()
           }
         })
       },
@@ -162,7 +196,7 @@
           if (message.from && message.from === 'system' && message.content && message.content._lcattrs && message.content._lcattrs.token) {
             this.user.authentication_token = message.content._lcattrs.token
             setStore('user', this.user)
-            this.getSignature(message.content._lcattrs.token)
+            this.getSignature(message.content._lcattrs.token, false, '')
             this.closeDialog()
           } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
             this.closeDialog()
@@ -206,70 +240,162 @@
         }
         count()
         this.interval = setInterval(count, speed)
+      },
+      sendCode (code, type) {
+        this.$store.dispatch('authAction', {
+          url: `/member/auth/${type}/callback`,
+          method: 'get',
+          params: {
+            code: code
+          },
+          data: {},
+          target: this,
+          resolveFn: (state, res) => {
+            setStore('device_signature', res.data.sign)
+            if (!res.data.authentication_token && res.data.id) {
+              this.user = res.data
+              this.countDown(AUTHORIZATION_TIME, 1000)
+              this.showDialog = true
+              this.initImClient(res.data.device_id)
+            } else if (res.data.authentication_token && res.data.id) {
+              setStore('user', res.data)
+              Indicator.open({
+                text: '正在登录...',
+                spinnerType: 'fading-circle'
+              })
+              this.getSignature(res.data.authentication_token, true, type)
+            } else {
+              Toast('授权登录出错')
+            }
+          },
+          rejectFn: () => {
+            Toast('授权登录出错')
+          }
+        })
+      },
+      shouldSendCode () {
+        if (window.location.search) {
+          let codeStr = window.location.search.split('&')[0]
+          let stateStr = window.location.search.split('&')[1]
+          let state = stateStr.replace('state=', '')
+          let code = codeStr.replace('?code=', '')
+          this.sendCode(code, state)
+        } else if (this.$route.query.code && this.$route.query.state) {
+          this.sendCode(this.$route.query.code, this.$route.query.state)
+        }
+      },
+      // 使用微博登录的时候，会改变路由栈(路由栈中有两个登录页面路由)，有时在本页面返回任然会跳转本页面，需要再次返回
+      autoGoBack () {
+        if (getStore('user') && getStore('user').authentication_token) {
+          this.goBack()
+        }
       }
     },
     mounted () {
-      this.$refs.mobileInput.focus()
+      this.shouldSendCode()
+      this.autoGoBack()
     }
   }
 </script>
 
-
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .login-container {
-    position: fixed; // 不能用absolute,UC浏览器会白屏
-    @include pm2rem(padding, 128px, 0px, 0px, 0px);
-    bottom: 0;
+  .container {
+    background-color: $twelfth-grey;
+    position: absolute;;
     top: 0;
+    bottom: 0;
     width: 100%;
     max-width: 540px;
-    background-color: $white;
-    .input-container {
-      @include pm2rem(padding, 0px, 50px, 0px, 50px);
-      display: flex;
+  }
+  .normal-login {
+    @include px2rem(padding-top, 147px);
+    .item {
+      @include px2rem(width, 612px);
+      @include px2rem(height, 80px);
+      margin: 0 auto;
+      position: relative;
+      img {
+        position: absolute;
+        bottom: 0;
+        @include px2rem(width, 612px);
+        @include px2rem(height, 65px);
+      }
       input {
-        @include px2rem(border-radius, 40px);
+        position: absolute;
+        @include px2rem(left, 116px);
         @include px2rem(height, 80px);
-        @include pm2rem(padding, 0px, 34px, 0px, 34px);
-        @include pm2rem(margin, 0px, 0px, 26px, 0px);
-        color: $second-dark;
-        @include font-dpr(14px);
-        line-height: normal;
+        @include px2rem(width, 480px);
+        background-color: transparent;
         border: none;
-        background-color: $primary-grey;
-        flex: 1;
+        @include font-dpr(14px);
+        color: $second-dark;
+      }
+      ::-webkit-input-placeholder{
+        color: $thirteenth-grey;
       }
     }
-    ::-webkit-input-placeholder{
-      color: $third-dark;
+    .top-item {
+      @include px2rem(margin-bottom, 39px);
     }
-    .login-btn {
-      a {
-        display: block;
-        @include px2rem(width, 610px);
-        margin: 0 auto;
-        @include px2rem(height, 80px);
-        @include px2rem(margin-top, 28px);
-        @include px2rem(margin-bottom, 46px);
-        background-color: $green;
-        color: $white;
-        @include font-dpr(16px);
-        @include px2rem(line-height, 80px);
+  }
+  .text-btn {
+    color: $fourteenth-grey;
+    @include font-dpr(15px);
+    @include pm2rem(margin, 28px, 69px, 36px, 0px);
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    line-height: 1;
+  }
+  .login-btn {
+    a {
+      display: block;
+      @include px2rem(width, 650px);
+      margin: 0 auto;
+      @include px2rem(height, 86px);
+      @include px2rem(margin-bottom, 84px);
+      background-color: $green;
+      color: $white;
+      @include font-dpr(16px);
+      @include px2rem(line-height, 86px);
+      text-align: center;
+    }
+    a:active {
+      background-color: rgba(82, 202, 167, .5);
+    }
+  }
+  .social-login {
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include px2rem(margin-bottom, 34px);
+      color: $third-dark;
+      p {
+        @include font-dpr(15px);
+        @include pm2rem(margin, 0px, 34px, 0px, 34px);
         text-align: center;
       }
-      a:active {
-        background-color: rgba(82, 202, 167, .5);
+      hr {
+        @include px2rem(width, 120px);
       }
     }
-    .text-btn {
-      color: $third-dark;
-      @include font-dpr(14px);
-      @include pm2rem(margin, 0px, 54px, 0px, 54px);
+    .icons {
       display: flex;
-      justify-content: space-between;
-      align-content: center;
+      @include pm2rem(padding, 0px, 96px, 0px, 96px);
+      flex-direction: column;
+      align-items: center;
+      .icon-box {
+        text-align: center;
+        display: block;
+        @include px2rem(margin-bottom, 44px);
+        img {
+          @include px2rem(width, 400px);
+          @include px2rem(height, 74px);
+        }
+      }
     }
   }
   .popup-dialog {

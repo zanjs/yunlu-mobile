@@ -100,3 +100,16 @@ export const isPc = () => {
   }
   return flag
 }
+
+export const mobileClient = () => {
+  let ua = navigator.userAgent.toLowerCase()
+  if (ua.indexOf('micromessenger') > -1) {
+    return 'weixin'
+  } else if (ua.indexOf('weibo') > -1) {
+    return 'weibo'
+  } else if (ua.indexOf('mqqbrowser') > -1) {
+    return 'qq'
+  } else {
+    return 'login' // 如果不能判断当前浏览器环境，则跳转登录页，由用户自行选择授权方式
+  }
+}
