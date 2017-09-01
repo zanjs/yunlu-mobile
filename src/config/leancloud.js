@@ -1,8 +1,8 @@
 import { Realtime } from 'leancloud-realtime'
-import { APP_ID } from '../constants/constant'
+import { LEANCLOUD_APP_ID } from '../constants/constant'
 
 const realtime = new Realtime({
-  appId: APP_ID,
+  appId: LEANCLOUD_APP_ID,
   region: 'cn' // 美国节点为 "us"
 })
 
