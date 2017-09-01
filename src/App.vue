@@ -143,18 +143,6 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
-      },
-      wechatAuth () {
-        this.$store.dispatch('authAction', {
-          url: '/member/auth/wechat',
-          method: 'get',
-          target: this,
-          resolveFn: (state, res) => {
-            console.log(res)
-          },
-          rejectFn: () => {
-          }
-        })
       }
     },
     updated () {
