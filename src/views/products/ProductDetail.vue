@@ -158,7 +158,9 @@
                 v-for="(i, indexI) in item.children"
                 :key="indexI"
                 class="row-container">
-                <div class="sub-row-title">
+                <div
+                  v-if="handleChildProperties(i)"
+                  class="sub-row-title">
                   <i class="iconfont icon-circle dot"></i>
                   <div class="title">{{i.name}} : {{i.value}}</div>
                   <i
@@ -507,6 +509,31 @@
         } else {
           return true
         }
+      },
+      // 参数为一级属性(如果一级属性的子属性(二级)有值，或者三级属性有值，则需要显示一级属性名)
+      handleChildProperties (prop) {
+        let flag = false
+        if (prop.name && prop.value) {
+          return true
+        }
+        if (prop.children.length === 0) {
+          return false
+        }
+        for (let i = 0; i < prop.children.length; i++) {
+          if (prop.children[i].name && prop.children[i].value) {
+            flag = true
+            break
+          }
+          if (prop.children[i].children.length > 0) {
+            for (let j = 0; j < prop.children[i].children.length; j++) {
+              if (prop.children[i].children[j].name && prop.children[i].children[j].value) {
+                flag = true
+                break
+              }
+            }
+          }
+        }
+        return flag
       },
       getAllPriceProperties (categoryId, productId, teamId) {
         this.$store.dispatch('commonAction', {
