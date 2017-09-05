@@ -175,14 +175,16 @@
                   :key="indexM"
                   class="sub-item">
                   <div
-                    v-if="m.name && m.value"
+                    v-if="handleChildProperties(m)"
                     class="title">{{m.name}} : {{m.value}}</div>
                     <div
                       v-for="(n, indexN) in m.children"
                       :key="indexN"
                       class="third-row-container">
                       <div class="third-item">
-                        <div class="title">{{n.name}} : {{n.value}}</div>
+                        <div
+                          v-if="n.name && n.value"
+                          class="title">{{n.name}} : {{n.value}}</div>
                       </div>
                     </div>
                 </div>
@@ -510,7 +512,7 @@
           return true
         }
       },
-      // 参数为一级属性(如果一级属性的子属性(二级)有值，或者三级属性有值，则需要显示一级属性名)
+      // 参数为一级或二级属性(如果属性的子属性有值，则需要显示完整上级属性名)
       handleChildProperties (prop) {
         let flag = false
         if (prop.name && prop.value) {
@@ -524,7 +526,7 @@
             flag = true
             break
           }
-          if (prop.children[i].children.length > 0) {
+          if (prop.children[i].children && prop.children[i].children.length > 0) {
             for (let j = 0; j < prop.children[i].children.length; j++) {
               if (prop.children[i].children[j].name && prop.children[i].children[j].value) {
                 flag = true
