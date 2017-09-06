@@ -7,7 +7,8 @@
 </template>
 
 <script>
-  import { getStore, removeAllStore } from './config/mUtils'
+  import { AUTH_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_MP_LOGIN_APP_ID } from './constants/constant'
+  import { getStore, removeAllStore, mobileClient } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -142,7 +143,16 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
+      },
+      // 如果是在微信中打开，则静默登录
+      autoLogin () {
+        if (mobileClient() === 'weixin' && !getStore('user')) {
+          window.location.href = `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_MP_LOGIN_APP_ID}&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect`
+        }
       }
+    },
+    mounted () {
+      this.autoLogin()
     },
     updated () {
       this.beforeInit()
