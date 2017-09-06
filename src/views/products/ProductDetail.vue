@@ -831,14 +831,6 @@
       addShoppingCar () {
         if (this.hasLogin) {
           this.addShoppingCarRequest()
-        // } else if (this.hasLogin && this.hasAddShoppingCar) {
-        //   // 暂无移出购物车接口，这里移出购物车实际并没有移出
-        //   this.shoppingCarText = '加入购物车'
-        //   this.hasAddShoppingCar = false
-        //   Toast({
-        //     message: '你已将该商品移出购物车',
-        //     duration: 1000
-        //   })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
