@@ -152,7 +152,8 @@
       }
     },
     mounted () {
-      this.autoLogin()
+      // TODO: 需要获取当前地址作为回调地址，并在此文件中向后台发送code，并阻止用户操作。
+      // this.autoLogin()
     },
     updated () {
       this.beforeInit()

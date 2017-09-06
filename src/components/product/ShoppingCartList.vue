@@ -61,26 +61,25 @@
                   <div
                     class="count"
                     @click.stop="doNothing">
-                    <!-- 暂时不考虑库存 -->
-                    <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
                     <input
+                      v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')"
                       type="number"
                       @blur="handleInput($event.target.value, i.price.amount, i, item)"
                       :value="i.quantity">
-                    <!-- <span
+                    <span
                       v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')">
                       {{i.quantity}}
-                    </span> -->
+                    </span>
                   </div>
-                  <!-- v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')" -->
                   <i
+                    v-if="parseInt(i.quantity + '') < parseInt(i.price.amount + '')"
                     class="iconfont icon-tianjia"
                     @click.stop="increase(i, item)"></i>
-                  <!-- <i
+                  <i
                     v-if="parseInt(i.quantity + '') === parseInt(i.price.amount + '')"
                     class="iconfont icon-tianjia disabled"
                     @click.stop="doNothing">
-                  </i> -->
+                  </i>
                 </div>
               </div>
             </div>
@@ -119,22 +118,16 @@ export default {
       this.$emit('go-product-detail', item)
     },
     handleInput (quantity, amount, i, item) {
-      // 暂时不考虑库存
-      // if (parseInt(quantity + '') >= parseInt(amount + '')) {
-      //   this.$emit('input', {quantity: amount, item: i, parentItem: item})
-      // } else if (parseInt(quantity + '') <= 0) {
-      //   this.$emit('input', {quantity: 1, item: i, parentItem: item})
-      // }
-      if (parseInt(quantity + '') <= 0) {
+      if (parseInt(quantity + '') >= parseInt(amount + '')) {
+        this.$emit('input', {quantity: amount, item: i, parentItem: item})
+      } else if (parseInt(quantity + '') <= 0 || !quantity) {
         this.$emit('input', {quantity: 1, item: i, parentItem: item})
-      } else if (parseInt(quantity + '') >= 999) {
-        this.$emit('input', {quantity: 999, item: i, parentItem: item})
       } else {
         this.$emit('input', {quantity: parseInt(quantity + ''), item: i, parentItem: item})
       }
     },
     doNothing () {
-
+      // 在购物车当前商品数量区域添加空点击方法，避免点击事件穿透，而执行了前往商品详情的方法。
     }
   }
 }
