@@ -862,7 +862,7 @@
               })
             } else {
               Toast({
-                message: '加入购物车失败',
+                message: res.data.detail || '加入购物车失败',
                 duration: 1000
               })
             }
