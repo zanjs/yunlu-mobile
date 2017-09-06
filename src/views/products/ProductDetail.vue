@@ -158,7 +158,9 @@
                 v-for="(i, indexI) in item.children"
                 :key="indexI"
                 class="row-container">
-                <div class="sub-row-title">
+                <div
+                  v-if="handleChildProperties(i)"
+                  class="sub-row-title">
                   <i class="iconfont icon-circle dot"></i>
                   <div class="title">{{i.name}} : {{i.value}}</div>
                   <i
@@ -173,14 +175,16 @@
                   :key="indexM"
                   class="sub-item">
                   <div
-                    v-if="m.name && m.value"
+                    v-if="handleChildProperties(m)"
                     class="title">{{m.name}} : {{m.value}}</div>
                     <div
                       v-for="(n, indexN) in m.children"
                       :key="indexN"
                       class="third-row-container">
                       <div class="third-item">
-                        <div class="title">{{n.name}} : {{n.value}}</div>
+                        <div
+                          v-if="n.name && n.value"
+                          class="title">{{n.name}} : {{n.value}}</div>
                       </div>
                     </div>
                 </div>
@@ -243,13 +247,13 @@
     </section>
     <section class="product-tab-bar white-bg full-width">
       <div
-        class="flex btn-box second-text"
-        @click="share()">
-        <i class="iconfont icon-fenxiang font-17"></i>
-        <span class="font-12">分享</span>
+        class="btn-box"
+        @click="openIm()">
+        <i class="iconfont icon-kefu font-17 kefu"></i>
+        <span class="font-12 kefu">客服</span>
       </div>
       <div
-        class="flex btn-box second-text"
+        class="btn-box second-text"
         @click="addFavorites()">
         <i
           class="iconfont icon-shoucang1 font-17"
@@ -259,27 +263,27 @@
           v-bind:class="{'bottom-btn-active': hasAddFavorites}">{{favoratesText}}</span>
       </div>
       <div
-        class="flex btn-box"
-        @click="openIm()">
-        <i class="iconfont icon-kefu font-17 kefu"></i>
-        <span class="font-12 kefu">客服</span>
+        class="btn-box second-text"
+        @click="openShoppingCar()">
+        <i class="iconfont icon-gouwuche1 font-17"></i>
+        <span class="font-12">购物车</span>
+        <div
+          v-show="purchaseItemsCount !== '0'"
+          class="badge">
+          <span>{{purchaseItemsCount}}</span>
+        </div>
       </div>
       <div
-        class="flex btn-box btn-shopping-car"
+        class="btn-box btn-shopping-car"
         @click="addShoppingCar()">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
-        class="flex btn-box btn-buy"
+        class="btn-box btn-buy"
         @click="buyNow()">
         <span class="font-14 white">立即购买</span>
       </div>
     </section>
-    <mt-actionsheet
-      :actions="actions"
-      v-model="sheetVisible"
-      class="product-actionsheet full-width">
-    </mt-actionsheet>
     <section
       v-if="popUp"
       class="product-popup-dialog"
@@ -374,12 +378,6 @@
   import { Toast } from 'mint-ui'
   export default {
     data () {
-      const noServiceYet = () => {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
-      }
       return {
         selected: '1',
         currentIndex: 1,
@@ -390,6 +388,7 @@
         hasProperties: true,
         hasAddFavorites: false,
         hasAddShoppingCar: false,
+        purchaseItemsCount: '0', // 超过99显示99+
         shoppingCarText: '加入购物车',
         favoratesText: '收藏',
         productLink: {},
@@ -432,25 +431,6 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        actions: [
-          {
-            name: '发送给微信好友',
-            method: noServiceYet
-          }, {
-            name: '分享到微信朋友圈',
-            method: noServiceYet
-          }, {
-            name: '分享到QQ空间',
-            method: noServiceYet
-          }, {
-            name: '分享到QQ',
-            method: noServiceYet
-          }, {
-            name: '分享到新浪微博',
-            method: noServiceYet
-          }
-        ],
-        sheetVisible: false,
         hideDownloadBar: getStore('hideDownloadBar')
       }
     },
@@ -496,7 +476,8 @@
         })
       },
       handleProperties (productDetail) {
-        if (!productDetail.goods_type) {
+        // 当产品类型为StoneMaterial或Medicament时，一定有附加的产品属性，判断时，排除这两种情况。
+        if (productDetail.goods_type !== 'StoneMaterial' && productDetail.goods_type !== 'Medicament') {
           let index = 0
           for (let i = 0; i < productDetail.properties.length; i++) {
             if (productDetail.properties[i].children.length === 0) {
@@ -507,6 +488,31 @@
         } else {
           return true
         }
+      },
+      // 参数为一级或二级属性(如果属性的子属性有值，则需要显示完整上级属性名)
+      handleChildProperties (prop) {
+        let flag = false
+        if (prop.name && prop.value) {
+          return true
+        }
+        if (prop.children.length === 0) {
+          return false
+        }
+        for (let i = 0; i < prop.children.length; i++) {
+          if (prop.children[i].name && prop.children[i].value) {
+            flag = true
+            break
+          }
+          if (prop.children[i].children && prop.children[i].children.length > 0) {
+            for (let j = 0; j < prop.children[i].children.length; j++) {
+              if (prop.children[i].children[j].name && prop.children[i].children[j].value) {
+                flag = true
+                break
+              }
+            }
+          }
+        }
+        return flag
       },
       getAllPriceProperties (categoryId, productId, teamId) {
         this.$store.dispatch('commonAction', {
@@ -628,10 +634,52 @@
               this.teamLink = res.data.teams[0]
               this.openPopup()
             }
+            this.getPurchaseItems()
           },
           reject: () => {
           }
         })
+      },
+      // 获取购物车中的产品数量
+      getPurchaseItems () {
+        if (this.hasLogin) {
+          this.$store.dispatch('commonAction', {
+            url: '/purchase_items',
+            method: 'get',
+            params: {
+              token: this.token
+            },
+            target: this,
+            resolve: (state, res) => {
+              if (res.data.purchase_items.length > 0) {
+                let purchaseItems = this.handlePurchaseItems(res.data.purchase_items)
+                this.purchaseItemsCount = this.handlePurchaseItemsCount(purchaseItems)
+              }
+            },
+            reject: () => {
+            }
+          })
+        }
+      },
+      handlePurchaseItemsCount (arr) {
+        let count = 0
+        for (let i = 0; i < arr.length; i++) {
+          count += arr[i].quantity
+        }
+        if (count > 99) {
+          return '99+'
+        } else {
+          return count + ''
+        }
+      },
+      handlePurchaseItems (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].price) {
+            tmpArr.push(arr[i])
+          }
+        }
+        return tmpArr
       },
       handleProducts (arr, arr2) {
         let tmpArr = []
@@ -652,9 +700,6 @@
       },
       handleChange (index) {
         this.currentIndex = index + 1
-      },
-      share () {
-        this.sheetVisible = true
       },
       expandMorePrice () {
         this.morePrice = !this.morePrice
@@ -787,14 +832,6 @@
       addShoppingCar () {
         if (this.hasLogin) {
           this.addShoppingCarRequest()
-        // } else if (this.hasLogin && this.hasAddShoppingCar) {
-        //   // 暂无移出购物车接口，这里移出购物车实际并没有移出
-        //   this.shoppingCarText = '加入购物车'
-        //   this.hasAddShoppingCar = false
-        //   Toast({
-        //     message: '你已将该商品移出购物车',
-        //     duration: 1000
-        //   })
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
@@ -814,6 +851,7 @@
           resolve: (state, res) => {
             // 该机构新增了一条访客记录
             if (res.data.purchase_items && res.data.purchase_items.price && res.data.purchase_items.price.id === this.currentPrice.id) {
+              this.getPurchaseItems()
               // 加入购物车可以加入多次
               this.hasAddShoppingCar = true
               Toast({
@@ -1113,16 +1151,41 @@
       border-top: 1px solid $fifth-grey;
       width: 17.6%;
       box-sizing: border-box;
+      line-height: 1;
+      position: relative;
+      display: flex;
       flex-direction: column;
-      line-height: normal;
+      justify-content: center;
+      align-items: center;
+      i {
+        @include px2rem(margin-bottom, 12px);
+      }
       .kefu {
         color: #20A2E5;
+      }
+      .badge {
+        background-color: $white;
+        position: absolute;
+        @include px2rem(top, 10px);
+        @include px2rem(right, 26px);
+        @include px2rem(min-width, 20px);
+        @include px2rem(min-height, 20px);
+        @include pm2rem(padding, 2px, 2px, 2px, 2px);
+        color: $red;
+        @include px2rem(border-radius, 30px);
+        @include font-dpr(8px);
+        border: 1px solid $red;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include line-height(8px);
       }
     }
     .btn-shopping-car {
       width: 23.6%;
       background-color: #FFA800;
       border: none;
+      line-height: normal;
       span {
         font-weight: bold;
       }
@@ -1131,6 +1194,7 @@
       width: 23.6%;
       background-color: #FF4901;
       border: none;
+      line-height: normal;
       span {
         font-weight: bold;
       }
@@ -1496,35 +1560,6 @@
       line-height: 1;
       @include font-dpr(20px);
       color: $fifth-grey;
-    }
-  }
-  .product-actionsheet {
-    background-color: transparent !important;
-    margin: 0 auto;
-    @include px2rem(margin-bottom, 12px);
-    .mint-actionsheet-list {
-      @include pm2rem(margin, 0px, 41px, 0px, 41px);
-      @include px2rem(border-radius, 10px);
-      & li:first-child {
-        @include px2rem(border-top-left-radius, 10px);
-        @include px2rem(border-top-right-radius, 10px);
-      }
-      & li:last-child {
-        @include px2rem(border-bottom-left-radius, 10px);
-        @include px2rem(border-bottom-right-radius, 10px);
-      }
-    }
-    .mint-actionsheet-button {
-      @include pm2rem(margin, 28px, 41px, 0px, 41px);
-      @include px2rem(border-radius, 10px);
-      width: auto;
-      color: #004BBD;
-    }
-    .mint-actionsheet-listitem {
-      color: #004BBD;
-      @include font-dpr(16px);
-      @include px2rem(height, 98px);
-      @include px2rem(line-height, 98px);
     }
   }
   .toast-icon-big {
