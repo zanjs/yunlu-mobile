@@ -476,7 +476,8 @@
         })
       },
       handleProperties (productDetail) {
-        if (!productDetail.goods_type) {
+        // 当产品类型为StoneMaterial或Medicament时，一定有附加的产品属性，判断时，排除这两种情况。
+        if (productDetail.goods_type !== 'StoneMaterial' && productDetail.goods_type !== 'Medicament') {
           let index = 0
           for (let i = 0; i < productDetail.properties.length; i++) {
             if (productDetail.properties[i].children.length === 0) {
