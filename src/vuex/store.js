@@ -119,10 +119,6 @@ const actions = {
   },
   resetState ({commit}) {
     commit(types.RESET_STATE)
-  },
-  authAction ({commit}, params) {
-    commit(types.REQUEST_BEGIN, params)
-    api.authRequest(params, res => commit(types.REQUEST_SUCCESS, {params, res}), err => commit(types.REQUEST_FAILED, {params, err}))
   }
 }
 
