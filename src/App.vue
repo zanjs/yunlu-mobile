@@ -7,8 +7,7 @@
 </template>
 
 <script>
-  import { AUTH_REDIRECT_URL, WEIXIN_AUTHORIZATION_CODE_RUL, WEIXIN_MP_LOGIN_APP_ID } from './constants/constant'
-  import { getStore, removeAllStore, mobileClient } from './config/mUtils'
+  import { getStore, setStore, removeAllStore, mobileClient } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -144,10 +143,34 @@
           this.getClosedConversationList()
         }
       },
+      loginRequest (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/login_info',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            // 有两个签名，一个是设备签名，一个是用户签名
+            setStore('device_signature', res.data.sign)
+            if (!res.data.authentication_token) {
+            } else {
+              setStore('user', res.data)
+              this.getSignature(res.data.authentication_token, false, '')
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
       // 如果是在微信中打开，则静默登录
       autoLogin () {
-        if (mobileClient() === 'weixin' && !getStore('user')) {
-          window.location.href = `${WEIXIN_AUTHORIZATION_CODE_RUL}?appid=${WEIXIN_MP_LOGIN_APP_ID}&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect`
+        if (this.$route.query.tmp_token) {
+          this.loginRequest(this.$route.query.tmp_token)
+        } else if (mobileClient() === 'weixin' && !this.$route.query.tmp_token) {
+          // let redirectUrl = encodeURIComponent('/#/see?tmp_token=')
+          window.location.href = 'https://test.yunlu6.com/member/auth/wechat'
         }
       }
     },
