@@ -80,7 +80,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
-  import { AUTH_URL, AUTHORIZATION_TIME, QQ_AUTHORIZATION_CODE_URL, QQ_LOGIN_APP_ID, WEIBO_LOGIN_APP_ID, WEIBO_AUTHORIZATION_CODE_URL, AUTH_REDIRECT_URL } from '../../constants/constant'
+  import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
     data () {
@@ -97,27 +97,27 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${QQ_AUTHORIZATION_CODE_URL}?which=Login&display=mobile&client_id=${QQ_LOGIN_APP_ID}&response_type=code&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&state=qq_connect`,
-        weiboLogin: `${WEIBO_AUTHORIZATION_CODE_URL}?client_id=${WEIBO_LOGIN_APP_ID}&response_type=code&redirect_uri=${AUTH_REDIRECT_URL}%2F%23%2Flogin&state=weibo`,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/login?tmp_token=')}`
+        qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/#/login?provider=qq&tmp_token=')}`,
+        weiboLogin: `${AUTH_URL}/member/auth/weibo?url=${encodeURIComponent('/#/login?provider=weibo&tmp_token=')}`,
+        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/login?provider=wechat&tmp_token=')}`
       }
     },
     components: {
       CommonHeader
     },
     methods: {
-      goBack () {
+      goBack (social = false, type = '') {
         if (getStore('afterRegistration')) {
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(-1)
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(-1)
+          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1)
         }
       },
       login () {
@@ -143,7 +143,7 @@
               this.initImClient(res.data.device_id)
             } else {
               setStore('user', res.data)
-              this.getSignature(res.data.authentication_token)
+              this.getSignature(res.data.authentication_token, false, '')
             }
           },
           reject: () => {
@@ -151,7 +151,7 @@
           }
         })
       },
-      getSignature (token) {
+      getSignature (token, social = false, type = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/sign',
           method: 'get',
@@ -162,7 +162,7 @@
           resolve: (state, res) => {
             setStore('signature', res.data)
             Indicator.close()
-            this.goBack()
+            this.goBack(social, type)
           },
           reject: () => {
             Indicator.close()
@@ -240,7 +240,7 @@
         count()
         this.interval = setInterval(count, speed)
       },
-      authLogin (token) {
+      authLogin (token, type) {
         this.$store.dispatch('commonAction', {
           url: '/login_info',
           method: 'get',
@@ -262,7 +262,7 @@
                 text: '正在登录...',
                 spinnerType: 'fading-circle'
               })
-              this.getSignature(res.data.authentication_token)
+              this.getSignature(res.data.authentication_token, true, type)
             } else {
               Toast('授权登录出错')
             }
@@ -274,7 +274,7 @@
       },
       shouldLogin () {
         if (this.$route.query.tmp_token) {
-          this.authLogin(this.$route.query.tmp_token)
+          this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         }
       },
       // 使用微博登录的时候，会改变路由栈(路由栈中有两个登录页面路由)，有时在本页面返回任然会跳转本页面，需要再次返回
@@ -286,7 +286,7 @@
     },
     mounted () {
       this.shouldLogin()
-      // this.autoGoBack()
+      this.autoGoBack()
     }
   }
 </script>
