@@ -106,18 +106,18 @@
       CommonHeader
     },
     methods: {
-      goBack (social = false, type = '') {
+      goBack (social = false, provider = '') {
         if (getStore('afterRegistration')) {
           removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1) // beforeLogin优先级较高
+          this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(social ? (type === 'weibo' ? -2 : -3) : -1)
+          this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1)
         }
       },
       login () {
@@ -151,7 +151,7 @@
           }
         })
       },
-      getSignature (token, social = false, type = '') {
+      getSignature (token, social = false, provider = '') {
         this.$store.dispatch('commonAction', {
           url: '/im/sign',
           method: 'get',
@@ -162,7 +162,7 @@
           resolve: (state, res) => {
             setStore('signature', res.data)
             Indicator.close()
-            this.goBack(social, type)
+            this.goBack(social, provider)
           },
           reject: () => {
             Indicator.close()
@@ -240,7 +240,7 @@
         count()
         this.interval = setInterval(count, speed)
       },
-      authLogin (token, type) {
+      authLogin (token, provider) {
         this.$store.dispatch('commonAction', {
           url: '/login_info',
           method: 'get',
@@ -262,7 +262,7 @@
                 text: '正在登录...',
                 spinnerType: 'fading-circle'
               })
-              this.getSignature(res.data.authentication_token, true, type)
+              this.getSignature(res.data.authentication_token, true, provider)
             } else {
               Toast('授权登录出错')
             }
