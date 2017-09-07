@@ -50,11 +50,6 @@
         </a>
         <a
           class="icon-box"
-          :href="testUrl">
-          <img src="../../assets/weixinLogin.png">
-        </a>
-        <a
-          class="icon-box"
           :href="weiboLogin">
           <img src="../../assets/weiboLogin.png">
         </a>
@@ -254,7 +249,7 @@
           },
           data: {},
           target: this,
-          resolveFn: (state, res) => {
+          resolve: (state, res) => {
             setStore('device_signature', res.data.sign)
             if (!res.data.authentication_token && res.data.id) {
               this.user = res.data
@@ -272,7 +267,7 @@
               Toast('授权登录出错')
             }
           },
-          rejectFn: () => {
+          reject: () => {
             Toast('授权登录出错')
           }
         })
