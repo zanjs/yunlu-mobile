@@ -11,7 +11,6 @@
       @back="goBack()"
       @open-favorites="openFavorites()"
       @report="goReport()"
-      @open-shopping-car="openShoppingCar()"
       @search-near-by="searchNearBy()"
       @home="goHome()"
       v-bind:class="{'header': !hideDownloadBar}">
