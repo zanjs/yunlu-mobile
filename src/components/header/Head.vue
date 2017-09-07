@@ -9,11 +9,6 @@
     </div>
     <section class="right">
       <div
-        class="icon-box flex"
-        @click="openShoppingCar()">
-        <i class="iconfont icon-gouwuche1"></i>
-      </div>
-      <div
         class="icon icon-box flex"
         @click="openDropMenu()">
         <i class="iconfont icon-fenlei"></i>
@@ -105,9 +100,6 @@
       },
       goFavorites () {
         this.$emit('open-favorites')
-      },
-      openShoppingCar () {
-        this.$emit('open-shopping-car')
       },
       searchNearBy () {
         this.$emit('search-near-by')
