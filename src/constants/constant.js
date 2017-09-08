@@ -4,4 +4,4 @@ export const COUNT_DOWN_SECOND = 60
 export const VALID_CODE_IMG_URL = 'https://api.yunlu6.com/captcha'
 export const LEANCLOUD_APP_ID = 'FALQWkhbIQhIj2AHpIWP6abh-gzGzoHsz'
 export const AUTHORIZATION_TIME = 120
-export const AUTH_URL = 'https://web.yunlu6.com'
+export const AUTH_URL = 'https://api.yunlu6.com'
