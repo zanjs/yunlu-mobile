@@ -98,7 +98,7 @@
         interval: null,
         showRejectPopup: false,
         qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/#/login?provider=qq&tmp_token=')}`,
-        weiboLogin: `${AUTH_URL}/member/auth/weibo?url=${encodeURIComponent('/#/login?provider=weibo&tmp_token=')}`,
+        weiboLogin: `${AUTH_URL}/member/auth/weibo`,
         weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/login?provider=wechat&tmp_token=')}`
       }
     },
