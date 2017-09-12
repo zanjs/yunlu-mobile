@@ -80,6 +80,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import AddressPicker from '../../components/common/AddressPicker'
+  import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
@@ -91,6 +92,7 @@
         provinces: [],
         cities: [],
         districts: [],
+        token: getStore('user') ? getStore('user').authentication_token : '',
         form: {
           recipient: '',
           phone: '',
@@ -126,11 +128,37 @@
       },
       checkForm () {
         if (!this.form.recipient) {
-
+          Toast({
+            message: '联系人不能为空',
+            duration: 500
+          })
+          return false
+        } else if (!this.form.phone) {
+          Toast({
+            message: '联系电话不能为空',
+            duration: 500
+          })
+          return false
+        } else if (!this.form.zone_code) {
+          Toast({
+            message: '所在地区不能为空',
+            duration: 500
+          })
+          return false
+        } else if (!this.form.address) {
+          Toast({
+            message: '详细地址不能为空',
+            duration: 500
+          })
+          return false
+        } else {
+          return true
         }
       },
       save () {
-        console.log('save')
+        if (this.checkForm()) {
+          this.addDeliverie()
+        }
       },
       getAddressItems (type = 'province', code = '', level = 0, name = '') {
         this.$store.dispatch('commonAction', {
@@ -180,15 +208,29 @@
         this.$store.dispatch('commonAction', {
           url: '/deliveries',
           method: 'post',
-          params: {
-            token: this.token
+          params: {},
+          data: {
+            token: this.token,
+            recipient: this.form.recipient,
+            phone: this.form.phone,
+            zone_code: this.form.zone_code,
+            address: this.form.address,
+            state: this.form.state
           },
           target: this,
           resolve: (state, res) => {
+            this.saveNext()
           },
           reject: () => {
           }
         })
+      },
+      saveNext () {
+        if (getStore('buying')) {
+          this.$router.push({name: 'OrderPaying'})
+        } else {
+          this.goBack()
+        }
       }
     }
   }

@@ -901,10 +901,7 @@
           if (this.$store.state.deliveries.length === 0) {
             this.$router.push({name: 'AddAddress'})
           } else {
-            Toast({
-              message: '暂未开放',
-              duration: 500
-            })
+            this.$router.push({name: 'OrderPaying'})
           }
         } else {
           setStore('beforeLogin', 'true')
