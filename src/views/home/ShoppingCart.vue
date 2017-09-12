@@ -331,6 +331,8 @@
       // 以商家/企业为分组，筛选出待支付的商品
       handleCheckedProducts () {
         let tmpArr = []
+        let arr = []
+        let map = {}
         for (let i = 0; i < this.purchaseItems.length; i++) {
           let obj = {
             team: {},
@@ -348,7 +350,22 @@
             }
           }
         }
-        return tmpArr
+        for (let i = 0; i < tmpArr.length; i++) {
+          let ai = tmpArr[i]
+          if (!map[ai.team.id]) {
+            arr.push(tmpArr[i])
+            map[ai.team.id] = ai
+          } else {
+            for (let j = 0; j < arr.length; j++) {
+              let aj = arr[j]
+              if (aj.team.id === ai.team.id) {
+                aj.products = [...ai.products]
+                break
+              }
+            }
+          }
+        }
+        return arr
       },
       handleCheckedItems () {
         let tmpArr = []
@@ -480,13 +497,35 @@
           }
         })
       },
+      // 获取收获地址
+      getDeliveries (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/deliveries',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.deliveries = res.data.deliveries
+          },
+          reject: () => {
+          }
+        })
+      },
       pay () {
         let arr = this.handleCheckedProducts()
         setStore('buying', arr)
+        if (this.$store.state.deliveries.length === 0) {
+          this.$router.push({name: 'AddAddress'})
+        } else {
+          this.$router.push({name: 'OrderPaying'})
+        }
       }
     },
     mounted () {
       this.getProducts()
+      this.getDeliveries(this.token)
     }
   }
 </script>
