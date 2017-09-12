@@ -629,11 +629,33 @@
           resolve: (state, res) => {
             if (productId === this.productId) {
               state.productDetailTeam = res.data.teams[0]
+              this.shouldGetDeliveries(this.token)
             } else {
               this.teamLink = res.data.teams[0]
               this.openPopup()
             }
             this.getPurchaseItems()
+          },
+          reject: () => {
+          }
+        })
+      },
+      shouldGetDeliveries (token) {
+        if (this.hasLogin) {
+          this.getDeliveries(token)
+        }
+      },
+      // 获取收获地址
+      getDeliveries (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/deliveries',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.deliveries = res.data.deliveries
           },
           reject: () => {
           }
@@ -871,11 +893,19 @@
         })
       },
       buyNow () {
+        setStore('buying', {
+          product: this.$store.state.productDetail,
+          team: this.$store.state.productDetailTeam
+        })
         if (this.hasLogin) {
-          Toast({
-            message: '暂未开放',
-            duration: 500
-          })
+          if (this.$store.state.deliveries.length === 0) {
+            this.$router.push({name: 'AddAddress'})
+          } else {
+            Toast({
+              message: '暂未开放',
+              duration: 500
+            })
+          }
         } else {
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})

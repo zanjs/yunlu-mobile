@@ -38,7 +38,8 @@ const state = {
   clusters: [], // 个人会员集群(空间)
   comityDetail: {}, // 协会详情
   clientKeyWrods: [], // 云视首页关键字卡片数组(企业数量大于100会在首页显示)
-  seeCard: {} // 云视首页发送名片卡片
+  seeCard: {}, // 云视首页发送名片卡片
+  deliveries: [] // 收货地址
 }
 
 const getters = {
@@ -71,7 +72,8 @@ const getters = {
   clusters: state => state.clusters,
   comityDetail: state => state.comityDetail,
   clientKeyWrods: state => state.clientKeyWrods,
-  seeCard: state => state.seeCard
+  seeCard: state => state.seeCard,
+  deliveries: state => state.deliveries
 }
 
 const actions = {

@@ -36,6 +36,8 @@ const Help = resolve => require(['../views/user/Help'], resolve)
 const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
 const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
 const Class = resolve => require(['../views/carte/Class'], resolve)
+const AddAddress = resolve => require(['../views/products/AddAddress'], resolve)
+const OrderPaying = resolve => require(['../views/products/OrderPaying'], resolve)
 
 Vue.use(Router)
 
@@ -200,6 +202,14 @@ export default new Router({
       path: '/classes/:id',
       name: 'Class',
       component: Class
+    }, {
+      path: '/addaddress',
+      name: 'AddAddress',
+      component: AddAddress
+    }, {
+      path: '/orderpaying',
+      name: 'OrderPaying',
+      component: OrderPaying
     }
   ]
 })
