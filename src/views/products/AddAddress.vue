@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="container full-width">
     <common-header
       :title="header"
       @back="goBack()">
@@ -240,6 +240,11 @@
   @import "../../styles/mixin";
 
   .container {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    background-color: $tenth-grey;
     .form-container {
       @include px2rem(padding-top, 88px);
       background-color: $white;
