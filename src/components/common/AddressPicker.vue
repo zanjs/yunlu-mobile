@@ -71,5 +71,6 @@
     @include px2rem(height, 80px);
     @include pm2rem(padding, 0px, 20px, 0px, 36px);
     border-bottom: 1px solid $twelfth-grey;
+    background-color: $white;
   }
 </style>
