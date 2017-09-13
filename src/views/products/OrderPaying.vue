@@ -25,7 +25,9 @@
       <div
         v-for="(p, index) in purchaseItems"
         :key="index">
-        <a class="title">
+        <a
+          class="title"
+          @click="goEnterpriseCarte(p.team.id)">
           <div class="icon-box">
             <i class="iconfont icon-shangjia second-text font-21"></i>
           </div>
@@ -36,7 +38,8 @@
           <div
             v-for="(item, indexI) in p.products"
             :key="indexI"
-            class="row">
+            class="row"
+            @click="goProductDetail(item.price.product.id)">
             <div class="info">
               <img :src="item.price.product.file_thumb_url">
               <div class="content second-text">
@@ -50,23 +53,26 @@
                 <a
                   v-if="item.quantity > 1"
                   class="flex"
-                  @click="decrease(item)">-</a>
+                  @click.stop="decrease(item)">-</a>
                 <a
                   v-if="item.quantity === 1"
-                  class="flex disabled">-</a>
-                <input
-                  v-if="parseInt(item.quantity + '') < parseInt(item.price.amount + '')"
-                  class="primary-text"
-                  type="number"
-                  @blur="handleInput($event.target.value, item.price.amount, item)"
-                  :value="item.quantity">
-                <span
-                  v-if="parseInt(item.quantity + '') === parseInt(item.price.amount + '')">
-                  {{item.quantity}}
-                </span>
+                  class="flex disabled"
+                  @click.stop="doNothing()">-</a>
+                <div @click.stop="doNothing()">
+                  <input
+                    v-if="parseInt(item.quantity + '') < parseInt(item.price.amount + '')"
+                    class="primary-text"
+                    type="number"
+                    @blur="handleInput($event.target.value, item.price.amount, item)"
+                    :value="item.quantity">
+                  <span
+                    v-if="parseInt(item.quantity + '') === parseInt(item.price.amount + '')">
+                    {{item.quantity}}
+                  </span>
+                </div>
                 <a
                   class="flex"
-                  @click="increase(item)">+</a>
+                  @click.stop.prevent.self="increase(item)">+</a>
               </div>
             </div>
           </div>
@@ -132,6 +138,12 @@
           this.$router.go(-1)
         }
       },
+      goEnterpriseCarte (id) {
+        this.$router.push({path: `/enterprises/${id}`})
+      },
+      goProductDetail (id) {
+        this.$router.push({path: `/products/${id}`})
+      },
       getDeliveries (token) {
         this.$store.dispatch('commonAction', {
           url: '/deliveries',
@@ -188,6 +200,9 @@
           }
         }
         this.updateShoppingCartRequest(item.id, item.quantity)
+      },
+      doNothing () {
+        // 空事件，避免点击穿透而导致跳转商品详情页。
       },
       updateShoppingCartRequest (id, quantity) {
         this.$store.dispatch('commonAction', {
@@ -435,6 +450,8 @@
         input {
           background-color: transparent;
           border: none;
+          flex: 1;
+          height: inherit;
         }
       }
       a:active {
