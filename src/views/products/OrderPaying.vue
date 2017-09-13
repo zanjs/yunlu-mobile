@@ -78,7 +78,9 @@
         <label>配送方式</label>
         <span>包邮</span>
       </a>
-      <a class="flex-between item">
+      <a
+        class="flex-between item"
+        @click="changeInvoice()">
         <label>发票</label>
         <div class="invoice">
           <span>电子发票</span>
@@ -106,7 +108,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -163,6 +165,7 @@
             }
           }
         }
+        this.updateShoppingCartRequest(priceItem.id, quantity)
       },
       decrease (item) {
         for (let i = 0; i < this.purchaseItems.length; i++) {
@@ -197,11 +200,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            // 该机构新增了一条访客记录
             if (res.data.id === id) {
-              console.log('123')
-              // 更新购物车中商品数量成功
-              this.hasOnFocus = false
+              setStore('buying', this.purchaseItems)
             } else {
               let toast = Toast({
                 message: '更改商品数量失败',
@@ -226,6 +226,12 @@
           }
         }
         return totalMoney
+      },
+      changeInvoice () {
+        Toast({
+          message: '需要纸质发票，请线下联系商家',
+          duration: 1000
+        })
       },
       pay () {
         Toast({
