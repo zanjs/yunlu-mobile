@@ -38,6 +38,8 @@ const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
 const Class = resolve => require(['../views/carte/Class'], resolve)
 const AddAddress = resolve => require(['../views/products/AddAddress'], resolve)
 const OrderPaying = resolve => require(['../views/products/OrderPaying'], resolve)
+const OrderForm = resolve => require(['../views/home/OrderForm'], resolve)
+const OrderDetail = resolve => require(['../views/home/OrderDetail'], resolve)
 
 Vue.use(Router)
 
@@ -182,6 +184,14 @@ export default new Router({
       path: '/conversation',
       name: 'Conversation',
       component: Conversation
+    }, {
+      path: '/orderform',
+      name: 'OrderForm',
+      component: OrderForm
+    }, {
+      path: '/orderdetail/:id',
+      name: 'OrderDetail',
+      component: OrderDetail
     }, {
       path: '/searchproducts',
       name: 'SearchProducts',
