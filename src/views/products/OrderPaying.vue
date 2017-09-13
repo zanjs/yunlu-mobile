@@ -82,7 +82,7 @@
     <section class="others">
       <a class="flex-between item">
         <label>配送方式</label>
-        <span>包邮</span>
+        <span class="second-text">包邮</span>
       </a>
       <a
         class="flex-between item"
@@ -336,6 +336,8 @@
         display: flex;
         align-items: center;
         @include px2rem(height, 97px);
+        line-height: normal;
+        border-bottom: 1px solid $twelfth-grey;
         .icon-box {
           @include px2rem(width, 72px);
           @include px2rem(padding-left, 40px);
@@ -372,6 +374,14 @@
               justify-content: space-between;
               flex-direction: column;
               @include pm2rem(margin, 26px, 30px, 20px, 0px);
+              p {
+                text-align: left;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                word-break: break-all;
+              }
               span {
                 color: #FE4A00;
               }
@@ -434,6 +444,7 @@
         @include pm2rem(padding, 0px, 30px, 0px, 30px);
         border-bottom: 1px solid $third-grey;
         @include font-dpr(14px);
+        line-height: normal;
         label {
           @include font-dpr(14px);
           color: $second-dark;

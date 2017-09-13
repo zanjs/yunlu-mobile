@@ -43,19 +43,19 @@
         </div>
         <div
           class="flex-between row-item"
-          @click="goRoute('OrderForm', hasLogin)">
-          <div class="icon-box box-3 flex">
-            <img src="../../assets/order.png">
-          </div>
-          <span class="font-14">订单</span>
-        </div>
-        <div
-          class="flex-between row-item"
           @click="goRoute('Favorites', hasLogin)">
           <div class="icon-box">
             <img src="../../assets/favorite.png">
           </div>
           <span class="font-14">收藏</span>
+        </div>
+        <div
+          class="flex-between row-item"
+          @click="goRoute('OrderForm', hasLogin)">
+          <div class="icon-box">
+            <img src="../../assets/order.png">
+          </div>
+          <span class="font-14">订单</span>
         </div>
       </div>
     </div>
