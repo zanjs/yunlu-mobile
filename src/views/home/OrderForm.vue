@@ -23,7 +23,9 @@
           <template v-if="allForms.length > 0">
             <order-form-list
               :store="allForms"
-              :selectable="false">
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail">
             </order-form-list>
           </template>
           <div
@@ -38,7 +40,9 @@
           <template v-if="submittedForms.length > 0">
             <order-form-list
               :store="submittedForms"
-              :selectable="true">
+              :selectable="true"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail">
             </order-form-list>
           </template>
           <div
@@ -53,7 +57,9 @@
           <template v-if="paidForms.length > 0">
             <order-form-list
               :store="paidForms"
-              :selectable="false">
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail">
             </order-form-list>
           </template>
           <div
@@ -68,7 +74,9 @@
           <template v-if="deliveredForms.length > 0">
             <order-form-list
               :store="deliveredForms"
-              :selectable="false">
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail">
             </order-form-list>
           </template>
           <div
@@ -83,7 +91,9 @@
           <template v-if="receiptedForms.length > 0">
             <order-form-list
               :store="receiptedForms"
-              :selectable="false">
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail">
             </order-form-list>
           </template>
           <div
@@ -102,7 +112,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -196,6 +206,13 @@
           reject: () => {
           }
         })
+      },
+      goEnterprise (id) {
+        this.$router.push({path: `/enterprises/${id}`})
+      },
+      goDetail (item) {
+        setStore('orderDetailParams', item)
+        this.$router.push({path: `/orderdetail/${item.code}?type=${item.state}`})
       }
     },
     mounted () {

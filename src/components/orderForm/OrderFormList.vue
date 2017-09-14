@@ -27,10 +27,11 @@
           </div>
         </a>
       </div>
-      <div
+      <a
         class="item"
         v-for="(i, indexI) in item.items"
-        :key="indexI">
+        :key="indexI"
+        @click="itemClick(item)">
         <img :src="i.logo">
         <div class="content">
           <div class="name second-text font-13">{{i.name}}</div>
@@ -39,7 +40,7 @@
             <span>x{{i.quantity}}</span>
           </div>
         </div>
-      </div>
+      </a>
       <div class="footer">
         <div class="total">
           <span class="third-text">共计{{handleTotoalCount(item.items)}}件商品  合计：</span>
@@ -94,7 +95,10 @@
         return money
       },
       handleClick (id) {
-        this.$emit('click', id)
+        this.$emit('go-enterprise', id)
+      },
+      itemClick (item) {
+        this.$emit('go-detail', item)
       }
     },
     filters: {
@@ -124,6 +128,9 @@
   @import ".././../styles/mixin";
 
   .row {
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
     .title {
       background-color: $white;
       @include px2rem(height, 97px);
