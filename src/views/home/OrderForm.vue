@@ -214,23 +214,23 @@
     width: 100%;
     z-index: 1;
     .mint-tab-item {
-      @include font-dpr-important(17px);
+      @include font-dpr-important(15px);
       border-bottom: 1px solid $tenth-grey !important;
       display: block;
       padding: 0 !important;
       @include px2remimportant(line-height, 90px);
       div {
-        @include font-dpr-important(17px);
+        @include font-dpr-important(15px);
       }
     }
     .is-selected {
-      color: $red !important;
+      color: #FF5001 !important;
       margin-bottom: 0 !important;
       @include px2remimportant(border-bottom-width, 4px);
-      border-bottom-color: $red !important;
+      border-bottom-color: #FF5001 !important;
       text-decoration: none !important;
       .mint-tab-item {
-        color: $red !important;
+        color: #FF5001 !important;
       }
     }
   }
@@ -262,7 +262,7 @@
     }
     .is-selected {
       .mint-tab-item-label {
-        color: $red !important;
+        color: #FF5001 !important;
       }
     }
   }

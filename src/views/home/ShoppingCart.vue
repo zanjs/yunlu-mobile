@@ -557,7 +557,7 @@
       align-items: center;
       height: inherit;
       @include px2rem(margin-right, 48px);
-      line-height: 1;
+      line-height: normal;
       i {
         @include px2rem(margin-right, 12px);
       }
@@ -567,13 +567,14 @@
       height: inherit;
       display: flex;
       align-items: center;
-      line-height: 1;
+      line-height: normal;
     }
     .disabled {
       color: $fourth-grey;
     }
     p {
       font-weight: bold;
+      line-height: normal;
     }
     .pay-btn {
       @include px2rem(width, 150px);
