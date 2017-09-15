@@ -1,10 +1,10 @@
 <template>
   <section>
     <common-header
-      :title='header'
-      :icon-class='iconClass'
-      @right-click='goBack()'
-      @back='goBack()'>
+      :title="header"
+      :icon-class="iconClass"
+      @right-click="openDropMenu()"
+      @back="goBack()">
     </common-header>
     <section>
       <div class="nav-bars full-width">
@@ -147,6 +147,26 @@
       :msg="confirmMsg"
       @click="handleConfirm">
     </confirm-dialog>
+    <section
+      v-show="showMenu"
+      id="drop-menu-bg"
+      class="drop-menu-bg full-width">
+      <div class="drop-menu-arrow"></div>
+      <div class="menu">
+        <a
+          class="item"
+          @click.stop="goFavorites()">
+          <i class="iconfont icon-shoucang"></i>
+          <span>收藏夹</span>
+        </a>
+        <a
+          class="item"
+          @click.stop="goShoppingCart()">
+          <i class="iconfont icon-gouwuche"></i>
+          <span>购物车</span>
+        </a>
+      </div>
+    </section>
   </section>
 </template>
 
@@ -180,7 +200,8 @@
         receiptedForms: [], // 待评价
         showConfirm: false,
         cancelOrderId: '',
-        confirmMsg: '确定取消订单？'
+        confirmMsg: '确定取消订单？',
+        showMenu: false
       }
     },
     components: {
@@ -398,10 +419,47 @@
         this.paidPageIndex = 1
         this.deliveredPageIndex = 1
         this.receiptedPageIndex = 1
+      },
+      openDropMenu () {
+        this.showMenu = true
+      },
+      addTouch () {
+        let self = this
+        document.getElementById('drop-menu-bg').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
+        document.getElementById('drop-menu-bg').addEventListener('click', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
+        document.getElementById('drop-menu-bg').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
+        document.getElementById('drop-menu-bg').addEventListener('click', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.showMenu = false
+          }, 500)
+        })
+      },
+      goFavorites () {
+        this.$router.push({name: 'Favorites'})
+      },
+      goShoppingCart () {
+        this.$router.push({name: 'ShoppingCart'})
       }
     },
     mounted () {
       this.getOrderForms(0, this.allPageIndex, this.allPageSize)
+      this.addTouch()
     }
   }
 </script>
@@ -447,6 +505,54 @@
       p {
         @include font-dpr(15px);
         color: $second-dark;
+      }
+    }
+  }
+  .drop-menu-bg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1002;
+    .drop-menu-arrow {
+      position: fixed;
+      background-color: transparent;
+      @include px2rem(top, 60px);
+      @include px2rem(right, 34px);
+      width: 0;
+      height: 0;
+      @include px2rem(border-left-width, 16px);
+      @include px2rem(border-right-width, 16px);
+      @include px2rem(border-bottom-width, 30px);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: rgba(57, 55, 66, .8);
+      border-style: solid;
+      border-top: none;
+    }
+    .menu {
+      position: fixed;
+      @include px2rem(top, 88px);
+      @include px2rem(right, 20px);
+      background-color: rgba(57, 55, 66, .8);
+      @include px2rem(width, 270px);
+      z-index: 9999 !important;
+      .item {
+        @include px2rem(height, 90px);
+        @include px2rem(padding-left, 30px);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        line-height: normal;
+        color: $white;
+        border-bottom: 1px solid $tenth-grey;
+        i {
+          @include px2rem(margin-right, 40px);
+          @include font-dpr(20px);
+        }
+        span {
+          @include font-dpr(15px);
+        }
       }
     }
   }

@@ -19,7 +19,11 @@
               :class="{'name-icon': selectable}">
               <i class="iconfont icon-shangjia second-text"></i>
             </div>
-            <span class="primary-text font-14">{{item.organization.name}}</span>
+            <span
+              class="primary-text font-14 ellipsis"
+              :class="{'width': selectable}">
+              {{item.organization.name}}
+            </span>
             <i class="iconfont icon-you arrow"></i>
           </div>
           <div class="flex tips font-13">
@@ -53,7 +57,7 @@
         </div>
         <div class="option-bar">
           <a
-            v-if="item.state === 'delivered' || item.state === 'receipted'"
+            v-if="item.state === 'delivered' || item.state === 'receipted' || item.state === 'finished'"
             class="btn"
             @click="handleLogistics(item)">查看物流</a>
           <a
@@ -157,6 +161,8 @@
             return '评论'
           case 'canceled':
             return '交易关闭'
+          case 'finished':
+            return '交易成功'
           default:
             return '交易关闭'
         }
@@ -211,6 +217,10 @@
           span {
             @include px2rem(margin-right, 42px);
             line-height: normal;
+            @include px2rem(max-width, 340px);
+          }
+          .width {
+            @include px2rem(max-width, 260px);
           }
           .arrow {
             color: $second-grey;

@@ -83,7 +83,7 @@
     <section class="option-bar full-width">
       <div class="bar-container">
         <a
-          v-if="orderDetail.state === 'delivered' || orderDetail.state === 'receipted'"
+          v-if="orderDetail.state === 'delivered' || orderDetail.state === 'receipted' || orderDetail.state === 'finished'"
           class="btn"
           @click="handleLogistics(orderDetail)">查看物流</a>
         <a
@@ -264,7 +264,6 @@
     .address {
       display: flex;
       @include px2rem(padding-top, 88px);
-      @include px2rem(height, 160px);
       background-color: $sixth-grey;
       .icon-box {
         height: inherit;
@@ -272,7 +271,7 @@
       }
       .content {
         flex: 1;
-        @include px2rem(padding-right, 70px);
+        @include pm2rem(padding, 0px, 70px, 20px, 0px);
         .row {
           display: flex;
           align-items: center;
@@ -288,14 +287,13 @@
           @include px2rem(height, 70px);
         }
         .text {
-          @include px2rem(height, 90px);
           line-height: 1.5;
-          text-align: left;
           overflow: hidden;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           word-break: break-all;
+          float: left;
         }
       }
     }
