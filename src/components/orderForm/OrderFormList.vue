@@ -57,7 +57,7 @@
             class="btn"
             @click="handleLogistics(item)">查看物流</a>
           <a
-            v-if="item.state === 'submitted'"
+            v-if="item.state === 'submitted' || item.state === 'paid' || item.state === 'reminded'"
             class="btn"
             @click="contact(item.items[0].product_id)">联系卖家</a>
           <a
@@ -73,8 +73,8 @@
             class="btn danger"
             @click="pay(item)">付款</a>
           <a
-            v-if="item.state === 'paid'"
-            class="btn"
+            v-if="item.state === 'paid' || item.state === 'reminded'"
+            class="btn danger"
             @click="remind(item.code)">提醒发货</a>
         </div>
       </div>
@@ -143,8 +143,10 @@
         switch (val) {
           case 'submitted':
             return '等待买家付款'
-          case 'mounted':
-            return '等待卖家发货'
+          case 'reminded':
+            return '等待卖家发货' // 待发货（已提醒）
+          case 'paid':
+            return '等待卖家发货' // 待发货
           case 'refunding':
             return '请求售后'
           case 'accepted':

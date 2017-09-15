@@ -7,109 +7,135 @@
       @back='goBack()'>
     </common-header>
     <section>
-      <mt-navbar
-        v-model="selected"
-        class="nav-bars full-width">
-        <mt-tab-item id='1'>全部</mt-tab-item>
-        <mt-tab-item id='2'>待付款</mt-tab-item>
-        <mt-tab-item id='3'>待发货</mt-tab-item>
-        <mt-tab-item id='4'>待收货</mt-tab-item>
-        <mt-tab-item id='5'>待评价</mt-tab-item>
-      </mt-navbar>
-      <mt-tab-container
-        v-model='selected'
-        class='nav-bar-container'>
-        <mt-tab-container-item id='1'>
-          <template v-if="allForms.length > 0">
-            <order-form-list
-              :store="allForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
+      <div class="nav-bars full-width">
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 1}"
+          @click="selectTab(1)">
+          <div class="label">全部</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 2}"
+          @click="selectTab(2)">
+          <div class="label">待付款</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 3}"
+          @click="selectTab(3)">
+          <div class="label">待发货</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 4}"
+          @click="selectTab(4)">
+          <div class="label">待收货</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 5}"
+          @click="selectTab(5)">
+          <div class="label">待评价</div>
+        </a>
+      </div>
+      <div class='nav-bar-container'>
+        <transition
+          name="fade"
+          :appear="true"
+          mode="out-in">
+          <template v-if="activeIndex === 1">
+            <template v-if="allForms.length > 0">
+              <order-form-list
+                :store="allForms"
+                :selectable="false"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+            </template>
+            <div
+              v-else
+              key="1"
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
           </template>
-          <div
-            v-else
-            key="1"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='2'>
-          <template v-if="submittedForms.length > 0">
-            <order-form-list
-              :store="submittedForms"
-              :selectable="true"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
+          <template v-if="activeIndex === 2">
+            <template v-if="submittedForms.length > 0">
+              <order-form-list
+                :store="submittedForms"
+                :selectable="true"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+            </template>
+            <div
+              v-else
+              key="2"
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
           </template>
-          <div
-            v-else
-            key="2"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='3'>
-          <template v-if="paidForms.length > 0">
-            <order-form-list
-              :store="paidForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
+          <template v-if="activeIndex === 3">
+            <template v-if="paidForms.length > 0">
+              <order-form-list
+                :store="paidForms"
+                :selectable="false"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+            </template>
+            <div
+              v-else
+              key="3"
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
           </template>
-          <div
-            v-else
-            key="3"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='4'>
-          <template v-if="deliveredForms.length > 0">
-            <order-form-list
-              :store="deliveredForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
+          <template v-if="activeIndex === 4">
+            <template v-if="deliveredForms.length > 0">
+              <order-form-list
+                :store="deliveredForms"
+                :selectable="false"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+            </template>
+            <div
+              v-else
+              key="4"
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
           </template>
-          <div
-            v-else
-            key="4"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='5'>
-          <template v-if="receiptedForms.length > 0">
-            <order-form-list
-              :store="receiptedForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
+          <template v-if="activeIndex === 5">
+            <template v-if="receiptedForms.length > 0">
+              <order-form-list
+                :store="receiptedForms"
+                :selectable="false"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+            </template>
+            <div
+              v-else
+              key="5"
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
           </template>
-          <div
-            v-else
-            key="5"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </mt-tab-container-item>
-      </mt-tab-container>
+        </transition>
+      </div>
     </section>
     <confirm-dialog
       v-if="showConfirm"
@@ -131,7 +157,7 @@
         header: '我的订单',
         iconClass: 'icon-fenlei',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        selected: '1',
+        activeIndex: 1,
         allPageIndex: 1,
         allPageSize: 20,
         allForms: [],
@@ -166,6 +192,9 @@
           this.$router.go(-1)
         }
       },
+      selectTab (index) {
+        this.activeIndex = index
+      },
       // 处理五种不同状态订单的参数
       handleStateParams (index) {
         switch (index) {
@@ -187,22 +216,38 @@
       // 处理返回的订单
       handleOrderForms (index, orderForms) {
         if (index === 0) {
-          this.allForms = orderForms
+          this.allForms = this.orderFormsFilter(orderForms)
           this.getOrderForms(1, this.submittedPageIndex, this.submittedPageSize)
         } else if (index === 1) {
-          this.submittedForms = orderForms
+          this.submittedForms = this.orderFormsFilter(orderForms)
           this.getOrderForms(2, this.paidPageIndex, this.paidPageSize)
         } else if (index === 2) {
-          this.paidForms = orderForms
+          this.paidForms = this.orderFormsFilter(orderForms)
           this.getOrderForms(3, this.deliveredPageIndex, this.deliveredPageSize)
         } else if (index === 3) {
-          this.deliveredForms = orderForms
+          this.deliveredForms = this.orderFormsFilter(orderForms)
           this.getOrderForms(4, this.receiptedPageIndex, this.receiptedPageSize)
         } else if (index === 4) {
-          this.receiptedForms = orderForms
+          this.receiptedForms = this.orderFormsFilter(orderForms)
         } else {
           console.error('获取订单信息失败')
         }
+      },
+      // 过滤掉返回订单中的空订单
+      orderFormsFilter (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          let count = 0
+          for (let j = 0; j < arr[i].items.length; j++) {
+            if (arr[i].items[j].name && arr[i].items[j].price && arr[i].items[j].quantity && arr[i].items[j].product_id && arr[i].items[j].state) {
+              count += 1
+            }
+          }
+          if (count === arr[i].items.length) {
+            tmpArr.push(arr[i])
+          }
+        }
+        return tmpArr
       },
       getOrderForms (index, pageIndex, pageSize) {
         this.$store.dispatch('commonAction', {
@@ -334,25 +379,24 @@
     @include px2rem(height, 90px);
     width: 100%;
     z-index: 1;
-    .mint-tab-item {
-      @include font-dpr-important(15px);
-      border-bottom: 1px solid $tenth-grey !important;
+    display: flex;
+    background-color: $white;
+    .tab {
       display: block;
-      padding: 0 !important;
-      @include px2remimportant(line-height, 90px);
-      div {
-        @include font-dpr-important(15px);
+      flex: 1;
+      text-align: center;
+      border-bottom: 1px solid $tenth-grey;
+      .label {
+        height: inherit;
+        @include px2rem(line-height, 90px);
+        @include font-dpr(15px);
       }
     }
-    .is-selected {
-      color: #FF5001 !important;
-      margin-bottom: 0 !important;
-      @include px2remimportant(border-bottom-width, 4px);
-      border-bottom-color: #FF5001 !important;
-      text-decoration: none !important;
-      .mint-tab-item {
-        color: #FF5001 !important;
-      }
+    .selected {
+      @include px2rem(border-bottom-width, 8px);
+      border-bottom-color: #FF5001;
+      color: #FF5001;
+      border-bottom-style: solid;
     }
   }
   .nav-bar-container {
@@ -371,21 +415,3 @@
     }
   }
 </style>
-
-<style lang='scss'>
-  @import '../../styles/mixin';
-
-  .nav-bars {
-    .mint-tab-item-label {
-      @include font-dpr-important(15px);
-      color: $second-dark;
-      line-height: inherit !important;
-    }
-    .is-selected {
-      .mint-tab-item-label {
-        color: #FF5001 !important;
-      }
-    }
-  }
-</style>
-
