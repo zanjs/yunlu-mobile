@@ -47,6 +47,7 @@
           <template v-if="activeIndex === 1">
             <template v-if="allForms.length > 0">
               <order-form-list
+                key="1"
                 :store="allForms"
                 :selectable="false"
                 @go-enterprise="goEnterprise"
@@ -65,6 +66,7 @@
           <template v-if="activeIndex === 2">
             <template v-if="submittedForms.length > 0">
               <order-form-list
+                key="2"
                 :store="submittedForms"
                 :selectable="true"
                 @go-enterprise="goEnterprise"
@@ -83,6 +85,7 @@
           <template v-if="activeIndex === 3">
             <template v-if="paidForms.length > 0">
               <order-form-list
+                key="3"
                 :store="paidForms"
                 :selectable="false"
                 @go-enterprise="goEnterprise"
@@ -101,6 +104,7 @@
           <template v-if="activeIndex === 4">
             <template v-if="deliveredForms.length > 0">
               <order-form-list
+                key="4"
                 :store="deliveredForms"
                 :selectable="false"
                 @go-enterprise="goEnterprise"
@@ -119,6 +123,7 @@
           <template v-if="activeIndex === 5">
             <template v-if="receiptedForms.length > 0">
               <order-form-list
+                key="5"
                 :store="receiptedForms"
                 :selectable="false"
                 @go-enterprise="goEnterprise"
@@ -291,7 +296,7 @@
             this.notOpen()
             break
           case 'remind': // 提醒发货
-            this.notOpen()
+            this.remindRequest(item.params)
             break
           case 'delete': // 删除订单(删除被取消的订单，暂未开放)
             this.notOpen()
@@ -303,6 +308,37 @@
             })
             break
         }
+      },
+      remindRequest (id) {
+        this.$store.dispatch('commonAction', {
+          url: `/order_forms/${id}/remind`,
+          method: 'put',
+          params: {},
+          data: {
+            token: this.token,
+            number: id
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.code) {
+              Toast({
+                mesasge: res.data.detail || '提醒失败',
+                duration: 500
+              })
+            }
+          },
+          reject: (state, err) => {
+            if (err.status && err.status === 204) {
+              Toast({
+                message: '您已成功提醒发货~',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+                position: 'bottom',
+                duration: 1000
+              })
+            }
+          }
+        })
       },
       notOpen () {
         Toast({

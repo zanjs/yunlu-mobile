@@ -236,25 +236,25 @@
         @include px2rem(margin-right, 25px);
       }
       img[lazy=loading] {
-          @include px2rem(height, 146px);
-          @include px2rem(width, 146px);
-          background-position: center center!important;
-          background: url("../../assets/imgLoading3.jpg");
-          background-repeat: no-repeat;
-          background-size: cover;
-        }
-        img[lazy=error] {
-          @include px2rem(height, 146px);
-          @include px2rem(width, 146px);
-          background-position: center center!important;
-          background: url("../../assets/imgLoadingError.png");
-          background-repeat: no-repeat;
-          background-size: cover;
-        }
-        img[lazy=loaded] {
-          @include px2rem(height, 146px);
-          @include px2rem(width, 146px);
-        }
+        @include px2rem(height, 146px);
+        @include px2rem(width, 146px);
+        background-position: center center!important;
+        background: url("../../assets/imgLoading3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=error] {
+        @include px2rem(height, 146px);
+        @include px2rem(width, 146px);
+        background-position: center center!important;
+        background: url("../../assets/imgLoadingError.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      img[lazy=loaded] {
+        @include px2rem(height, 146px);
+        @include px2rem(width, 146px);
+      }
       .content {
         @include px2rem(height, 130px);
         display: flex;

@@ -198,10 +198,13 @@ const mutations = {
   },
 
   [types.UPDATE_UN_READ_MSG_COUNT] (state, {params}) {
-    state.unReadeMsgs = params
     let tmpArr = []
     for (let i = 0; i < params.length; i++) {
-      tmpArr.push({id: params[i].id})
+      // 需要把系统消息过滤掉(流程消息)，只保留用户聊天(单聊、群聊、客服)消息
+      if (params[i].lastMessage.from !== 'system') {
+        tmpArr.push({id: params[i].id})
+        state.unReadeMsgs = params
+      }
     }
     setStore('unReadMsgs', tmpArr)
   },
