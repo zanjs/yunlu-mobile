@@ -36,7 +36,7 @@
           v-for="(item, indexI) in purchaseItems"
           :key="indexI"
           class="row"
-          @click="goProductDetail(item.product.id)">
+          @click="goProductDetail(item.product_id)">
           <div class="info">
             <img
               v-lazy="{
@@ -247,6 +247,12 @@
         if (bool) {
           this.cancelOrderRequest(this.cancelOrderId)
         }
+      },
+      goProductDetail (id) {
+        this.$router.push({path: `/products/${id}`})
+      },
+      goEnterpriseCarte (id) {
+        this.$router.push({path: `/enterprises/${id}`})
       }
     }
   }

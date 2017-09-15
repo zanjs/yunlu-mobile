@@ -304,7 +304,9 @@
       action (item) {
         switch (item.type) {
           case 'trace': // 查看物流
-            this.notOpen()
+            // 116250642270135
+            setStore('traceLogo', item.params.items[0].logo)
+            this.$router.push({path: `/trace/${item.params.code}`})
             break
           case 'contact': // 联系卖家客服
             this.goChat(item.params)
