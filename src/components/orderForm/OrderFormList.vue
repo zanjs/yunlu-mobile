@@ -23,7 +23,7 @@
             <i class="iconfont icon-you arrow"></i>
           </div>
           <div class="flex tips font-13">
-            {{item.items[0].state | status}}
+            {{item.state | status}}
           </div>
         </a>
       </div>
@@ -32,7 +32,12 @@
         v-for="(i, indexI) in item.items"
         :key="indexI"
         @click="itemClick(item)">
-        <img :src="i.logo">
+        <img
+          v-lazy="{
+            src: i.logo,
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }">
         <div class="content">
           <div class="name second-text font-13">{{i.name}}</div>
           <div class="bar">
@@ -49,22 +54,28 @@
         <div class="option-bar">
           <a
             v-if="item.state === 'delivered' || item.state === 'receipted'"
-            class="btn">查看物流</a>
+            class="btn"
+            @click="handleLogistics(item)">查看物流</a>
           <a
             v-if="item.state === 'submitted'"
-            class="btn">联系卖家</a>
+            class="btn"
+            @click="contact(item.items[0].product_id)">联系卖家</a>
           <a
             v-if="item.state === 'submitted'"
-            class="btn">取消订单</a>
+            class="btn"
+            @click="cancel(item.code)">取消订单</a>
           <a
-            v-if="item.state === 'receipted'"
-            class="btn">删除订单</a>
+            v-if="item.state === 'canceled'"
+            class="btn"
+            @click="deleteOrder(item.code)">删除订单</a>
           <a
             v-if="item.state === 'submitted'"
-            class="btn danger">付款</a>
+            class="btn danger"
+            @click="pay(item)">付款</a>
           <a
             v-if="item.state === 'paid'"
-            class="btn">提醒发货</a>
+            class="btn"
+            @click="remind(item.code)">提醒发货</a>
         </div>
       </div>
     </div>
@@ -94,11 +105,37 @@
         }
         return money
       },
+      // 前往企业名片
       handleClick (id) {
         this.$emit('go-enterprise', id)
       },
+      // 前往订单详情
       itemClick (item) {
         this.$emit('go-detail', item)
+      },
+      // 查看物流
+      handleLogistics (item) {
+        this.$emit('action', {type: 'trace', params: item})
+      },
+      // 联系卖家客服
+      contact (item) {
+        this.$emit('action', {type: 'contact', params: item})
+      },
+      // 取消订单
+      cancel (code) {
+        this.$emit('action', {type: 'cancel', params: code})
+      },
+      // 付款
+      pay (item) {
+        this.$emit('action', {type: 'pay', params: item})
+      },
+      // 提醒发货
+      remind (code) {
+        this.$emit('action', {type: 'remind', params: code})
+      },
+      // 删除订单
+      deleteOrder (code) {
+        this.$emit('action', {type: 'delete', params: code})
       }
     },
     filters: {
@@ -116,6 +153,8 @@
             return '拒绝售后'
           case 'commented':
             return '评论'
+          case 'canceled':
+            return '交易关闭'
           default:
             return '交易关闭'
         }
@@ -194,6 +233,26 @@
         @include px2rem(width, 146px);
         @include px2rem(margin-right, 25px);
       }
+      img[lazy=loading] {
+          @include px2rem(height, 146px);
+          @include px2rem(width, 146px);
+          background-position: center center!important;
+          background: url("../../assets/imgLoading3.jpg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        img[lazy=error] {
+          @include px2rem(height, 146px);
+          @include px2rem(width, 146px);
+          background-position: center center!important;
+          background: url("../../assets/imgLoadingError.png");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        img[lazy=loaded] {
+          @include px2rem(height, 146px);
+          @include px2rem(width, 146px);
+        }
       .content {
         @include px2rem(height, 130px);
         display: flex;

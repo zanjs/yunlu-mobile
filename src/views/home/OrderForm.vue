@@ -25,7 +25,8 @@
               :store="allForms"
               :selectable="false"
               @go-enterprise="goEnterprise"
-              @go-detail="goDetail">
+              @go-detail="goDetail"
+              @action="action">
             </order-form-list>
           </template>
           <div
@@ -42,7 +43,8 @@
               :store="submittedForms"
               :selectable="true"
               @go-enterprise="goEnterprise"
-              @go-detail="goDetail">
+              @go-detail="goDetail"
+              @action="action">
             </order-form-list>
           </template>
           <div
@@ -59,7 +61,8 @@
               :store="paidForms"
               :selectable="false"
               @go-enterprise="goEnterprise"
-              @go-detail="goDetail">
+              @go-detail="goDetail"
+              @action="action">
             </order-form-list>
           </template>
           <div
@@ -76,7 +79,8 @@
               :store="deliveredForms"
               :selectable="false"
               @go-enterprise="goEnterprise"
-              @go-detail="goDetail">
+              @go-detail="goDetail"
+              @action="action">
             </order-form-list>
           </template>
           <div
@@ -93,7 +97,8 @@
               :store="receiptedForms"
               :selectable="false"
               @go-enterprise="goEnterprise"
-              @go-detail="goDetail">
+              @go-detail="goDetail"
+              @action="action">
             </order-form-list>
           </template>
           <div
@@ -106,6 +111,11 @@
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
+    <confirm-dialog
+      v-if="showConfirm"
+      :msg="confirmMsg"
+      @click="handleConfirm">
+    </confirm-dialog>
   </section>
 </template>
 
@@ -113,6 +123,8 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import ConfirmDialog from '../../components/common/ConfirmDialog'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
@@ -134,12 +146,16 @@
         deliveredForms: [], // 待收货
         receiptedPageIndex: 1,
         receiptedPageSize: 20,
-        receiptedForms: [] // 待评价
+        receiptedForms: [], // 待评价
+        showConfirm: false,
+        cancelOrderId: '',
+        confirmMsg: '确定取消订单？'
       }
     },
     components: {
       CommonHeader,
-      OrderFormList
+      OrderFormList,
+      ConfirmDialog
     },
     methods: {
       goBack () {
@@ -213,6 +229,94 @@
       goDetail (item) {
         setStore('orderDetailParams', item)
         this.$router.push({path: `/orderdetail/${item.code}?type=${item.state}`})
+      },
+      action (item) {
+        switch (item.type) {
+          case 'trace': // 查看物流
+            this.notOpen()
+            break
+          case 'contact': // 联系卖家客服
+            this.goChat(item.params)
+            break
+          case 'cancel': // 取消订单
+            this.showConfirm = true
+            this.cancelOrderId = item.params
+            break
+          case 'pay': // 付款
+            this.notOpen()
+            break
+          case 'remind': // 提醒发货
+            this.notOpen()
+            break
+          case 'delete': // 删除订单(删除被取消的订单，暂未开放)
+            this.notOpen()
+            break
+          default:
+            Toast({
+              message: '未知错误',
+              duration: 500
+            })
+            break
+        }
+      },
+      notOpen () {
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
+      },
+      goChat (id) {
+        this.$router.push({name: 'Chat', query: {type: 'Product', productId: id}})
+      },
+      // 取消订单
+      cancelOrderRequest (id) {
+        this.$store.dispatch('commonAction', {
+          url: `/order_forms/${id}/cancel`,
+          method: 'put',
+          params: {},
+          data: {
+            token: this.token,
+            number: id
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.code) {
+              Toast({
+                mesasge: res.data.detail || '取消订单失败',
+                duration: 500
+              })
+            } else {
+              Toast({
+                message: '您已成功取消订单',
+                duration: 500
+              })
+            }
+          },
+          reject: (state, res) => {
+            if (res.status && res.status === 204) {
+              Toast({
+                message: '您已成功取消订单',
+                duration: 500
+              })
+              this.resetPageIndex()
+              this.getOrderForms(0, this.allPageIndex, this.allPageSize)
+            }
+          }
+        })
+      },
+      handleConfirm (bool) {
+        this.showConfirm = false
+        if (bool) {
+          this.cancelOrderRequest(this.cancelOrderId)
+        }
+      },
+      // 重置所以的分页索引
+      resetPageIndex () {
+        this.allPageIndex = 1
+        this.submittedPageIndex = 1
+        this.paidPageIndex = 1
+        this.deliveredPageIndex = 1
+        this.receiptedPageIndex = 1
       }
     },
     mounted () {
