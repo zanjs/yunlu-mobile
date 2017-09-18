@@ -62,7 +62,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
@@ -204,26 +204,47 @@
         return tmpArr
       },
       checkGroup (item) {
+        let flag = false
         for (let i = 0; i < this.purchaseItems.length; i++) {
           if (item.item.id === this.purchaseItems[i].id) {
-            this.purchaseItems[i].checked = !item.checked
             for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-              this.purchaseItems[i].purchase_items[j].checked = !item.checked
+              if (this.purchaseItems[i].purchase_items[j].price.money === '定制') {
+                flag = true
+                continue
+              } else {
+                this.purchaseItems[i].purchase_items[j].checked = !item.checked
+              }
+            }
+            if (!flag) {
+              this.purchaseItems[i].checked = !item.checked
             }
           }
+        }
+        if (flag) {
+          Toast({
+            message: '定制商品暂时不能下单',
+            duration: 500
+          })
         }
         this.checkAll = this.isGroupChecked(this.purchaseItems)
         this.isItemChecked()
         this.handleTotalMoney()
       },
       checkItem (item) {
-        for (let i = 0; i < this.purchaseItems.length; i++) {
-          if (item.parentItem.id === this.purchaseItems[i].id) {
-            for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-              if (item.item.id === this.purchaseItems[i].purchase_items[j].id) {
-                this.purchaseItems[i].purchase_items[j].checked = !item.checked
-                this.purchaseItems[i].checked = this.isGroupChecked(this.purchaseItems[i].purchase_items)
-                this.checkAll = this.isGroupChecked(this.purchaseItems)
+        if (item.item.price.money === '定制') {
+          Toast({
+            message: '定制商品暂时不能下单',
+            duration: 500
+          })
+        } else {
+          for (let i = 0; i < this.purchaseItems.length; i++) {
+            if (item.parentItem.id === this.purchaseItems[i].id) {
+              for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+                if (item.item.id === this.purchaseItems[i].purchase_items[j].id) {
+                  this.purchaseItems[i].purchase_items[j].checked = !item.checked
+                  this.purchaseItems[i].checked = this.isGroupChecked(this.purchaseItems[i].purchase_items)
+                  this.checkAll = this.isGroupChecked(this.purchaseItems)
+                }
               }
             }
           }
@@ -307,6 +328,45 @@
           this.deleteItemRequest(ids)
         }
       },
+      // 以商家/企业为分组，筛选出待支付的商品
+      handleCheckedProducts () {
+        let tmpArr = []
+        let arr = []
+        let map = {}
+        for (let i = 0; i < this.purchaseItems.length; i++) {
+          let obj = {
+            team: {},
+            products: []
+          }
+          for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+            if (this.purchaseItems[i].purchase_items[j].checked) {
+              obj.team = {
+                company: this.purchaseItems[i].company,
+                id: this.purchaseItems[i].id,
+                logo: this.purchaseItems[i].logo
+              }
+              obj.products.push(this.purchaseItems[i].purchase_items[j])
+              tmpArr.push(obj)
+            }
+          }
+        }
+        for (let i = 0; i < tmpArr.length; i++) {
+          let ai = tmpArr[i]
+          if (!map[ai.team.id]) {
+            arr.push(tmpArr[i])
+            map[ai.team.id] = ai
+          } else {
+            for (let j = 0; j < arr.length; j++) {
+              let aj = arr[j]
+              if (aj.team.id === ai.team.id) {
+                aj.products = [...ai.products]
+                break
+              }
+            }
+          }
+        }
+        return arr
+      },
       handleCheckedItems () {
         let tmpArr = []
         for (let i = 0; i < this.purchaseItems.length; i++) {
@@ -365,10 +425,18 @@
         this.$router.push({name: 'ProductDetail', params: {id: item.price.product.id}})
       },
       handleAllCheck () {
+        let flag = false
         for (let i = 0; i < this.purchaseItems.length; i++) {
-          this.purchaseItems[i].checked = !this.checkAll
           for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-            this.purchaseItems[i].purchase_items[j].checked = !this.checkAll
+            if (this.purchaseItems[i].purchase_items[j].price.money === '定制') {
+              flag = true
+              continue
+            } else {
+              this.purchaseItems[i].purchase_items[j].checked = !this.checkAll
+            }
+          }
+          if (!flag) {
+            this.purchaseItems[i].checked = !this.checkAll
           }
         }
         this.checkAll = !this.checkAll
@@ -429,15 +497,35 @@
           }
         })
       },
-      pay () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
+      // 获取收获地址
+      getDeliveries (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/deliveries',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.deliveries = res.data.deliveries
+          },
+          reject: () => {
+          }
         })
+      },
+      pay () {
+        let arr = this.handleCheckedProducts()
+        setStore('buying', arr)
+        if (this.$store.state.deliveries.length === 0) {
+          this.$router.push({name: 'AddAddress'})
+        } else {
+          this.$router.push({name: 'OrderPaying'})
+        }
       }
     },
     mounted () {
       this.getProducts()
+      this.getDeliveries(this.token)
     }
   }
 </script>
@@ -469,7 +557,7 @@
       align-items: center;
       height: inherit;
       @include px2rem(margin-right, 48px);
-      line-height: 1;
+      line-height: normal;
       i {
         @include px2rem(margin-right, 12px);
       }
@@ -479,13 +567,14 @@
       height: inherit;
       display: flex;
       align-items: center;
-      line-height: 1;
+      line-height: normal;
     }
     .disabled {
       color: $fourth-grey;
     }
     p {
       font-weight: bold;
+      line-height: normal;
     }
     .pay-btn {
       @include px2rem(width, 150px);
