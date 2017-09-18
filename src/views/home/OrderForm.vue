@@ -158,8 +158,14 @@
           class="iconfont icon-weixuanzhong"></i>
       </a>
       <a
+        v-if="checkAll"
         class="btn danger"
         @click.stop="payAll()">合并付款</a>
+      <div
+        v-if="!checkAll"
+        class="btn disabled">
+        合并付款
+      </div>
     </section>
     <confirm-dialog
       v-if="showConfirm"
@@ -606,6 +612,9 @@
     .danger {
       border-color: #FF5001;
       color: #FF5001;
+    }
+    .disabled {
+      color: $eighth-grey;
     }
   }
   .drop-menu-bg {

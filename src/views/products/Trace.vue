@@ -41,20 +41,13 @@
         v-for="(item, index) in traceInfo.traces"
         :key="index"
         class="row">
-        <div class="icon-box">
-          <div
-            class="line"
-            :class="{'hidden': index === 0}"></div>
-          <div class="circle"></div>
-          <div
-            class="line"
-            :class="{'hidden': index === traceInfo.traces.length - 1}"></div>
-        </div>
         <div
-          class="content"
-          :class="{'last': index === traceInfo.traces.length - 1}">
-          <p class="time">{{item.accepted_at}}</p>
-          <div>{{item.station}}</div>
+          class="wrapper"
+          :class="{'first': index === 0, 'last': index === traceInfo.traces.length - 1}">
+          <div class="content">
+            <p class="time">{{item.accepted_at}}</p>
+            <div>{{item.station}}</div>
+          </div>
         </div>
       </div>
     </section>
@@ -68,7 +61,7 @@
     data () {
       return {
         header: '查看物流',
-        token: '4d75cfa0cdd04efd9d4dd732929bb58e',
+        token: getStore('user') ? getStore('user').authentication_token : '',
         traceInfo: null,
         logo: getStore('traceLogo')
       }
@@ -170,40 +163,49 @@
       align-items: center;
       justify-content: flex-start;
       height: auto;
-      .icon-box {
-        @include px2rem(width, 130px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: inherit;
-        .circle {
-          @include px2rem(width, 30px);
-          @include px2rem(height, 30px);
-          @include px2rem(border-radius, 15px);
-          background-color: $green;
-        }
-        .line {
-          @include px2rem(width, 6px);
-          // @include px2rem(min-height, 40px);
-          background-color: $third-dark;
-          flex: 1;
-        }
-        .hidden {
-          background-color: transparent;
-        }
-      }
-      .content {
+      .wrapper {
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        @include px2rem(min-height, 90px);
-        border-bottom: 1px solid $second-grey;
-        @include px2rem(padding-left, 28px);
+        @include px2rem(margin-left, 65px);
+        border-left: 1px solid $third-dark;
+        @include px2rem(border-width, 2px);
+        position: relative;
+        .content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          border-bottom: 1px solid $second-grey;
+          @include px2rem(margin-left, 65px);
+          @include pm2rem(padding, 30px, 30px, 30px, 20px);
+          color: $third-dark;
+          @include font-dpr(14px);
+          .time {
+            @include px2rem(padding-bottom, 20px);
+          }
+        }
       }
-      .last {
-        border: none;
+      .content:after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        @include px2rem(left, -15px);
+        @include px2rem(top, 36px);
+        @include px2rem(width, 30px);
+        @include px2rem(height, 30px);
+        @include px2rem(border-radius, 30px);
+        background-color: $third-dark;
+      }
+      .first {
+        border-left-color: $green;
+      }
+      .first .content {
+        color: $primary-dark;
+      }
+      .last .content{
+        border-bottom: none;
+      }
+      .first .content:after {
+        background-color: $green;
       }
     }
   }
