@@ -112,7 +112,11 @@
           this.$router.replace({name: 'See'})
         } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
+          if (getStore('user') && getStore('user').authentication_token && getStore('buying')) { // 产品详情页正在购买的产品信息
+            this.getDeliveries(getStore('user').authentication_token)
+          } else {
+            this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
+          }
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
@@ -282,6 +286,31 @@
         if (getStore('user') && getStore('user').authentication_token) {
           this.goBack()
         }
+      },
+      // 获取收货地址（只有从上皮详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
+      getDeliveries (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/deliveries',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            state.deliveries = res.data.deliveries
+            this.$router.replace({name: 'AddAddress'})
+            this.buyingBack(state.deliveries)
+          },
+          reject: () => {
+          }
+        })
+      },
+      buyingBack (deliveries) {
+        if (deliveries.length > 0) {
+          this.$router.replace({name: 'OrderPaying'})
+        } else {
+          this.$router.replace({name: 'AddAddress'})
+        }
       }
     },
     mounted () {
@@ -365,13 +394,14 @@
       align-items: center;
       justify-content: center;
       @include px2rem(margin-bottom, 34px);
-      color: $third-dark;
       p {
         @include font-dpr(15px);
         @include pm2rem(margin, 0px, 34px, 0px, 34px);
         text-align: center;
+        color: $third-dark;
       }
       hr {
+        background-color: $second-grey;
         @include px2rem(width, 120px);
       }
     }
@@ -398,7 +428,7 @@
     background-color: rgba(0, 0, 0, .45);
     z-index: 1004 !important;
     .dialog {
-      @include px2rem(width, 500px);
+      @include px2rem(width, 562px);
       @include px2rem(top, 300px);
       background-color: $white;
       header {
@@ -430,10 +460,12 @@
         }
       }
       footer {
-        text-align: center;
-        line-height: 1;
+        @include px2rem(height, 80px);
+        line-height: normal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-top: 1px solid $second-grey;
-        @include pm2rem(padding, 20px, 0px, 20px, 0px);
         @include font-dpr(15px);
         color: $primary-dark;
       }

@@ -36,6 +36,13 @@ const Help = resolve => require(['../views/user/Help'], resolve)
 const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
 const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
 const Class = resolve => require(['../views/carte/Class'], resolve)
+const AddAddress = resolve => require(['../views/products/AddAddress'], resolve)
+const OrderPaying = resolve => require(['../views/products/OrderPaying'], resolve)
+const OrderForm = resolve => require(['../views/home/OrderForm'], resolve)
+const OrderDetail = resolve => require(['../views/home/OrderDetail'], resolve)
+const Trace = resolve => require(['../views/products/Trace'], resolve)
+const Address = resolve => require(['../views/products/Address'], resolve)
+const Pay = resolve => require(['../views/products/Pay'], resolve)
 
 Vue.use(Router)
 
@@ -181,6 +188,14 @@ export default new Router({
       name: 'Conversation',
       component: Conversation
     }, {
+      path: '/orderform',
+      name: 'OrderForm',
+      component: OrderForm
+    }, {
+      path: '/orderdetail/:id',
+      name: 'OrderDetail',
+      component: OrderDetail
+    }, {
       path: '/searchproducts',
       name: 'SearchProducts',
       component: SearchProducts
@@ -200,6 +215,26 @@ export default new Router({
       path: '/classes/:id',
       name: 'Class',
       component: Class
+    }, {
+      path: '/addaddress',
+      name: 'AddAddress',
+      component: AddAddress
+    }, {
+      path: '/orderpaying',
+      name: 'OrderPaying',
+      component: OrderPaying
+    }, {
+      path: '/trace/:id',
+      name: 'Trace',
+      component: Trace
+    }, {
+      path: '/address',
+      name: 'Address',
+      component: Address
+    }, {
+      path: '/pay',
+      name: 'Pay',
+      component: Pay
     }
   ]
 })

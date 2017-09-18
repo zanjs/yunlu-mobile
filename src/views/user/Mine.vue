@@ -186,7 +186,7 @@
         }
         .arrow {
           transform: rotate(180deg);
-          color: $third-dark;
+          color: $fifth-grey;
           @include font-dpr(18px);
           @include px2rem(margin-right, 30px);
         }
@@ -198,12 +198,13 @@
   }
   .logout-btn {
     color: $white;
-    @include px2rem(margin-top, 22px);
+    @include px2rem(margin-top, 50px);
     text-align: center;
+    line-height: normal;
     a {
       margin: 0 auto;
       @include px2rem(width, 520px);
-      @include px2rem(height,70px);
+      @include px2rem(height, 80px);
       background-color: $green;
       @include font-dpr(15px);
     }

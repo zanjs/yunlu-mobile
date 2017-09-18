@@ -1,7 +1,7 @@
 <template>
   <header
     class="head-product full-width"
-    v-bind:class="{'download': showDownload}">
+    :class="{'download': showDownload}">
     <div
       class="left icon-box flex"
       @click="goBack()">

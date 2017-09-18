@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeAllStore, mobileClient } from './config/mUtils'
+  import { getStore, setStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -79,23 +79,27 @@
         })
         this.$store.state.userDelegate.on('message', message => {
           console.log('userDelegate, 用户uuid收到的消息，用于聊天等操作', message)
-          let tmpObj = {
-            conversationId: message.cid,
-            from: message.from,
-            id: message.id,
-            fromLogo: message._lcattrs.fromLogo,
-            fromName: message._lcattrs.fromName,
-            timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
-            clazz: message._lcattrs.clazz,
-            lastMessage: message._lctext,
-            isSelf: false,
-            remark: message._lcattrs.fromName,
-            logoUrl: message._lcattrs.fromLogo
-          }
-          this.reOpenBanList(message.from, message._lcattrs.clazz, message.cid)
-          // 不在聊天页面，收到的新消息统一默认为未读消息
-          if (this.$route.name !== 'Chat' && message.from !== getStore('user').id) {
-            this.$store.dispatch('receiveNewMessage', tmpObj)
+          if (message.from !== 'system') {
+            let tmpObj = {
+              conversationId: message.cid,
+              from: message.from,
+              id: message.id,
+              fromLogo: message._lcattrs.fromLogo,
+              fromName: message._lcattrs.fromName,
+              timestamp: moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss'),
+              clazz: message._lcattrs.clazz,
+              lastMessage: message._lctext,
+              isSelf: false,
+              remark: message._lcattrs.fromName,
+              logoUrl: message._lcattrs.fromLogo
+            }
+            this.reOpenBanList(message.from, message._lcattrs.clazz, message.cid)
+            // 不在聊天页面，收到的新消息统一默认为未读消息
+            if (this.$route.name !== 'Chat' && message.from !== getStore('user').id) {
+              this.$store.dispatch('receiveNewMessage', tmpObj)
+            }
+          } else {
+            // 用户uuid收到的消息类型为系统消息，通常是流程里的推送通知，网页端暂未开放，因此将非会话类型的消息过滤掉
           }
         })
         this.$store.state.userDelegate.on('unreadmessagescountupdate', unreadMessagesCount => {
@@ -163,20 +167,7 @@
           reject: () => {
           }
         })
-      },
-      // 如果是在微信中打开，则静默登录
-      autoLogin () {
-        if (this.$route.query.tmp_token) {
-          this.loginRequest(this.$route.query.tmp_token)
-        } else if (mobileClient() === 'weixin' && !this.$route.query.tmp_token) {
-          // let redirectUrl = encodeURIComponent('/#/see?tmp_token=')
-          window.location.href = 'https://test.yunlu6.com/member/auth/wechat'
-        }
       }
-    },
-    mounted () {
-      // TODO: 需要获取当前地址作为回调地址，并在此文件中向后台发送code，并阻止用户操作。
-      // this.autoLogin()
     },
     updated () {
       this.beforeInit()
@@ -227,5 +218,22 @@
   .mint-header-title {
     height: inherit !important;
     @include px2rem(line-height, 88px);
+  }
+  // 公共样式，放在公共文件中，避免部分页面没有加载而找不到样式文件
+  .toast-icon-big {
+    @include font-dpr(36px);
+    @include pm2rem(margin, 0px, 0px, -20px, 0px);
+  }
+  .toast-content {
+    background-color: rgba(0, 0, 0, .7);
+    @include px2rem(width, 400px);
+    box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.5);
+    @include pm2rem(margin, -20px, 0px, -10px, 0px);
+    padding: 0 !important;
+    @include px2rem(border-radius, 14px);
+    span {
+      @include font-dpr(16px);
+      @include px2rem(margin-bottom, 30px);
+    }
   }
 </style>
