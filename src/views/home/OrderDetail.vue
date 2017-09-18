@@ -270,7 +270,7 @@
     .address {
       display: flex;
       @include px2rem(padding-top, 88px);
-      background-color: $sixth-grey;
+      background-color: $white;
       .icon-box {
         height: inherit;
         @include px2rem(width, 120px);

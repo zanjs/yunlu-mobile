@@ -146,7 +146,7 @@
     </section>
     <section
       v-if="activeIndex === 2 && submittedForms.length > 0"
-      class="option-bar">
+      class="option-bar full-width">
       <a
         class="icon-box"
         @click.stop="handleAllCheck(submittedForms, checkAll)">
