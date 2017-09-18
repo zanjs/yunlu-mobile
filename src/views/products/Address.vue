@@ -5,15 +5,23 @@
       @back="goBack()">
     </common-header>
     <div class="address-list">
-      <address-item
-        v-for="(item, index) in deliveries"
-        :key="index"
-        :store="item"
-        @click="itemSelected"
-        @checked="itemChecked"
-        @delete="itemDelete"
-        @edit="itemEdit">
-      </address-item>
+      <template v-if="deliveries.length > 0">
+        <address-item
+          v-for="(item, index) in deliveries"
+          :key="index"
+          :store="item"
+          @click="itemSelected"
+          @checked="itemChecked"
+          @delete="itemDelete"
+          @edit="itemEdit">
+        </address-item>
+      </template>
+      <div
+        v-else
+        class="empty">
+        <img src="../../assets/emptyAddress.png">
+        <p>您还没有添加收货地址哟~</p>
+      </div>
     </div>
     <confirm-dialog
       v-if="showConfirm"
@@ -156,6 +164,19 @@
   .address-list {
     @include px2rem(padding-top, 88px);
     @include px2rem(margin-bottom, 100px);
+    .empty {
+      text-align: center;
+      @include px2rem(padding-top, 90px);
+      img {
+        @include px2rem(width, 300px);
+        @include px2rem(height, 408px);
+      }
+      p {
+        @include px2rem(margin-top, 82px);
+        @include font-dpr(17px);
+        color: #B3B3B3;
+      }
+    }
   }
   .footer {
     position: fixed;

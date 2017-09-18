@@ -7,10 +7,19 @@
     <section
       class="address full-width"
       @click="goManageAddress()">
-      <div class="flex icon-box">
+      <div
+        v-if="deliverie"
+        class="flex icon-box">
         <i class="iconfont icon-fujinkehu-copy primary font-25"></i>
       </div>
-      <div class="content">
+      <div
+        v-else
+        class="img-box">
+        <img src="../../assets/addressLogo.png">
+      </div>
+      <div
+        v-if="deliverie"
+        class="content">
         <div class="row primary-text font-15 top">
           <span>收货人：{{deliverie.recipient}}</span>
           <span class="phone">{{deliverie.phone}}</span>
@@ -18,6 +27,13 @@
         <div class="row second-text font-13 text">
           收货地址：{{deliverie.zone_name}}{{deliverie.address}}
         </div>
+      </div>
+      <div
+        v-else
+        class="tips">
+        <span>您还没有收货地址，赶快</span>
+        <span class="danger">去添加</span>
+        <span>吧！</span>
       </div>
     </section>
     <div class="line">
@@ -127,7 +143,7 @@
     data () {
       return {
         header: '确认订单',
-        deliverie: {},
+        deliverie: null,
         token: getStore('user') ? getStore('user').authentication_token : '',
         purchaseItems: getStore('buying') ? getStore('buying') : [],
         message: '希望掌柜快点发货！'
@@ -168,7 +184,7 @@
         })
       },
       selectDefaultDeliverie (arr) {
-        let obj = {}
+        let obj = null
         let hasDefault = false
         if (getStore('selectedAddressId')) {
           obj = arr.filter(i => i.id === parseInt(getStore('selectedAddressId')))[0]
@@ -291,7 +307,11 @@
         })
       },
       goManageAddress () {
-        this.$router.push({name: 'Address', query: {from: 'orderpaying'}})
+        if (this.deliverie) {
+          this.$router.push({name: 'Address', query: {from: 'orderpaying'}})
+        } else {
+          this.$router.push({name: 'AddAddress', query: {from: 'manage'}})
+        }
       }
     },
     mounted () {
@@ -355,6 +375,30 @@
           -webkit-box-orient: vertical;
           word-break: break-all;
           float: left;
+        }
+      }
+      .img-box {
+        @include px2rem(width, 205px);
+        @include px2rem(height, 150px);
+        display: flex;
+        align-items: center;
+        img {
+          @include px2rem(width, 90px);
+          @include px2rem(height, 91px);
+          @include px2rem(margin-left, 75px);
+        }
+      }
+      .tips {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        line-height: normal;
+        span {
+          @include font-dpr(15px);
+          color: $primary-dark;
+        }
+        .danger {
+          color: #FF5001;
         }
       }
     }
