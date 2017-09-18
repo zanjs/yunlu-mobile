@@ -7,8 +7,14 @@
       <div class="title">
         <div
           v-if="selectable"
+          @click.stop="handleChecked(item.checked, item.code)"
           class="left flex">
-          <i class="iconfont icon-weixuanzhong font-18"></i>
+          <i
+            v-if="item.checked"
+            class="iconfont icon-xuanzhong font-18 checked"></i>
+          <i
+            v-if="!item.checked"
+            class="iconfont icon-weixuanzhong font-18"></i>
         </div>
         <a
           class="right flex-between flex-1"
@@ -95,6 +101,9 @@
     },
     props: ['store', 'selectable'],
     methods: {
+      handleChecked (bool, id) {
+        this.$emit('checked', {bool: bool, id: id})
+      },
       handleTotoalCount (items) {
         let count = 0
         for (let i = 0; i < items.length; i++) {
@@ -195,6 +204,14 @@
         justify-content: flex-start;
         height: inherit;
         @include pm2rem(padding, 0px, 30px, 0px, 30px);
+        i {
+          color: $third-dark;
+          border-color: $third-dark;
+        }
+        .checked {
+          color: $green;
+          border-color: $green;
+        }
       }
       .right {
         height: inherit;

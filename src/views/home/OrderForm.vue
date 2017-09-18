@@ -67,8 +67,10 @@
             <template v-if="submittedForms.length > 0">
               <order-form-list
                 key="2"
+                class="has-option"
                 :store="submittedForms"
                 :selectable="true"
+                @checked="checkForm"
                 @go-enterprise="goEnterprise"
                 @go-detail="goDetail"
                 @action="action">
@@ -142,6 +144,23 @@
         </transition>
       </div>
     </section>
+    <section
+      v-if="activeIndex === 2 && submittedForms.length > 0"
+      class="option-bar">
+      <a
+        class="icon-box"
+        @click.stop="handleAllCheck(submittedForms, checkAll)">
+        <i
+          v-if="checkAll"
+          class="iconfont icon-xuanzhong checked"></i>
+        <i
+          v-if="!checkAll"
+          class="iconfont icon-weixuanzhong"></i>
+      </a>
+      <a
+        class="btn danger"
+        @click.stop="payAll()">合并付款</a>
+    </section>
     <confirm-dialog
       v-if="showConfirm"
       :msg="confirmMsg"
@@ -201,7 +220,9 @@
         showConfirm: false,
         cancelOrderId: '',
         confirmMsg: '确定取消订单？',
-        showMenu: false
+        showMenu: false,
+        hasChecked: false,
+        checkAll: false
       }
     },
     components: {
@@ -259,7 +280,7 @@
           console.error('获取订单信息失败')
         }
       },
-      // 过滤掉返回订单中的空订单
+      // 过滤掉返回订单中的空订单,并且添加checked字段
       orderFormsFilter (arr) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
@@ -270,10 +291,35 @@
             }
           }
           if (count === arr[i].items.length) {
-            tmpArr.push(arr[i])
+            tmpArr.push({...arr[i], checked: false})
           }
         }
         return tmpArr
+      },
+      // 勾选订单
+      checkForm (item) {
+        for (let i = 0; i < this.submittedForms.length; i++) {
+          if (item.id === this.submittedForms[i].code) {
+            this.submittedForms[i].checked = !item.bool
+            this.isAllChecked(this.submittedForms)
+          }
+        }
+      },
+      isAllChecked (arr) {
+        let count = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].checked) {
+            count += 1
+          }
+        }
+        this.hasChecked = count > 0
+        this.checkAll = count === arr.length
+      },
+      handleAllCheck (arr, bool) {
+        for (let i = 0; i < arr.length; i++) {
+          arr[i].checked = !bool
+        }
+        this.checkAll = this.hasChecked = !bool
       },
       getOrderForms (index, pageIndex, pageSize) {
         this.$store.dispatch('commonAction', {
@@ -457,6 +503,9 @@
       },
       goShoppingCart () {
         this.$router.push({name: 'ShoppingCart'})
+      },
+      payAll () {
+        this.notOpen()
       }
     },
     mounted () {
@@ -497,6 +546,9 @@
   }
   .nav-bar-container {
     @include px2rem(padding-top, 178px);
+    .has-option {
+      @include px2rem(margin-bottom, 120px);
+    }
     .no-form {
       img {
         @include px2rem(width, 319px);
@@ -508,6 +560,52 @@
         @include font-dpr(15px);
         color: $second-dark;
       }
+    }
+  }
+  .option-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    @include px2rem(height, 100px);
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: normal;
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
+    .icon-box {
+      display: flex;
+      align-items: center;
+      height: inherit;
+      i {
+        @include font-dpr(20px);
+        color: $third-dark;
+        border-color: $third-dark;
+        @include pm2rem(margin, 0px, 30px, 0px, 30px);
+      }
+      .checked {
+        color: $green;
+        border-color: $green;
+      }
+    }
+    .btn {
+      @include px2rem(height, 60px);
+      @include px2rem(width, 152px);
+      @include px2rem(margin-right, 30px);
+      @include font-dpr(13px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $primary-dark;
+      border: 1px solid $fifth-grey;
+      @include px2rem(margin-left, 20px);
+      @include px2rem(border-radius, 8px);
+    }
+    .danger {
+      border-color: #FF5001;
+      color: #FF5001;
     }
   }
   .drop-menu-bg {
