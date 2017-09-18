@@ -6,7 +6,7 @@
     </common-header>
     <section class="address full-width">
       <div class="flex icon-box">
-        <i class="iconfont icon-fujinkehu-copy primary font-25"></i>
+        <i class="iconfont icon-dingwei1 primary font-25"></i>
       </div>
       <div class="content">
         <div class="row primary-text font-15 top">

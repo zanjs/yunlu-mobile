@@ -42,6 +42,7 @@ const OrderForm = resolve => require(['../views/home/OrderForm'], resolve)
 const OrderDetail = resolve => require(['../views/home/OrderDetail'], resolve)
 const Trace = resolve => require(['../views/products/Trace'], resolve)
 const Address = resolve => require(['../views/products/Address'], resolve)
+const Pay = resolve => require(['../views/products/Pay'], resolve)
 
 Vue.use(Router)
 
@@ -230,6 +231,10 @@ export default new Router({
       path: '/address',
       name: 'Address',
       component: Address
+    }, {
+      path: '/pay',
+      name: 'Pay',
+      component: Pay
     }
   ]
 })

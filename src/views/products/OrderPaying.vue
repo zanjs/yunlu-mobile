@@ -10,7 +10,7 @@
       <div
         v-if="deliverie"
         class="flex icon-box">
-        <i class="iconfont icon-fujinkehu-copy primary font-25"></i>
+        <i class="iconfont icon-dingwei1 primary font-25"></i>
       </div>
       <div
         v-else
@@ -127,6 +127,12 @@
         <span class="money">￥{{totalMoney}}</span>
       </div>
       <a
+        v-if="!deliverie"
+        class="flex pay-btn white font-17 disabled">
+        支付
+      </a>
+      <a
+        v-else
         class="flex pay-btn white font-17"
         @click="pay()">
         支付
@@ -300,14 +306,32 @@
           duration: 1000
         })
       },
+      handlePayingItems (arr) {
+        let tmpArr = []
+        for (let i = 0; i < arr.length; i++) {
+          let obj = {
+            items: [],
+            organization_id: arr[i].team.id
+          }
+          for (let j = 0; j < arr[i].products.length; j++) {
+            obj.items.push({price_id: arr[i].products[j].price.id, quantity: arr[i].products[j].quantity})
+          }
+          tmpArr.push(obj)
+        }
+        return tmpArr
+      },
       pay () {
         Toast({
           message: '暂未开放',
           duration: 500
         })
+        /* let groups = this.handlePayingItems(this.purchaseItems)
+        setStore('paying', groups)
+        this.$router.push({name: 'Pay', query: {id: this.deliverie.id}}) */
       },
       goManageAddress () {
         if (this.deliverie) {
+          removeStore('editAddress')
           this.$router.push({name: 'Address', query: {from: 'orderpaying'}})
         } else {
           this.$router.push({name: 'AddAddress', query: {from: 'manage'}})
@@ -574,6 +598,9 @@
         height: inherit;
         @include px2rem(width, 190px);
         background-color: #FF4901;
+      }
+      .disabled {
+        background-color: $eighth-grey;
       }
     }
   }
