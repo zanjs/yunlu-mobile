@@ -4,7 +4,9 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <section class="address full-width">
+    <section
+      class="address full-width"
+      @click="goManageAddress()">
       <div class="flex icon-box">
         <i class="iconfont icon-fujinkehu-copy primary font-25"></i>
       </div>
@@ -159,11 +161,31 @@
           target: this,
           resolve: (state, res) => {
             state.deliveries = res.data.deliveries
-            this.deliverie = res.data.deliveries[0]
+            this.deliverie = this.selectDefaultDeliverie(res.data.deliveries)
           },
           reject: () => {
           }
         })
+      },
+      selectDefaultDeliverie (arr) {
+        let obj = {}
+        let hasDefault = false
+        if (getStore('selectedAddressId')) {
+          obj = arr.filter(i => i.id === parseInt(getStore('selectedAddressId')))[0]
+          removeStore('selectedAddressId')
+        } else {
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i].state === 'default') {
+              obj = {...arr[i]}
+              hasDefault = true
+              break
+            }
+          }
+          if (!hasDefault) {
+            return arr[0]
+          }
+        }
+        return obj
       },
       handleInput (quantity, amount, i) {
         if (parseInt(quantity + '') >= parseInt(amount + '')) {
@@ -267,6 +289,9 @@
           message: '暂未开放',
           duration: 500
         })
+      },
+      goManageAddress () {
+        this.$router.push({name: 'Address', query: {from: 'orderpaying'}})
       }
     },
     mounted () {
@@ -300,7 +325,7 @@
     .address {
       display: flex;
       @include px2rem(padding-top, 88px);
-      background-color: $sixth-grey;
+      background-color: $white;
       .icon-box {
         height: inherit;
         @include px2rem(width, 120px);

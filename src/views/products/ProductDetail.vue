@@ -922,6 +922,7 @@
         }])
         if (this.hasLogin) {
           if (this.$store.state.deliveries.length === 0) {
+            removeStore('editAddress')
             this.$router.push({name: 'AddAddress'})
           } else {
             this.$router.push({name: 'OrderPaying'})

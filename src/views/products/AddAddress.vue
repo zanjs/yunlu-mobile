@@ -85,8 +85,10 @@
   export default {
     data () {
       return {
-        header: '添加收货地址',
-        checked: false,
+        header: this.$route.query.type === 'edit' ? '编辑收货地址' : '添加收货地址',
+        type: this.$route.query.type || 'add',
+        from: this.$route.query.from || '',
+        checked: getStore('editAddress') && getStore('editAddress').state && getStore('editAddress').state === 'default',
         addressModal: false,
         level: 0,
         provinces: [],
@@ -94,12 +96,12 @@
         districts: [],
         token: getStore('user') ? getStore('user').authentication_token : '',
         form: {
-          recipient: '',
-          phone: '',
-          zone_code: '',
-          address: '',
-          zone_name: '必填',
-          state: 'normal'
+          recipient: getStore('editAddress') ? getStore('editAddress').recipient : '',
+          phone: getStore('editAddress') ? getStore('editAddress').phone : '',
+          zone_code: getStore('editAddress') ? getStore('editAddress').zone_code : '',
+          address: getStore('editAddress') ? getStore('editAddress').address : '',
+          zone_name: getStore('editAddress') ? getStore('editAddress').zone_name : '必填',
+          state: getStore('editAddress') ? getStore('editAddress').state : 'normal'
         }
       }
     },
@@ -206,8 +208,8 @@
       },
       addDeliverie () {
         this.$store.dispatch('commonAction', {
-          url: '/deliveries',
-          method: 'post',
+          url: this.type === 'add' ? '/deliveries' : `/deliveries/${getStore('editAddress').id}`,
+          method: this.type === 'add' ? 'post' : 'put',
           params: {},
           data: {
             token: this.token,
@@ -226,10 +228,14 @@
         })
       },
       saveNext () {
-        if (getStore('buying')) {
-          this.$router.push({name: 'OrderPaying'})
+        if (this.from === 'manage') {
+          this.$router.go(-1)
         } else {
-          this.goBack()
+          if (getStore('buying')) {
+            this.$router.push({name: 'OrderPaying'})
+          } else {
+            this.goBack()
+          }
         }
       }
     }
