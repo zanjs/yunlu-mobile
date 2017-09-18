@@ -71,8 +71,13 @@
                   </span>
                 </div>
                 <a
+                  v-if="parseInt(item.quantity + '') < parseInt(item.price.amount + '')"
                   class="flex"
                   @click.stop.prevent.self="increase(item)">+</a>
+                <a
+                  v-if="parseInt(item.quantity + '') === parseInt(item.price.amount + '')"
+                  class="flex disabled"
+                  @click.stop.prevent.self="doNothing()">+</a>
               </div>
             </div>
           </div>
@@ -177,7 +182,10 @@
             }
           }
         }
-        this.updateShoppingCartRequest(priceItem.id, quantity)
+        // 在产品详情页，点击立即购买，此id为空
+        if (priceItem.id) {
+          this.updateShoppingCartRequest(priceItem.id, quantity)
+        }
       },
       decrease (item) {
         for (let i = 0; i < this.purchaseItems.length; i++) {
@@ -188,7 +196,10 @@
             }
           }
         }
-        this.updateShoppingCartRequest(item.id, item.quantity)
+        // 在产品详情页，点击立即购买，此id为空
+        if (item.id) {
+          this.updateShoppingCartRequest(item.id, item.quantity)
+        }
       },
       increase (item) {
         for (let i = 0; i < this.purchaseItems.length; i++) {
@@ -199,7 +210,10 @@
             }
           }
         }
-        this.updateShoppingCartRequest(item.id, item.quantity)
+        // 在产品详情页，点击立即购买，此id为空
+        if (item.id) {
+          this.updateShoppingCartRequest(item.id, item.quantity)
+        }
       },
       doNothing () {
         // 空事件，避免点击穿透而导致跳转商品详情页。
@@ -413,19 +427,20 @@
                 @include px2rem(width, 90px);
                 text-align: center;
                 background-color: $twelfth-grey;
-                border: none;
                 border-top: 1px solid $third-grey;
                 border-bottom: 1px solid $third-grey;
+                border: none;
               }
               span {
+                display: block;
                 @include px2rem(height, 50px);
                 @include px2rem(width, 90px);
                 @include px2rem(line-height, 50px);
                 text-align: center;
                 background-color: $twelfth-grey;
-                border: none;
                 border-top: 1px solid $third-grey;
                 border-bottom: 1px solid $third-grey;
+                border: none;
               }
             }
           }

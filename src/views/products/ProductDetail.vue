@@ -893,10 +893,33 @@
         })
       },
       buyNow () {
-        setStore('buying', {
-          product: this.$store.state.productDetail,
-          team: this.$store.state.productDetailTeam
-        })
+        setStore('buying', [{
+          team: {
+            company: this.$store.state.productDetailTeam.company,
+            id: this.$store.state.productDetailTeam.id,
+            logo: this.$store.state.productDetailTeam.logo
+          },
+          products: [{
+            id: null, // 进入确认订单页面后，此id为空，更改购买数量时，不需要发请求更改
+            quantity: 1,
+            price: {
+              id: null,
+              warehouse: null,
+              amount: this.currentPrice.amount,
+              money: this.currentPrice.money,
+              product: {
+                id: this.$store.state.productDetail.id,
+                name: this.$store.state.productDetail.name,
+                state: this.$store.state.productDetail.state,
+                organization_id: this.$store.state.productDetail.organization_id,
+                file_id: this.$store.state.productDetailFiles[0].id,
+                file_url: this.$store.state.productDetailFiles[0].url,
+                file_thumb_url: this.$store.state.productDetailFiles[0].thumb_urls[0]
+              }
+            },
+            checked: true
+          }]
+        }])
         if (this.hasLogin) {
           if (this.$store.state.deliveries.length === 0) {
             this.$router.push({name: 'AddAddress'})
