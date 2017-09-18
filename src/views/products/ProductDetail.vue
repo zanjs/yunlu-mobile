@@ -273,11 +273,23 @@
         </div>
       </div>
       <div
+        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
+        class="btn-box btn-shopping-car disabled">
+        <span class="font-14 white">{{shoppingCarText}}</span>
+      </div>
+      <div
+        v-else
         class="btn-box btn-shopping-car"
         @click="addShoppingCar()">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
+        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
+        class="btn-box btn-buy disabled">
+        <span class="font-14 white">立即购买</span>
+      </div>
+      <div
+        v-else
         class="btn-box btn-buy"
         @click="buyNow()">
         <span class="font-14 white">立即购买</span>
@@ -1251,6 +1263,9 @@
       span {
         font-weight: bold;
       }
+    }
+    .disabled {
+      background-color: $eighth-grey;
     }
   }
   .productdetail-product-tags {

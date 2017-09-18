@@ -121,7 +121,7 @@
         i {
           @include font-dpr(21px);
           @include pm2rem(margin, 0px, 17px, 0px, 30px);
-          color: $second-grey;
+          color: $third-dark;
         }
         span {
           @include font-dpr(12px);
