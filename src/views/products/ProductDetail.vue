@@ -1634,16 +1634,4 @@
     @include font-dpr(36px);
     @include pm2rem(margin, 0px, 0px, -20px, 0px);
   }
-  .toast-content {
-    background-color: rgba(0, 0, 0, .7);
-    @include px2rem(width, 400px);
-    box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0.5);
-    @include pm2rem(margin, -20px, 0px, -10px, 0px);
-    padding: 0 !important;
-    @include px2rem(border-radius, 14px);
-    span {
-      @include font-dpr(16px);
-      @include px2rem(margin-bottom, 30px);
-    }
-  }
 </style>

@@ -51,7 +51,7 @@
         <div class="content">
           <div class="name second-text font-13">{{i.name}}</div>
           <div class="bar">
-            <span>￥{{i.price}}</span>
+            <span>&yen;{{i.price}}</span>
             <span>x{{i.quantity}}</span>
           </div>
         </div>
@@ -193,8 +193,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid $third-grey;
-      border-bottom: 1px solid $third-grey;
       a:active {
         background-color: rgba(239, 234, 234, .5);
       }
@@ -251,8 +249,7 @@
       }
     }
     .item {
-      background-color: $twelfth-grey;
-      border-bottom: 1px solid $third-grey;
+      background-color: $tenth-grey;
       display: flex;
       align-items: center;
       @include pm2rem(padding, 18px, 30px, 18px, 30px);
@@ -308,7 +305,6 @@
     .footer {
       background-color: $white;
       @include px2rem(margin-bottom, 20px);
-      border-bottom: 1px solid $third-grey;
       .total {
         @include px2rem(height, 86px);
         @include px2rem(padding-right, 30px);
@@ -317,7 +313,7 @@
         justify-content: flex-end;
         line-height: normal;
         @include font-dpr(13px);
-        border-bottom: 1px solid $third-grey;
+        border-bottom: 1px solid $tenth-grey;
         .money {
           color: $second-dark;
         }

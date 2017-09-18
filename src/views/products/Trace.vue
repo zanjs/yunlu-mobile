@@ -13,8 +13,12 @@
         }">
       <div class="content">
         <div class="item">
-          <span>物流状态：</span>
-          <span v-if="traceInfo && traceInfo.express_state">{{traceInfo.express_state | status}}</span>
+          <span class="status">物流状态：</span>
+          <span
+            v-if="traceInfo && traceInfo.express_state"
+            class="danger">
+            {{traceInfo.express_state | status}}
+          </span>
           <span v-else></span>
         </div>
         <div class="item">
@@ -24,7 +28,11 @@
         </div>
         <div class="item">
           <span>运单编号：</span>
-          <span v-if="traceInfo && traceInfo.express_number">{{traceInfo.express_number}}</span>
+          <span
+            v-if="traceInfo && traceInfo.express_number"
+            class="danger">
+            {{traceInfo.express_number}}
+          </span>
           <span v-else></span>
         </div>
         <div class="item">
@@ -153,6 +161,18 @@
       @include px2rem(height, 130px);
       @include px2rem(width, 130px);
     }
+    .item {
+      span {
+        @include font-dpr(14px);
+        color: $third-dark;
+      }
+      .status {
+        color: $primary-dark;
+      }
+      .danger {
+        color: #FF5001;
+      }
+    }
   }
   .trace-process {
     background-color: $white;
@@ -166,7 +186,7 @@
       .wrapper {
         flex: 1;
         @include px2rem(margin-left, 65px);
-        border-left: 1px solid $third-dark;
+        border-left: 1px solid $fourth-grey;
         @include px2rem(border-width, 2px);
         position: relative;
         .content {
@@ -193,7 +213,7 @@
         @include px2rem(width, 30px);
         @include px2rem(height, 30px);
         @include px2rem(border-radius, 30px);
-        background-color: $third-dark;
+        background-color: $fourth-grey;
       }
       .first {
         border-left-color: $green;

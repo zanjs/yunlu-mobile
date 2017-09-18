@@ -394,13 +394,14 @@
       align-items: center;
       justify-content: center;
       @include px2rem(margin-bottom, 34px);
-      color: $third-dark;
       p {
         @include font-dpr(15px);
         @include pm2rem(margin, 0px, 34px, 0px, 34px);
         text-align: center;
+        color: $third-dark;
       }
       hr {
+        background-color: $second-grey;
         @include px2rem(width, 120px);
       }
     }
@@ -427,7 +428,7 @@
     background-color: rgba(0, 0, 0, .45);
     z-index: 1004 !important;
     .dialog {
-      @include px2rem(width, 500px);
+      @include px2rem(width, 562px);
       @include px2rem(top, 300px);
       background-color: $white;
       header {
@@ -459,10 +460,12 @@
         }
       }
       footer {
-        text-align: center;
-        line-height: 1;
+        @include px2rem(height, 80px);
+        line-height: normal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-top: 1px solid $second-grey;
-        @include pm2rem(padding, 20px, 0px, 20px, 0px);
         @include font-dpr(15px);
         color: $primary-dark;
       }

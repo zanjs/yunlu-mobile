@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="container full-width">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -209,19 +209,19 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         activeIndex: 1,
         allPageIndex: 1,
-        allPageSize: 20,
+        allPageSize: 2000,
         allForms: [],
         submittedPageIndex: 1,
         submittedPageSize: 20,
         submittedForms: [], // 待付款
         paidPageIndex: 1,
-        paidPageSize: 20,
+        paidPageSize: 2000,
         paidForms: [], // 待发货
         deliveredPageIndex: 1,
-        deliveredPageSize: 20,
+        deliveredPageSize: 2000,
         deliveredForms: [], // 待收货
         receiptedPageIndex: 1,
-        receiptedPageSize: 20,
+        receiptedPageSize: 2000,
         receiptedForms: [], // 待评价
         showConfirm: false,
         cancelOrderId: '',
@@ -524,6 +524,12 @@
 <style lang='scss' scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: $tenth-grey;
+  }
   .nav-bars {
     position: fixed;
     @include px2rem(top, 88px);

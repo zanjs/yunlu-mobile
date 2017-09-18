@@ -118,7 +118,7 @@
       </a>
       <a class="item">
         <label>买家留言：</label>
-        <input v-model="message">
+        <span>{{message}}</span>
       </a>
     </section>
     <section class="option-bar full-width">

@@ -47,7 +47,7 @@
             <div class="content second-text">
               <p class="font-13">{{item.name}}</p>
               <div class="flex-between">
-                <span class="font-13">￥{{parseFloat(item.price + '') * item.quantity}}</span>
+                <span class="font-13">&yen;{{parseFloat(item.price + '') * item.quantity}}</span>
                 <span class="font-13">x{{item.quantity}}</span>
               </div>
             </div>
@@ -59,7 +59,7 @@
       <div class="option">
         <div class="flex-between item">
           <span class="third-text">商品总价</span>
-          <span class="primary-text">￥{{handleTotalMoney(purchaseItems)}}</span>
+          <span class="primary-text">&yen;{{handleTotalMoney(purchaseItems)}}</span>
         </div>
         <div class="flex-between item">
           <span class="third-text">运费</span>
@@ -72,7 +72,7 @@
       </div>
       <div class="flex-between money">
         <span class="primary-text">订单总价</span>
-        <span class="num">￥{{handleTotalMoney(purchaseItems)}}</span>
+        <span class="num">&yen;{{handleTotalMoney(purchaseItems)}}</span>
       </div>
     </section>
     <section class="order-time">
@@ -413,6 +413,7 @@
         @include pm2rem(padding, 10px, 30px, 10px, 30px);
         .num {
           color: #FF5001;
+          font-weight: bold;
         }
       }
     }
