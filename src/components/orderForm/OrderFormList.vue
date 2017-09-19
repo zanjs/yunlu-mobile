@@ -38,9 +38,10 @@
         </a>
       </div>
       <a
-        class="item"
         v-for="(i, indexI) in item.items"
         :key="indexI"
+        class="item"
+        :class="{'item-last': indexI === item.items.length - 1}"
         @click="itemClick(item)">
         <img
           v-lazy="{
@@ -49,7 +50,7 @@
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }">
         <div class="content">
-          <div class="name second-text font-13">{{i.name}}</div>
+          <div class="name second-text font-15">{{i.name}}</div>
           <div class="bar">
             <span>&yen;{{i.price}}</span>
             <span>x{{i.quantity}}</span>
@@ -249,10 +250,11 @@
       }
     }
     .item {
-      background-color: $tenth-grey;
+      background-color: #F8F8F8;
       display: flex;
       align-items: center;
       @include pm2rem(padding, 18px, 30px, 18px, 30px);
+      border-bottom: 1px solid $third-grey;
       img {
         display: block;
         @include px2rem(height, 146px);
@@ -298,9 +300,12 @@
           justify-content: space-between;
           align-items: center;
           color: $second-dark;
-          @include font-dpr(13px);
+          @include font-dpr(15px);
         }
       }
+    }
+    .item-last {
+      border-bottom: none;
     }
     .footer {
       background-color: $white;

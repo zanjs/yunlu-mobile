@@ -45,10 +45,10 @@
                 loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
               }">
             <div class="content second-text">
-              <p class="font-13">{{item.name}}</p>
+              <p class="font-15">{{item.name}}</p>
               <div class="flex-between">
-                <span class="font-13">&yen;{{parseFloat(item.price + '') * item.quantity}}</span>
-                <span class="font-13">x{{item.quantity}}</span>
+                <span class="font-15">&yen;{{parseFloat(item.price + '') * item.quantity}}</span>
+                <span class="font-15">x{{item.quantity}}</span>
               </div>
             </div>
           </div>
