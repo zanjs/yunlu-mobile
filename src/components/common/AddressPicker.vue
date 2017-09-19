@@ -1,8 +1,13 @@
 <template>
   <section class="container">
     <slot name="header"></slot>
-    <template v-if="level === 0">
-      <div>
+    <transition
+      name="fade"
+      mode="out-in"
+      :appear="true">
+      <div
+        v-if="level === 0"
+        key="0">
         <a
           v-for="(p, index) in province"
           :key="index"
@@ -12,9 +17,9 @@
           <i class="iconfont icon-you font-20"></i>
         </a>
       </div>
-    </template>
-    <template v-if="level === 1">
-      <div>
+      <div
+        v-if="level === 1"
+        key="1">
         <a
           v-for="(c, index) in city"
           :key="index"
@@ -24,9 +29,9 @@
           <i class="iconfont icon-you font-20"></i>
         </a>
       </div>
-    </template>
-    <template v-if="level === 2">
-      <div>
+      <div
+        v-if="level === 2"
+        key="2">
         <a
           v-for="(d, index) in district"
           :key="index"
@@ -36,7 +41,7 @@
           <i class="iconfont icon-you font-20"></i>
         </a>
       </div>
-    </template>
+    </transition>
   </section>
 </template>
 
@@ -70,5 +75,14 @@
     i {
       color: $fifth-grey;
     }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .25s ease-in;
+  }
+  .fade-leave-active {
+    transition: opacity .25s ease-out;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>
