@@ -1520,6 +1520,7 @@
           @include px2rem(margin-right, 50px);
           word-wrap: break-word;
           word-break: break-all;
+          color: $second-dark;
         }
         i {
           color: #F4B223;
@@ -1537,6 +1538,7 @@
           @include pm2rem(margin, 0px, 50px, 0px, 60px);
           word-wrap: break-word;
           word-break: break-all;
+          color: $second-dark;
         }
       }
       .third-item {
@@ -1548,6 +1550,7 @@
           @include pm2rem(margin, 0px, 50px, 0px, 100px);
           word-wrap: break-word;
           word-break: break-all;
+          color: $second-dark;
         }
       }
     }
