@@ -40,108 +40,103 @@
         </a>
       </div>
       <div class='nav-bar-container'>
-        <transition
-          name="fade"
-          :appear="true"
-          mode="out-in">
-          <template v-if="activeIndex === 1">
-            <template v-if="allForms.length > 0">
-              <order-form-list
-                key="1"
-                :store="allForms"
-                :selectable="false"
-                @go-enterprise="goEnterprise"
-                @go-detail="goDetail"
-                @action="action">
-              </order-form-list>
-            </template>
-            <div
-              v-else
+        <template v-if="activeIndex === 1">
+          <template v-if="allForms.length > 0">
+            <order-form-list
               key="1"
-              class="no-form">
-              <img src="../../assets/emptyOrder.png">
-              <p>您还没有相关订单哦~</p>
-            </div>
+              :store="allForms"
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail"
+              @action="action">
+            </order-form-list>
           </template>
-          <template v-if="activeIndex === 2">
-            <template v-if="submittedForms.length > 0">
-              <order-form-list
-                key="2"
-                class="has-option"
-                :store="submittedForms"
-                :selectable="true"
-                @checked="checkForm"
-                @go-enterprise="goEnterprise"
-                @go-detail="goDetail"
-                @action="action">
-              </order-form-list>
-            </template>
-            <div
-              v-else
+          <div
+            v-else
+            key="1"
+            class="no-form">
+            <img src="../../assets/emptyOrder.png">
+            <p>您还没有相关订单哦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 2">
+          <template v-if="submittedForms.length > 0">
+            <order-form-list
               key="2"
-              class="no-form">
-              <img src="../../assets/emptyOrder.png">
-              <p>您还没有相关订单哦~</p>
-            </div>
+              class="has-option"
+              :store="submittedForms"
+              :selectable="true"
+              @checked="checkForm"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail"
+              @action="action">
+            </order-form-list>
           </template>
-          <template v-if="activeIndex === 3">
-            <template v-if="paidForms.length > 0">
-              <order-form-list
-                key="3"
-                :store="paidForms"
-                :selectable="false"
-                @go-enterprise="goEnterprise"
-                @go-detail="goDetail"
-                @action="action">
-              </order-form-list>
-            </template>
-            <div
-              v-else
+          <div
+            v-else
+            key="2"
+            class="no-form">
+            <img src="../../assets/emptyOrder.png">
+            <p>您还没有相关订单哦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 3">
+          <template v-if="paidForms.length > 0">
+            <order-form-list
               key="3"
-              class="no-form">
-              <img src="../../assets/emptyOrder.png">
-              <p>您还没有相关订单哦~</p>
-            </div>
+              :store="paidForms"
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail"
+              @action="action">
+            </order-form-list>
           </template>
-          <template v-if="activeIndex === 4">
-            <template v-if="deliveredForms.length > 0">
-              <order-form-list
-                key="4"
-                :store="deliveredForms"
-                :selectable="false"
-                @go-enterprise="goEnterprise"
-                @go-detail="goDetail"
-                @action="action">
-              </order-form-list>
-            </template>
-            <div
-              v-else
+          <div
+            v-else
+            key="3"
+            class="no-form">
+            <img src="../../assets/emptyOrder.png">
+            <p>您还没有相关订单哦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 4">
+          <template v-if="deliveredForms.length > 0">
+            <order-form-list
               key="4"
-              class="no-form">
-              <img src="../../assets/emptyOrder.png">
-              <p>您还没有相关订单哦~</p>
-            </div>
+              :store="deliveredForms"
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail"
+              @action="action">
+            </order-form-list>
           </template>
-          <template v-if="activeIndex === 5">
-            <template v-if="receiptedForms.length > 0">
-              <order-form-list
-                key="5"
-                :store="receiptedForms"
-                :selectable="false"
-                @go-enterprise="goEnterprise"
-                @go-detail="goDetail"
-                @action="action">
-              </order-form-list>
-            </template>
-            <div
-              v-else
+          <div
+            v-else
+            key="4"
+            class="no-form">
+            <img src="../../assets/emptyOrder.png">
+            <p>您还没有相关订单哦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 5">
+          <template v-if="receiptedForms.length > 0">
+            <order-form-list
               key="5"
-              class="no-form">
-              <img src="../../assets/emptyOrder.png">
-              <p>您还没有相关订单哦~</p>
-            </div>
+              :store="receiptedForms"
+              :selectable="false"
+              @go-enterprise="goEnterprise"
+              @go-detail="goDetail"
+              @action="action">
+            </order-form-list>
           </template>
-        </transition>
+          <div
+            v-else
+            key="5"
+            class="no-form">
+            <img src="../../assets/emptyOrder.png">
+            <p>您还没有相关订单哦~</p>
+          </div>
+        </template>
       </div>
     </section>
     <section
@@ -570,7 +565,7 @@
       text-align: center;
       p {
         @include font-dpr(15px);
-        color: $second-dark;
+        color: $third-dark;
       }
     }
   }
@@ -649,7 +644,7 @@
       position: fixed;
       @include px2rem(top, 88px);
       @include px2rem(right, 20px);
-      background-color: rgba(57, 55, 66, .8);
+      background-color: rgba(57, 55, 66, .9);
       @include px2rem(width, 270px);
       z-index: 9999 !important;
       .item {
@@ -660,7 +655,7 @@
         align-items: center;
         line-height: normal;
         color: $white;
-        border-bottom: 1px solid $tenth-grey;
+        border-bottom: 1px solid $third-dark;
         i {
           @include px2rem(margin-right, 40px);
           @include font-dpr(20px);
