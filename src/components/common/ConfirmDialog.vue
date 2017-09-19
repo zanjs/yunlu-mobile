@@ -1,6 +1,7 @@
 <template>
   <section>
-    <div class="confirm-bg full-width">
+    <div
+      class="confirm-container full-width">
       <div class="confirm-dialog absolute-horizontal">
         <div class="msg">
           {{msg}}
@@ -18,6 +19,10 @@
           </a>
         </div>
       </div>
+      <div
+        class="confirm-bg full-width"
+        id="confirm-bg">
+      </div>
     </div>
   </section>
 </template>
@@ -34,7 +39,28 @@ export default {
   methods: {
     handleClick (bool) {
       this.$emit('click', bool)
+    },
+    addTouch () {
+      document.getElementById('confirm-bg').addEventListener('touchstart', (e) => {
+        e.preventDefault()
+        this.$emit('click', false)
+      })
+      document.getElementById('confirm-bg').addEventListener('click', (e) => {
+        e.preventDefault()
+        this.$emit('click', false)
+      })
+      document.getElementById('confirm-bg').addEventListener('touchstart', (e) => {
+        e.preventDefault()
+        this.$emit('click', false)
+      })
+      document.getElementById('confirm-bg').addEventListener('click', (e) => {
+        e.preventDefault()
+        this.$emit('click', false)
+      })
     }
+  },
+  mounted () {
+    this.addTouch()
   }
 }
 </script>
@@ -42,11 +68,10 @@ export default {
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .confirm-bg {
+  .confirm-container {
     position: fixed;
     top: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, .45);
     z-index: 1002;
     .confirm-dialog {
       background-color: $white;
@@ -54,6 +79,7 @@ export default {
       @include px2rem(width, 562px);
       @include px2rem(border-radius, 14px);
       @include px2rem(height, 240px);
+      z-index: 1004;
       .msg {
         @include px2rem(height, 94px);
         text-align: center;
@@ -87,6 +113,13 @@ export default {
           @include px2rem(border-bottom-right-radius, 14px);
         }
       }
+    }
+    .confirm-bg {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, .45);
+      z-index: 1003;
     }
   }
 </style>

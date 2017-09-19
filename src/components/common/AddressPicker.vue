@@ -76,7 +76,7 @@
       color: $fifth-grey;
     }
   }
-  .fade-enter-active, .fade-leave-active {
+  .fade-enter-active {
     transition: opacity .25s ease-in;
   }
   .fade-leave-active {
