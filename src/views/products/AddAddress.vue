@@ -77,7 +77,8 @@
     <div
       v-show="addressModal"
       class="picker-bg"
-      id="picker-bg"></div>
+      id="picker-bg">
+    </div>
   </section>
 </template>
 
