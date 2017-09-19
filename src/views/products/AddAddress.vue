@@ -74,6 +74,10 @@
         <i class="iconfont icon-guanbi"></i>
       </a>
     </div>
+    <div
+      v-show="addressModal"
+      class="picker-bg"
+      id="picker-bg"></div>
   </section>
 </template>
 
@@ -237,7 +241,41 @@
             this.goBack()
           }
         }
+      },
+      addTouch () {
+        let self = this
+        document.getElementById('picker-bg').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.resetAddress()
+            self.addressModal = false
+          }, 500)
+        })
+        document.getElementById('picker-bg').addEventListener('click', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.resetAddress()
+            self.addressModal = false
+          }, 500)
+        })
+        document.getElementById('picker-bg').addEventListener('touchstart', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.resetAddress()
+            self.addressModal = false
+          }, 500)
+        })
+        document.getElementById('picker-bg').addEventListener('click', (e) => {
+          // e.preventDefault()
+          setTimeout(() => {
+            self.resetAddress()
+            self.addressModal = false
+          }, 500)
+        })
       }
+    },
+    mounted () {
+      this.addTouch()
     }
   }
 </script>
@@ -327,8 +365,10 @@
       @include px2rem(bottom, 100px);
       @include px2rem(width, 620px);
       overflow-y: scroll;
+      z-index: 1004;
     }
     .modal-header {
+      z-index: 1004;
       position: fixed;
       @include px2rem(top, 100px);
       @include px2rem(width, 620px);
@@ -347,6 +387,14 @@
         height: inherit;
         @include pm2rem(padding, 0px, 36px, 0px, 36px);
       }
+    }
+    .picker-bg {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, .5);
+      z-index: 1002;
     }
   }
 </style>
