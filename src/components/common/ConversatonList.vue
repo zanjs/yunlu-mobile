@@ -20,7 +20,7 @@
           @click="handleClick(item)">
           <img
             v-if="item.logoUrl"
-            :src="item.logoUrl">
+            :src="item.logoUrl + '-thumb'">
           <img
             v-else
             src="../../assets/userAvatarSmall.png">
