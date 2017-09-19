@@ -1562,6 +1562,7 @@
         @include px2rem(margin-right, 50px);
         word-wrap: break-word;
         word-break: break-all;
+        color: $second-dark;
       }
       i {
         color: #F4B223;
