@@ -52,10 +52,10 @@
         this.$emit('search', this.searchParams, this.orderUp)
       },
       scrollToBar () {
-        document.body.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 160 / 36
+        document.documentElement.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 160 / 36
       },
       scrollToTop () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       },
       handleClick (item) {
         this.scrollToTop()

@@ -170,7 +170,7 @@
         color: $primary-dark;
       }
       .danger {
-        color: #FF5001;
+        color: $second-red;
       }
     }
   }

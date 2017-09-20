@@ -412,7 +412,7 @@
         @include font-dpr(18px);
         @include pm2rem(padding, 10px, 30px, 10px, 30px);
         .num {
-          color: #FF5001;
+          color: $second-red;
           font-weight: bold;
         }
       }
@@ -453,8 +453,8 @@
           @include px2rem(border-radius, 8px);
         }
         .danger {
-          border-color: #FF5001;
-          color: #FF5001;
+          border-color: $second-red;
+          color: $second-red;
         }
         a:active {
           background-color: rgba(239, 234, 234, .5);

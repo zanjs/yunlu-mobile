@@ -207,7 +207,7 @@
           if (res.data.products.length === 0) {
             this.loading = false
             // 这里必须向上滚动大于等于50，否则会连发两次请求。
-            document.body.scrollTop -= 50
+            document.documentElement.scrollTop -= 50
             if (this.productPageIndex !== 1) {
               Toast({
                 message: '没有更多数据了',
@@ -350,7 +350,7 @@
       },
       goBack () {
         if (this.hasSearch) {
-          document.body.scrollTop = 0
+          document.documentElement.scrollTop = 0
           this.getProducts('', 'price')
         } else if (getStore('EnterpriseCarte_goHome')) {
           removeStore('EnterpriseCarte_goHome')
@@ -360,7 +360,7 @@
         }
       },
       goReport (item) {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         this.$router.push({name: 'Report', query: {resourceId: item.enterprise_id, resourceClass: 'product'}})
       },
       tabClick (val) {
@@ -377,7 +377,7 @@
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
         this.productPageIndex = 1
-        document.body.scrollTop = 158
+        document.documentElement.scrollTop = 158
         this.search(res)
         document.activeElement.blur()
       },
@@ -394,10 +394,10 @@
         }, this.height)
       },
       goTop () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       },
       goProductDetail (item) {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {
@@ -480,7 +480,7 @@
       }
     },
     mounted () {
-      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
       this.getEnterpriseDetail(this.teamId)
       this.handleSearchBar()
     },

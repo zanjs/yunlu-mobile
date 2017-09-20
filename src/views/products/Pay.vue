@@ -105,7 +105,7 @@
         color: $primary-dark;
       }
       .money {
-        color: #FF5001;
+        color: $second-red;
       }
     }
   }

@@ -126,7 +126,7 @@
         span {
           @include font-dpr(12px);
           @include px2rem(padding-right, 30px);
-          color: #FF5001;
+          color: $second-red;
         }
         .checked {
           color: $green;
