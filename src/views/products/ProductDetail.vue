@@ -23,13 +23,15 @@
           <swiper-slide
             v-for="(item, index) in productDetailFiles"
             :key="index">
-            <img
-              v-lazy="{
-                src: item.thumb_urls[0],
+            <div
+              v-lazy:background-image="{
+                src: item.url,
                 error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
                 loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
               }"
+              class="swipe-img"
               @click="viewFullScreenPic(productDetailFiles)">
+            </div>
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
@@ -975,33 +977,37 @@
       align-items: center;
       justify-content: center;
     }
-    img {
-      max-width: 100%;
-      max-height: 100%;
+    .swipe-img {
+      height: inherit;
       width: inherit;
       z-index: 1;
+      background-position: center center!important;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
-    img[lazy=loading] {
-      max-width: 100%;
-      max-height: 100%;
-      width: inherit;
+    .swipe-img[lazy=loading] {
       z-index: 1;
       background-position: center center!important;
       background: url("../../assets/imgLoading3.jpg");
       background-repeat: no-repeat;
-      background-size: cover;
+      background-size: contain;
     }
-    img[lazy=error] {
-      max-width: 100%;
-      max-height: 100%;
-      width: inherit;
+    .swipe-img[lazy=error] {
       z-index: 1;
       background-position: center center!important;
       background: url("../../assets/imgLoadingError.png");
       background-repeat: no-repeat;
+      background-size: contain;
+    }
+    .swipe-img[lazy=loaded] {
+      height: inherit;
+      width: inherit;
+      z-index: 1;
+      background-position: center center!important;
+      background-repeat: no-repeat;
       background-size: cover;
     }
-    img[lazy=loaded] {
+    img {
       max-width: 100%;
       max-height: 100%;
       width: inherit;
