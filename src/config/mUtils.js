@@ -51,7 +51,7 @@ export const showBack = (callback, height) => {
   // 判断是否达到目标点
   const showBackFun = () => {
     let self = this
-    if (document.body.scrollTop > height) {
+    if (document.documentElement.scrollTop > height) {
       self.callback(true)
     } else {
       self.callback(false)
@@ -59,10 +59,10 @@ export const showBack = (callback, height) => {
   }
 
   const moveEnd = () => {
-    oldScrollTop = document.body.scrollTop
+    oldScrollTop = document.documentElement.scrollTop
     requestFram = requestAnimationFrame(() => {
-      if (document.body.scrollTop !== oldScrollTop) {
-        oldScrollTop = document.body.scrollTop
+      if (document.documentElement.scrollTop !== oldScrollTop) {
+        oldScrollTop = document.documentElement.scrollTop
         moveEnd()
       } else {
         cancelAnimationFrame(requestFram)

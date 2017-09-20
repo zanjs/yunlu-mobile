@@ -116,11 +116,11 @@
         if (res.data) {
           this.hasSearch = q !== ''
           if (this.enterprisePageIndex === 1) {
-            document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
             state.allEnterprises = res.data.enterprises
           } else {
             if (res.data.enterprises.length === 0) {
-              // document.body.scrollTop -= 41
+              // document.documentElement.scrollTop -= 41
               Toast({
                 message: '没有更多数据了',
                 duration: 1000
@@ -178,7 +178,7 @@
         }
       },
       goTop () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       },
       handleGoTopBtn () {
         showBack((status) => {
