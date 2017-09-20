@@ -285,7 +285,7 @@
             // this.queryParams = ''
             if (res.data.products.length === 0) {
               this.productLoading = false
-              document.body.scrollTop -= 50
+              document.documentElement.scrollTop -= 50
               if (this.productPageIndex !== 1) {
                 Toast({
                   message: '没有更多数据了',
@@ -457,7 +457,7 @@
               state.enterpriseMembers = res.data.members
             } else {
               if (res.data.members.length === 0) {
-                document.body.scrollTop -= 50
+                document.documentElement.scrollTop -= 50
                 if (this.enterprisePageIndex !== 1) {
                   Toast({
                     message: '没有更多数据了',
@@ -495,7 +495,7 @@
               this.alumniBusiness = res.data.enterprises
             } else {
               if (res.data.enterprises.length === 0) {
-                document.body.scrollTop -= 50
+                document.documentElement.scrollTop -= 50
                 if (this.personPageIndex !== 1) {
                   Toast({
                     message: '没有更多数据了',
@@ -520,7 +520,7 @@
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
-          document.body.scrollTop = 0
+          document.documentElement.scrollTop = 0
           this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
           this.enterprisePageIndex = 1
           this.personPageIndex = 1
@@ -533,10 +533,10 @@
         }
       },
       goTop () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       },
       goReport () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         this.$router.push({name: 'Report', query: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
@@ -590,7 +590,7 @@
       },
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
-        document.body.scrollTop = 158
+        document.documentElement.scrollTop = 158
         this.search(res)
       },
       handleSearchBar () {
@@ -611,7 +611,7 @@
         }, this.height)
       },
       goProductDetail (item) {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {
