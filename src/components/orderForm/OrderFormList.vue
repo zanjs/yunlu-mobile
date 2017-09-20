@@ -57,7 +57,9 @@
           </div>
         </div>
       </a>
-      <div class="footer">
+      <div
+        class="footer"
+        :class="{'last': index === store.length - 1}">
         <div class="total">
           <span class="third-text">共计{{handleTotoalCount(item.items)}}件商品  合计：</span>
           <span class="money font-16">￥{{handleTotalMoney(item.items)}}</span>
@@ -350,6 +352,9 @@
           background-color: rgba(239, 234, 234, .5);
         }
       }
+    }
+    .last {
+      margin-bottom: 0;
     }
   }
 </style>

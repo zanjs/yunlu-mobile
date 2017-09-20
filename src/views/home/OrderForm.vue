@@ -41,7 +41,9 @@
       </div>
       <div class='nav-bar-container'>
         <template v-if="activeIndex === 1">
-          <template v-if="allForms.length > 0">
+          <div
+            v-if="allForms.length > 0"
+            key="1">
             <order-form-list
               key="1"
               :store="allForms"
@@ -50,7 +52,22 @@
               @go-detail="goDetail"
               @action="action">
             </order-form-list>
-          </template>
+            <mugen-scroll
+              key="allForms"
+              :handler="loadAllFormsBottom"
+              :handle-on-mount="false"
+              :should-handle="!allLoading">
+              <div
+                v-show="allLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
           <div
             v-else
             key="1"
@@ -60,7 +77,9 @@
           </div>
         </template>
         <template v-if="activeIndex === 2">
-          <template v-if="submittedForms.length > 0">
+          <div
+            v-if="submittedForms.length > 0"
+            key="2">
             <order-form-list
               key="2"
               class="has-option"
@@ -71,7 +90,22 @@
               @go-detail="goDetail"
               @action="action">
             </order-form-list>
-          </template>
+            <mugen-scroll
+              key="submittedForms"
+              :handler="loadSubmittedFormsBottom"
+              :handle-on-mount="false"
+              :should-handle="!submittedLoading">
+              <div
+                v-show="submittedLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
           <div
             v-else
             key="2"
@@ -81,7 +115,9 @@
           </div>
         </template>
         <template v-if="activeIndex === 3">
-          <template v-if="paidForms.length > 0">
+          <div
+            v-if="paidForms.length > 0"
+            key="3">
             <order-form-list
               key="3"
               :store="paidForms"
@@ -90,7 +126,22 @@
               @go-detail="goDetail"
               @action="action">
             </order-form-list>
-          </template>
+            <mugen-scroll
+              key="paidForms"
+              :handler="loadPaidFormsBottom"
+              :handle-on-mount="false"
+              :should-handle="!paidLoading">
+              <div
+                v-show="paidLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
           <div
             v-else
             key="3"
@@ -100,7 +151,9 @@
           </div>
         </template>
         <template v-if="activeIndex === 4">
-          <template v-if="deliveredForms.length > 0">
+          <div
+            v-if="deliveredForms.length > 0"
+            key="4">
             <order-form-list
               key="4"
               :store="deliveredForms"
@@ -109,7 +162,22 @@
               @go-detail="goDetail"
               @action="action">
             </order-form-list>
-          </template>
+            <mugen-scroll
+              key="deliveredForms"
+              :handler="loadDeliveredFormsBottom"
+              :handle-on-mount="false"
+              :should-handle="!deliveredLoading">
+              <div
+                v-show="deliveredLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
           <div
             v-else
             key="4"
@@ -119,7 +187,9 @@
           </div>
         </template>
         <template v-if="activeIndex === 5">
-          <template v-if="receiptedForms.length > 0">
+          <div
+            v-if="receiptedForms.length > 0"
+            key="5">
             <order-form-list
               key="5"
               :store="receiptedForms"
@@ -128,7 +198,22 @@
               @go-detail="goDetail"
               @action="action">
             </order-form-list>
-          </template>
+            <mugen-scroll
+              key="receiptedForms"
+              :handler="loadReceiptedFormsBottom"
+              :handle-on-mount="false"
+              :should-handle="!receiptedLoading">
+              <div
+                v-show="receiptedLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
           <div
             v-else
             key="5"
@@ -195,6 +280,7 @@
   import OrderFormList from '../../components/orderForm/OrderFormList'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
+  import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -203,20 +289,25 @@
         iconClass: 'icon-fenlei',
         token: getStore('user') ? getStore('user').authentication_token : '',
         activeIndex: 1,
+        allLoading: false,
         allPageIndex: 1,
-        allPageSize: 2000,
+        allPageSize: 20,
         allForms: [],
+        submittedLoading: false,
         submittedPageIndex: 1,
         submittedPageSize: 20,
         submittedForms: [], // 待付款
+        paidLoading: false,
         paidPageIndex: 1,
-        paidPageSize: 2000,
+        paidPageSize: 20,
         paidForms: [], // 待发货
+        deliveredLoading: false,
         deliveredPageIndex: 1,
-        deliveredPageSize: 2000,
+        deliveredPageSize: 20,
         deliveredForms: [], // 待收货
+        receiptedLoading: false,
         receiptedPageIndex: 1,
-        receiptedPageSize: 2000,
+        receiptedPageSize: 20,
         receiptedForms: [], // 待评价
         showConfirm: false,
         cancelOrderId: '',
@@ -229,7 +320,8 @@
     components: {
       CommonHeader,
       OrderFormList,
-      ConfirmDialog
+      ConfirmDialog,
+      MugenScroll
     },
     methods: {
       goBack () {
@@ -264,19 +356,24 @@
       // 处理返回的订单
       handleOrderForms (index, orderForms) {
         if (index === 0) {
-          this.allForms = this.orderFormsFilter(orderForms)
+          this.allForms = [...this.allForms, ...this.orderFormsFilter(orderForms)]
+          this.allLoading = false
           this.getOrderForms(1, this.submittedPageIndex, this.submittedPageSize)
         } else if (index === 1) {
-          this.submittedForms = this.orderFormsFilter(orderForms)
+          this.submittedForms = [...this.submittedForms, ...this.orderFormsFilter(orderForms)]
+          this.submittedLoading = false
           this.getOrderForms(2, this.paidPageIndex, this.paidPageSize)
         } else if (index === 2) {
-          this.paidForms = this.orderFormsFilter(orderForms)
+          this.paidForms = [...this.paidForms, ...this.orderFormsFilter(orderForms)]
+          this.paidLoading = false
           this.getOrderForms(3, this.deliveredPageIndex, this.deliveredPageSize)
         } else if (index === 3) {
-          this.deliveredForms = this.orderFormsFilter(orderForms)
+          this.deliveredForms = [...this.deliveredForms, ...this.orderFormsFilter(orderForms)]
+          this.deliveredLoading = false
           this.getOrderForms(4, this.receiptedPageIndex, this.receiptedPageSize)
         } else if (index === 4) {
-          this.receiptedForms = this.orderFormsFilter(orderForms)
+          this.receiptedForms = [...this.receiptedForms, ...this.orderFormsFilter(orderForms)]
+          this.receiptedLoading = false
         } else {
           console.error('获取订单信息失败')
         }
@@ -322,7 +419,30 @@
         }
         this.checkAll = this.hasChecked = !bool
       },
+      handleLoading (index, bool) {
+        switch (index) {
+          case 0:
+            this.allLoading = bool
+            break
+          case 1:
+            this.submittedLoading = bool
+            break
+          case 2:
+            this.paidLoading = bool
+            break
+          case 3:
+            this.deliveredLoading = bool
+            break
+          case 4:
+            this.receiptedLoading = bool
+            break
+          default:
+            this.allLoading = bool
+            break
+        }
+      },
       getOrderForms (index, pageIndex, pageSize) {
+        this.handleLoading(index, true)
         this.$store.dispatch('commonAction', {
           url: '/order_forms',
           method: 'get',
@@ -335,7 +455,20 @@
           data: {},
           target: this,
           resolve: (state, res) => {
-            this.handleOrderForms(index, res.data.order_forms)
+            if (res.data.order_forms.length === 0) {
+              if (pageIndex !== 1) {
+                Toast({
+                  message: '没有更多数据了',
+                  duration: 1000
+                })
+              }
+              this.$nextTick(() => {
+                document.documentElement.scrollTop -= 50
+              })
+              this.handleLoading(index, false)
+            } else {
+              this.handleOrderForms(index, res.data.order_forms)
+            }
           },
           reject: () => {
           }
@@ -507,6 +640,26 @@
       },
       payAll () {
         this.notOpen()
+      },
+      loadAllFormsBottom () {
+        this.allPageIndex += 1
+        this.getOrderForms(0, this.allPageIndex, this.allPageSize)
+      },
+      loadSubmittedFormsBottom () {
+        this.submittedPageIndex += 1
+        this.getOrderForms(1, this.submittedPageIndex, this.submittedPageSize)
+      },
+      loadPaidFormsBottom () {
+        this.paidPageIndex += 1
+        this.getOrderForms(2, this.paidPageIndex, this.paidPageSize)
+      },
+      loadDeliveredFormsBottom () {
+        this.deliveredPageIndex += 1
+        this.getOrderForms(3, this.deliveredPageIndex, this.deliveredPageSize)
+      },
+      loadReceiptedFormsBottom () {
+        this.receiptedPageIndex += 1
+        this.getOrderForms(4, this.receiptedPageIndex, this.receiptedPageSize)
       }
     },
     mounted () {
@@ -553,6 +706,19 @@
   }
   .nav-bar-container {
     @include px2rem(padding-top, 178px);
+    @include px2rem(margin-bottom, 10px);
+    .loading {
+      height: 40px;
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
+      }
+    }
     .has-option {
       @include px2rem(margin-bottom, 120px);
     }
