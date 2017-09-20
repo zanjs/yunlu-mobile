@@ -189,7 +189,7 @@
       justify-content: center;
       align-items: center;
       flex: 1;
-      background-color: #FF5001;
+      background-color: $second-red;
       color: $white;
       @include font-dpr(18px);
     }

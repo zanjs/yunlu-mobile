@@ -180,7 +180,7 @@
               this.folders = res.data.gallery
             } else {
               if (res.data.gallery.length === 0) {
-                document.body.scrollTop -= 50
+                document.documentElement.scrollTop -= 50
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000

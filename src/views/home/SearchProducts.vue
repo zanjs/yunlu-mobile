@@ -169,7 +169,7 @@
         })
         if (res.data) {
           if (res.data.products.length === 0) {
-            document.body.scrollTop -= 20
+            document.documentElement.scrollTop -= 20
             this.loading = false
             this.hasSearch = true
             this.products = [...res.data.products, ...this.products]
@@ -253,7 +253,7 @@
         }
       },
       goTop () {
-        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       },
       handleSearchBtn () {
         // 每次搜索需重置分页索引,并重置产品列表
