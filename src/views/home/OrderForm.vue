@@ -546,8 +546,8 @@
     }
     .selected {
       @include px2rem(border-bottom-width, 8px);
-      border-bottom-color: #FF5001;
-      color: #FF5001;
+      border-bottom-color: $second-red;
+      color: $second-red;
       border-bottom-style: solid;
     }
   }
@@ -611,8 +611,8 @@
       @include px2rem(border-radius, 8px);
     }
     .danger {
-      border-color: #FF5001;
-      color: #FF5001;
+      border-color: $second-red;
+      color: $second-red;
     }
     .disabled {
       color: $eighth-grey;

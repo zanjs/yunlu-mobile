@@ -1190,7 +1190,7 @@
           width: inherit;
           .title {
             font-weight: 400;
-            color: #ff5001;
+            color: $second-red;
             width: 100%;
           }
           .info {

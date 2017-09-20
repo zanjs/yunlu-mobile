@@ -245,7 +245,7 @@
         .tips {
           @include px2rem(margin-right, 40px);
           line-height: normal;
-          color: #FF5001;
+          color: $second-red;
         }
       }
     }
@@ -343,8 +343,8 @@
           @include px2rem(border-radius, 8px);
         }
         .danger {
-          border-color: #FF5001;
-          color: #FF5001;
+          border-color: $second-red;
+          color: $second-red;
         }
         a:active {
           background-color: rgba(239, 234, 234, .5);

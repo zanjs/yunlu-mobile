@@ -422,7 +422,7 @@
           color: $primary-dark;
         }
         .danger {
-          color: #FF5001;
+          color: $second-red;
         }
       }
     }
@@ -510,7 +510,7 @@
                 border: 1px solid $third-grey;
                 @include px2rem(height, 50px);
                 @include px2rem(width, 50px);
-                color: #FF5001;
+                color: $second-red;
               }
               .disabled {
                 color: $third-grey;
