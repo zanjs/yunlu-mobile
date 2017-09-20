@@ -41,6 +41,24 @@ export const removeAllStore = () => {
 }
 
 /**
+ * 获取scrollTop的值，兼容所有浏览器
+ */
+export const getScrollTop = () => {
+  let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+  return scrollTop
+}
+
+/**
+ * 设置scrollTop的值，兼容所有浏览器
+ * @param {Number} scrollTop 距离窗口顶部的高度
+ */
+export const setScrollTop = (scrollTop) => {
+  document.documentElement.scrollTop = scrollTop
+  window.pageYOffset = scrollTop
+  document.body.scrollTop = scrollTop
+}
+
+/**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点
  */
 export const showBack = (callback, height) => {
@@ -51,7 +69,7 @@ export const showBack = (callback, height) => {
   // 判断是否达到目标点
   const showBackFun = () => {
     let self = this
-    if (document.documentElement.scrollTop > height) {
+    if (getScrollTop() > height) {
       self.callback(true)
     } else {
       self.callback(false)
@@ -59,10 +77,10 @@ export const showBack = (callback, height) => {
   }
 
   const moveEnd = () => {
-    oldScrollTop = document.documentElement.scrollTop
+    oldScrollTop = getScrollTop()
     requestFram = requestAnimationFrame(() => {
-      if (document.documentElement.scrollTop !== oldScrollTop) {
-        oldScrollTop = document.documentElement.scrollTop
+      if (getScrollTop() !== oldScrollTop) {
+        oldScrollTop = getScrollTop()
         moveEnd()
       } else {
         cancelAnimationFrame(requestFram)

@@ -33,6 +33,7 @@
 </template>
 
 <script>
+  import { getScrollTop, setScrollTop } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -52,10 +53,10 @@
         this.$emit('search', this.searchParams, this.orderUp)
       },
       scrollToBar () {
-        document.documentElement.scrollTop = parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 160 / 36
+        setScrollTop(parseFloat(document.documentElement.style.fontSize.replace('px', '')) * 160 / 36)
       },
       scrollToTop () {
-        document.documentElement.scrollTop = 0
+        setScrollTop(0)
       },
       handleClick (item) {
         this.scrollToTop()
