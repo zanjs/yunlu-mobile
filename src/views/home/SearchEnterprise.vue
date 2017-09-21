@@ -162,6 +162,8 @@
           this.$router.push({name: 'Alumni', params: {id: item.organization.id}})
         } else if (item.organization.service.aliaz === 'class') {
           this.$router.push({name: 'Class', params: {id: item.organization.id}})
+        } else if (item.organization.service.aliaz === 'mall') {
+          this.$router.push({name: 'Mall', params: {id: item.organization.id}})
         } else {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.organization.id}})
         }
