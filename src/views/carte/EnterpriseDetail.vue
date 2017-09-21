@@ -85,7 +85,7 @@
         <div
           v-if="comityDetail && comityDetail.organization &&  comityDetail.organization.guild_organizations && comityDetail.organization.guild_organizations.length > 0"
           class="link-container font-14">
-          <div class="label">社会认证</div>
+          <div class="label">{{comityDetail && comityDetail.organization && comityDetail.organization.service && comityDetail.organization.service.aliaz === 'mall' ? '运营主体' : '社会认证'}}</div>
           <div class="link-item flex-1">
             <div
               v-for="(item, index) in comityDetail.organization.guild_organizations"
@@ -99,6 +99,14 @@
               </a>
             </div>
           </div>
+        </div>
+        <div
+          v-if="comityDetail && comityDetail.organization && comityDetail.organization.service && comityDetail.organization.service.aliaz === 'mall'"
+          class="item">
+          <span class="label">有效期</span>
+          <span class="content">
+            从{{comityDetail.organization.from}}至{{comityDetail.organization.to}}止
+          </span>
         </div>
       </div>
     </div>
