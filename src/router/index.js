@@ -36,7 +36,7 @@ const Help = resolve => require(['../views/user/Help'], resolve)
 const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
 const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
 const Class = resolve => require(['../views/carte/Class'], resolve)
-const Mall = resolve => require(['../views/carte/mall'], resolve)
+const Mall = resolve => require(['../views/carte/Mall'], resolve)
 
 Vue.use(Router)
 
