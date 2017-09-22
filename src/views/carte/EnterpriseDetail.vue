@@ -179,6 +179,8 @@
           this.$router.push({name: 'ComityCarte', params: {id: item.id}})
         } else if (item.service_name === '校友会') {
           this.$router.push({name: 'Alumni', params: {id: item.id}})
+        } else if (item.service_name === '商家') {
+          this.$router.push({name: 'Mall', params: {id: item.id}})
         } else {
           this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
         }
