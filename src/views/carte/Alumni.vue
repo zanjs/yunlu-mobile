@@ -284,6 +284,7 @@
           resolve: (state, res) => {
             this.hasSearch = q !== ''
             // this.queryParams = ''
+            this.getEnterpriseDocument()
             if (res.data.products.length === 0) {
               this.productLoading = false
               document.documentElement.scrollTop -= 50
@@ -351,7 +352,6 @@
               state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
               state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
             }
-            this.getEnterpriseDocument()
           },
           reject: (state, error) => {
             this.productLoading = false
