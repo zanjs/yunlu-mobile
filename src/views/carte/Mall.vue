@@ -544,8 +544,8 @@
           this.enterprisePageIndex = 1
           this.personPageIndex = 1
           this.getProducts('', 'price')
-        } else if (getStore('ComityCarte_goHome')) {
-          removeStore('ComityCarte_goHome')
+        } else if (getStore('Mall_goHome')) {
+          removeStore('Mall_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
