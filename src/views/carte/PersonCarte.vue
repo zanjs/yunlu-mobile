@@ -390,6 +390,8 @@
           this.$router.push({name: 'Alumni', params: {id: item.team_id}})
         } else if (item.type === 'mall') {
           this.$router.push({name: 'Mall', params: {id: item.team_id}})
+        } else {
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
         }
       },
       goFolder (item) {
