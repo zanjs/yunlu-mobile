@@ -52,6 +52,9 @@
             <img
               v-if="item.type === 'school'"
               src="../../assets/alumniLogo.png">
+            <img
+              v-if="item.type === 'mall'"
+              src="../../assets/mallLogo.png">
             <span class="ellipsis second-text font-13">{{item.name}}</span>
           </a>
         </div>
@@ -390,6 +393,8 @@
           this.$router.push({name: 'Alumni', params: {id: item.team_id}})
         } else if (item.type === 'mall') {
           this.$router.push({name: 'Mall', params: {id: item.team_id}})
+        } else {
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.team_id}})
         }
       },
       goFolder (item) {
