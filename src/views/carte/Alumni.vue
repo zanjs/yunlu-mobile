@@ -232,7 +232,8 @@
         message: null,
         productLoading: false,
         enterpriseLoading: false,
-        personLoading: false
+        personLoading: false,
+        alumniBusiness: []
       }
     },
     components: {
