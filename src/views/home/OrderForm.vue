@@ -278,7 +278,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
@@ -463,7 +463,7 @@
                 })
               }
               this.$nextTick(() => {
-                document.documentElement.scrollTop -= 50
+                setScrollTop(getScrollTop() - 50)
               })
               this.handleLoading(index, false)
             } else {

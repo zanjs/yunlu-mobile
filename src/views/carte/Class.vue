@@ -195,7 +195,7 @@
     </div>
     <back-to-top
       v-if="showGoTopBtn"
-      @click="goTop()">
+      @click="goScroll(0)">
     </back-to-top>
   </section>
 </template>
@@ -208,7 +208,7 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -302,7 +302,7 @@
             this.getEnterpriseDocument()
             if (res.data.products.length === 0) {
               this.productLoading = false
-              document.documentElement.scrollTop -= 50
+              setScrollTop(getScrollTop() - 50)
               if (this.productPageIndex !== 1) {
                 Toast({
                   message: '没有更多数据了',
@@ -473,7 +473,7 @@
               state.enterpriseMembers = res.data.members
             } else {
               if (res.data.members.length === 0) {
-                document.documentElement.scrollTop -= 50
+                setScrollTop(getScrollTop() - 50)
                 if (this.enterprisePageIndex !== 1) {
                   Toast({
                     message: '没有更多数据了',
@@ -514,7 +514,7 @@
               state.personMembers = res.data.preps
             } else {
               if (res.data.preps.length === 0) {
-                document.documentElement.scrollTop -= 50
+                setScrollTop(getScrollTop() - 50)
                 if (this.personPageIndex !== 1) {
                   Toast({
                     message: '没有更多数据了',
@@ -539,7 +539,7 @@
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
-          document.documentElement.scrollTop = 0
+          setScrollTop(0)
           this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
           this.enterprisePageIndex = 1
           this.personPageIndex = 1
@@ -551,11 +551,10 @@
           this.$router.go(-1)
         }
       },
-      goTop () {
-        document.documentElement.scrollTop = 0
+      goScroll (scroll = 0) {
+        setScrollTop(scroll)
       },
       goReport () {
-        document.documentElement.scrollTop = 0
         this.$router.push({name: 'Report', query: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
@@ -609,7 +608,7 @@
       },
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
-        document.documentElement.scrollTop = 158
+        setScrollTop(158)
         this.search(res)
       },
       handleSearchBar () {
@@ -630,7 +629,6 @@
         }, this.height)
       },
       goProductDetail (item) {
-        document.documentElement.scrollTop = 0
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {

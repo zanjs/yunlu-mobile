@@ -36,7 +36,7 @@
         </mugen-scroll>
         <back-to-top
           v-if="showGoTopBtn"
-          @click="goTop()">
+          @click="goScroll(0)">
         </back-to-top>
       </template>
       <template v-if="allEnterprises && allEnterprises.length === 0">
@@ -57,7 +57,7 @@
   import List from '../../components/enterprise/List'
   import BackToTop from '../../components/common/BackToTop'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore, showBack } from '../../config/mUtils'
+  import { getStore, removeStore, showBack, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -116,11 +116,11 @@
         if (res.data) {
           this.hasSearch = q !== ''
           if (this.enterprisePageIndex === 1) {
-            document.documentElement.scrollTop = 0
+            setScrollTop(0)
             state.allEnterprises = res.data.enterprises
           } else {
             if (res.data.enterprises.length === 0) {
-              // document.documentElement.scrollTop -= 41
+              setScrollTop(getScrollTop() - 41)
               Toast({
                 message: '没有更多数据了',
                 duration: 1000
@@ -179,8 +179,9 @@
           this.$router.go(-1)
         }
       },
-      goTop () {
-        document.documentElement.scrollTop = 0
+      // 滚动到页面指定位置
+      goScroll (scroll = 0) {
+        setScrollTop(scroll)
       },
       handleGoTopBtn () {
         showBack((status) => {
@@ -193,7 +194,6 @@
       }
     },
     mounted () {
-      this.goTop()
       this.getServices()
       this.handleGoTopBtn()
     },
