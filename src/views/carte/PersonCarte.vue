@@ -144,7 +144,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
@@ -312,7 +312,7 @@
               this.folders = res.data.gallery
             } else {
               if (res.data.gallery.length === 0) {
-                document.documentElement.scrollTop -= 50
+                setScrollTop(getScrollTop() - 50)
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000

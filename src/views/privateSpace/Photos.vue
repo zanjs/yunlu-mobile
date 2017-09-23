@@ -79,7 +79,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
@@ -185,7 +185,7 @@
               this.photos = res.data.photos
             } else {
               if (res.data.photos.length === 0) {
-                document.documentElement.scrollTop -= 10
+                setScrollTop(getScrollTop() - 10)
                 if (this.pageIndex !== 1) {
                   Toast({
                     message: '没有更多数据了',

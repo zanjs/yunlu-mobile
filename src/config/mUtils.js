@@ -52,10 +52,12 @@ export const getScrollTop = () => {
  * 设置scrollTop的值，兼容所有浏览器
  * @param {Number} scrollTop 距离窗口顶部的高度
  */
-export const setScrollTop = (scrollTop) => {
-  document.documentElement.scrollTop = scrollTop
-  window.pageYOffset = scrollTop
-  document.body.scrollTop = scrollTop
+export const setScrollTop = (scrollTop = 0) => {
+  if (document.body.scrollTop === 0) {
+    document.documentElement.scrollTop = scrollTop
+  } else {
+    document.body.scrollTop = scrollTop
+  }
 }
 
 /**

@@ -85,7 +85,7 @@
         </transition>
         <back-to-top
           v-if="showGoTopBtn"
-          @click="goTop()">
+          @click="goScroll(0)">
         </back-to-top>
       </div>
     </div>
@@ -121,7 +121,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, setStore, showBack, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
@@ -207,7 +207,7 @@
           if (res.data.products.length === 0) {
             this.loading = false
             // 这里必须向上滚动大于等于50，否则会连发两次请求。
-            document.documentElement.scrollTop -= 50
+            setScrollTop(getScrollTop() - 50)
             if (this.productPageIndex !== 1) {
               Toast({
                 message: '没有更多数据了',
@@ -350,7 +350,7 @@
       },
       goBack () {
         if (this.hasSearch) {
-          document.documentElement.scrollTop = 0
+          setScrollTop(0)
           this.getProducts('', 'price')
         } else if (getStore('EnterpriseCarte_goHome')) {
           removeStore('EnterpriseCarte_goHome')
@@ -360,7 +360,6 @@
         }
       },
       goReport (item) {
-        document.documentElement.scrollTop = 0
         this.$router.push({name: 'Report', query: {resourceId: item.enterprise_id, resourceClass: 'product'}})
       },
       tabClick (val) {
@@ -377,7 +376,7 @@
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
         this.productPageIndex = 1
-        document.documentElement.scrollTop = 158
+        setScrollTop(158)
         this.search(res)
         document.activeElement.blur()
       },
@@ -393,11 +392,10 @@
           }
         }, this.height)
       },
-      goTop () {
-        document.documentElement.scrollTop = 0
+      goScroll (scroll) {
+        setScrollTop(scroll)
       },
       goProductDetail (item) {
-        document.documentElement.scrollTop = 0
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       goEnterpriseDetail (id) {
@@ -480,7 +478,6 @@
       }
     },
     mounted () {
-      document.documentElement.scrollTop = 0
       this.getEnterpriseDetail(this.teamId)
       this.handleSearchBar()
     },
