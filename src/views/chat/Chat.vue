@@ -196,7 +196,7 @@
         }
         this.msgs.push(tmpObj)
         this.$nextTick(() => {
-          document.documentElement.scrollTop = document.body.scrollHeight
+          document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
         })
       },
       async init () {
@@ -253,7 +253,7 @@
             }
             this.msgs.push(tmpObj)
             this.$nextTick(() => {
-              document.documentElement.scrollTop = document.body.scrollHeight
+              document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
             })
           } else {
             // 非当前会话，不做处理
@@ -294,7 +294,7 @@
           }
         }
         this.$nextTick(() => {
-          document.documentElement.scrollTop = document.body.scrollHeight
+          document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
         })
       },
       goBack () {

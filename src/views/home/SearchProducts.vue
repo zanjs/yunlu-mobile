@@ -48,7 +48,7 @@
         </mugen-scroll>
         <back-to-top
           v-if="showGoTopBtn"
-          @click="goTop()">
+          @click="goScroll(0)">
         </back-to-top>
       </template>
       <template v-if="hasSearch && products && products.length === 0">
@@ -74,7 +74,7 @@
   import ProductListMode from '../../components/product/List'
   import BackToTop from '../../components/common/BackToTop'
   import SearchProductsOrder from '../../components/product/Order'
-  import { getStore, removeStore, showBack } from '../../config/mUtils'
+  import { getStore, removeStore, showBack, getScrollTop, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -169,7 +169,7 @@
         })
         if (res.data) {
           if (res.data.products.length === 0) {
-            document.documentElement.scrollTop -= 20
+            setScrollTop(getScrollTop() - 20)
             this.loading = false
             this.hasSearch = true
             this.products = [...res.data.products, ...this.products]
@@ -252,8 +252,8 @@
           this.$router.go(-1)
         }
       },
-      goTop () {
-        document.documentElement.scrollTop = 0
+      goScroll (scroll) {
+        setScrollTop(scroll)
       },
       handleSearchBtn () {
         // 每次搜索需重置分页索引,并重置产品列表

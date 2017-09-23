@@ -20,6 +20,7 @@ router.beforeEach((to, from, next) => {
   store.dispatch('resetState')
   next()
   document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
 })
 
 Vue.use(realtime)
