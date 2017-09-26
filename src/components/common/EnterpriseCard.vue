@@ -135,7 +135,7 @@
     },
     computed: {
       hasLink () {
-        return (this.products && this.products.length > 0 && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || (this.store && ((this.store.mobile && !isPc()) || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+        return (this.products && this.products.length > 0 && this.store && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || (this.store && ((this.store.mobile && !isPc()) || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
       }
     }
   }
