@@ -83,6 +83,12 @@
             </div>
           </template>
         </transition>
+        <favorite-btn
+          v-if="teams"
+          :single="!showGoTopBtn"
+          :text="favoratesText"
+          @click="favoriteAction()">
+        </favorite-btn>
         <back-to-top
           v-if="showGoTopBtn"
           @click="goScroll(0)">
@@ -127,6 +133,7 @@
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import BackToTop from '../../components/common/BackToTop'
+  import FavoriteBtn from '../../components/common/FavoriteBtn'
   import { Toast, MessageBox } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -139,6 +146,7 @@
         iconClass: 'icon-jubao',
         height: 153,
         hasLogin: !!getStore('user'),
+        token: getStore('user') ? getStore('user').authentication_token : null,
         hasSearch: false,
         showProduct: true,
         showSearchBar: false,
@@ -159,7 +167,9 @@
         showGoTopBtn: false,
         showDialog: false,
         message: null,
-        loading: false
+        loading: false,
+        favoratesText: '收藏',
+        hasAddFavorites: false
       }
     },
     components: {
@@ -172,10 +182,11 @@
       Search,
       Order,
       BackToTop,
+      FavoriteBtn,
       MugenScroll
     },
     methods: {
-      async getEnterpriseDetail (teamId = this.teamId) {
+      async getTeams (teamId = this.teamId) {
         let {state, res} = await requestFn({
           url: '/links/teams',
           params: {
@@ -185,6 +196,7 @@
         if (res.data) {
           state.teams = res.data.teams[0]
           this.getProducts()
+          this.handleFavoriteStatus(res.data.teams[0].enterprise_id)
         }
       },
       async getProducts (q = this.queryParams, order = this.productOrder) {
@@ -475,10 +487,71 @@
       },
       closeDialog () {
         this.showDialog = false
+      },
+      favoriteAction () {
+        if (!this.hasLogin) {
+          setStore('beforeLogin', 'true')
+          this.$router.push({name: 'Login'})
+        } else if (!this.hasAddFavorites) {
+          this.favoriteRequest()
+        } else {
+          Toast({
+            message: '您已将该企业添加收藏，无需重复添加',
+            duration: 1000
+          })
+        }
+      },
+      favoriteRequest () {
+        this.$store.dispatch('commonAction', {
+          url: '/favorites',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            team_id: this.teamId
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorites && res.data.favorites.id === parseInt(this.teamId)) {
+              this.hasAddFavorites = true
+              this.favoratesText = '已收藏'
+              Toast({
+                message: '你已成功收藏该企业',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+                duration: 1000
+              })
+            } else {
+              Toast({
+                message: '收藏该企业失败',
+                duration: 1000
+              })
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleFavoriteStatus (id) {
+        if (this.hasLogin) {
+          this.getTeamDetail(id)
+        }
+      },
+      async getTeamDetail (id) {
+        let { res } = await requestFn({
+          url: `/enterprises/${id}/details`,
+          params: {
+            token: this.token
+          }
+        })
+        if (res.data) {
+          this.hasAddFavorites = res.data.enterprises.organization.favorable
+          this.favoratesText = res.data.enterprises.organization.favorable ? '已收藏' : '收藏'
+        }
       }
     },
     mounted () {
-      this.getEnterpriseDetail(this.teamId)
+      this.getTeams(this.teamId)
       this.handleSearchBar()
     },
     computed: {
