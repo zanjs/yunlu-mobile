@@ -51,6 +51,8 @@
         switch (val) {
           case 'Product':
             return '商品'
+          case 'Organization':
+            return '机构'
           default:
             return '商品'
         }
