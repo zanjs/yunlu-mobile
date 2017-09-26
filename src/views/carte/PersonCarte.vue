@@ -10,7 +10,8 @@
     <div class="card-container">
       <card
         :store="userCard"
-        @click="cardClick"></card>
+        @click="cardClick">
+      </card>
     </div>
     <div
       v-if="clusters && clusters.length === 0"
@@ -132,6 +133,12 @@
         </div>
       </template>
     </template>
+    <favorite-btn
+      v-if="userCard"
+      :single="true"
+      :text="favoratesText"
+      @click="favoriteAction()">
+    </favorite-btn>
     <template v-if="showDialog">
       <pop-dialog
         :store="message"
@@ -150,6 +157,7 @@
   import PopDialog from '../../components/common/PopDialog'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import FavoriteBtn from '../../components/common/FavoriteBtn'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
     data () {
@@ -159,6 +167,7 @@
         iconClass: 'icon-jubao',
         user_id: this.$route.params.user_id || '',
         p: this.$route.query.p || '',
+        hasLogin: !!getStore('user'),
         token: getStore('user') ? getStore('user').authentication_token : null,
         showDialog: false,
         message: null,
@@ -200,7 +209,9 @@
         showScrollBtn: false,
         scrollLeftListener: false,
         scrollRightListener: false,
-        loading: false
+        loading: false,
+        favoratesText: '收藏',
+        hasAddFavorites: false
       }
     },
     components: {
@@ -210,7 +221,8 @@
       SpaceFolders,
       swiper,
       swiperSlide,
-      MugenScroll
+      MugenScroll,
+      FavoriteBtn
     },
     methods: {
       beforeGetData () {
@@ -436,10 +448,6 @@
       closeDialog () {
         this.showDialog = false
       },
-      loadFolderTop () {
-        this.pageIndex = 1
-        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
-      },
       loadFolderBottom () {
         this.pageIndex += 1
         this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
@@ -460,6 +468,55 @@
             this.showScrollBtn = false
           })
           this[`${target}Listener`] = true
+        }
+      },
+      favoriteAction () {
+        if (!this.hasLogin) {
+          setStore('beforeLogin', 'true')
+          this.$router.push({name: 'Login'})
+        } else if (!this.hasAddFavorites) {
+          this.favoriteRequest(typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id)
+        } else {
+          Toast({
+            message: '您已将该用户添加收藏，无需重复添加',
+            duration: 1000
+          })
+        }
+      },
+      favoriteRequest (userId) {
+        this.$store.dispatch('commonAction', {
+          url: '/favorites',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            user_id: userId
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorites && res.data.favorites.id && res.data.favorites.type === 'User') {
+              this.hasAddFavorites = true
+              this.favoratesText = '已收藏'
+              Toast({
+                message: '你已成功收藏该用户',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+                duration: 1000
+              })
+            } else {
+              Toast({
+                message: '收藏该用户失败',
+                duration: 1000
+              })
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleFavoriteStatus (id) {
+        if (this.hasLogin) {
+          // TODO: 等待后台新增个人名片收藏状态接口
         }
       }
     },
