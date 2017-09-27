@@ -206,10 +206,7 @@
         searchParams: '',
         activeIndex: 1,
         selectedType: 'Product',
-        pageIndex: 1,
-        pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : null,
-        favorites: [],
         favoriteProducts: [],
         favoriteOrganizations: [],
         favoritePerson: [],
@@ -249,7 +246,6 @@
         this.searchParams = ''
         this.hasChecked = false
         this.hasSearch = false
-        this.pageIndex = 1
         this.productPageIndex = 1
         this.organizationPageIndex = 1
         this.personPageIndex = 1
@@ -426,11 +422,7 @@
               break
           }
         } else if (item.type === 'User') {
-          Toast({
-            message: '暂未开放',
-            duration: 500
-          })
-          // this.$router.push({name: 'PersonCarte', params: {user_id: item.id}})
+          this.$router.push({name: 'PersonCarte', params: {user_id: item.id}})
         }
       },
       handleSingleCheck (item) {
@@ -634,14 +626,19 @@
       .label {
         height: inherit;
         @include px2rem(line-height, 88px);
-        @include font-dpr(14px);
+        @include font-dpr(15px);
+        font-weight: 500;
+        color: $second-dark;
       }
     }
     .selected {
-      @include px2rem(border-bottom-width, 4px);
+      @include px2rem(border-bottom-width, 6px);
       border-bottom-color: $green;
       color: $green;
       border-bottom-style: solid;
+      .label {
+        color: $green;
+      }
     }
   }
   .nav-bar-container {
