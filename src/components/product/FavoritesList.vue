@@ -11,10 +11,12 @@
           @click="handleChecked(item)">
           <i
             v-if="item.checked"
-            class="iconfont icon-xuanzhong checked"></i>
+            class="iconfont icon-xuanzhong checked">
+          </i>
           <i
             v-if="!item.checked"
-            class="iconfont icon-weixuanzhong"></i>
+            class="iconfont icon-weixuanzhong">
+          </i>
         </div>
         <a
           class="container"
@@ -23,7 +25,6 @@
           <img :src="item.image_url">
           <div class="content">
             <p class="title">{{item.name || '胖胖的云庐君'}}</p>
-            <p class="type">{{item.type | typeFilter}}</p>
           </div>
         </a>
       </div>
@@ -47,20 +48,6 @@
       handleChecked (item) {
         this.$emit('check', item)
       }
-    },
-    filters: {
-      typeFilter (val) {
-        switch (val) {
-          case 'Product':
-            return '商品'
-          case 'Organization':
-            return '机构'
-          case 'User':
-            return '用户'
-          default:
-            return '商品'
-        }
-      }
     }
   }
 </script>
@@ -70,7 +57,6 @@
 
   .item-list {
     background-color: $white;
-    border-top: 1px solid $third-grey;
     box-sizing: border-box;
     .item {
       @include px2rem(height, 140px);
@@ -103,20 +89,25 @@
         img {
           @include px2rem(width, 118px);
           @include px2rem(height, 118px);
+          @include px2rem(min-width, 118px);
           @include px2rem(margin-right, 30px);
         }
         .content {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          justify-content: space-around;
+          justify-content: center;
+          height: inherit;
+          @include px2rem(padding-right, 20px);
           .title {
-            @include font-dpr(16px);
-            color: $second-dark;
-          }
-          .type {
-            @include font-dpr(14px);
+            @include font-dpr(15px);
             color: $third-dark;
+            text-align: left;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            word-break: break-all;
           }
         }
       }
