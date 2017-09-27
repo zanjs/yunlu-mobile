@@ -277,6 +277,7 @@
           resolve: (state, res) => {
             state.userCard = res.data.cards
             state.clusters = res.data.clusters
+            this.handleFavoriteStatus(res.data.favoriated || false)
             this.$nextTick(() => {
               this.showScrollBtnFn('hoverLeft')
               this.showScrollBtnFn('hoverRight')
@@ -514,9 +515,10 @@
           }
         })
       },
-      handleFavoriteStatus (id) {
+      handleFavoriteStatus (bool) {
         if (this.hasLogin) {
-          // TODO: 等待后台新增个人名片收藏状态接口
+          this.hasAddFavorites = bool
+          this.favoratesText = bool ? '已收藏' : '收藏'
         }
       }
     },
