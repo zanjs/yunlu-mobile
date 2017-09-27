@@ -6,6 +6,7 @@
         v-for="(item, index) in favorites"
         :key="index">
         <div
+          v-show="selectable"
           class="icon-box"
           @click="handleChecked(item)">
           <i
@@ -17,10 +18,11 @@
         </div>
         <a
           class="container"
+          :class="{'no-checkbox': !selectable}"
           @click.stop="handleClick(item)">
           <img :src="item.image_url">
           <div class="content">
-            <p class="title">{{item.name}}</p>
+            <p class="title">{{item.name || '胖胖的云庐君'}}</p>
             <p class="type">{{item.type | typeFilter}}</p>
           </div>
         </a>
@@ -36,7 +38,7 @@
 
       }
     },
-    props: ['favorites'],
+    props: ['favorites', 'selectable'],
     name: 'FavoritesList',
     methods: {
       handleClick (item) {
@@ -53,6 +55,8 @@
             return '商品'
           case 'Organization':
             return '机构'
+          case 'User':
+            return '用户'
           default:
             return '商品'
         }
@@ -115,6 +119,9 @@
             color: $third-dark;
           }
         }
+      }
+      .no-checkbox {
+        @include px2rem(padding-left, 20px);
       }
     }
   }
