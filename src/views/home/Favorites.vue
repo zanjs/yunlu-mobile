@@ -2,6 +2,8 @@
   <section>
     <common-header
       :title="header"
+      :right-text="rightBtnText"
+      @right-click="selectableSwitch(inOperation)"
       @back="goBack()">
     </common-header>
     <form
@@ -24,26 +26,141 @@
         style="display: none;">
       </iframe>
     </form>
-    <template v-if="favorites && favorites.length > 0">
-      <section class="list-container">
-        <mt-loadmore
-          :top-method="loadFavoritesTop"
-          :bottom-method="loadFavoritesBottom"
-          :bottom-pull-text="bottomPullText"
-          :bottom-drop-text="bottomDropText"
-          :auto-fill="false"
-          ref="loadMoreFavorites">
-          <favorites-list
-            :favorites="favorites"
-            @click="goRoute"
-            @check="handleSingleCheck">
-          </favorites-list>
-        </mt-loadmore>
-      </section>
-      <div class="option-bar full-width">
+    <section>
+      <div class="nav-bars full-width">
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 1}"
+          @click="selectTab(1)">
+          <div class="label">商品</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 2}"
+          @click="selectTab(2)">
+          <div class="label">机构名片</div>
+        </a>
+        <a
+          class="tab"
+          :class="{'selected': activeIndex === 3}"
+          @click="selectTab(3)">
+          <div class="label">个人名片</div>
+        </a>
+      </div>
+      <div
+        class='nav-bar-container full-width'
+        :class="{'nav-bar-bottom': inOperation}">
+        <template v-if="activeIndex === 1">
+          <div v-if="favoriteProducts.length > 0">
+            <favorites-list
+              :favorites="favoriteProducts"
+              :selectable="inOperation"
+              @click="goRoute"
+              @check="handleSingleCheck">
+            </favorites-list>
+            <mugen-scroll
+              key="favoriteProducts"
+              :handler="loadAProductsBottom"
+              :handle-on-mount="false"
+              :should-handle="!productLoading && !inOperation">
+              <div
+                v-show="productLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
+          <div
+            v-else
+            key="1"
+            class="empty-container">
+            <div class="img-container">
+              <img src="../../assets/noFavorites.png">
+            </div>
+            <p>您还没有收藏任何宝贝呦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 2">
+          <div v-if="favoriteOrganizations.length > 0">
+            <favorites-list
+              :favorites="favoriteOrganizations"
+              :selectable="inOperation"
+              @click="goRoute"
+              @check="handleSingleCheck">
+            </favorites-list>
+            <mugen-scroll
+              key="favoriteOrganizations"
+              :handler="loadAOrganizationsBottom"
+              :handle-on-mount="false"
+              :should-handle="!organizationLoading && !inOperation">
+              <div
+                v-show="organizationLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
+          <div
+            v-else
+            key="1"
+            class="empty-container">
+            <div class="img-container">
+              <img src="../../assets/noFavorites.png">
+            </div>
+            <p>您还没有收藏任何宝贝呦~</p>
+          </div>
+        </template>
+        <template v-if="activeIndex === 3">
+          <div v-if="favoritePerson.length > 0">
+            <favorites-list
+              :favorites="favoritePerson"
+              :selectable="inOperation"
+              @click="goRoute"
+              @check="handleSingleCheck">
+            </favorites-list>
+            <mugen-scroll
+              key="favoritePerson"
+              :handler="loadAPersonBottom"
+              :handle-on-mount="false"
+              :should-handle="!personLoading && !inOperation">
+              <div
+                v-show="personLoading"
+                class="loading">
+                <mt-spinner
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>加载中...</p>
+              </div>
+            </mugen-scroll>
+          </div>
+          <div
+            v-else
+            key="1"
+            class="empty-container">
+            <div class="img-container">
+              <img src="../../assets/noFavorites.png">
+            </div>
+            <p>您还没有收藏任何宝贝呦~</p>
+          </div>
+        </template>
+      </div>
+    </section>
+    <template v-if="shouldShowOptionBar()">
+      <div
+        v-show="inOperation"
+        class="option-bar full-width">
         <div
           class="check-btn"
-          @click="handleAllCheck(favorites, checkAll)">
+          @click="handleAllCheck(activeIndex, checkAll)">
           <i
             v-if="!checkAll"
             class="iconfont icon-weixuanzhong"></i>
@@ -71,45 +188,53 @@
         @click="deleteItem">
       </confirm-dialog>
     </template>
-    <template v-if="favorites && favorites.length === 0">
-      <div class="empty-container">
-        <div class="img-container">
-          <img src="../../assets/noFavorites.png">
-        </div>
-        <p>您还没有收藏任何宝贝呦~</p>
-      </div>
-    </template>
   </section>
 </template>
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop, getScrollTop } from '../../config/mUtils'
   import FavoritesList from '../../components/product/FavoritesList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
+  import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         header: '收藏夹',
+        rightBtnText: '管理',
         searchParams: '',
+        activeIndex: 1,
+        selectedType: 'Product',
         pageIndex: 1,
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : null,
         favorites: [],
+        favoriteProducts: [],
+        favoriteOrganizations: [],
+        favoritePerson: [],
+        productPageIndex: 1,
+        productPageSize: 20,
+        productLoading: false,
+        organizationPageIndex: 1,
+        organizationPageSize: 20,
+        organizationLoading: false,
+        personPageIndex: 1,
+        personPageSize: 20,
+        personLoading: false,
         checkAll: false,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         hasSearch: false,
         hasChecked: false,
         showConfirm: false,
-        confirmMsg: '确定要删除选中的商品吗?'
+        confirmMsg: '确定要删除选中的商品吗?',
+        inOperation: false
       }
     },
     components: {
       CommonHeader,
       FavoritesList,
-      ConfirmDialog
+      ConfirmDialog,
+      MugenScroll
     },
     methods: {
       goBack () {
@@ -125,7 +250,10 @@
         this.hasChecked = false
         this.hasSearch = false
         this.pageIndex = 1
-        this.getFavorites()
+        this.productPageIndex = 1
+        this.organizationPageIndex = 1
+        this.personPageIndex = 1
+        this.getFavorites(this.searchParams, this.activeIndex, 1, 20, this.selectedType)
       },
       handleInput () {
         if (this.searchParams === '') {
@@ -139,51 +267,81 @@
             duration: 500
           })
         } else {
-          this.getFavorites(this.searchParams)
+          this.getFavorites(this.searchParams, this.activeIndex, 1, 20, this.selectedType)
         }
       },
       handleSearchBtn () {
-        this.getFavorites(this.searchParams)
+        this.getFavorites(this.searchParams, this.activeIndex, 1, 20, this.selectedType)
         document.activeElement.blur()
       },
-      getFavorites (q = this.searchParams) {
+      getFavorites (q = this.searchParams, activeIndex = 1, pageIndex = 1, pageSize = 20, type = 'Product') {
+        this.handleLoading(activeIndex, true)
         this.$store.dispatch('commonAction', {
           url: '/favorites',
           method: 'get',
           params: {
-            page: this.pageIndex,
-            per_page: this.pageSize,
+            page: pageIndex,
+            per_page: pageSize,
             token: this.token,
+            type: type,
             q: q
           },
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            if (this.pageIndex === 1) {
-              this.favorites = this.handleFavorites(res.data.favorites)
-              this.handleAllCheck(this.favorites, true)
-              // favorites为空时，上拉加载、下拉刷新组件未初始化，不能直接调用它的重置位置方法
-              if (this.$refs.loadMoreFavorites && this.$refs.loadMoreFavorites.onTopLoaded) {
-                this.$refs.loadMoreFavorites.onTopLoaded()
-              }
-            } else {
-              if (res.data.favorites.length === 0) {
+            if (res.data.favorites.length === 0) {
+              if (pageIndex !== 1) {
                 Toast({
                   message: '没有更多数据了',
                   duration: 1000
                 })
               }
-              this.favorites = [...this.favorites, ...this.handleFavorites(res.data.favorites)]
-              if (this.$refs.loadMoreFavorites && this.$refs.loadMoreFavorites.onBottomLoaded) {
-                this.$refs.loadMoreFavorites.onBottomLoaded()
-              }
+              this.$nextTick(() => {
+                setScrollTop(getScrollTop() - 10)
+              })
+              this.handleLoading(activeIndex, false)
+            } else {
+              this.setFavoritesData(activeIndex, res.data.favorites, pageIndex)
             }
           },
           reject: () => {
           }
         })
       },
-      handleFavorites (arr) {
+      setFavoritesData (activeIndex, arr, pageIndex) {
+        if (activeIndex === 1) {
+          this.favoriteProducts = [...(pageIndex === 1 ? [] : this.favoriteProducts), ...this.handleChecked(arr)]
+          this.productLoading = false
+          this.getFavorites(this.searchParams, 2, this.organizationPageIndex, this.organizationPageSize, 'Organization')
+          this.handleAllCheck(this.favoriteProducts, true)
+        } else if (activeIndex === 2) {
+          this.favoriteOrganizations = [...(pageIndex === 1 ? [] : this.favoriteOrganizations), ...this.handleChecked(arr)]
+          this.organizationLoading = false
+          this.getFavorites(this.searchParams, 3, this.personPageIndex, this.personPageSize, 'User')
+          this.handleAllCheck(this.favoriteOrganizations, true)
+        } else {
+          this.favoritePerson = [...(pageIndex === 1 ? [] : this.favoritePerson), ...this.handleChecked(arr)]
+          this.personLoading = false
+          this.handleAllCheck(this.favoritePerson, true)
+        }
+      },
+      handleLoading (index, bool) {
+        switch (index) {
+          case 1:
+            this.productLoading = bool
+            break
+          case 2:
+            this.organizationLoading = bool
+            break
+          case 3:
+            this.personLoading = bool
+            break
+          default:
+            this.productLoading = bool
+            break
+        }
+      },
+      handleChecked (arr) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
           tmpArr.push({
@@ -199,7 +357,13 @@
       deleteItem (bool) {
         this.showConfirm = false
         if (bool) {
-          this.handleDeleteFavorites(this.favorites)
+          if (this.activeIndex === 1) {
+            this.handleDeleteFavorites(this.favoriteProducts)
+          } else if (this.activeIndex === 2) {
+            this.handleDeleteFavorites(this.favoriteOrganizations)
+          } else {
+            this.handleDeleteFavorites(this.favoritePerson)
+          }
         }
       },
       handleDeleteFavorites (arr) {
@@ -223,7 +387,13 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.favorites = this.deleteFavorites(this.favorites, arr)
+              if (this.activeIndex === 1) {
+                this.favoriteProducts = this.deleteFavorites(this.favoriteProducts, arr)
+              } else if (this.activeIndex === 2) {
+                this.favoriteOrganizations = this.deleteFavorites(this.favoriteOrganizations, arr)
+              } else {
+                this.favoritePerson = this.deleteFavorites(this.favoritePerson, arr)
+              }
               Toast({
                 message: '删除成功',
                 duration: 500
@@ -237,13 +407,46 @@
       goRoute (item) {
         if (item.type === 'Product') {
           this.$router.push({name: 'ProductDetail', params: {id: item.id}})
+        } else if (item.type === 'Organization') {
+          switch (item.other_fields.service_aliaz) {
+            case 'class':
+              this.$router.push({name: 'Class', params: {id: item.id}})
+              break
+            case 'mall':
+              this.$router.push({name: 'Mall', params: {id: item.id}})
+              break
+            case 'association':
+              this.$router.push({name: 'ComityCarte', params: {id: item.id}})
+              break
+            case 'school':
+              this.$router.push({name: 'Alumni', params: {id: item.id}})
+              break
+            default:
+              this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
+              break
+          }
+        } else if (item.type === 'User') {
+          Toast({
+            message: '暂未开放',
+            duration: 500
+          })
+          // this.$router.push({name: 'PersonCarte', params: {user_id: item.id}})
         }
       },
       handleSingleCheck (item) {
-        for (let i = 0; i < this.favorites.length; i++) {
-          if (item.id === this.favorites[i].id) {
-            this.favorites[i].checked = !this.favorites[i].checked
-            this.isAllChecked(this.favorites)
+        if (this.activeIndex === 1) {
+          this.singleCheck(item, this.favoriteProducts)
+        } else if (this.activeIndex === 2) {
+          this.singleCheck(item, this.favoriteOrganizations)
+        } else {
+          this.singleCheck(item, this.favoritePerson)
+        }
+      },
+      singleCheck (item, arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (item.id === arr[i].id) {
+            arr[i].checked = !arr[i].checked
+            this.isAllChecked(arr)
           }
         }
       },
@@ -272,36 +475,67 @@
         }
         return tmpArr
       },
-      handleAllCheck (arr, bool) {
+      handleAllCheck (index, bool) {
+        if (index === 1) {
+          this.allCheck(this.favoriteProducts, bool)
+        } else if (index === 2) {
+          this.allCheck(this.favoriteOrganizations, bool)
+        } else {
+          this.allCheck(this.favoritePerson, bool)
+        }
+      },
+      allCheck (arr, bool) {
         for (let i = 0; i < arr.length; i++) {
           arr[i].checked = !bool
         }
         this.checkAll = this.hasChecked = !bool
       },
-      loadFavoritesTop () {
-        this.pageIndex = 1
-        this.getFavorites(this.searchParams)
+      loadAProductsBottom () {
+        this.productPageIndex += 1
+        this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
       },
-      loadFavoritesBottom () {
-        this.pageIndex += 1
-        this.getFavorites(this.searchParams)
+      loadAOrganizationsBottom () {
+        this.organizationPageIndex += 1
+        this.getFavorites(this.searchParams, 2, this.organizationPageIndex, this.organizationPageSize, 'Organization')
       },
-      shouldLogin () {
-        if (!this.token) {
-          let toast = Toast({
-            message: `您未登录，正在转入登录页`
-          })
-          setTimeout(() => {
-            toast.close()
-            this.$router.push({name: 'Login'})
-          }, 2000)
+      loadAPersonBottom () {
+        this.personPageIndex += 1
+        this.getFavorites(this.searchParams, 3, this.personPageIndex, this.personPageSize, 'User')
+      },
+      selectableSwitch (bool) {
+        this.inOperation = !bool
+        this.handleAllCheck(this.activeIndex, true)
+      },
+      selectTab (index) {
+        this.activeIndex = index
+        this.handleAllCheck(this.activeIndex, true)
+        switch (index) {
+          case 1:
+            this.selectedType = 'Product'
+            break
+          case 2:
+            this.selectedType = 'Organization'
+            break
+          case 3:
+            this.selectedType = 'User'
+            break
+          default:
+            this.selectedType = 'Product'
+            break
+        }
+      },
+      shouldShowOptionBar () {
+        if (this.activeIndex === 1) {
+          return this.favoriteProducts.length > 0
+        } else if (this.activeIndex === 2) {
+          return this.favoriteOrganizations.length > 0
         } else {
-          this.getFavorites(this.searchParams)
+          return this.favoritePerson.length > 0
         }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
     }
   }
 </script>
@@ -384,8 +618,65 @@
       }
     }
   }
-  .list-container {
-    @include pm2rem(padding, 176px, 0px, 98px, 0px);
+  .nav-bars {
+    position: fixed;
+    @include px2rem(top, 176px);
+    @include px2rem(height, 88px);
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    background-color: $white;
+    .tab {
+      display: block;
+      flex: 1;
+      text-align: center;
+      border-bottom: 1px solid $tenth-grey;
+      .label {
+        height: inherit;
+        @include px2rem(line-height, 88px);
+        @include font-dpr(14px);
+      }
+    }
+    .selected {
+      @include px2rem(border-bottom-width, 4px);
+      border-bottom-color: $green;
+      color: $green;
+      border-bottom-style: solid;
+    }
+  }
+  .nav-bar-container {
+    @include px2rem(padding-top, 266px);
+    @include px2rem(margin-bottom, 10px);
+    .loading {
+      height: 40px;
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
+      }
+    }
+    .has-option {
+      @include px2rem(margin-bottom, 120px);
+    }
+    .no-form {
+      img {
+        @include px2rem(width, 319px);
+        @include px2rem(height, 319px);
+        @include pm2rem(margin, 122px, 0px, 46px, 0px);
+      }
+      text-align: center;
+      p {
+        @include font-dpr(15px);
+        color: $third-dark;
+      }
+    }
+  }
+  .nav-bar-bottom {
+    @include px2rem(margin-bottom, 98px);
   }
   .option-bar {
     display: flex;
@@ -433,7 +724,6 @@
     }
   }
   .empty-container {
-    @include pm2rem(padding, 176px, 0px, 0px, 0px);
     .img-container {
       @include pm2rem(padding, 90px, 0px, 40px, 0px);
       text-align: center;
