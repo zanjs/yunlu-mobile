@@ -726,11 +726,37 @@
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest()
         } else {
-          Toast({
-            message: '您已将该班级添加收藏，无需重复添加',
-            duration: 1000
-          })
+          this.removeFavorites()
         }
+      },
+      removeFavorites () {
+        this.$store.dispatch('commonAction', {
+          url: `/favorites/${this.teamId}`,
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            id: this.teamId,
+            type: 'Organization'
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorable_id === this.teamId) {
+              this.hasAddFavorites = false
+              this.favoratesText = '收藏'
+              Toast({
+                message: '您已取消收藏该班级',
+                duration: 500
+              })
+            }
+          },
+          reject: () => {
+            Toast({
+              message: '取消收藏失败，请重试',
+              duration: 500
+            })
+          }
+        })
       },
       favoriteRequest () {
         this.$store.dispatch('commonAction', {

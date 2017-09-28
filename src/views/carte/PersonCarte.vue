@@ -478,11 +478,37 @@
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest(typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id)
         } else {
-          Toast({
-            message: '您已将该用户添加收藏，无需重复添加',
-            duration: 1000
-          })
+          this.removeFavorites(typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id)
         }
+      },
+      removeFavorites (id) {
+        this.$store.dispatch('commonAction', {
+          url: `/favorites/${id}`,
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            id: id,
+            type: 'User'
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorable_id === id) {
+              this.hasAddFavorites = false
+              this.favoratesText = '收藏'
+              Toast({
+                message: '您已取消收藏该用户',
+                duration: 500
+              })
+            }
+          },
+          reject: () => {
+            Toast({
+              message: '取消收藏失败，请重试',
+              duration: 500
+            })
+          }
+        })
       },
       favoriteRequest (userId) {
         this.$store.dispatch('commonAction', {
