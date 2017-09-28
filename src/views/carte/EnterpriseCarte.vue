@@ -500,16 +500,17 @@
       },
       removeFavorites () {
         this.$store.dispatch('commonAction', {
-          url: '/favorites/all',
+          url: `/favorites/${this.teamId}`,
           method: 'delete',
           params: {},
           data: {
             token: this.token,
-            ids: [this.teamId]
+            id: this.teamId,
+            type: 'Organization'
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.success) {
+            if (res.data.favorable_id === this.teamId) {
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
               Toast({
@@ -519,6 +520,10 @@
             }
           },
           reject: () => {
+            Toast({
+              message: '取消收藏失败，请重试',
+              duration: 500
+            })
           }
         })
       },
