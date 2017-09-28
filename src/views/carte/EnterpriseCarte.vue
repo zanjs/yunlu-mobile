@@ -495,11 +495,32 @@
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest()
         } else {
-          Toast({
-            message: '您已将该企业添加收藏，无需重复添加',
-            duration: 1000
-          })
+          this.removeFavorites()
         }
+      },
+      removeFavorites () {
+        this.$store.dispatch('commonAction', {
+          url: '/favorites/all',
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            ids: [this.teamId]
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.success) {
+              this.hasAddFavorites = false
+              this.favoratesText = '收藏'
+              Toast({
+                message: '您已取消收藏该企业',
+                duration: 500
+              })
+            }
+          },
+          reject: () => {
+          }
+        })
       },
       favoriteRequest () {
         this.$store.dispatch('commonAction', {
