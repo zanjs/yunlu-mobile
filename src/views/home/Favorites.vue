@@ -496,6 +496,7 @@
       },
       selectableSwitch (bool) {
         this.inOperation = !bool
+        this.rightBtnText = bool ? '管理' : '完成'
         this.handleAllCheck(this.activeIndex, true)
       },
       selectTab (index) {
