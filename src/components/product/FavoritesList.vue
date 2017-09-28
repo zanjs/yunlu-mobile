@@ -1,14 +1,14 @@
 <template>
-  <section>
+  <section class="list-container">
     <div class="item-list">
-      <div
+      <a
         class="item"
         v-for="(item, index) in favorites"
-        :key="index">
+        :key="index"
+        @click="itemClick(item, selectable)">
         <div
           v-show="selectable"
-          class="icon-box"
-          @click="handleChecked(item)">
+          class="icon-box">
           <i
             v-if="item.checked"
             class="iconfont icon-xuanzhong checked">
@@ -18,7 +18,16 @@
             class="iconfont icon-weixuanzhong">
           </i>
         </div>
+        <div
+          v-show="selectable"
+          class="container">
+          <img :src="item.image_url">
+          <div class="content">
+            <p class="title">{{item.name || '胖胖的云庐君'}}</p>
+          </div>
+        </div>
         <a
+          v-show="!selectable"
           class="container"
           :class="{'no-checkbox': !selectable}"
           @click.stop="handleClick(item)">
@@ -27,7 +36,7 @@
             <p class="title">{{item.name || '胖胖的云庐君'}}</p>
           </div>
         </a>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -42,6 +51,11 @@
     props: ['favorites', 'selectable'],
     name: 'FavoritesList',
     methods: {
+      itemClick (item, bool) {
+        if (bool) {
+          this.$emit('check', item)
+        }
+      },
       handleClick (item) {
         this.$emit('click', item)
       },
@@ -55,6 +69,11 @@
 <style lang="scss" scopde>
   @import "../../styles/mixin";
 
+  .list-container {
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
+  }
   .item-list {
     background-color: $white;
     box-sizing: border-box;
