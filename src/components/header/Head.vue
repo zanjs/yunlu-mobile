@@ -1,7 +1,7 @@
 <template>
   <header
     class="head-product full-width"
-    v-bind:class="{'download': showDownload}">
+    :class="{'download': showDownload}">
     <div
       class="left icon-box flex"
       @click="goBack()">
@@ -204,7 +204,7 @@
       z-index: 9999 !important;
       .item {
         @include px2rem(height, 96px);
-        border-bottom: 1px solid rgba(255, 255, 255, .45);
+        border-bottom: 1px solid $third-dark;
         @include pm2rem(padding, 0px, 0px, 0px, 34px);
         @include px2rem(line-height, 96px);
         @include font-dpr(15px);

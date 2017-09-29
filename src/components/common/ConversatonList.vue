@@ -82,7 +82,7 @@
       display: flex;
       align-items: center;
       @include px2rem(height, 140px);
-      border-bottom: 1px solid $second-grey;
+      border-bottom: 1px solid $third-grey;
       .check-box {
         @include px2rem(width, 74);
         @include px2rem(padding-left, 28px);

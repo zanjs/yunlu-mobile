@@ -692,7 +692,7 @@
       align-items: center;
       height: inherit;
       @include pm2rem(padding, 0px, 30px, 0px, 28px);
-      line-height: 1;
+      line-height: normal;
       i {
         @include font-dpr(18px);
         color: $third-dark;
