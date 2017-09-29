@@ -291,6 +291,8 @@
                   message: '没有更多数据了',
                   duration: 1000
                 })
+              } else {
+                this.setFavoritesData(activeIndex, [], 1)
               }
               this.$nextTick(() => {
                 setScrollTop(getScrollTop() - 10)

@@ -119,8 +119,8 @@
           height: inherit;
           @include px2rem(padding-right, 20px);
           .title {
-            @include font-dpr(15px);
-            color: $third-dark;
+            @include font-dpr(14px);
+            color: $second-dark;
             text-align: left;
             overflow: hidden;
             display: -webkit-box;
