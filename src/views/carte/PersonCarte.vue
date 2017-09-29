@@ -493,7 +493,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorable_id === id) {
+            if (res.status === 200 && res.data.favorable_id) {
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
               Toast({
