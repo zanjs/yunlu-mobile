@@ -1165,6 +1165,9 @@
       i {
         @include px2rem(margin-bottom, 12px);
       }
+      .bottom-btn-active {
+        color: #FF3E3E;
+      }
       .kefu {
         color: #20A2E5;
       }
