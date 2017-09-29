@@ -228,4 +228,21 @@
     height: inherit !important;
     @include px2rem(line-height, 88px);
   }
+  // 公共样式，放在公共文件中，避免部分页面没有加载而找不到样式文件
+  .toast-icon-big {
+    @include font-dpr(36px);
+    @include pm2rem(margin, 0px, 0px, -20px, 0px);
+  }
+  .toast-content {
+    background-color: rgba(0, 0, 0, .7);
+    @include px2rem(width, 400px);
+    box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.5);
+    @include pm2rem(margin, -20px, 0px, -10px, 0px);
+    padding: 0 !important;
+    @include px2rem(border-radius, 14px);
+    span {
+      @include font-dpr(16px);
+      @include px2rem(margin-bottom, 30px);
+    }
+  }
 </style>
