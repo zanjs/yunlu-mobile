@@ -37,13 +37,14 @@
           :handle-on-mount="false"
           :should-handle="!loading">
           <div
-            v-if="loading"
+            v-if="loading || noMoreData"
             class="loading">
             <mt-spinner
+              v-if="loading"
               type="snake"
               :size="18">
             </mt-spinner>
-            <p>加载中...</p>
+            <p>{{loadingText}}</p>
           </div>
         </mugen-scroll>
         <back-to-top
@@ -74,7 +75,7 @@
   import ProductListMode from '../../components/product/List'
   import BackToTop from '../../components/common/BackToTop'
   import SearchProductsOrder from '../../components/product/Order'
-  import { getStore, removeStore, showBack, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore, showBack, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -114,7 +115,9 @@
             url: 'https://m.ctrip.com/'
           }
         ],
-        loading: false
+        loading: true,
+        loadingText: '加载中...',
+        noMoreData: false
       }
     },
     components: {
@@ -133,6 +136,9 @@
         this.products = []
         this.pageIndex = 1
         this.productsThumbnails = []
+        this.loadingText = '加载中...'
+        this.noMoreData = false
+        setScrollTop(0)
       },
       handleInput (e) {
         if (e.target.value === '') {
@@ -169,15 +175,12 @@
         })
         if (res.data) {
           if (res.data.products.length === 0) {
-            setScrollTop(getScrollTop() - 20)
             this.loading = false
             this.hasSearch = true
             this.products = [...res.data.products, ...this.products]
             if (this.pageIndex !== 1) {
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
+              this.noMoreData = true
+              this.loadingText = '没有更多数据了...'
             }
           } else {
             let tmpArr = this.handleProductThumbnails(res.data.products)
@@ -268,8 +271,10 @@
         }, this.height)
       },
       loadProductBottom () {
-        this.pageIndex += 1
-        this.getProducts(this.sort, this.searchParams)
+        if (!this.noMoreData) {
+          this.pageIndex += 1
+          this.getProducts(this.sort, this.searchParams)
+        }
       }
     },
     mounted () {
