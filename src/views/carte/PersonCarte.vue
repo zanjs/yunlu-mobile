@@ -82,13 +82,14 @@
             :handle-on-mount="false"
             :should-handle="!loading">
             <div
-              v-if="loading"
+              v-if="loading || noMoreData"
               class="loading">
               <mt-spinner
+                v-if="loading"
                 type="snake"
                 :size="18">
               </mt-spinner>
-              <p>加载中...</p>
+              <p>{{loadingText}}</p>
             </div>
           </mugen-scroll>
         </div>
@@ -151,7 +152,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast, MessageBox } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
@@ -174,8 +175,6 @@
         folders: [],
         pageIndex: 1,
         pageSize: 5,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         targetSpaceId: '',
         targetUserId: '',
         photos: [],
@@ -209,9 +208,11 @@
         showScrollBtn: false,
         scrollLeftListener: false,
         scrollRightListener: false,
-        loading: false,
+        loading: true,
         favoratesText: '收藏',
-        hasAddFavorites: false
+        hasAddFavorites: false,
+        loadingText: '加载中...',
+        noMoreData: false
       }
     },
     components: {
@@ -324,12 +325,9 @@
             if (this.pageIndex === 1) {
               this.folders = res.data.gallery
             } else {
-              if (res.data.gallery.length === 0) {
-                setScrollTop(getScrollTop() - 50)
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+              if (res.data.gallery.length === 0 && this.pageIndex !== 1) {
+                this.noMoreData = true
+                this.loadingText = '没有更多数据了...'
               }
               this.folders = [...this.folders, ...res.data.gallery]
             }
@@ -450,8 +448,10 @@
         this.showDialog = false
       },
       loadFolderBottom () {
-        this.pageIndex += 1
-        this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
+        if (!this.noMoreData) {
+          this.pageIndex += 1
+          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', this.targetSpaceId, this.targetUserId, this.token, this.p)
+        }
       },
       scrollHorizontal (bool) {
         this.$refs.scrollTarget.scrollLeft += bool ? -250 : 250

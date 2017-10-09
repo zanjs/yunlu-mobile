@@ -25,13 +25,14 @@
           :handle-on-mount="false"
           :should-handle="!loading">
           <div
-            v-if="loading"
+            v-if="loading || noMoreData"
             class="loading">
             <mt-spinner
+              v-if="loading"
               type="snake"
               :size="18">
             </mt-spinner>
-            <p>加载中...</p>
+            <p>{{loadingText}}</p>
           </div>
         </mugen-scroll>
         <back-to-top
@@ -57,8 +58,7 @@
   import List from '../../components/enterprise/List'
   import BackToTop from '../../components/common/BackToTop'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore, showBack, getScrollTop, setScrollTop } from '../../config/mUtils'
-  import { Toast } from 'mint-ui'
+  import { getStore, removeStore, showBack, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
@@ -73,7 +73,9 @@
         height: 160, // 向上滚动到160px，就显示回到顶部按钮
         showGoTopBtn: false,
         exclude_service_ids: [], // 企业搜索需要过滤掉班级,页面维护一套services数组，里面包含了所有服务类型
-        loading: false
+        loading: true,
+        loadingText: '加载中...',
+        noMoreData: false
       }
     },
     components: {
@@ -120,11 +122,8 @@
             state.allEnterprises = res.data.enterprises
           } else {
             if (res.data.enterprises.length === 0) {
-              setScrollTop(getScrollTop() - 41)
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
+              this.noMoreData = true
+              this.loadingText = '没有更多数据了...'
             }
             state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
           }
@@ -134,7 +133,10 @@
         this.searchParams = ''
         this.hasSearch = false
         this.enterprisePageIndex = 1
+        this.noMoreData = false
+        this.loadingText = '加载中...'
         this.throttle(this.getEnterprises, this)
+        setScrollTop(0)
       },
       // 节流函数
       throttle (method, context) {
@@ -189,8 +191,10 @@
         }, this.height)
       },
       loadEnterpriseBottom () {
-        this.enterprisePageIndex += 1
-        this.getEnterprises(this.searchParams)
+        if (!this.noMoreData) {
+          this.enterprisePageIndex += 1
+          this.getEnterprises(this.searchParams)
+        }
       }
     },
     mounted () {
