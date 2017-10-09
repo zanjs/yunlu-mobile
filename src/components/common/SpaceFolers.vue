@@ -1,5 +1,5 @@
 <template>
-  <section class="load-more-container">
+  <section>
     <template
       v-for="(item, index) in store">
       <div
@@ -71,9 +71,6 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .load-more-container {
-    @include px2rem(margin-bottom, 20px);
-  }
   .container {
     @include px2rem(width, 705px);
     margin: 0 auto;

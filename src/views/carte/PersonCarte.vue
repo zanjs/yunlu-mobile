@@ -71,7 +71,7 @@
         </div>
       </div>
       <template v-if="folders && folders.length > 0">
-        <div class="space-container">
+        <div>
           <space-folders
             :store="folders"
             @view-more="goFolder"
