@@ -58,13 +58,14 @@
                   :handle-on-mount="false"
                   :should-handle="!productLoading">
                   <div
-                    v-if="productLoading"
+                    v-if="productLoading || noMoreProducts"
                     class="loading">
                     <mt-spinner
+                      v-if="productLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
-                    <p>加载中...</p>
+                    <p>{{productLoadingText}}</p>
                   </div>
                 </mugen-scroll>
               </div>
@@ -105,13 +106,14 @@
                     :handle-on-mount="false"
                     :should-handle="!personLoading">
                     <div
-                      v-if="personLoading"
+                      v-if="personLoading || noMorePeople"
                       class="loading">
                       <mt-spinner
+                        v-if="personLoading"
                         type="snake"
                         :size="18">
                       </mt-spinner>
-                      <p>加载中...</p>
+                      <p>{{personLoadingText}}</p>
                     </div>
                   </mugen-scroll>
                 </div>
@@ -149,13 +151,14 @@
                   :handle-on-mount="false"
                   :should-handle="!enterpriseLoading">
                   <div
-                    v-if="enterpriseLoading"
+                    v-if="enterpriseLoading || noMoreEnterprises"
                     class="loading">
                     <mt-spinner
+                      v-if="enterpriseLoading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
-                    <p>加载中...</p>
+                    <p>{{enterpriseLoadingText}}</p>
                   </div>
                 </mugen-scroll>
               </div>
@@ -214,7 +217,7 @@
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
-  import { getStore, setStore, showBack, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -253,11 +256,17 @@
         showGoTopBtn: false,
         showDialog: false,
         message: null,
-        productLoading: false,
-        enterpriseLoading: false,
-        personLoading: false,
+        productLoading: true,
+        enterpriseLoading: true,
+        personLoading: true,
         favoratesText: '收藏',
-        hasAddFavorites: false
+        hasAddFavorites: false,
+        productLoadingText: '加载中...',
+        enterpriseLoadingText: '加载中...',
+        personLoadingText: '加载中...',
+        noMoreProducts: false,
+        noMoreEnterprises: false,
+        noMorePeople: false
       }
     },
     components: {
@@ -314,12 +323,9 @@
             this.getEnterpriseDocument()
             if (res.data.products.length === 0) {
               this.productLoading = false
-              setScrollTop(getScrollTop() - 50)
               if (this.productPageIndex !== 1) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                this.productLoadingText = '没有更多数据了...'
+                this.noMoreProducts = true
               }
             } else {
               let tmpArr = this.handleProductThumbnails(res.data.products)
@@ -484,14 +490,9 @@
             if (this.enterprisePageIndex === 1) {
               state.enterpriseMembers = res.data.members
             } else {
-              if (res.data.members.length === 0) {
-                setScrollTop(getScrollTop() - 50)
-                if (this.enterprisePageIndex !== 1) {
-                  Toast({
-                    message: '没有更多数据了',
-                    duration: 1000
-                  })
-                }
+              if (res.data.members.length === 0 && this.enterprisePageIndex !== 1) {
+                this.enterpriseLoadingText = '没有更多数据了...'
+                this.noMoreEnterprises = true
               }
               state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
             }
@@ -525,14 +526,9 @@
             if (this.personPageIndex === 1) {
               state.personMembers = res.data.preps
             } else {
-              if (res.data.preps.length === 0) {
-                setScrollTop(getScrollTop() - 50)
-                if (this.personPageIndex !== 1) {
-                  Toast({
-                    message: '没有更多数据了',
-                    duration: 1000
-                  })
-                }
+              if (res.data.preps.length === 0 && this.personPageIndex !== 1) {
+                this.personLoadingText = '没有更多数据了...'
+                this.noMorePeople = true
               }
               state.personMembers = [...state.personMembers, ...res.data.preps]
             }
@@ -702,16 +698,20 @@
         this.getProducts(this.queryParams, this.productOrder)
       },
       loadProductBottom () {
-        this.productPageIndex += 1
-        this.getProducts()
+        if (!this.noMoreProducts) {
+          this.productPageIndex += 1
+          this.getProducts()
+        }
       },
       loadEnterpriseBottom () {
-        this.enterprisePageIndex += 1
-        this.getEnterpriseList()
+        if (!this.noMoreEnterprises) {
+          this.enterprisePageIndex += 1
+          this.getEnterpriseList()
+        }
       },
       loadPersonBottom () {
-        this.personPageIndex += 1
-        if (getStore('user')) {
+        if (getStore('user') && !this.noMorePeople) {
+          this.personPageIndex += 1
           this.getPersonList()
         }
       },

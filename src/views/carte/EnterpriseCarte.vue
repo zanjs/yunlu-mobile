@@ -49,13 +49,14 @@
                   :handle-on-mount="false"
                   :should-handle="!loading">
                   <div
-                    v-if="loading"
+                    v-if="loading || noMoreProducts"
                     class="loading">
                     <mt-spinner
+                      v-show="loading"
                       type="snake"
                       :size="18">
                     </mt-spinner>
-                    <p>加载中...</p>
+                    <p>{{loadingText}}</p>
                   </div>
                 </mugen-scroll>
               </div>
@@ -127,7 +128,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, setStore, showBack, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
@@ -153,12 +154,6 @@
         placeholder: '搜索产品',
         productPageIndex: 1,
         productPageSize: 10,
-        enterprisePageIndex: 1,
-        enterprisePageSize: 10,
-        personPageIndex: 1,
-        personPageSize: 10,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         queryParams: '',
         orderUp: true,
         productOrder: 1,
@@ -167,7 +162,9 @@
         showGoTopBtn: false,
         showDialog: false,
         message: null,
-        loading: false,
+        loading: true,
+        loadingText: '加载中...',
+        noMoreProducts: false,
         favoratesText: '收藏',
         hasAddFavorites: false
       }
@@ -218,13 +215,9 @@
           let tmppArr = this.handleProductThumbnails(res.data.products)
           if (res.data.products.length === 0) {
             this.loading = false
-            // 这里必须向上滚动大于等于50，否则会连发两次请求。
-            setScrollTop(getScrollTop() - 50)
             if (this.productPageIndex !== 1) {
-              Toast({
-                message: '没有更多数据了',
-                duration: 1000
-              })
+              this.loadingText = '没有更多数据了...'
+              this.noMoreProducts = true
             }
           } else {
             this.getFilesPublisheds(tmppArr, res.data.products, q)
@@ -481,9 +474,11 @@
         this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
         this.getProducts(this.queryParams, this.productOrder)
       },
-      loadProductBottom () {
-        this.productPageIndex += 1
-        this.getProducts()
+      loadProductBottom (infinite) {
+        if (!this.noMoreProducts) {
+          this.productPageIndex += 1
+          this.getProducts()
+        }
       },
       closeDialog () {
         this.showDialog = false

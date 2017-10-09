@@ -20,13 +20,14 @@
           :handle-on-mount="false"
           :should-handle="!photoLoading">
           <div
-            v-if="photoLoading"
+            v-if="photoLoading || noMoreData"
             class="loading">
             <mt-spinner
+              v-if="photoLoading"
               type="snake"
               :size="18">
             </mt-spinner>
-            <p>加载中...</p>
+            <p>{{photoLoadingText}}</p>
           </div>
         </mugen-scroll>
       </section>
@@ -79,7 +80,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
-  import { getStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
@@ -94,8 +95,6 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         photos: [],
         previewPhotos: [],
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         topDistance: 10,
         showPreview: false,
         currentIndex: 1,
@@ -154,7 +153,9 @@
             }
           }
         },
-        photoLoading: false
+        photoLoading: false,
+        photoLoadingText: '加载中...',
+        noMoreData: false
       }
     },
     components: {
@@ -185,12 +186,9 @@
               this.photos = res.data.photos
             } else {
               if (res.data.photos.length === 0) {
-                setScrollTop(getScrollTop() - 10)
                 if (this.pageIndex !== 1) {
-                  Toast({
-                    message: '没有更多数据了',
-                    duration: 1000
-                  })
+                  this.noMoreData = true
+                  this.photoLoadingText = '没有更多数据了...'
                 }
               }
               this.photos = [...this.photos, ...res.data.photos]
@@ -210,8 +208,10 @@
         }
       },
       loadPhotosBottom () {
-        this.pageIndex += 1
-        this.beforeGetData()
+        if (!this.noMoreData) {
+          this.pageIndex += 1
+          this.beforeGetData()
+        }
       },
       handlePreviewPhotos (index, arr, pageSize) {
         let tmpArr = []
