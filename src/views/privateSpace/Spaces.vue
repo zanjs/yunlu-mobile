@@ -23,13 +23,14 @@
             :handle-on-mount="false"
             :should-handle="!loading">
             <div
-              v-if="loading"
+              v-if="loading || noMoreData"
               class="loading">
               <mt-spinner
+                v-if="loading"
                 type="snake"
                 :size="18">
               </mt-spinner>
-              <p>加载中...</p>
+              <p>{{loadingText}}</p>
             </div>
           </mugen-scroll>
         </div>
@@ -87,7 +88,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { Toast, MessageBox } from 'mint-ui'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -108,8 +109,6 @@
         folders: [],
         pageIndex: 1,
         pageSize: 5,
-        bottomPullText: '上拉加载更多',
-        bottomDropText: '释放加载',
         targetSpaceId: '',
         targetUserId: '',
         photos: [],
@@ -140,7 +139,9 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        loading: false
+        loading: false,
+        loadingText: '加载中...',
+        noMoreData: false
       }
     },
     components: {
@@ -180,11 +181,8 @@
               this.folders = res.data.gallery
             } else {
               if (res.data.gallery.length === 0) {
-                setScrollTop(getScrollTop() - 50)
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                this.noMoreData = true
+                this.loadingText = '没有更多数据了...'
               }
               this.folders = [...this.folders, ...res.data.gallery]
             }
@@ -283,8 +281,10 @@
         })
       },
       loadFolderBottom () {
-        this.pageIndex += 1
-        this.getData()
+        if (!this.noMoreData) {
+          this.pageIndex += 1
+          this.getData()
+        }
       }
     },
     mounted () {

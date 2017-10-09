@@ -64,13 +64,14 @@
               :handle-on-mount="false"
               :should-handle="!productLoading && !inOperation">
               <div
-                v-show="productLoading"
+                v-if="productLoading || noMoreProducts"
                 class="loading">
                 <mt-spinner
+                  v-if="productLoading"
                   type="snake"
                   :size="18">
                 </mt-spinner>
-                <p>加载中...</p>
+                <p>{{productLoadingText}}</p>
               </div>
             </mugen-scroll>
           </div>
@@ -98,13 +99,14 @@
               :handle-on-mount="false"
               :should-handle="!organizationLoading && !inOperation">
               <div
-                v-show="organizationLoading"
+                v-if="organizationLoading || noMoreOrganizations"
                 class="loading">
                 <mt-spinner
+                  v-if="organizationLoading"
                   type="snake"
                   :size="18">
                 </mt-spinner>
-                <p>加载中...</p>
+                <p>{{organizationLoadingText}}</p>
               </div>
             </mugen-scroll>
           </div>
@@ -193,7 +195,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore, setScrollTop, getScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import FavoritesList from '../../components/product/FavoritesList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
@@ -212,19 +214,25 @@
         favoritePerson: [],
         productPageIndex: 1,
         productPageSize: 20,
-        productLoading: false,
+        productLoading: true,
         organizationPageIndex: 1,
         organizationPageSize: 20,
-        organizationLoading: false,
+        organizationLoading: true,
         personPageIndex: 1,
         personPageSize: 20,
-        personLoading: false,
+        personLoading: true,
         checkAll: false,
         hasSearch: false,
         hasChecked: false,
         showConfirm: false,
         confirmMsg: '确定要删除选中的商品吗?',
-        inOperation: false
+        inOperation: false,
+        productLoadingText: '加载中...',
+        organizationLoadingText: '加载中...',
+        personLoadingText: '加载中...',
+        noMoreProducts: false,
+        noMoreOrganizations: false,
+        noMorePeople: false
       }
     },
     components: {
@@ -287,16 +295,10 @@
             this.hasSearch = q !== ''
             if (res.data.favorites.length === 0) {
               if (pageIndex !== 1) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+                this.handleNoMoreDataTips(activeIndex)
               } else {
                 this.setFavoritesData(activeIndex, [], 1)
               }
-              this.$nextTick(() => {
-                setScrollTop(getScrollTop() - 10)
-              })
               this.handleLoading(activeIndex, false)
             } else {
               this.setFavoritesData(activeIndex, res.data.favorites, pageIndex)
@@ -305,6 +307,26 @@
           reject: () => {
           }
         })
+      },
+      handleNoMoreDataTips (activeIndex) {
+        switch (activeIndex) {
+          case 1:
+            this.noMoreProducts = true
+            this.productLoadingText = '没有更多数据了...'
+            break
+          case 2:
+            this.noMoreOrganizations = true
+            this.organizationLoadingText = '没有更多数据了...'
+            break
+          case 3:
+            this.noMorePeople = true
+            this.personLoadingText = '没有更多数据了...'
+            break
+          default:
+            this.noMoreProducts = true
+            this.productLoadingText = '没有更多数据了...'
+            break
+        }
       },
       setFavoritesData (activeIndex, arr, pageIndex) {
         if (activeIndex === 1) {
@@ -485,16 +507,22 @@
         this.checkAll = this.hasChecked = !bool
       },
       loadAProductsBottom () {
-        this.productPageIndex += 1
-        this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
+        if (!this.noMoreProducts) {
+          this.productPageIndex += 1
+          this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
+        }
       },
       loadAOrganizationsBottom () {
-        this.organizationPageIndex += 1
-        this.getFavorites(this.searchParams, 2, this.organizationPageIndex, this.organizationPageSize, 'Organization')
+        if (!this.noMoreOrganizations) {
+          this.organizationPageIndex += 1
+          this.getFavorites(this.searchParams, 2, this.organizationPageIndex, this.organizationPageSize, 'Organization')
+        }
       },
       loadAPersonBottom () {
-        this.personPageIndex += 1
-        this.getFavorites(this.searchParams, 3, this.personPageIndex, this.personPageSize, 'User')
+        if (!this.noMorePeople) {
+          this.personPageIndex += 1
+          this.getFavorites(this.searchParams, 3, this.personPageIndex, this.personPageSize, 'User')
+        }
       },
       selectableSwitch (bool) {
         this.inOperation = !bool
