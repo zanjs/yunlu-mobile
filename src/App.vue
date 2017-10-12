@@ -245,4 +245,21 @@
       @include px2rem(margin-bottom, 30px);
     }
   }
+
+  @keyframes rotateTo90 {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(90deg);
+    }
+  }
+  @keyframes rotateTo0 {
+    from {
+      transform: rotate(90deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
 </style>
