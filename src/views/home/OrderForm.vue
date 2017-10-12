@@ -256,7 +256,6 @@
       v-show="showMenu"
       id="drop-menu-bg"
       class="drop-menu-bg full-width">
-      <div class="drop-menu-arrow"></div>
       <div class="menu">
         <a
           class="item"
@@ -790,22 +789,6 @@
     bottom: 0;
     width: 100%;
     z-index: 1002;
-    .drop-menu-arrow {
-      position: fixed;
-      background-color: transparent;
-      @include px2rem(top, 60px);
-      @include px2rem(right, 34px);
-      width: 0;
-      height: 0;
-      @include px2rem(border-left-width, 16px);
-      @include px2rem(border-right-width, 16px);
-      @include px2rem(border-bottom-width, 30px);
-      border-left-color: transparent;
-      border-right-color: transparent;
-      border-bottom-color: rgba(57, 55, 66, .8);
-      border-style: solid;
-      border-top: none;
-    }
     .menu {
       position: fixed;
       @include px2rem(top, 88px);
@@ -830,6 +813,23 @@
           @include font-dpr(15px);
         }
       }
+    }
+    .menu:after {
+      content: '';
+      position: absolute;
+      background-color: transparent;
+      @include px2rem(top, -26px);
+      @include px2rem(right, 17px);
+      width: 0;
+      height: 0;
+      @include px2rem(border-left-width, 14px);
+      @include px2rem(border-right-width, 14px);
+      @include px2rem(border-bottom-width, 26px);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: rgba(57, 55, 66, .8);
+      border-style: solid;
+      border-top: none;
     }
   }
 </style>
