@@ -215,7 +215,7 @@
       width: 0;
       height: 0;
       @include px2rem(top, -28px);
-      @include px2rem(right, 26px);
+      @include px2rem(right, 24px);
     }
   }
 </style>
