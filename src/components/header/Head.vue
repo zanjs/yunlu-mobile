@@ -18,10 +18,6 @@
       v-show="showMenu"
       id="fullscreen-cover"
       class="full-screen-cover">
-      </div>
-    <div
-      v-show="showMenu"
-      class="drop-menu-arrow">
     </div>
     <section
       v-show="showMenu"
@@ -166,22 +162,6 @@
       @include font-dpr(34px);
     }
   }
-  .drop-menu-arrow {
-    position: absolute;
-    background-color: transparent;
-    @include px2rem(top, 80px);
-    @include px2rem(right, 40px);
-    width: 0;
-    height: 0;
-    @include px2rem(border-left-width, 14px);
-    @include px2rem(border-right-width, 14px);
-    @include px2rem(border-bottom-width, 26px);
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: rgba(57, 55, 66, .8);
-    border-style: solid;
-    border-top: none;
-  }
   .full-screen-cover {
     position: fixed;
     top: 0;
@@ -219,6 +199,23 @@
       & .item:last-child {
         border-bottom: none;
       }
+    }
+    .menu:after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      @include px2rem(border-left-width, 14px);
+      @include px2rem(border-right-width, 14px);
+      @include px2rem(border-bottom-width, 28px);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: rgba(57, 55, 66, .8);
+      border-style: solid;
+      border-top: none;
+      width: 0;
+      height: 0;
+      @include px2rem(top, -28px);
+      @include px2rem(right, 24px);
     }
   }
 </style>
