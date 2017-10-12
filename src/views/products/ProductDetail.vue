@@ -73,9 +73,7 @@
             <i class="iconfont icon-gengduo primary font-15"></i>
           </div>
         </div>
-        <div
-          v-show="morePrice"
-          class="more-price white-bg font-16">
+        <div class="more-price white-bg font-16" :class="{'hide': !morePrice}">
           <p
             v-for="(item, index) in productDetail.prices"
             :key="item.id"
@@ -270,7 +268,8 @@
         <span class="font-12">购物车</span>
         <div
           v-show="purchaseItemsCount !== '0'"
-          class="badge">
+          class="badge"
+          :class="{'active': hasAddShoppingCar}">
           <span>{{purchaseItemsCount}}</span>
         </div>
       </div>
@@ -889,12 +888,16 @@
               this.getPurchaseItems()
               // 加入购物车可以加入多次
               this.hasAddShoppingCar = true
-              Toast({
+              let toast = Toast({
                 message: '加入购物车成功',
                 className: 'toast-content',
                 iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
                 duration: 1000
               })
+              setTimeout(() => {
+                clearTimeout(toast)
+                this.hasAddShoppingCar = false // 1000ms后重置加入购物车状态，是动画可以重复播放
+              }, 1000)
             } else {
               Toast({
                 message: res.data.detail || '加入购物车失败',
@@ -1129,12 +1132,16 @@
         color: #FF0000;
         border-top: 1px solid $fifth-grey;
         z-index: 1002;
+        animation:fadeInDown 0.2s ease-in-out 0s 1 normal both;
         p {
           border: 1px solid $fifth-grey;
           border-top: none;
           box-sizing: border-box;
           @include pm2rem(padding, 8px, 10px, 8px, 10px);
         }
+      }
+      .hide {
+        animation:fadeOutUp 0.2s ease-in-out 0s 1 normal both
       }
     }
     .inventory {
@@ -1236,6 +1243,7 @@
       }
       .bottom-btn-active {
         color: #FF3E3E;
+        animation: bounceIn 1s ease-in 0s 1 normal both;
       }
       .kefu {
         color: #20A2E5;
@@ -1256,6 +1264,9 @@
         align-items: center;
         justify-content: center;
         @include line-height(8px);
+      }
+      .active {
+        animation: bounceIn 1s ease-in 0s 1 normal both;
       }
     }
     .btn-shopping-car {
