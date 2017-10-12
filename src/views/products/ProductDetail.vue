@@ -69,7 +69,7 @@
           <span class="more font-14">更多价格</span>
           <div
             class="icon-box"
-            v-bind:class="{'up': morePrice}">
+            v-bind:class="{'up active': morePrice, 'inactive': !morePrice}">
             <i class="iconfont icon-gengduo primary font-15"></i>
           </div>
         </div>
@@ -962,7 +962,7 @@
         let self = this
         document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
           if (self.showPreview || self.popUp) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+            e.preventDefault()
           }
         })
       },
@@ -1113,6 +1113,12 @@
       }
       .up {
         transform: rotate(-90deg);
+      }
+      .active {
+        animation:rotateTo90 0.2s ease-in-out 0s 1 normal both;
+      }
+      .inactive {
+        animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
       }
       .more-price {
         position: absolute;
@@ -1326,7 +1332,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1002;
+    z-index: 1003 !important;
     background-color: $dark;
     img[lazy=loading] {
       max-width: 100%;
