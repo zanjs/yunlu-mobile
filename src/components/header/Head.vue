@@ -11,46 +11,43 @@
       <div
         class="icon icon-box flex"
         @click="openDropMenu()">
-        <i class="iconfont icon-fenlei"></i>
+        <i class="iconfont icon-fenlei" :class="{'active': showMenu, 'inactive': !showMenu}"></i>
       </div>
     </section>
+    <div
+      class="menu"
+      v-show="showMenu"
+      id="product-drop-menu">
+      <div
+        class="item"
+        @click.stop="goHome()">
+        <i class="iconfont icon-shouye"></i>
+        <span>首页</span>
+      </div>
+      <div
+        class="item"
+        @click.stop="goFavorites()">
+        <i class="iconfont icon-shoucang"></i>
+        <span>收藏夹</span>
+      </div>
+      <div
+        class="item"
+        @click.stop="searchNearBy()">
+        <i class="iconfont icon-fujin"></i>
+        <span>搜附近</span>
+      </div>
+      <div
+        class="item"
+        @click.stop="goReport()">
+        <i class="iconfont icon-jubao"></i>
+        <span>举报Ta</span>
+      </div>
+    </div>
     <div
       v-show="showMenu"
       id="fullscreen-cover"
       class="full-screen-cover">
     </div>
-    <section
-      v-show="showMenu"
-      class="product-drop-menu">
-      <div
-        class="menu"
-        id="product-drop-menu">
-        <div
-          class="item"
-          @click.stop="goHome()">
-          <i class="iconfont icon-shouye"></i>
-          <span>首页</span>
-        </div>
-        <div
-          class="item"
-          @click.stop="goFavorites()">
-          <i class="iconfont icon-shoucang"></i>
-          <span>收藏夹</span>
-        </div>
-        <div
-          class="item"
-          @click.stop="searchNearBy()">
-          <i class="iconfont icon-fujin"></i>
-          <span>搜附近</span>
-        </div>
-        <div
-          class="item"
-          @click.stop="goReport()">
-          <i class="iconfont icon-jubao"></i>
-          <span>举报Ta</span>
-        </div>
-      </div>
-    </section>
   </header>
 </template>
 
@@ -112,9 +109,6 @@
     },
     mounted () {
       this.addTouch()
-    },
-    computed: {
-
     }
   }
 </script>
@@ -130,13 +124,19 @@
     align-items: center;
     position: absolute;
     top: 0;
-    z-index: 2;
+    z-index: 1003 !important;
     .icon-box {
       @include px2rem(border-radius, 35px);
       @include px2rem(width, 70px);
       @include px2rem(height, 70px);
       background-color: rgba(57, 55, 66, .8);
       color: $white;
+    }
+    .active {
+      animation:rotateTo90 0.2s ease-in-out 0s 1 normal both;
+    }
+    .inactive {
+      animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
     }
     .left {
       @include pm2rem(margin, 0px, 0px, 0px, 20px);
@@ -164,58 +164,54 @@
   }
   .full-screen-cover {
     position: fixed;
+    left: 0;
+    right: 0;
     top: 0;
-    width: 100%;
     max-width: 540px;
     bottom: 0;
   }
-  .product-drop-menu {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .menu {
     width: 100%;
-    z-index: 0;
-    .menu {
-      position: absolute;
-      @include px2rem(width, 282px);
-      @include px2rem(top, 104px);
-      @include px2rem(right, 16px);
-      background-color: rgba(57, 55, 66, .8);
-      z-index: 9999 !important;
-      .item {
-        @include px2rem(height, 96px);
-        border-bottom: 1px solid $third-dark;
-        @include pm2rem(padding, 0px, 0px, 0px, 34px);
-        @include px2rem(line-height, 96px);
-        @include font-dpr(15px);
-        color: $white;
-        i {
-          @include px2rem(margin-right, 16px);
-        }
-        span {
-          font-weight: bold;
-        }
+    position: absolute;
+    @include px2rem(width, 282px);
+    @include px2rem(top, 104px);
+    @include px2rem(right, 16px);
+    background-color: rgba(57, 55, 66, .8);
+    z-index: 9999 !important;
+    .item {
+      @include px2rem(height, 96px);
+      border-bottom: 1px solid $third-dark;
+      @include pm2rem(padding, 0px, 0px, 0px, 34px);
+      @include px2rem(line-height, 96px);
+      @include font-dpr(15px);
+      color: $white;
+      i {
+        @include px2rem(margin-right, 16px);
       }
-      & .item:last-child {
-        border-bottom: none;
+      span {
+        font-weight: bold;
       }
     }
-    .menu:after {
-      content: '';
-      display: inline-block;
-      position: absolute;
-      @include px2rem(border-left-width, 14px);
-      @include px2rem(border-right-width, 14px);
-      @include px2rem(border-bottom-width, 28px);
-      border-left-color: transparent;
-      border-right-color: transparent;
-      border-bottom-color: rgba(57, 55, 66, .8);
-      border-style: solid;
-      border-top: none;
-      width: 0;
-      height: 0;
-      @include px2rem(top, -28px);
-      @include px2rem(right, 24px);
+    & .item:last-child {
+      border-bottom: none;
     }
   }
+  .menu:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    @include px2rem(border-left-width, 14px);
+    @include px2rem(border-right-width, 14px);
+    @include px2rem(border-bottom-width, 28px);
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: rgba(57, 55, 66, .8);
+    border-style: solid;
+    border-top: none;
+    width: 0;
+    height: 0;
+    @include px2rem(top, -28px);
+    @include px2rem(right, 24px);
+  }
+
 </style>
