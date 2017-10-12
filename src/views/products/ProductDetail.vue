@@ -896,7 +896,7 @@
               })
               setTimeout(() => {
                 clearTimeout(toast)
-                this.hasAddShoppingCar = false // 1000ms后重置加入购物车状态，是动画可以重复播放
+                this.hasAddShoppingCar = false // 1000ms后重置加入购物车状态，使动画可以重复播放
               }, 1000)
             } else {
               Toast({

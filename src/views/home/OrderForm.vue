@@ -10,226 +10,57 @@
       <div class="nav-bars full-width">
         <a
           class="tab"
-          :class="{'selected': activeIndex === 1}"
-          @click="selectTab(1)">
-          <div class="label">全部</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 2}"
-          @click="selectTab(2)">
-          <div class="label">待付款</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 3}"
-          @click="selectTab(3)">
-          <div class="label">待发货</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 4}"
-          @click="selectTab(4)">
-          <div class="label">待收货</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 5}"
-          @click="selectTab(5)">
-          <div class="label">待评价</div>
+          v-for="(item, index) in orderFormOptions"
+          :key="index"
+          :class="{'selected': activeIndex === index}"
+          @click="selectTab(index)">
+          <div class="label">{{item.title}}</div>
         </a>
       </div>
       <div class='nav-bar-container'>
-        <template v-if="activeIndex === 1">
-          <div
-            v-if="allForms.length > 0"
-            key="1">
-            <order-form-list
-              key="1"
-              :store="allForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
-            <mugen-scroll
-              key="allForms"
-              :handler="loadAllFormsBottom"
-              :handle-on-mount="false"
-              :should-handle="!allLoading">
-              <div
-                v-show="allLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="1"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 2">
-          <div
-            v-if="submittedForms.length > 0"
-            key="2">
-            <order-form-list
-              key="2"
-              class="has-option"
-              :store="submittedForms"
-              :selectable="true"
-              @checked="checkForm"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
-            <mugen-scroll
-              key="submittedForms"
-              :handler="loadSubmittedFormsBottom"
-              :handle-on-mount="false"
-              :should-handle="!submittedLoading">
-              <div
-                v-show="submittedLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="2"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 3">
-          <div
-            v-if="paidForms.length > 0"
-            key="3">
-            <order-form-list
-              key="3"
-              :store="paidForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
-            <mugen-scroll
-              key="paidForms"
-              :handler="loadPaidFormsBottom"
-              :handle-on-mount="false"
-              :should-handle="!paidLoading">
-              <div
-                v-show="paidLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="3"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 4">
-          <div
-            v-if="deliveredForms.length > 0"
-            key="4">
-            <order-form-list
-              key="4"
-              :store="deliveredForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
-            <mugen-scroll
-              key="deliveredForms"
-              :handler="loadDeliveredFormsBottom"
-              :handle-on-mount="false"
-              :should-handle="!deliveredLoading">
-              <div
-                v-show="deliveredLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="4"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 5">
-          <div
-            v-if="receiptedForms.length > 0"
-            key="5">
-            <order-form-list
-              key="5"
-              :store="receiptedForms"
-              :selectable="false"
-              @go-enterprise="goEnterprise"
-              @go-detail="goDetail"
-              @action="action">
-            </order-form-list>
-            <mugen-scroll
-              key="receiptedForms"
-              :handler="loadReceiptedFormsBottom"
-              :handle-on-mount="false"
-              :should-handle="!receiptedLoading">
-              <div
-                v-show="receiptedLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="5"
-            class="no-form">
-            <img src="../../assets/emptyOrder.png">
-            <p>您还没有相关订单哦~</p>
-          </div>
-        </template>
+        <div v-for="(item, index) in orderFormOptions" :key="index">
+          <template v-if="activeIndex === index">
+            <div v-if="item.forms.length > 0">
+              <order-form-list
+                :store="item.forms"
+                :selectable="item.selectable"
+                @checked="checkForm"
+                @go-enterprise="goEnterprise"
+                @go-detail="goDetail"
+                @action="action">
+              </order-form-list>
+              <mugen-scroll
+                :handler="loadBottom"
+                :handle-on-mount="false"
+                :should-handle="!item.loading">
+                <div
+                  v-if="item.loading || item.noMoreData"
+                  class="loading">
+                  <mt-spinner
+                    v-if="item.loading"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{item.text}}</p>
+                </div>
+              </mugen-scroll>
+            </div>
+            <div
+              v-else
+              class="no-form">
+              <img src="../../assets/emptyOrder.png">
+              <p>您还没有相关订单哦~</p>
+            </div>
+          </template>
+        </div>
       </div>
     </section>
     <section
-      v-if="activeIndex === 2 && submittedForms.length > 0"
+      v-if="activeIndex === 1 && orderFormOptions[activeIndex].forms.length > 0"
       class="option-bar full-width">
       <a
         class="icon-box"
-        @click.stop="handleAllCheck(submittedForms, checkAll)">
+        @click.stop="handleAllCheck(orderFormOptions[activeIndex].forms, checkAll)">
         <i
           v-if="checkAll"
           class="iconfont icon-xuanzhong checked"></i>
@@ -277,7 +108,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
-  import { getStore, setStore, removeStore, getScrollTop, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
@@ -287,27 +118,63 @@
         header: '我的订单',
         iconClass: 'icon-fenlei',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        activeIndex: 1,
-        allLoading: false,
-        allPageIndex: 1,
-        allPageSize: 20,
-        allForms: [],
-        submittedLoading: false,
-        submittedPageIndex: 1,
-        submittedPageSize: 20,
-        submittedForms: [], // 待付款
-        paidLoading: false,
-        paidPageIndex: 1,
-        paidPageSize: 20,
-        paidForms: [], // 待发货
-        deliveredLoading: false,
-        deliveredPageIndex: 1,
-        deliveredPageSize: 20,
-        deliveredForms: [], // 待收货
-        receiptedLoading: false,
-        receiptedPageIndex: 1,
-        receiptedPageSize: 20,
-        receiptedForms: [], // 待评价
+        activeIndex: 0,
+        orderFormOptions: [
+          {
+            loading: true,
+            selectable: false,
+            title: '全部',
+            text: '加载中...',
+            pageIndex: 1,
+            pageSize: 20,
+            forms: [],
+            noMoreData: false,
+            params: {}
+          }, {
+            loading: true,
+            selectable: true,
+            title: '待付款',
+            text: '加载中...',
+            pageIndex: 1,
+            pageSize: 20,
+            forms: [],
+            noMoreData: false,
+            params: {state: ['submitted']}
+          }, {
+            loading: true,
+            selectable: false,
+            title: '待发货',
+            text: '加载中...',
+            pageIndex: 1,
+            pageSize: 20,
+            forms: [],
+            noMoreData: false,
+            params: {state: ['paid', 'reminded']}
+          }, {
+            loading: true,
+            selectable: false,
+            title: '待收货',
+            text: '加载中...',
+            pageIndex: 1,
+            pageSize: 20,
+            forms: [],
+            noMoreData: false,
+            params: {state: ['delivered']}
+          }, {
+            loading: true,
+            selectable: false,
+            title: '待评价',
+            text: '加载中...',
+            pageIndex: 1,
+            pageSize: 20,
+            forms: [],
+            noMoreData: false,
+            params: {
+              state: ['receipted', 'finished'],
+              item_state: ['mounted', 'accepted', 'rejected']
+            }
+          }
+        ],
         showConfirm: false,
         cancelOrderId: '',
         confirmMsg: '确定取消订单？',
@@ -334,48 +201,14 @@
       selectTab (index) {
         this.activeIndex = index
       },
-      // 处理五种不同状态订单的参数
-      handleStateParams (index) {
-        switch (index) {
-          case 0:
-            return {}
-          case 1:
-            return {state: ['submitted']}
-          case 2:
-            return {state: ['paid', 'reminded']}
-          case 3:
-            return {state: ['delivered']}
-          case 4:
-            return {
-              state: ['receipted', 'finished'],
-              item_state: ['mounted', 'accepted', 'rejected']
-            }
-        }
-      },
       // 处理返回的订单
       handleOrderForms (index, orderForms) {
-        if (index === 0) {
-          this.allForms = [...this.allForms, ...this.orderFormsFilter(orderForms)]
-          this.allLoading = false
-          this.getOrderForms(1, this.submittedPageIndex, this.submittedPageSize)
-        } else if (index === 1) {
-          this.submittedForms = [...this.submittedForms, ...this.orderFormsFilter(orderForms)]
-          this.submittedLoading = false
-          this.getOrderForms(2, this.paidPageIndex, this.paidPageSize)
-        } else if (index === 2) {
-          this.paidForms = [...this.paidForms, ...this.orderFormsFilter(orderForms)]
-          this.paidLoading = false
-          this.getOrderForms(3, this.deliveredPageIndex, this.deliveredPageSize)
-        } else if (index === 3) {
-          this.deliveredForms = [...this.deliveredForms, ...this.orderFormsFilter(orderForms)]
-          this.deliveredLoading = false
-          this.getOrderForms(4, this.receiptedPageIndex, this.receiptedPageSize)
-        } else if (index === 4) {
-          this.receiptedForms = [...this.receiptedForms, ...this.orderFormsFilter(orderForms)]
-          this.receiptedLoading = false
-        } else {
-          console.error('获取订单信息失败')
+        this.orderFormOptions[index].forms = [...this.orderFormOptions[index].forms, ...this.orderFormsFilter(orderForms)]
+        this.orderFormOptions[index].loading = false
+        if (index === 4) {
+          return false
         }
+        this.getOrderForms(index + 1, this.orderFormOptions[index + 1].pageIndex, this.orderFormOptions[index + 1].pageSize)
       },
       // 过滤掉返回订单中的空订单,并且添加checked字段
       orderFormsFilter (arr) {
@@ -395,10 +228,10 @@
       },
       // 勾选订单
       checkForm (item) {
-        for (let i = 0; i < this.submittedForms.length; i++) {
-          if (item.id === this.submittedForms[i].code) {
-            this.submittedForms[i].checked = !item.bool
-            this.isAllChecked(this.submittedForms)
+        for (let i = 0; i < this.orderFormOptions[1].forms.length; i++) {
+          if (item.id === this.orderFormOptions[1].forms[i].code) {
+            this.orderFormOptions[1].forms[i].checked = !item.bool
+            this.isAllChecked(this.orderFormOptions[1].forms)
           }
         }
       },
@@ -418,30 +251,8 @@
         }
         this.checkAll = this.hasChecked = !bool
       },
-      handleLoading (index, bool) {
-        switch (index) {
-          case 0:
-            this.allLoading = bool
-            break
-          case 1:
-            this.submittedLoading = bool
-            break
-          case 2:
-            this.paidLoading = bool
-            break
-          case 3:
-            this.deliveredLoading = bool
-            break
-          case 4:
-            this.receiptedLoading = bool
-            break
-          default:
-            this.allLoading = bool
-            break
-        }
-      },
       getOrderForms (index, pageIndex, pageSize) {
-        this.handleLoading(index, true)
+        this.orderFormOptions[index].loading = true
         this.$store.dispatch('commonAction', {
           url: '/order_forms',
           method: 'get',
@@ -449,23 +260,23 @@
             token: this.token,
             page: pageIndex,
             per_page: pageSize,
-            ...(this.handleStateParams(index))
+            ...this.orderFormOptions[index].params
           },
           data: {},
           target: this,
           resolve: (state, res) => {
-            if (res.data.order_forms.length === 0) {
-              if (pageIndex !== 1) {
-                Toast({
-                  message: '没有更多数据了',
-                  duration: 1000
-                })
+            if (pageIndex === 1) {
+              this.orderFormOptions[index].forms = this.orderFormsFilter(res.data.order_forms)
+              this.orderFormOptions[index].loading = false
+              if (index === 4) {
+                return false
               }
-              this.$nextTick(() => {
-                setScrollTop(getScrollTop() - 50)
-              })
-              this.handleLoading(index, false)
+              this.getOrderForms(index + 1, this.orderFormOptions[index + 1].pageIndex, this.orderFormOptions[index + 1].pageSize)
             } else {
+              if (res.data.order_forms.length === 0) {
+                this.orderFormOptions[index].noMoreData = true
+                this.orderFormOptions[index].text = '没有更多数据了...'
+              }
               this.handleOrderForms(index, res.data.order_forms)
             }
           },
@@ -582,7 +393,7 @@
                 duration: 500
               })
               this.resetPageIndex()
-              this.getOrderForms(0, this.allPageIndex, this.allPageSize)
+              this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
             }
           }
         })
@@ -595,11 +406,12 @@
       },
       // 重置所以的分页索引
       resetPageIndex () {
-        this.allPageIndex = 1
-        this.submittedPageIndex = 1
-        this.paidPageIndex = 1
-        this.deliveredPageIndex = 1
-        this.receiptedPageIndex = 1
+        this.orderFormOptions = this.orderFormOptions.map(i => {
+          i.pageIndex = 1
+          i.noMoreData = false
+          i.text = '加载中...'
+          return i
+        })
       },
       openDropMenu () {
         this.showMenu = true
@@ -640,29 +452,15 @@
       payAll () {
         this.notOpen()
       },
-      loadAllFormsBottom () {
-        this.allPageIndex += 1
-        this.getOrderForms(0, this.allPageIndex, this.allPageSize)
-      },
-      loadSubmittedFormsBottom () {
-        this.submittedPageIndex += 1
-        this.getOrderForms(1, this.submittedPageIndex, this.submittedPageSize)
-      },
-      loadPaidFormsBottom () {
-        this.paidPageIndex += 1
-        this.getOrderForms(2, this.paidPageIndex, this.paidPageSize)
-      },
-      loadDeliveredFormsBottom () {
-        this.deliveredPageIndex += 1
-        this.getOrderForms(3, this.deliveredPageIndex, this.deliveredPageSize)
-      },
-      loadReceiptedFormsBottom () {
-        this.receiptedPageIndex += 1
-        this.getOrderForms(4, this.receiptedPageIndex, this.receiptedPageSize)
+      loadBottom () {
+        if (!this.orderFormOptions[this.activeIndex].noMoreData) {
+          this.orderFormOptions[this.activeIndex].pageIndex += 1
+          this.getOrderForms(this.activeIndex, this.orderFormOptions[this.activeIndex].pageIndex, this.orderFormOptions[this.activeIndex].pageSize)
+        }
       }
     },
     mounted () {
-      this.getOrderForms(0, this.allPageIndex, this.allPageSize)
+      this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
       this.addTouch()
     }
   }
