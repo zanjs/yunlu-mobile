@@ -19,7 +19,7 @@
     </div>
     <div class="tips">
       <p>如果无法下载，你可以复制下面链接，用其他的浏览器打开</p>
-      <a href="http://www.yunlu6.com/yunlu.apk">http://www.yunlu6.com/yunlu.apk</a>
+      <a href="https://www.yunlu6.com/yunlu.apk">https://www.yunlu6.com/yunlu.apk</a>
     </div>
   </section>
 </template>
@@ -45,7 +45,7 @@
         this.$router.push({name: 'See'})
       },
       download () {
-        window.location.href = 'http://www.yunlu6.com/yunlu.apk'
+        window.location.href = 'https://www.yunlu6.com/yunlu.apk'
       }
     },
     mounted () {
