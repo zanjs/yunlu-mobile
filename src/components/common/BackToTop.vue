@@ -54,6 +54,7 @@
       background-color: rgba(0, 0, 0, .68);
       line-height: 1;
       z-index: 1004;
+      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
       i {
         @include font-dpr(21px);
       }
