@@ -42,6 +42,7 @@
     z-index: 1001;
     border: none;
     box-sizing: border-box;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
     input {
       background-color: $ninth-grey;
       width: 100%;
