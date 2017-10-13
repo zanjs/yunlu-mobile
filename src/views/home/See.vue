@@ -1,9 +1,6 @@
 <template>
   <section>
     <div class="search-bar full-width">
-      <img
-        src="../../assets/homePageTopBg.png"
-        class="full-width">
       <div
         class="search-input"
         @click="goRoute('SearchProducts', true)">
@@ -247,12 +244,10 @@
     position: fixed;
     top: 0;
     z-index: 999;
-    img {
-      position: fixed;
-      top: 0;
-      @include px2rem(height, 114px);
-      z-index: 999;
-    }
+    @include px2rem(height, 114px);
+    background: url("../../assets/homePageTopBg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     .search-input {
       position: relative;
       flex: 1;
