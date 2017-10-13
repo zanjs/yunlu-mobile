@@ -73,13 +73,19 @@
             <i class="iconfont icon-gengduo primary font-15"></i>
           </div>
         </div>
-        <div class="more-price white-bg font-16" :class="{'hide': !morePrice}">
-          <p
-            v-for="(item, index) in productDetail.prices"
-            :key="item.id"
-            @click="changePrice(item)">
-            {{item.money}}
-          </p>
+        <div class="more-price white-bg font-16" :class="{'menu-active': morePrice}">
+          <div class="menu-list">
+            <ul>
+              <li
+                v-for="(item, index) in productDetail.prices"
+                :key="index"
+                @click="changePrice(item)">
+                <a class="item">
+                  {{item.money}}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div
@@ -1130,18 +1136,77 @@
         @include px2rem(top, 60px);
         text-align: center;
         color: #FF0000;
-        border-top: 1px solid $fifth-grey;
         z-index: 1002;
-        animation:fadeInDown 0.2s ease-in-out 0s 1 normal both;
-        p {
-          border: 1px solid $fifth-grey;
-          border-top: none;
-          box-sizing: border-box;
-          @include pm2rem(padding, 8px, 10px, 8px, 10px);
+        overflow: hidden;
+        .menu-list {
+          position: absolute;
+          width: 100%;
+          transform: translate3d(0, -100%, 0);
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height .3s cubic-bezier(0.3, .03, .08, .65);
+          background-color: $white;
+          ul {
+            overflow-y: auto;
+          }
+          .item {
+            display: block;
+            transition: transform .2s ease-in,opacity .4s ease-in;
+            transform: translate3d(0, -20% ,0);
+            opacity: 0;
+            @include px2rem(height, 70px);
+            @include px2rem(line-height, 70px);
+            border: 1px solid $fifth-grey;
+            border-bottom: none;
+          }
+          li:last-child {
+            .item {
+              border-bottom: 1px solid $fifth-grey;
+            }
+          }
         }
-      }
-      .hide {
-        animation:fadeOutUp 0.2s ease-in-out 0s 1 normal both
+        &.menu-active {
+          overflow: visible;
+          .menu-list {
+            @include px2rem(max-height, 280px);
+            overflow: visible;
+            transform: translate3d(0,0,0);
+            .item {
+              opacity: 1;
+              transform: translate3d(0,0,0);
+            }
+            li:nth-last-child(1) .item {
+              transition-delay: .16s;
+            }
+            li:nth-last-child(2) .item {
+              transition-delay: .2s;
+            }
+            li:nth-last-child(3) .item {
+              transition-delay: .24s;
+            }
+            li:nth-last-child(4) .item {
+              transition-delay: .28s;
+            }
+            li:nth-last-child(5) .item {
+              transition-delay: .32s;
+            }
+            li:nth-last-child(6) .item {
+              transition-delay: .36s;
+            }
+            li:nth-last-child(7) .item {
+              transition-delay: .4s;
+            }
+            li:nth-last-child(8) .item {
+              transition-delay: .44s;
+            }
+            li:nth-last-child(9) .item {
+              transition-delay: .48s;
+            }
+            li:nth-last-child(10) .item {
+              transition-delay: .52s;
+            }
+          }
+        }
       }
     }
     .inventory {
