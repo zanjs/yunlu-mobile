@@ -65,6 +65,7 @@
     z-index: 1001;
     width: 100%;
     max-width: 540px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2);
     .item {
       height: inherit;
       display: flex;
