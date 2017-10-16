@@ -55,16 +55,6 @@
          @click="handleClick({'type': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <!-- <a v-if="store && store.wechat"
-         class="icon-box"
-         @click="handleClick({'type': 'wechat', 'value': store.wechat})">
-        <i class="iconfont icon-weixin weixin"></i>
-      </a>
-      <a v-if="store && store.weibo"
-         class="icon-box"
-         @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
-        <i class="iconfont icon-weibo weibo"></i>
-      </a> -->
       <div v-else-if="!hasLink" class="tips">&nbsp;</div>
     </div>
   </section>

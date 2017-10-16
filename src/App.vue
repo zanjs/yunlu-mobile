@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeAllStore } from './config/mUtils'
+  import { getStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -146,27 +146,6 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
-      },
-      loginRequest (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/login_info',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            // 有两个签名，一个是设备签名，一个是用户签名
-            setStore('device_signature', res.data.sign)
-            if (!res.data.authentication_token) {
-            } else {
-              setStore('user', res.data)
-              this.getSignature(res.data.authentication_token, false, '')
-            }
-          },
-          reject: () => {
-          }
-        })
       }
     },
     updated () {
