@@ -484,15 +484,15 @@ body {
   opacity: 1;
 }
 .fade-enter-active {
-  -webkit-transition: .5s ease-in;
-  transition: .5s ease-in;
+  -webkit-transition: .1s ease-in;
+  transition: .1s ease-in;
 }
 .fade-leave {
   opacity: 1;
 }
 .fade-leave-active {
-  -webkit-transition: .5s ease-out;
-  transition: .5s ease-out;
+  -webkit-transition: .1s ease-out;
+  transition: .1s ease-out;
 }
 .fade-leave-to {
   opacity: 0
