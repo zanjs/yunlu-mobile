@@ -142,6 +142,111 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
+      },
+      async initImClient (id) {
+        this.deviceDelegate = await this.$realtime.createIMClient(`dev_${id}`, {
+          signatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('device_signature').signature,
+                timestamp: getStore('device_signature').timestamp / 1,
+                nonce: getStore('device_signature').nonce
+              })
+            })
+          },
+          conversationSignatureFactory: () => {
+            return new Promise((resolve, reject) => {
+              return resolve({
+                signature: getStore('device_signature').signature,
+                timestamp: getStore('device_signature').timestamp / 1,
+                nonce: getStore('device_signature').nonce
+              })
+            })
+          }
+        })
+        this.$store.dispatch('setDeviceDelegate', this.deviceDelegate)
+        this.deviceDelegate.on('message', message => {
+          if (message.from && message.from === 'system' && message.content && message.content._lcattrs && message.content._lcattrs.token) {
+            this.user.authentication_token = message.content._lcattrs.token
+            setStore('user', this.user)
+            this.getSignature(message.content._lcattrs.token, false, '')
+            this.closeDialog()
+          } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
+            this.closeDialog()
+            this.showRejectPopup = true
+            MessageBox.alert('主控设备拒绝了您的登录请求！').then(action => {
+              this.showRejectPopup = false
+            })
+          }
+        })
+      },
+      authLogin (token, provider) {
+        this.$store.dispatch('commonAction', {
+          url: '/login_info',
+          method: 'get',
+          params: {
+            token: token
+          },
+          data: {},
+          target: this,
+          resolve: (state, res) => {
+            setStore('device_signature', res.data.sign)
+            if (!res.data.authentication_token && res.data.id) {
+              this.user = res.data
+              this.countDown(AUTHORIZATION_TIME, 1000)
+              this.showDialog = true
+              this.initImClient(res.data.device_id)
+            } else if (res.data.authentication_token && res.data.id) {
+              setStore('user', res.data)
+              Indicator.open({
+                text: '正在登录...',
+                spinnerType: 'fading-circle'
+              })
+              this.getClosedConversationList()
+              this.init()
+            } else {
+              Toast('授权登录出错')
+            }
+          },
+          reject: () => {
+            Toast('授权登录出错')
+          }
+        })
+      },
+      countDown (seconds, speed = 1000) {
+        const count = () => {
+          let minute = Math.floor(seconds / 60)
+          let second = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
+          if (seconds < 3600) {
+            this.time = `${minute} : ${second}`
+            seconds -= 1
+            if (this.time === '0 : 00' && this.interval) {
+              clearInterval(this.interval)
+              if (this.deviceDelegate) {
+                this.deviceDelegate.close().then(() => {
+                  // 下线成功（倒计时走完后，没有授权则注销，点击登录，重新登录leancloud）
+                }).catch(console.error.bind(console))
+              }
+              this.closeDialog()
+              return false
+            }
+          }
+        }
+        count()
+        this.interval = setInterval(count, speed)
+      },
+      closeDialog () {
+        if (this.interval) {
+          clearInterval(this.interval)
+        }
+        this.showDialog = false
+      },
+      shouldLogin () {
+        if (this.$route.query.tmp_token) {
+          this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
+        } else if (mobileClient() === 'weixin') {
+          window.location.href = this.weixinLogin
+        }
       }
     },
     updated () {
