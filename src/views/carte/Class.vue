@@ -95,7 +95,7 @@
           <template v-if="activeIndex === 2">
             <template v-if="hasLogin">
               <template v-if="personMembers && personMembers.length > 0">
-                <div>
+                <div key="person">
                   <person-list
                     :store="personMembers"
                     @click="goPersonCarte">
@@ -140,7 +140,7 @@
           </template>
           <template v-if="activeIndex === 3">
             <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div>
+              <div key="enterprise">
                 <enterprise-list
                   :store="enterpriseMembers"
                   @click="goEnterpriseCarte">
