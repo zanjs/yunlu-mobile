@@ -10,15 +10,16 @@
       </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
-        <p v-else>胖胖的云庐君</p>
-        <template v-if="store && store.mobiles && store.mobiles.length > 0">
+        <p v-else>&nbsp;</p>
+        <div v-if="!store || !store.name" class="level">&nbsp;</div>
+        <template v-else-if="store && store.mobiles && store.mobiles.length > 0">
           <div class="level">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-zhenshi"></use>
             </svg>
           </div>
         </template>
-        <template v-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
+        <template v-else-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
           <div class="level">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-zhenshi3"></use>
@@ -64,9 +65,7 @@
          @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
         <i class="iconfont icon-weibo weibo"></i>
       </a> -->
-      <div
-        v-if="!hasLink"
-        class="tips">暂无联系方式</div>
+      <div v-else-if="!hasLink" class="tips">&nbsp;</div>
     </div>
   </section>
 </template>
@@ -90,7 +89,7 @@
     },
     computed: {
       hasLink () {
-        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.id || this.store.email || this.store.address || this.store.qq)
+        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || !!this.store.id || !!this.store.email || !!this.store.address || !!this.store.qq)
       }
     }
   }

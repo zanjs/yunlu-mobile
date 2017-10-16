@@ -1,34 +1,21 @@
 <template>
   <section class="card white-bg">
-    <div class="user-info"
-         @click.stop="handleClick(store)">
+    <div class="user-info"  @click.stop="handleClick(store)">
       <div class="img-container flex">
-        <img v-if="store && store.logo"
-             :src="store.logo"/>
-        <div v-else>
-
-        </div>
+        <img v-if="store && store.logo" :src="store.logo"/>
+        <div v-else></div>
       </div>
       <div class="flex-between content">
-        <p
-          v-if="store && store.company"
-          class="font-17 ellipsis">{{store.company}}</p>
-        <p
-          v-else
-          class="font-17 ellipsis">胖胖的云庐君</p>
-        <div v-if="true"
-          class="icon-container">
+        <p v-if="store && store.company" class="font-17 ellipsis">{{store.company}}</p>
+        <p v-else class="font-17 ellipsis">&nbsp;</p>
+        <div v-if="true" class="icon-container">
           <template v-if="store && store.state && store.state !== 'approved'">
-            <svg
-              class="icon large"
-              aria-hidden="true">
+            <svg class="icon large" aria-hidden="true">
               <use xlink:href="#icon-zhenshi3"></use>
             </svg>
           </template>
           <template v-if="store && store.state && store.state === 'approved'">
-            <svg
-              class="icon large"
-              aria-hidden="true">
+            <svg class="icon large" aria-hidden="true">
               <use xlink:href="#icon-zhenshi4"></use>
             </svg>
           </template>
@@ -44,24 +31,16 @@
             </svg>
           </template>
         </div>
-        <div
-          v-else
-          class="icon-container">
+        <div v-else class="icon-container">
         </div>
         <div class="address-container">
           <!-- 取消显示地址 -->
-          <span
-            class="address font-13 second"
-            v-if="false">
+          <span class="address font-13 second" v-if="false">
             {{store.provice_name}}&middot;{{store.city_name}}
           </span>
-          <span
-            v-else
-            class="address font-13 second">&nbsp;</span>
+          <span v-else class="address font-13 second">&nbsp;</span>
           <!-- 取消显示类型 -->
-          <span
-            v-if="false"
-            class="tag white primary-bg font-12">{{store.service.name}}</span>
+          <span v-if="false" class="tag white primary-bg font-12">{{store.service.name}}</span>
         </div>
       </div>
     </div>
@@ -108,9 +87,8 @@
         class="icon-box">
         <i class="iconfont icon-wangluo wangluo"></i>
       </a>
-      <div
-        v-if="!hasLink"
-        class="tips">暂无联系方式</div>
+      <div v-else-if="!store" class="tips">&nbsp;</div>
+      <div v-else-if="!hasLink" class="tips">暂无联系方式</div>
     </div>
   </section>
 </template>
@@ -135,7 +113,8 @@
     },
     computed: {
       hasLink () {
-        return (this.products && this.products.length > 0 && this.store && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || (this.store && ((this.store.mobile && !isPc()) || this.store.email || this.store.address || this.store.longitude || this.store.latitude || this.store.wechat || this.store.website || this.store.qq))
+        // 机构中，只有企业与商城支持与客服会话
+        return !!this.store.id && ((this.products && this.products.length > 0 && this.store.service.name !== '协会' && this.store.service.name !== '校友会' && this.store.service.name !== '班级') || ((!!this.store.mobile && !isPc()) || !!this.store.email || !!this.store.address || !!this.store.longitude || !!this.store.latitude || !!this.store.wechat || !!this.store.website || !!this.store.qq))
       }
     }
   }
