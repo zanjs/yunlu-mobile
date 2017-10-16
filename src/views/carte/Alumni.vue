@@ -94,7 +94,7 @@
           </template>
           <template v-if="activeIndex === 2">
             <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div>
+              <div key="enterprise">
                 <enterprise-list
                   :store="enterpriseMembers"
                   @click="goClass">
@@ -126,7 +126,7 @@
           </template>
           <template v-if="activeIndex === 3">
             <template v-if="alumniBusiness && alumniBusiness.length > 0">
-              <div>
+              <div key="person">
                 <enterprise-list
                   :store="alumniBusiness"
                   @click="goEnterpriseCarte">
