@@ -40,7 +40,7 @@
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/#${this.$route.path}?provider=wechat&tmp_token=`)}`,
+        weixinLogin: `${AUTH_URL}` + '/member/auth/wechat?url=' + encodeURIComponent(`/#${this.$route.path}?provider=wechat&tmp_token=`),
         title: '提醒',
         time: AUTHORIZATION_TIME,
         tips: '登录请求已发送，请等待授权...',
@@ -421,7 +421,7 @@
       transform: rotate(0deg);
     }
   }
-    @keyframes bounceIn {
+  @keyframes bounceIn {
     from, 20%, 40%, 60%, 80%, to {
       animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
     }
