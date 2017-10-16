@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeAllStore, mobileClient } from './config/mUtils'
+  import { getStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -142,41 +142,7 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
-      },
-      loginRequest (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/login_info',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            // 有两个签名，一个是设备签名，一个是用户签名
-            setStore('device_signature', res.data.sign)
-            if (!res.data.authentication_token) {
-            } else {
-              setStore('user', res.data)
-              this.getSignature(res.data.authentication_token, false, '')
-            }
-          },
-          reject: () => {
-          }
-        })
-      },
-      // 如果是在微信中打开，则静默登录
-      autoLogin () {
-        if (this.$route.query.tmp_token) {
-          this.loginRequest(this.$route.query.tmp_token)
-        } else if (mobileClient() === 'weixin' && !this.$route.query.tmp_token) {
-          // let redirectUrl = encodeURIComponent('/#/see?tmp_token=')
-          window.location.href = 'https://test.yunlu6.com/member/auth/wechat'
-        }
       }
-    },
-    mounted () {
-      // TODO: 需要获取当前地址作为回调地址，并在此文件中向后台发送code，并阻止用户操作。
-      // this.autoLogin()
     },
     updated () {
       this.beforeInit()
