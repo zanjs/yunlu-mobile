@@ -5,10 +5,10 @@
         <img v-if="store && store.logo" :src="store.logo"/>
         <div v-else></div>
       </div>
-      <div class="flex-between content">
+      <div class="content">
         <p v-if="store && store.company" class="font-17 ellipsis">{{store.company}}</p>
         <p v-else class="font-17 ellipsis">&nbsp;</p>
-        <div v-if="true" class="icon-container">
+        <div class="icon-container">
           <template v-if="store && store.state && store.state !== 'approved'">
             <svg class="icon large" aria-hidden="true">
               <use xlink:href="#icon-zhenshi3"></use>
@@ -19,28 +19,6 @@
               <use xlink:href="#icon-zhenshi4"></use>
             </svg>
           </template>
-          <template v-if="false">
-            <svg class="icon large" aria-hidden="true">
-              <use xlink:href="#icon-zhenshi3"></use>
-            </svg>
-            <svg class="icon large" aria-hidden="true">
-              <use xlink:href="#icon-zhenshi3"></use>
-            </svg>
-            <svg class="icon large" aria-hidden="true">
-              <use xlink:href="#icon-zhenshi3"></use>
-            </svg>
-          </template>
-        </div>
-        <div v-else class="icon-container">
-        </div>
-        <div class="address-container">
-          <!-- 取消显示地址 -->
-          <span class="address font-13 second" v-if="false">
-            {{store.provice_name}}&middot;{{store.city_name}}
-          </span>
-          <span v-else class="address font-13 second">&nbsp;</span>
-          <!-- 取消显示类型 -->
-          <span v-if="false" class="tag white primary-bg font-12">{{store.service.name}}</span>
         </div>
       </div>
     </div>
@@ -75,12 +53,6 @@
         class="icon-box">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <!-- <a
-        v-if="store && store.wechat"
-        @click="handleIconClick({type: 'wechat', value: store.wechat})"
-        class="icon-box">
-        <i class="iconfont icon-weixin weixin"></i>
-      </a> -->
       <a
         v-if="store && store.website"
         @click="handleIconClick({type: 'website', value: store.website})"
@@ -144,6 +116,7 @@
         }
       }
       .content {
+        display: flex;
         flex: 1;
         @include px2rem(margin-left, 26px);
         @include px2rem(width, 448px);
@@ -159,19 +132,6 @@
         }
         svg {
           @include pm2rem(margin, 20px, 18px, 30px, 0px);
-        }
-        .address-container {
-          .address {
-            @include px2rem(margin-right, 40px);
-          }
-          .tag {
-            @include px2rem(height, 40px);
-            @include pm2rem(padding, 0px, 10px, 0px, 10px);
-            @include px2rem(border-radius, 10px);
-            display: inline-block;
-            @include px2rem(line-height, 42px);
-            text-align: center;
-          }
         }
       }
     }
