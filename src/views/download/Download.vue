@@ -25,8 +25,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -46,14 +45,19 @@
       },
       download () {
         window.location.href = 'https://www.yunlu6.com/yunlu.apk'
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        }
       }
     },
     mounted () {
-    },
-    computed: {
-      ...mapGetters([
-        'user'
-      ])
+      this.shouldLogin()
     }
   }
 </script>

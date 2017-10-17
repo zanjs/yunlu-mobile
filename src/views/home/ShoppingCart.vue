@@ -62,7 +62,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
@@ -521,11 +521,22 @@
         } else {
           this.$router.push({name: 'OrderPaying'})
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.getProducts()
+          this.getDeliveries(this.token)
+        }
       }
     },
     mounted () {
-      this.getProducts()
-      this.getDeliveries(this.token)
+      this.shouldLogin()
     }
   }
 </script>

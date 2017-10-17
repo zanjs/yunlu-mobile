@@ -68,7 +68,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
@@ -265,10 +265,21 @@
         for (let i = 0; i < ids.length; i++) {
           this.$store.dispatch('markAsRead', ids[i])
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.getConversationList()
+        }
       }
     },
     mounted () {
-      this.getConversationList()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
