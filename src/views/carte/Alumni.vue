@@ -159,7 +159,7 @@
         </transition>
       </div>
       <search
-        v-show="showSearchBar"
+        :show="showSearchBar"
         @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
@@ -169,7 +169,7 @@
           :placeholder="placeholder">
       </search>
       <order
-        v-show="showSearchBar && activeIndex === 0"
+        :show="showSearchBar && activeIndex === 0"
         :order-up="orderUp"
         :show-list="showList"
         @order-change="orderChange"
