@@ -220,7 +220,7 @@
           this.loading = false
         }
       },
-       // 手机QQ浏览器不支持array.findIndex方法
+      // 手机QQ浏览器不支持array.findIndex方法
       handleProducts (arr, arr2) {
         let tmpArr = []
         for (let i = 0; i < arr.length; i++) {
