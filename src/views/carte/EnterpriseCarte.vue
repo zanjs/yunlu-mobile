@@ -128,7 +128,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, setScrollTop, mobileClient } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
@@ -405,8 +405,7 @@
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else {
           this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
         }
@@ -415,8 +414,7 @@
         switch (item.type) {
           case 'chat':
             if (!this.hasLogin) {
-              setStore('beforeLogin', 'true')
-              this.$router.push({name: 'Login'})
+              this.goLogin()
             } else {
               this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.value}})
             }
@@ -441,6 +439,10 @@
             }
             break
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
       },
       linkToast (str, key, value) {
         Toast({
@@ -485,8 +487,7 @@
       },
       favoriteAction () {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest()
         } else {
@@ -569,11 +570,18 @@
           this.hasAddFavorites = res.data.enterprises.organization.favorable
           this.favoratesText = res.data.enterprises.organization.favorable ? '已收藏' : '收藏'
         }
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.getTeams(this.teamId)
+          this.handleSearchBar()
+        }
       }
     },
     mounted () {
-      this.getTeams(this.teamId)
-      this.handleSearchBar()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([

@@ -392,7 +392,7 @@
   import DownloadBar from '../../components/common/DownloadBar'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -786,14 +786,17 @@
       goHome () {
         this.$router.push({name: 'See'})
       },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
           this.favoritesRequest()
         } else if (this.hasLogin && this.hasAddFavorites) {
           this.removeFavorites()
         } else {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         }
       },
       favoritesRequest () {
@@ -861,7 +864,7 @@
       },
       openIm () {
         if (!this.hasLogin) {
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else {
           this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.currentTeamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
         }
@@ -873,8 +876,7 @@
         if (this.hasLogin) {
           this.addShoppingCarRequest()
         } else {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         }
       },
       addShoppingCarRequest () {
@@ -951,8 +953,7 @@
             this.$router.push({name: 'OrderPaying'})
           }
         } else {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         }
       },
       openFavorites () {
@@ -1012,12 +1013,18 @@
       },
       goEnterprise () {
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.stopTouchMove()
+          this.getProductDetail(this.productId)
+        }
       }
     },
     mounted () {
-      removeStore('beforeLogin')
-      this.stopTouchMove()
-      this.getProductDetail(this.productId)
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([

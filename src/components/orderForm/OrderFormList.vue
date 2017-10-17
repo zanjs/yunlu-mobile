@@ -312,6 +312,7 @@
     .footer {
       background-color: $white;
       @include px2rem(margin-bottom, 20px);
+      box-shadow: 0px 4px 4px rgba(202, 195, 195, 0.35);
       .total {
         @include px2rem(height, 86px);
         @include px2rem(padding-right, 30px);

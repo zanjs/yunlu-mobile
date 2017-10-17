@@ -79,7 +79,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
@@ -279,15 +279,19 @@
       shouldLogin () {
         if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
+        } else if (mobileClient() === 'weixin') {
+          window.location.href = this.weixinLogin
         }
       },
       // 使用微博登录的时候，会改变路由栈(路由栈中有两个登录页面路由)，有时在本页面返回任然会跳转本页面，需要再次返回
       autoGoBack () {
-        if (getStore('user') && getStore('user').authentication_token) {
+        if (getStore('user') && !!getStore('user').authentication_token) {
           this.goBack()
+        } else {
+          this.shouldLogin()
         }
       },
-      // 获取收货地址（只有从上皮详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
+      // 获取收货地址（只有从商品详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
       getDeliveries (token) {
         this.$store.dispatch('commonAction', {
           url: '/deliveries',
@@ -314,7 +318,6 @@
       }
     },
     mounted () {
-      this.shouldLogin()
       this.autoGoBack()
     }
   }
