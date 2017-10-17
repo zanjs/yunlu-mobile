@@ -4,8 +4,7 @@
       :title="title"
       @back="goBack()">
     </common-header>
-    <search
-      @search="getEnterprises(searchParams)">
+    <search :show="true" @search="getEnterprises(searchParams)">
       <input
         slot="input"
         type="search"

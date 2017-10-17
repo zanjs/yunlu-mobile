@@ -256,6 +256,9 @@
         }
       }
     },
+    mounted () {
+      // this.shouldLogin()
+    },
     updated () {
       this.beforeInit()
     }

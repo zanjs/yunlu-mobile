@@ -3,12 +3,12 @@ MAINTAINER Lyndon <snakeliwei@gmail.com>
 
 RUN apk --update --no-cache add make git \
     && mkdir -p /app \
-    && mkdir -p /build 
+    && mkdir -p /build
 
 COPY . /app
 WORKDIR /app
-RUN npm install && \
-    npm run build && \
+RUN npm run build && \
+    # yarn install && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
     echo "$(git log -1 --pretty=format:"%h - %an, %ar: %s")" > /dist/version && \

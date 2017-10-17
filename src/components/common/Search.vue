@@ -3,7 +3,8 @@
     <form
       class="search-container full-width"
       action=""
-      target="iframe">
+      target="iframe"
+      :class="{'active': show}">
       <slot name="input">
       </slot>
       <i
@@ -23,6 +24,7 @@
       return {
       }
     },
+    props: ['show'],
     methods: {
       handleClick () {
         this.$emit('search')
@@ -43,6 +45,8 @@
     border: none;
     box-sizing: border-box;
     box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    transition: opacity .3s;
+    opacity: 0;
     input {
       background-color: $ninth-grey;
       width: 100%;
@@ -69,4 +73,9 @@
       @include px2rem(line-height, 58px);
     }
   }
+  .active {
+    transition: opacity .3s;
+    opacity: 1;
+  }
+
 </style>
