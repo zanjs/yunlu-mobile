@@ -3,33 +3,13 @@
     <transition name="router-fade" mode="out-in">
       <router-view></router-view>
     </transition>
-    <div
-      v-show="showDialog"
-      class="popup-dialog full-width">
-      <div class="dialog absolute-horizontal">
-        <header>
-          {{title}}
-        </header>
-        <div class="content">
-          <p>{{tips}}</p>
-          <div>
-            <i class="iconfont icon-shizhong"></i>
-            <span>{{time}}</span>
-          </div>
-        </div>
-        <footer @click="closeDialog()">
-          取消
-        </footer>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-  import { getStore, removeAllStore, setStore, mobileClient } from './config/mUtils'
-  import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
+  import { getStore, removeAllStore, setStore } from './config/mUtils'
   import { requestFn } from './config/request'
-  import { MessageBox, Indicator, Toast } from 'mint-ui'
+  import { MessageBox } from 'mint-ui'
   import moment from 'moment'
   export default {
     name: 'app',
@@ -39,13 +19,7 @@
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
         conversation: null,
         acitve: false,
-        showLogoffPopup: false,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/#${this.$route.path}?provider=wechat&tmp_token=`)}`,
-        title: '提醒',
-        time: AUTHORIZATION_TIME,
-        tips: '登录请求已发送，请等待授权...',
-        showDialog: false,
-        interval: null
+        showLogoffPopup: false
       }
     },
     methods: {
@@ -209,83 +183,7 @@
             })
           }
         })
-      },
-      authLogin (token, provider) {
-        this.$store.dispatch('commonAction', {
-          url: '/login_info',
-          method: 'get',
-          params: {
-            token: token
-          },
-          data: {},
-          target: this,
-          resolve: (state, res) => {
-            setStore('device_signature', res.data.sign)
-            if (!res.data.authentication_token && res.data.id) {
-              this.user = res.data
-              this.countDown(AUTHORIZATION_TIME, 1000)
-              this.showDialog = true
-              this.initImClient(res.data.device_id)
-            } else if (res.data.authentication_token && res.data.id) {
-              setStore('user', res.data)
-              Indicator.open({
-                text: '正在登录...',
-                spinnerType: 'fading-circle'
-              })
-              this.getClosedConversationList()
-              this.init()
-            } else {
-              Toast('授权登录出错')
-            }
-          },
-          reject: () => {
-            Toast('授权登录出错')
-          }
-        })
-      },
-      countDown (seconds, speed = 1000) {
-        const count = () => {
-          let minute = Math.floor(seconds / 60)
-          let second = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
-          if (seconds < 3600) {
-            this.time = `${minute} : ${second}`
-            seconds -= 1
-            if (this.time === '0 : 00' && this.interval) {
-              clearInterval(this.interval)
-              if (this.deviceDelegate) {
-                this.deviceDelegate.close().then(() => {
-                  // 下线成功（倒计时走完后，没有授权则注销，点击登录，重新登录leancloud）
-                }).catch(console.error.bind(console))
-              }
-              this.closeDialog()
-              return false
-            }
-          }
-        }
-        count()
-        this.interval = setInterval(count, speed)
-      },
-      closeDialog () {
-        if (this.interval) {
-          clearInterval(this.interval)
-        }
-        this.showDialog = false
-      },
-      shouldLogin () {
-        /* if (this.$route.query.tmp_token) {
-          this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
-        } else if (mobileClient() === 'weixin') {
-          window.location.href = this.weixinLogin
-        } */
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          // this.$router.push({name: 'Login'})
-        }
       }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this.shouldLogin()
-      })
     },
     updated () {
       this.beforeInit()
