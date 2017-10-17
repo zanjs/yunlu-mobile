@@ -291,7 +291,7 @@
           this.shouldLogin()
         }
       },
-      // 获取收货地址（只有从上皮详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
+      // 获取收货地址（只有从商品详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
       getDeliveries (token) {
         this.$store.dispatch('commonAction', {
           url: '/deliveries',
