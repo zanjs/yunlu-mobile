@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { getStore, removeAllStore, setStore, mobileClient } from './config/mUtils'
+  import { getStore, removeAllStore, setStore } from './config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
   import { requestFn } from './config/request'
   import { MessageBox, Indicator, Toast } from 'mint-ui'
@@ -272,11 +272,13 @@
         this.showDialog = false
       },
       shouldLogin () {
-        if (this.$route.query.tmp_token) {
+        /* if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (mobileClient() === 'weixin') {
-          console.log(this.weixinLogin)
           window.location.href = this.weixinLogin
+        } */
+        if (!getStore('user') || !getStore('user').authentication_token) {
+          this.$router.push({name: 'Login'})
         }
       }
     },
