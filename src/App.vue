@@ -272,11 +272,13 @@
         this.showDialog = false
       },
       shouldLogin () {
-        if (this.$route.query.tmp_token) {
+        /* if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (mobileClient() === 'weixin') {
-          console.log(this.weixinLogin)
           window.location.href = this.weixinLogin
+        } */
+        if (!getStore('user') || !getStore('user').authentication_token) {
+          this.$router.push({name: 'Login'})
         }
       }
     },

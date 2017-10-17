@@ -79,7 +79,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
@@ -279,6 +279,8 @@
       shouldLogin () {
         if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
+        } else if (mobileClient() === 'weixin') {
+          window.location.href = this.weixinLogin
         }
       },
       // 使用微博登录的时候，会改变路由栈(路由栈中有两个登录页面路由)，有时在本页面返回任然会跳转本页面，需要再次返回
