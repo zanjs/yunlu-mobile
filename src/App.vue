@@ -278,7 +278,9 @@
           window.location.href = this.weixinLogin
         } */
         if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          // this.$router.push({name: 'Login'})
+          this.$nextTick(() => {
+            this.$router.push({name: 'Login'})
+          })
         }
       }
     },
