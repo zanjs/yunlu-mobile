@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { getStore, removeAllStore, setStore, mobileClient } from './config/mUtils'
+  import { getStore, removeAllStore, setStore } from './config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
   import { requestFn } from './config/request'
   import { MessageBox, Indicator, Toast } from 'mint-ui'
