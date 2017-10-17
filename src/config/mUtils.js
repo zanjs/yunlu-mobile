@@ -91,21 +91,21 @@ export const showBack = (callback, height) => {
     })
   }
 
-  document.removeEventListener('scroll', showBackFun, false)
+  document.removeEventListener('scroll', throttle(showBackFun, 200, 200), false)
 
-  document.removeEventListener('touchstart', showBackFun, { passive: true, once: true })
+  // document.removeEventListener('touchstart', throttle(showBackFun, 200, 200), { passive: true, once: true })
 
-  document.removeEventListener('touchmove', showBackFun, { passive: true, once: true })
+  document.removeEventListener('touchmove', throttle(showBackFun, 200, 200), { passive: true, once: true })
 
-  document.removeEventListener('touchend', moveEnd, { passive: true, once: true })
+  document.removeEventListener('touchend', throttle(moveEnd, 200, 200), { passive: true, once: true })
 
-  document.addEventListener('scroll', showBackFun, false)
+  document.addEventListener('scroll', throttle(showBackFun, 200, 200), false)
 
-  document.addEventListener('touchstart', showBackFun, { passive: true, once: true })
+  // document.addEventListener('touchstart', throttle(showBackFun, 200, 200), { passive: true, once: true })
 
-  document.addEventListener('touchmove', showBackFun, { passive: true, once: true })
+  document.addEventListener('touchmove', throttle(showBackFun, 200, 200), { passive: true, once: true })
 
-  document.addEventListener('touchend', moveEnd, { passive: true, once: true })
+  document.addEventListener('touchend', throttle(moveEnd, 200, 200), { passive: true, once: true })
 }
 
 export const isPc = () => {
@@ -131,5 +131,22 @@ export const mobileClient = () => {
     return 'qq'
   } else {
     return 'login' // 如果不能判断当前浏览器环境，则跳转登录页，由用户自行选择授权方式
+  }
+}
+
+export const throttle = (method, delay, time) => {
+  let tmieOut = null
+  let startTime = new Date()
+  return () => {
+    let curTime = new Date()
+    clearTimeout(tmieOut)
+    // 如果达到了规定的触发时间间隔，触发 handler
+    if (curTime - startTime >= time) {
+      method.apply(this, arguments)
+      startTime = curTime
+    // 没达到触发间隔，重新设定定时器
+    } else {
+      tmieOut = setTimeout(method, delay)
+    }
   }
 }
