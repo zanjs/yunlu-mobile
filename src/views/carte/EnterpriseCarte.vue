@@ -405,8 +405,7 @@
       },
       goEnterpriseDetail (id) {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else {
           this.$router.push({name: 'EnterpriseDetail', params: {id: id}})
         }
@@ -415,8 +414,7 @@
         switch (item.type) {
           case 'chat':
             if (!this.hasLogin) {
-              setStore('beforeLogin', 'true')
-              this.$router.push({name: 'Login'})
+              this.goLogin()
             } else {
               this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.value}})
             }
@@ -441,6 +439,10 @@
             }
             break
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
       },
       linkToast (str, key, value) {
         Toast({
@@ -485,8 +487,7 @@
       },
       favoriteAction () {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest()
         } else {
@@ -572,8 +573,7 @@
       },
       shouldLogin () {
         if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else {
           this.getTeams(this.teamId)
           this.handleSearchBar()
