@@ -23,9 +23,8 @@ router.beforeEach((to, from, next) => {
   document.body.scrollTop = 0
 })
 
-router.beforeResolve((to, from, next) => {
-  console.log('112')
-  next()
+router.afterEach((to, from) => {
+  console.log('路由组件已加载')
   if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
     router.push({name: 'Login'})
   }
