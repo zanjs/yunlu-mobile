@@ -128,7 +128,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, setScrollTop, mobileClient } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
@@ -569,11 +569,19 @@
           this.hasAddFavorites = res.data.enterprises.organization.favorable
           this.favoratesText = res.data.enterprises.organization.favorable ? '已收藏' : '收藏'
         }
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          setStore('beforeLogin', 'true')
+          this.$router.push({name: 'Login'})
+        } else {
+          this.getTeams(this.teamId)
+          this.handleSearchBar()
+        }
       }
     },
     mounted () {
-      this.getTeams(this.teamId)
-      this.handleSearchBar()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
