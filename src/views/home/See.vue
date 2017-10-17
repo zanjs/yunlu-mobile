@@ -11,48 +11,43 @@
         v-if="hasLogin"
         class="iconfont icon-geren icon-btn white"
         @click="goRoute('Mine', true)"></i>
-      <p
-        v-else
-        @click="goRoute('Login', false)"
-        class="icon-btn login-btn white">登录|注册</p>
+      <p v-else
+         @click="goRoute('Login', false)"
+         class="icon-btn login-btn white">登录|注册</p>
     </div>
     <div class="option-bars">
       <img src="../../assets/seeBg.png">
       <div class="flex-between row">
-        <div
-          class="flex-between row-item"
-          @click="goRoute('Download', true)">
-          <div class="icon-box">
-            <img src="../../assets/process.png">
+        <div class="flex-between row-item"
+             @click="goRoute('Download', true)">
+          <div class="icon-box box-1 flex">
+            <i class="iconfont icon-liucheng"></i>
           </div>
           <span class="font-14">流程</span>
         </div>
-        <div
-          class="flex-between row-item"
-          @click="goRoute('Conversation', hasLogin)">
-          <div class="icon-box">
-            <img src="../../assets/chat.png">
+        <div class="flex-between row-item"
+             @click="goRoute('Conversation', hasLogin)">
+          <div class="icon-box box-2 flex">
+            <i class="iconfont icon-huihua"></i>
             <div
               v-if="unReadeMsgs.length > 0"
               class="dot second-bg"></div>
           </div>
           <span class="font-14">会话</span>
         </div>
-        <div
-          class="flex-between row-item"
-          @click="goRoute('Favorites', hasLogin)">
-          <div class="icon-box">
-            <img src="../../assets/favorite.png">
+        <div class="flex-between row-item"
+             @click="goRoute('ShoppingCart', hasLogin)">
+          <div class="icon-box box-3 flex">
+            <i class="iconfont icon-gouwuche1"></i>
+          </div>
+          <span class="font-14">购物车</span>
+        </div>
+        <div class="flex-between row-item"
+             @click="goRoute('Favorites', hasLogin)">
+          <div class="icon-box box-4 flex">
+            <i class="iconfont icon-shoucang1"></i>
           </div>
           <span class="font-14">收藏</span>
-        </div>
-        <div
-          class="flex-between row-item"
-          @click="goRoute('OrderForm', hasLogin)">
-          <div class="icon-box">
-            <img src="../../assets/order.png">
-          </div>
-          <span class="font-14">订单</span>
         </div>
       </div>
     </div>
@@ -131,7 +126,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, mobileClient } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -229,7 +224,7 @@
       }
     },
     mounted () {
-      removeStore('showGoHome')
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
@@ -306,13 +301,10 @@
         .icon-box {
           @include px2rem(height, 94px);
           @include px2rem(width, 94px);
+          @include px2rem(border-radius, 57px);
           @include pm2rem(margin, 0px, 0px, 16px, 0px);
+          box-shadow: 0px 2px 6px rgba(128, 128, 128, .5);
           position: relative;
-          img {
-            display: block;
-            width: 100%;
-            height: 100%;
-          }
           .dot {
             @include px2rem(width, 16px);
             @include px2rem(height, 16px);
@@ -328,6 +320,18 @@
         }
         span {
           color: #246451;
+        }
+        .box-1 {
+          background: linear-gradient(to bottom, #FEBEBE , #EE75C5);
+        }
+        .box-2 {
+          background: linear-gradient(to bottom, #FFDD9C , #FDA698);
+        }
+        .box-3 {
+          background: linear-gradient(to bottom, #ECB1FF , #959DFF);
+        }
+        .box-4 {
+          background: linear-gradient(to bottom, #C6D7FF , #32BBD8);
         }
       }
     }

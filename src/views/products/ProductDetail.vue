@@ -280,23 +280,11 @@
         </div>
       </div>
       <div
-        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
-        class="btn-box btn-shopping-car disabled">
-        <span class="font-14 white">{{shoppingCarText}}</span>
-      </div>
-      <div
-        v-else
         class="btn-box btn-shopping-car"
         @click="addShoppingCar()">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
-        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
-        class="btn-box btn-buy disabled">
-        <span class="font-14 white">立即购买</span>
-      </div>
-      <div
-        v-else
         class="btn-box btn-buy"
         @click="buyNow()">
         <span class="font-14 white">立即购买</span>
@@ -648,33 +636,11 @@
           resolve: (state, res) => {
             if (productId === this.productId) {
               state.productDetailTeam = res.data.teams[0]
-              this.shouldGetDeliveries(this.token)
             } else {
               this.teamLink = res.data.teams[0]
               this.openPopup()
             }
             this.getPurchaseItems()
-          },
-          reject: () => {
-          }
-        })
-      },
-      shouldGetDeliveries (token) {
-        if (this.hasLogin) {
-          this.getDeliveries(token)
-        }
-      },
-      // 获取收获地址
-      getDeliveries (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/deliveries',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            state.deliveries = res.data.deliveries
           },
           reject: () => {
           }
@@ -918,42 +884,14 @@
         })
       },
       buyNow () {
-        setStore('buying', [{
-          team: {
-            company: this.$store.state.productDetailTeam.company,
-            id: this.$store.state.productDetailTeam.id,
-            logo: this.$store.state.productDetailTeam.logo
-          },
-          products: [{
-            id: null, // 进入确认订单页面后，此id为空，更改购买数量时，不需要发请求更改
-            quantity: 1,
-            price: {
-              id: null,
-              warehouse: null,
-              amount: this.currentPrice.amount,
-              money: this.currentPrice.money,
-              product: {
-                id: this.$store.state.productDetail.id,
-                name: this.$store.state.productDetail.name,
-                state: this.$store.state.productDetail.state,
-                organization_id: this.$store.state.productDetail.organization_id,
-                file_id: this.$store.state.productDetailFiles[0].id,
-                file_url: this.$store.state.productDetailFiles[0].url,
-                file_thumb_url: this.$store.state.productDetailFiles[0].thumb_urls[0]
-              }
-            },
-            checked: true
-          }]
-        }])
         if (this.hasLogin) {
-          if (this.$store.state.deliveries.length === 0) {
-            removeStore('editAddress')
-            this.$router.push({name: 'AddAddress'})
-          } else {
-            this.$router.push({name: 'OrderPaying'})
-          }
+          Toast({
+            message: '暂未开放',
+            duration: 500
+          })
         } else {
-          this.goLogin()
+          setStore('beforeLogin', 'true')
+          this.$router.push({name: 'Login'})
         }
       },
       openFavorites () {
