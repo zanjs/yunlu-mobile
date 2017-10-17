@@ -202,7 +202,7 @@
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
-  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, setStore, showBack, removeStore, setScrollTop, mobileClient } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -787,12 +787,18 @@
           this.hasAddFavorites = res.data.enterprises.organization.favorable
           this.favoratesText = res.data.enterprises.organization.favorable ? '已收藏' : '收藏'
         }
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.getEnterpriseDetail()
+          this.handleSearchBar()
+        }
       }
     },
     mounted () {
-      removeStore('beforeLogin')
-      this.getEnterpriseDetail()
-      this.handleSearchBar()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
