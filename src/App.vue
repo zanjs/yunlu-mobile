@@ -278,14 +278,14 @@
           window.location.href = this.weixinLogin
         } */
         if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.$nextTick(() => {
-            this.$router.push({name: 'Login'})
-          })
+          this.$router.push({name: 'Login'})
         }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.$nextTick(function () {
+        this.shouldLogin()
+      })
     },
     updated () {
       this.beforeInit()
