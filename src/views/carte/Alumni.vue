@@ -94,7 +94,7 @@
           </template>
           <template v-if="activeIndex === 2">
             <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div>
+              <div key="enterprise">
                 <enterprise-list
                   :store="enterpriseMembers"
                   @click="goClass">
@@ -126,7 +126,7 @@
           </template>
           <template v-if="activeIndex === 3">
             <template v-if="alumniBusiness && alumniBusiness.length > 0">
-              <div>
+              <div key="person">
                 <enterprise-list
                   :store="alumniBusiness"
                   @click="goEnterpriseCarte">
@@ -159,7 +159,7 @@
         </transition>
       </div>
       <search
-        v-show="showSearchBar"
+        :show="showSearchBar"
         @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
@@ -169,7 +169,7 @@
           :placeholder="placeholder">
       </search>
       <order
-        v-show="showSearchBar && activeIndex === 0"
+        :show="showSearchBar && activeIndex === 0"
         :order-up="orderUp"
         :show-list="showList"
         @order-change="orderChange"

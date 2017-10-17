@@ -10,15 +10,16 @@
       </div>
       <div class="content">
         <p v-if="store && store.name">{{store.name}}</p>
-        <p v-else>胖胖的云庐君</p>
-        <template v-if="store && store.mobiles && store.mobiles.length > 0">
+        <p v-else>&nbsp;</p>
+        <div v-if="!store || !store.name" class="level">&nbsp;</div>
+        <template v-else-if="store && store.mobiles && store.mobiles.length > 0">
           <div class="level">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-zhenshi"></use>
             </svg>
           </div>
         </template>
-        <template v-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
+        <template v-else-if="(store && store.mobiles && store.mobiles.length === 0) || (store && !store.mobiles)">
           <div class="level">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-zhenshi3"></use>
@@ -54,19 +55,7 @@
          @click="handleClick({'type': 'address', 'value': store.address})">
         <i class="iconfont icon-dingwei dingwei"></i>
       </a>
-      <!-- <a v-if="store && store.wechat"
-         class="icon-box"
-         @click="handleClick({'type': 'wechat', 'value': store.wechat})">
-        <i class="iconfont icon-weixin weixin"></i>
-      </a>
-      <a v-if="store && store.weibo"
-         class="icon-box"
-         @cilck="handleClick({'type': 'qq', 'value': store.weibo})">
-        <i class="iconfont icon-weibo weibo"></i>
-      </a> -->
-      <div
-        v-if="!hasLink"
-        class="tips">暂无联系方式</div>
+      <div v-else-if="!hasLink" class="tips">&nbsp;</div>
     </div>
   </section>
 </template>
@@ -90,7 +79,7 @@
     },
     computed: {
       hasLink () {
-        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || this.store.id || this.store.email || this.store.address || this.store.qq)
+        return this.store && ((this.store.mobiles && this.store.mobiles.length > 0 && !isPc()) || !!this.store.id || !!this.store.email || !!this.store.address || !!this.store.qq)
       }
     }
   }
@@ -103,6 +92,7 @@
     border: 1px solid $second-grey;
     background: $white;
     @include px2rem(padding-top, 24px);
+    box-shadow: 0 1px 5px rgba(119, 113, 113, 0.2), 0 2px 2px rgba(189, 188, 188, 0.14), 0 3px 1px -2px rgba(245, 243, 243, 0.12);
     .user-info {
       display: flex;
       @include pm2rem(padding, 0px, 0px, 30px, 26px);

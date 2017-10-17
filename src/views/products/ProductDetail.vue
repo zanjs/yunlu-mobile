@@ -69,19 +69,23 @@
           <span class="more font-14">更多价格</span>
           <div
             class="icon-box"
-            v-bind:class="{'up': morePrice}">
+            v-bind:class="{'up active': morePrice, 'inactive': !morePrice}">
             <i class="iconfont icon-gengduo primary font-15"></i>
           </div>
         </div>
-        <div
-          v-show="morePrice"
-          class="more-price white-bg font-16">
-          <p
-            v-for="(item, index) in productDetail.prices"
-            :key="item.id"
-            @click="changePrice(item)">
-            {{item.money}}
-          </p>
+        <div class="more-price white-bg font-16" :class="{'menu-active': morePrice}">
+          <div class="menu-list">
+            <ul>
+              <li
+                v-for="(item, index) in productDetail.prices"
+                :key="index"
+                @click="changePrice(item)">
+                <a class="item">
+                  {{item.money}}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div
@@ -270,7 +274,8 @@
         <span class="font-12">购物车</span>
         <div
           v-show="purchaseItemsCount !== '0'"
-          class="badge">
+          class="badge"
+          :class="{'active': hasAddShoppingCar}">
           <span>{{purchaseItemsCount}}</span>
         </div>
       </div>
@@ -889,12 +894,16 @@
               this.getPurchaseItems()
               // 加入购物车可以加入多次
               this.hasAddShoppingCar = true
-              Toast({
+              let toast = Toast({
                 message: '加入购物车成功',
                 className: 'toast-content',
                 iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
                 duration: 1000
               })
+              setTimeout(() => {
+                clearTimeout(toast)
+                this.hasAddShoppingCar = false // 1000ms后重置加入购物车状态，使动画可以重复播放
+              }, 1000)
             } else {
               Toast({
                 message: res.data.detail || '加入购物车失败',
@@ -962,7 +971,7 @@
         let self = this
         document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
           if (self.showPreview || self.popUp) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+            e.preventDefault()
           }
         })
       },
@@ -1114,6 +1123,12 @@
       .up {
         transform: rotate(-90deg);
       }
+      .active {
+        animation:rotateTo90 0.2s ease-in-out 0s 1 normal both;
+      }
+      .inactive {
+        animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
+      }
       .more-price {
         position: absolute;
         @include px2rem(right, 70px);
@@ -1121,13 +1136,77 @@
         @include px2rem(top, 60px);
         text-align: center;
         color: #FF0000;
-        border-top: 1px solid $fifth-grey;
         z-index: 1002;
-        p {
-          border: 1px solid $fifth-grey;
-          border-top: none;
-          box-sizing: border-box;
-          @include pm2rem(padding, 8px, 10px, 8px, 10px);
+        overflow: hidden;
+        .menu-list {
+          position: absolute;
+          width: 100%;
+          transform: translate3d(0, -100%, 0);
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height .3s cubic-bezier(0.3, .03, .08, .65);
+          background-color: $white;
+          box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+          ul {
+            overflow-y: auto;
+          }
+          .item {
+            display: block;
+            transition: transform .2s ease-in,opacity .4s ease-in;
+            transform: translate3d(0, -20% ,0);
+            opacity: 0;
+            @include px2rem(height, 70px);
+            @include px2rem(line-height, 70px);
+            border: 1px solid $fifth-grey;
+            border-bottom: none;
+          }
+          li:last-child {
+            .item {
+              border-bottom: 1px solid $fifth-grey;
+            }
+          }
+        }
+        &.menu-active {
+          overflow: visible;
+          .menu-list {
+            @include px2rem(max-height, 280px);
+            overflow: visible;
+            transform: translate3d(0,0,0);
+            .item {
+              opacity: 1;
+              transform: translate3d(0,0,0);
+            }
+            li:nth-last-child(1) .item {
+              transition-delay: .16s;
+            }
+            li:nth-last-child(2) .item {
+              transition-delay: .2s;
+            }
+            li:nth-last-child(3) .item {
+              transition-delay: .24s;
+            }
+            li:nth-last-child(4) .item {
+              transition-delay: .28s;
+            }
+            li:nth-last-child(5) .item {
+              transition-delay: .32s;
+            }
+            li:nth-last-child(6) .item {
+              transition-delay: .36s;
+            }
+            li:nth-last-child(7) .item {
+              transition-delay: .4s;
+            }
+            li:nth-last-child(8) .item {
+              transition-delay: .44s;
+            }
+            li:nth-last-child(9) .item {
+              transition-delay: .48s;
+            }
+            li:nth-last-child(10) .item {
+              transition-delay: .52s;
+            }
+          }
         }
       }
     }
@@ -1230,6 +1309,7 @@
       }
       .bottom-btn-active {
         color: #FF3E3E;
+        animation: bounceIn 1s ease-in 0s 1 normal both;
       }
       .kefu {
         color: #20A2E5;
@@ -1250,6 +1330,9 @@
         align-items: center;
         justify-content: center;
         @include line-height(8px);
+      }
+      .active {
+        animation: bounceIn 1s ease-in 0s 1 normal both;
       }
     }
     .btn-shopping-car {
@@ -1326,7 +1409,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1002;
+    z-index: 1003 !important;
     background-color: $dark;
     img[lazy=loading] {
       max-width: 100%;

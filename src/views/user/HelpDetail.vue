@@ -20,7 +20,7 @@
     data () {
       return {
         header: '帮助手册',
-        html: `https://api.360stones.com/docs/topic-${this.$route.params.id}.html`
+        html: `https://www.360stones.com/docs/topic-${this.$route.params.id}.html`
       }
     },
     components: {

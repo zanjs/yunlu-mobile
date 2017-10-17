@@ -1,13 +1,13 @@
-FROM node:6-alpine
+FROM node:8-alpine
 MAINTAINER Lyndon <snakeliwei@gmail.com>
 
 RUN apk --update --no-cache add make git \
     && mkdir -p /app \
-    && mkdir -p /build 
+    && mkdir -p /build
 
 COPY . /app
 WORKDIR /app
-RUN npm install && \
+RUN yarn install && \
     npm run build && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \

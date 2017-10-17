@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeAllStore } from './config/mUtils'
+  import { getStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -146,27 +146,6 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
-      },
-      loginRequest (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/login_info',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            // 有两个签名，一个是设备签名，一个是用户签名
-            setStore('device_signature', res.data.sign)
-            if (!res.data.authentication_token) {
-            } else {
-              setStore('user', res.data)
-              this.getSignature(res.data.authentication_token, false, '')
-            }
-          },
-          reject: () => {
-          }
-        })
       }
     },
     updated () {
@@ -179,7 +158,7 @@
   @import './styles/common';
   @import './styles/mixin';
   .router-fade-enter-active, .router-fade-leave-active {
-    transition: opacity .3s;
+    transition: opacity .1s;
 	}
 	.router-fade-enter, .router-fade-leave-active {
     opacity: 0;
@@ -227,13 +206,75 @@
   .toast-content {
     background-color: rgba(0, 0, 0, .7);
     @include px2rem(width, 400px);
-    box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.5);
     @include pm2rem(margin, -20px, 0px, -10px, 0px);
     padding: 0 !important;
     @include px2rem(border-radius, 14px);
     span {
       @include font-dpr(16px);
       @include px2rem(margin-bottom, 30px);
+    }
+  }
+
+  @keyframes rotateTo90 {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(90deg);
+    }
+  }
+  @keyframes rotateTo0 {
+    from {
+      transform: rotate(90deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+  @keyframes bounceIn {
+    from, 20%, 40%, 60%, 80%, to {
+      animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+      opacity: 0;
+      transform: scale3d(.3, .3, .3);
+    }
+    20% {
+      transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+      transform: scale3d(.9, .9, .9);
+    }
+    60% {
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+      transform: scale3d(.97, .97, .97);
+    }
+    to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
     }
   }
 </style>

@@ -95,7 +95,7 @@
           <template v-if="activeIndex === 2">
             <template v-if="hasLogin">
               <template v-if="personMembers && personMembers.length > 0">
-                <div>
+                <div key="person">
                   <person-list
                     :store="personMembers"
                     @click="goPersonCarte">
@@ -140,7 +140,7 @@
           </template>
           <template v-if="activeIndex === 3">
             <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div>
+              <div key="enterprise">
                 <enterprise-list
                   :store="enterpriseMembers"
                   @click="goEnterpriseCarte">
@@ -173,7 +173,7 @@
         </transition>
       </div>
       <search
-        v-show="showSearchBar"
+        :show="showSearchBar"
         @search="handleSearchBtn(queryParams)">
         <input
           slot="input"
@@ -183,7 +183,7 @@
           :placeholder="placeholder">
       </search>
       <order
-        v-show="showSearchBar && activeIndex === 0"
+        :show="showSearchBar && activeIndex === 0"
         :order-up="orderUp"
         :show-list="showList"
         @order-change="orderChange"
@@ -579,10 +579,10 @@
             this.placeholder = '搜索资讯'
             break
           case 2:
-            this.placeholder = '搜索企业会员'
+            this.placeholder = '搜索个人会员'
             break
           case 3:
-            this.placeholder = '搜索个人会员'
+            this.placeholder = '搜索企业会员'
             break
           default:
             this.placeholder = '搜索产品'
