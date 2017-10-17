@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="option-bar">
+    <div class="option-bar" :class="{'active': show}">
       <div class="item">
         <div
           class="text"
@@ -37,7 +37,7 @@
 
       }
     },
-    props: ['orderUp', 'showList'],
+    props: ['orderUp', 'showList', 'show'],
     methods: {
       changeOrder (val) {
         this.$emit('order-change', !val)
@@ -66,6 +66,8 @@
     width: 100%;
     max-width: 540px;
     box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    transition: opacity .3s;
+    opacity: 0;
     .item {
       height: inherit;
       display: flex;
@@ -103,5 +105,10 @@
     .icon-inactive {
       color: $third-dark;
     }
+    &.active {
+      transition: opacity .3s;
+      opacity: 1;
+    }
   }
+
 </style>
