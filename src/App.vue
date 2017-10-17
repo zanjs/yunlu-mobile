@@ -282,7 +282,7 @@
         }
       }
     },
-    mounted () {
+    mounted: function () {
       this.$nextTick(function () {
         this.shouldLogin()
       })
