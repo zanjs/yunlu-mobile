@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import MintUI from 'mint-ui'
 import store from './vuex/store'
-import { getStore, setStore, mobileClient } from './config/mUtils'
+import { getStore, setStore } from './config/mUtils'
 import realtime from './config/leancloud'
 
 router.beforeEach((to, from, next) => {
@@ -21,13 +21,6 @@ router.beforeEach((to, from, next) => {
   next()
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
-})
-
-router.afterEach((to, from) => {
-  console.log('路由组件已加载')
-  if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-    router.push({name: 'Login'})
-  }
 })
 
 Vue.use(realtime)
