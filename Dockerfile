@@ -7,8 +7,8 @@ RUN apk --update --no-cache add make git \
 
 COPY . /app
 WORKDIR /app
-RUN npm run build && \
-    # yarn install && \
+RUN npm install && \
+    npm run build && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
     echo "$(git log -1 --pretty=format:"%h - %an, %ar: %s")" > /dist/version && \
