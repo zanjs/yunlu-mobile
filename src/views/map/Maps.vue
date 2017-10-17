@@ -14,7 +14,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -75,10 +75,21 @@
         } else {
           this.geocoder(true, [this.longitude, this.latitude])
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.showGeocoder()
+        }
       }
     },
     mounted () {
-      this.showGeocoder()
+      this.shouldLogin()
     }
   }
 </script>

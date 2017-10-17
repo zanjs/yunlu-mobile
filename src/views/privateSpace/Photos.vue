@@ -80,7 +80,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
@@ -267,6 +267,10 @@
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
       },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
       shouldLogin () {
         if (!this.token) {
           let toast = Toast({
@@ -279,10 +283,17 @@
         } else {
           this.getData(`/galleries/${this.id}/photos`, {token: this.token, page: this.pageIndex, per_page: this.pageSize})
         }
+      },
+      shouldAutoLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.beforeGetData()
+        }
       }
     },
     mounted () {
-      this.beforeGetData()
+      this.shouldAutoLogin()
     }
   }
 </script>
