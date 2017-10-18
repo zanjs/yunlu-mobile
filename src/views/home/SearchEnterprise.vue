@@ -35,7 +35,7 @@
           </div>
         </mugen-scroll>
         <back-to-top
-          v-if="showGoTopBtn"
+          :show="showGoTopBtn"
           @click="goScroll(0)">
         </back-to-top>
       </template>
