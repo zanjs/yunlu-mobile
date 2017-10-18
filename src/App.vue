@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { getStore, removeAllStore, setStore } from './config/mUtils'
+  import { getStore, removeAllStore } from './config/mUtils'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
