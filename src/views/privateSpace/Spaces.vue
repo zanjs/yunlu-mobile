@@ -88,8 +88,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore } from '../../config/mUtils'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
@@ -198,12 +197,6 @@
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
-          case 'wechat':
-            this.showPopDialog(1, '微信号', item.value)
-            break
-          case 'weibo':
-            this.showMessageBox(item.value)
-            break
           case 'qq':
             this.showPopDialog(0, 'QQ号', item.value)
             break
@@ -215,18 +208,6 @@
             }
             break
         }
-      },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       showPopDialog (type, name, value) {
         this.message = {
@@ -268,7 +249,7 @@
         let self = this
         document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
           if (self.showPreview) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
+            e.preventDefault()
           }
         })
       },
@@ -285,10 +266,21 @@
           this.pageIndex += 1
           this.getData()
         }
+      },
+      goLogin () {
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      shouldLogin () {
+        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.goLogin()
+        } else {
+          this.getData()
+        }
       }
     },
     mounted () {
-      this.getData()
+      this.shouldLogin()
     },
     computed: {
       ...mapGetters([
