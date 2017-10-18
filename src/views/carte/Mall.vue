@@ -42,32 +42,37 @@
           <template v-if="activeIndex === 0">
             <template v-if="products && products.length > 0">
               <div>
-                <product-list-mode
-                  v-if="showList"
-                  :store="products"
-                  @click="goProductDetail">
-                </product-list-mode>
-                <product-thumbnail-mode
-                  v-else
-                  :store="products"
-                  @click="goProductDetail">
-                </product-thumbnail-mode>
-                <mugen-scroll
-                  key="product"
-                  :handler="loadProductBottom"
-                  :handle-on-mount="false"
-                  :should-handle="!productLoading">
-                  <div
-                    v-if="productLoading || noMoreProducts"
-                    class="loading">
-                    <mt-spinner
-                      v-if="productLoading"
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>{{productLoadingText}}</p>
-                  </div>
-                </mugen-scroll>
+                <transition
+                  name="fade"
+                  :appear="true"
+                  mode="out-in">
+                  <product-list-mode
+                    v-if="showList"
+                    :store="products"
+                    @click="goProductDetail">
+                  </product-list-mode>
+                  <product-thumbnail-mode
+                    v-else
+                    :store="products"
+                    @click="goProductDetail">
+                  </product-thumbnail-mode>
+                  <mugen-scroll
+                    key="product"
+                    :handler="loadProductBottom"
+                    :handle-on-mount="false"
+                    :should-handle="!productLoading">
+                    <div
+                      v-if="productLoading || noMoreProducts"
+                      class="loading">
+                      <mt-spinner
+                        v-if="productLoading"
+                        type="snake"
+                        :size="18">
+                      </mt-spinner>
+                      <p>{{productLoadingText}}</p>
+                    </div>
+                  </mugen-scroll>
+                </transition>
               </div>
             </template>
             <div

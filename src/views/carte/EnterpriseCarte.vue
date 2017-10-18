@@ -34,16 +34,21 @@
           <template v-if="showProduct">
             <template v-if="products && products.length > 0">
               <div>
-                <product-list-mode
-                  v-show="showList"
-                  :store="products"
-                  @click="goProductDetail">
-                </product-list-mode>
-                <product-thumbnail-mode
-                  v-show="!showList"
-                  :store="products"
-                  @click="goProductDetail">
-                </product-thumbnail-mode>
+                <transition
+                  name="fade"
+                  :appear="true"
+                  mode="out-in">
+                  <product-list-mode
+                    v-if="showList"
+                    :store="products"
+                    @click="goProductDetail">
+                  </product-list-mode>
+                  <product-thumbnail-mode
+                    v-else
+                    :store="products"
+                    @click="goProductDetail">
+                  </product-thumbnail-mode>
+                </transition>
                 <mugen-scroll
                   :handler="loadProductBottom"
                   :handle-on-mount="false"
