@@ -40,6 +40,7 @@
     display: block;
     width: 100%;
     max-width: 540px;
+    transition: all .3s cubic-bezier(0, 0, 0, 1);
     .cirlce-btn {
       right: 0;
       bottom: 0;
