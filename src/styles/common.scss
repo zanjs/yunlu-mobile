@@ -408,6 +408,7 @@ body {
               box-sizing: border-box;
       @include px2rem(line-height, 84px);
       border: 1px solid $green;
+      transition: color, background-color .3s;
     }
     .left {
       @include px2rem(border-top-left-radius, 14px);
@@ -484,15 +485,15 @@ body {
   opacity: 1;
 }
 .fade-enter-active {
-  -webkit-transition: .1s ease-in;
-  transition: .1s ease-in;
+  -webkit-transition: .2s ease-in;
+  transition: .2s ease-in;
 }
 .fade-leave {
   opacity: 1;
 }
 .fade-leave-active {
-  -webkit-transition: .1s ease-out;
-  transition: .1s ease-out;
+  -webkit-transition: .2s ease-out;
+  transition: .2s ease-out;
 }
 .fade-leave-to {
   opacity: 0
