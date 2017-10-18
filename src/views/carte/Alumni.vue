@@ -642,9 +642,7 @@
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
-          case 'weixin':
-            this.showPopDialog(1, '微信号', item.value)
-            break
+
           case 'website':
             window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
             break

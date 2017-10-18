@@ -154,7 +154,7 @@
   import Card from '../../components/common/Card'
   import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -350,12 +350,6 @@
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
-          case 'wechat':
-            this.showPopDialog(1, '微信号', item.value)
-            break
-          case 'weibo':
-            this.showMessageBox(item.value)
-            break
           case 'qq':
             this.showPopDialog(0, 'QQ号', item.value)
             break
@@ -368,12 +362,6 @@
             break
         }
       },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
       showPopDialog (type, name, value) {
         this.message = {
           type: type,
@@ -381,12 +369,6 @@
           value: value
         }
         this.showDialog = true
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       goCarte (item) {
         this.pageIndex = 1
