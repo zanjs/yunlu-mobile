@@ -135,7 +135,7 @@
       </template>
     </template>
     <favorite-btn
-      v-if="userCard"
+      :show="userCard"
       :single="true"
       :text="favoratesText"
       @click="favoriteAction()">

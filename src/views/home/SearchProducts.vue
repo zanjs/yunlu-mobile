@@ -48,7 +48,7 @@
           </div>
         </mugen-scroll>
         <back-to-top
-          v-if="showGoTopBtn"
+          :show="showGoTopBtn"
           @click="goScroll(0)">
         </back-to-top>
       </template>
@@ -344,7 +344,7 @@
       width: 100%;
       max-width: 540px;
       z-index: 2;
-      box-shadow: 0 1px 5px rgba(0,0,0,.2);
+      box-shadow: 0 4px 8px -4px rgba(0,0,0,.2);
     }
     .empty-products {
       color: $third-dark;
