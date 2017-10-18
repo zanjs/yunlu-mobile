@@ -85,13 +85,13 @@
           </template>
         </transition>
         <favorite-btn
-          v-if="teams"
+          :show="teams"
           :single="!showGoTopBtn"
           :text="favoratesText"
           @click="favoriteAction()">
         </favorite-btn>
         <back-to-top
-          v-if="showGoTopBtn"
+          :show="showGoTopBtn"
           @click="goScroll(0)">
         </back-to-top>
       </div>

@@ -1,13 +1,16 @@
 <template>
   <section>
     <div class="float-btn">
-      <div
-        class="cirlce-btn"
-        @click="handleClick()">
-        <i class="iconfont icon-dingzhi"></i>
-        <p v-if="text">{{text}}</p>
-        <p v-else>置顶</p>
-      </div>
+      <transition name="zoom">
+        <div
+          class="cirlce-btn"
+          v-if="show"
+          @click="handleClick()">
+          <i class="iconfont icon-dingzhi"></i>
+          <p v-if="text">{{text}}</p>
+          <p v-else>置顶</p>
+        </div>
+      </transition>
     </div>
   </section>
 </template>
@@ -19,7 +22,7 @@
 
       }
     },
-    props: ['text'],
+    props: ['text', 'show'],
     methods: {
       handleClick () {
         this.$emit('click')
@@ -55,12 +58,38 @@
       line-height: 1;
       z-index: 1004;
       box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
+      transform-origin: center center 0px;
       i {
         @include font-dpr(21px);
       }
       p {
         @include font-dpr(12px);
       }
+    }
+  }
+  .zoom-enter-active {
+    animation: zoomIn .2s ease-in-out 0s 1 both;
+  }
+  .zoom-leave-active {
+    animation: zoomOut .2s ease-in-out 0s 1 both;
+  }
+  .zoom-enter, .zoom-leave-to {
+    transform: scale3d(1, 1, 1);
+  }
+  @keyframes zoomIn {
+    from {
+      transform: scale3d(.03, .03, .03);
+    }
+    to {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  @keyframes zoomOut {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+    to {
+      transform: scale3d(.03, .03, .03);
     }
   }
 </style>
