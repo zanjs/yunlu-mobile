@@ -2,28 +2,26 @@
   <section>
     <div class="option-bar" :class="{'active': show}">
       <div class="item">
-        <div
-          class="text"
-          @click="changeOrder(orderUp)">
+        <div class="text" @click="changeOrder(orderUp)">
           价格
         </div>
         <div class="order-icon">
           <div class="icon-box">
             <i
               class="iconfont icon-shang"
-              v-bind:class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"></i>
+              :class="{'icon-actinve': orderUp, 'icon-inactive': !orderUp}"></i>
           </div>
           <div class="icon-box">
             <i
               class="iconfont icon-xia"
-              v-bind:class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"></i>
+              :class="{'icon-actinve': !orderUp, 'icon-inactive': orderUp}"></i>
           </div>
         </div>
       </div>
       <div class="item">
         <i
-          class="iconfont"
-          v-bind:class="{'icon-liebiao': !showList, 'icon-liebiao1': showList}"
+          class="iconfont icon-liebiao"
+          :class="{'icon-liebiao1': showList}"
           @click="swithList(showList)"></i>
       </div>
     </div>
@@ -65,7 +63,7 @@
     z-index: 1001;
     width: 100%;
     max-width: 540px;
-    box-shadow: 0 1px 5px rgba(0,0,0,.2);
+    box-shadow: 0 6px 8px -4px rgba(0, 0, 0, .2);
     transition: opacity .3s;
     opacity: 0;
     .item {
@@ -101,14 +99,15 @@
     }
     .icon-actinve {
       color: $green;
+      transition: color .3s;
     }
     .icon-inactive {
       color: $third-dark;
+      transition: color .3s;
     }
     &.active {
       transition: opacity .3s;
       opacity: 1;
     }
   }
-
 </style>
