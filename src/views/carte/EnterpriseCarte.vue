@@ -135,7 +135,7 @@
   import Order from '../../components/common/Order'
   import BackToTop from '../../components/common/BackToTop'
   import FavoriteBtn from '../../components/common/FavoriteBtn'
-  import { Toast, MessageBox } from 'mint-ui'
+  import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
@@ -422,9 +422,6 @@
           case 'email':
             this.showPopDialog(2, '邮箱地址', item.value)
             break
-          case 'weixin':
-            this.showPopDialog(1, '微信号', item.value)
-            break
           case 'website':
             window.location.href = item.value.indexOf('http') > -1 ? item.value : `http://${item.value}`
             break
@@ -443,18 +440,6 @@
       goLogin () {
         setStore('beforeLogin', 'true')
         this.$router.push({name: 'Login'})
-      },
-      linkToast (str, key, value) {
-        Toast({
-          message: `该${str}${key}为：${value}`,
-          duration: 5000
-        })
-      },
-      showMessageBox (str) {
-        MessageBox({
-          title: '长按复制到剪切板',
-          message: str
-        })
       },
       showPopDialog (type, name, value) {
         this.message = {
