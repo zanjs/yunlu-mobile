@@ -392,7 +392,7 @@
   import DownloadBar from '../../components/common/DownloadBar'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -1013,18 +1013,11 @@
       },
       goEnterprise () {
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.stopTouchMove()
-          this.getProductDetail(this.productId)
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.stopTouchMove()
+      this.getProductDetail(this.productId)
     },
     computed: {
       ...mapGetters([

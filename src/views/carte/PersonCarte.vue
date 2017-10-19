@@ -152,7 +152,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   import { Toast } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
@@ -528,17 +528,10 @@
           this.hasAddFavorites = bool
           this.favoratesText = bool ? '已收藏' : '收藏'
         }
-      },
-      shouldAutoLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.beforeGetData()
-        }
       }
     },
     mounted () {
-      this.shouldAutoLogin()
+      this.beforeGetData()
     },
     computed: {
       ...mapGetters([

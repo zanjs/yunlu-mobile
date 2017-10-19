@@ -75,7 +75,7 @@
   import ProductListMode from '../../components/product/List'
   import BackToTop from '../../components/common/BackToTop'
   import SearchProductsOrder from '../../components/product/Order'
-  import { getStore, setStore, removeStore, showBack, setScrollTop, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore, showBack, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -274,17 +274,6 @@
         if (!this.noMoreData) {
           this.pageIndex += 1
           this.getProducts(this.sort, this.searchParams)
-        }
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.handleGoTopBtn()
         }
       }
     },

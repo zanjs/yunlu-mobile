@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import RadioList from '../../components/common/RadioList'
   import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
@@ -135,19 +135,7 @@
         } else {
           this.$router.go(-1)
         }
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        }
       }
-    },
-    mounted () {
-      this.shouldLogin()
     }
   }
 </script>
