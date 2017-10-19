@@ -255,7 +255,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('device_signature', res.data.sign)
-            removeLocalStore('weixinLoginCount')
+            removeLocalStore('weixinLogin')
             if (!res.data.authentication_token && res.data.id) {
               this.user = res.data
               this.countDown(AUTHORIZATION_TIME, 1000)
