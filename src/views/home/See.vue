@@ -126,7 +126,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     data () {
@@ -214,17 +214,11 @@
           this.getClientKeyWords()
           this.getSpaces()
         }
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.$router.push({name: 'Login'})
-        } else {
-          this.getSeeInfo()
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      removeStore('showGoHome')
+      this.getSeeInfo()
     },
     computed: {
       ...mapGetters([

@@ -88,7 +88,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import { mapGetters } from 'vuex'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
@@ -277,17 +277,10 @@
       goLogin () {
         setStore('beforeLogin', 'true')
         this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.getData()
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getData()
     },
     computed: {
       ...mapGetters([
