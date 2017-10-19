@@ -79,7 +79,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, getLocalStore, setStore, setLocalStore, removeStore, removeLocalStore, mobileClient } from '../../config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
@@ -251,6 +251,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('device_signature', res.data.sign)
+            removeLocalStore('weixinLoginCount')
             if (!res.data.authentication_token && res.data.id) {
               this.user = res.data
               this.countDown(AUTHORIZATION_TIME, 1000)
@@ -275,7 +276,13 @@
       shouldLogin () {
         if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
-        } else if (mobileClient() === 'weixin') {
+        } else if (getLocalStore('weixinLoginCount') === '1') {
+          Toast({
+            message: '自动登录失败，请手动登录',
+            duration: 1000
+          })
+        } else if (mobileClient() === 'weixin' && getLocalStore('weixinLoginCount') !== '1') {
+          setLocalStore('weixinLoginCount', '1')
           window.location.href = this.weixinLogin
         }
       },

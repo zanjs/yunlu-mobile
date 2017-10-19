@@ -12,6 +12,19 @@ export const setStore = (name, content) => {
 }
 
 /**
+ * 存储localStorage
+ */
+export const setLocalStore = (name, content) => {
+  if (!name) {
+    return false
+  }
+  if (typeof content !== 'string') {
+    content = JSON.stringify(content)
+  }
+  window.localStorage.setItem(name, content)
+}
+
+/**
  * 获取sessionStorage
  */
 export const getStore = name => {
@@ -26,18 +39,51 @@ export const getStore = name => {
 }
 
 /**
+ * 获取localStorage
+ */
+export const getLocalStore = name => {
+  if (!name) {
+    return false
+  }
+  try {
+    return JSON.parse(window.localStorage.getItem(name))
+  } catch (error) {
+    return window.localStorage.getItem(name)
+  }
+}
+
+/**
  * 删除sessionStorage
  */
 export const removeStore = name => {
-  if (!name) return
+  if (!name) {
+    return false
+  }
   window.sessionStorage.removeItem(name)
+}
+
+/**
+ * 删除localStorage
+ */
+export const removeLocalStore = name => {
+  if (!name) {
+    return false
+  }
+  window.localStorage.removeItem(name)
+}
+
+/**
+ * 删除所有的sessionStorage
+ */
+export const removeAllStore = () => {
+  window.sessionStorage.clear()
 }
 
 /**
  * 删除所有的localStorage
  */
-export const removeAllStore = () => {
-  window.sessionStorage.clear()
+export const removeAllLocalStore = () => {
+  window.localStorage.clear()
 }
 
 /**
