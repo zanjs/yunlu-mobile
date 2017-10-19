@@ -1101,7 +1101,7 @@
     @include px2rem(bottom, 16px);
     @include px2rem(right, 16px);
     @include pm2rem(padding, 4px, 20px, 4px, 20px);
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(57, 55, 66, 0.5);
     z-index: 1;
   }
   .info-container {
