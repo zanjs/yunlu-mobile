@@ -57,7 +57,7 @@
   import List from '../../components/enterprise/List'
   import BackToTop from '../../components/common/BackToTop'
   import { mapGetters } from 'vuex'
-  import { getStore, setStore, removeStore, showBack, setScrollTop, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore, showBack, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
@@ -194,22 +194,11 @@
           this.enterprisePageIndex += 1
           this.getEnterprises(this.searchParams)
         }
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.getServices()
-          this.handleGoTopBtn()
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getServices()
+      this.handleGoTopBtn()
     },
     computed: {
       ...mapGetters([
