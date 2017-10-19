@@ -129,9 +129,9 @@
       @include px2rem(border-radius, 35px);
       @include px2rem(width, 70px);
       @include px2rem(height, 70px);
-      background-color: rgba(57, 55, 66, .8);
+      background-color: rgba(57, 55, 66, .5);
       color: $white;
-      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
+      // box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
     }
     .active {
       animation:rotateTo90 0.2s ease-in-out 0s 1 normal both;
@@ -180,18 +180,16 @@
     background-color: rgba(57, 55, 66, .8);
     z-index: 9999 !important;
     box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+    @include px2rem(border-radius, 16px);
     .item {
       @include px2rem(height, 96px);
-      border-bottom: 1px solid $third-dark;
+      border-bottom: 1px solid rgba(166, 166, 166, .5);
       @include pm2rem(padding, 0px, 0px, 0px, 34px);
       @include px2rem(line-height, 96px);
       @include font-dpr(15px);
       color: $white;
       i {
         @include px2rem(margin-right, 16px);
-      }
-      span {
-        font-weight: bold;
       }
     }
     & .item:last-child {
