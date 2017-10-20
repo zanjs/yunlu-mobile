@@ -137,7 +137,7 @@ export default {
   @import "../../styles/mixin";
 
   .item-list {
-    @include px2rem(margin-bottom, 10px);
+    @include px2rem(margin-bottom, 20px);
     background-color: $third-grey;
     .title {
       @include px2rem(height, 88px);

@@ -15,15 +15,15 @@
         @click="goEnterpriseDetail">
       </enterprise-card>
     </div>
-    <div class="four-nav-tabs white-bg">
+    <div class="four-nav-tabs">
       <div class="tab-bar primary flex font-17">
         <div
-          class="left flex-1"
-          v-bind:class="{'primary-bg white': showProduct}"
+          class="left flex-1 white-bg"
+          v-bind:class="{'active-bg white': showProduct}"
           @click.prevent="tabClick(0)">产品</div>
         <div
-          class="middle right flex-1"
-          v-bind:class="{'primary-bg white': !showProduct}"
+          class="middle right flex-1 white-bg"
+          v-bind:class="{'active-bg white': !showProduct}"
           @click.prevent="tabClick(1)">资讯</div>
       </div>
       <div class="tab-container">
