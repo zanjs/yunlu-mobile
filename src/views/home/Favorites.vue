@@ -6,10 +6,7 @@
       @right-click="selectableSwitch(inOperation)"
       @back="goBack()">
     </common-header>
-    <form
-      class="search-bar"
-      action=""
-      target="iframe">
+    <form class="search-bar" action="" target="iframe">
       <input
         type="search"
         v-model="searchParams"
@@ -29,131 +26,132 @@
     <section>
       <div class="nav-bars full-width">
         <a
+          v-for="(item, index) in tabOptions "
           class="tab"
-          :class="{'selected': activeIndex === 1}"
-          @click="selectTab(1)">
-          <div class="label">商品</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 2}"
-          @click="selectTab(2)">
-          <div class="label">机构名片</div>
-        </a>
-        <a
-          class="tab"
-          :class="{'selected': activeIndex === 3}"
-          @click="selectTab(3)">
-          <div class="label">个人名片</div>
+          :key="index"
+          :class="{'selected': activeIndex === index + 1}"
+          @click="selectTab(index + 1)">
+          <div class="label">{{item.label}}</div>
         </a>
       </div>
       <div
         class='nav-bar-container full-width'
         :class="{'nav-bar-bottom': inOperation}">
-        <template v-if="activeIndex === 1">
-          <div v-if="favoriteProducts.length > 0">
-            <favorites-list
-              :favorites="favoriteProducts"
-              :selectable="inOperation"
-              @click="goRoute"
-              @check="handleSingleCheck">
-            </favorites-list>
-            <mugen-scroll
-              key="favoriteProducts"
-              :handler="loadAProductsBottom"
-              :handle-on-mount="false"
-              :should-handle="!productLoading && !inOperation">
-              <div
-                v-if="productLoading || noMoreProducts"
-                class="loading">
-                <mt-spinner
-                  v-if="productLoading"
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>{{productLoadingText}}</p>
-              </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="1"
-            class="empty-container">
-            <div class="img-container">
-              <img src="../../assets/noFavorites.png">
+        <transition name="fade" :appear="true" mode="out-in">
+          <template v-if="activeIndex === 1">
+            <div v-if="favoriteProducts.length > 0">
+              <transition name="fade" :appear="true" mode="out-in">
+                <favorites-list
+                  key="product"
+                  :favorites="favoriteProducts"
+                  :selectable="inOperation"
+                  @click="goRoute"
+                  @check="handleSingleCheck">
+                </favorites-list>
+              </transition>
+              <mugen-scroll
+                key="favoriteProducts"
+                :handler="loadAProductsBottom"
+                :handle-on-mount="false"
+                :should-handle="!productLoading && !inOperation">
+                <div
+                  v-if="productLoading || noMoreProducts"
+                  class="loading">
+                  <mt-spinner
+                    v-if="productLoading"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{productLoadingText}}</p>
+                </div>
+              </mugen-scroll>
             </div>
-            <p>您还没有收藏任何宝贝呦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 2">
-          <div v-if="favoriteOrganizations.length > 0">
-            <favorites-list
-              :favorites="favoriteOrganizations"
-              :selectable="inOperation"
-              @click="goRoute"
-              @check="handleSingleCheck">
-            </favorites-list>
-            <mugen-scroll
-              key="favoriteOrganizations"
-              :handler="loadAOrganizationsBottom"
-              :handle-on-mount="false"
-              :should-handle="!organizationLoading && !inOperation">
-              <div
-                v-if="organizationLoading || noMoreOrganizations"
-                class="loading">
-                <mt-spinner
-                  v-if="organizationLoading"
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>{{organizationLoadingText}}</p>
+            <div
+              v-else
+              key="1"
+              class="empty-container">
+              <div class="img-container">
+                <img src="../../assets/noFavorites.png">
               </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="1"
-            class="empty-container">
-            <div class="img-container">
-              <img src="../../assets/noFavorites.png">
+              <p>您还没有收藏任何宝贝呦~</p>
             </div>
-            <p>您还没有收藏任何宝贝呦~</p>
-          </div>
-        </template>
-        <template v-if="activeIndex === 3">
-          <div v-if="favoritePerson.length > 0">
-            <favorites-list
-              :favorites="favoritePerson"
-              :selectable="inOperation"
-              @click="goRoute"
-              @check="handleSingleCheck">
-            </favorites-list>
-            <mugen-scroll
-              key="favoritePerson"
-              :handler="loadAPersonBottom"
-              :handle-on-mount="false"
-              :should-handle="!personLoading && !inOperation">
-              <div
-                v-show="personLoading"
-                class="loading">
-                <mt-spinner
-                  type="snake"
-                  :size="18">
-                </mt-spinner>
-                <p>加载中...</p>
+          </template>
+          <template v-if="activeIndex === 2">
+            <div v-if="favoriteOrganizations.length > 0">
+              <transition name="fade" :appear="true" mode="out-in">
+                <favorites-list
+                  key="organization"
+                  :favorites="favoriteOrganizations"
+                  :selectable="inOperation"
+                  @click="goRoute"
+                  @check="handleSingleCheck">
+                </favorites-list>
+              </transition>
+              <mugen-scroll
+                key="favoriteOrganizations"
+                :handler="loadAOrganizationsBottom"
+                :handle-on-mount="false"
+                :should-handle="!organizationLoading && !inOperation">
+                <div
+                  v-if="organizationLoading || noMoreOrganizations"
+                  class="loading">
+                  <mt-spinner
+                    v-if="organizationLoading"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{organizationLoadingText}}</p>
+                </div>
+              </mugen-scroll>
+            </div>
+            <div
+              v-else
+              key="1"
+              class="empty-container">
+              <div class="img-container">
+                <img src="../../assets/noFavorites.png">
               </div>
-            </mugen-scroll>
-          </div>
-          <div
-            v-else
-            key="1"
-            class="empty-container">
-            <div class="img-container">
-              <img src="../../assets/noFavorites.png">
+              <p>您还没有收藏任何宝贝呦~</p>
             </div>
-            <p>您还没有收藏任何宝贝呦~</p>
-          </div>
-        </template>
+          </template>
+          <template v-if="activeIndex === 3">
+            <div v-if="favoritePerson.length > 0">
+              <transition name="fade" :appear="true" mode="out-in">
+                <favorites-list
+                  key="person"
+                  :favorites="favoritePerson"
+                  :selectable="inOperation"
+                  @click="goRoute"
+                  @check="handleSingleCheck">
+                </favorites-list>
+              </transition>
+              <mugen-scroll
+                key="favoritePerson"
+                :handler="loadAPersonBottom"
+                :handle-on-mount="false"
+                :should-handle="!personLoading && !inOperation">
+                <div
+                  v-show="personLoading"
+                  class="loading">
+                  <mt-spinner
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>加载中...</p>
+                </div>
+              </mugen-scroll>
+            </div>
+            <div
+              v-else
+              key="1"
+              class="empty-container">
+              <div class="img-container">
+                <img src="../../assets/noFavorites.png">
+              </div>
+              <p>您还没有收藏任何宝贝呦~</p>
+            </div>
+          </template>
+        </transition>
       </div>
     </section>
     <template v-if="shouldShowOptionBar()">
@@ -232,7 +230,15 @@
         personLoadingText: '加载中...',
         noMoreProducts: false,
         noMoreOrganizations: false,
-        noMorePeople: false
+        noMorePeople: false,
+        tabOptions: [
+          {
+            label: '商品'
+          }, {
+            label: '机构名片'
+          }, {
+            label: '个人名片'
+          }]
       }
     },
     components: {
@@ -678,8 +684,10 @@
       border-bottom-color: $green;
       color: $green;
       border-bottom-style: solid;
+      transition: color, border-bottom-color .2s;
       .label {
         color: $green;
+        transition: color .2s;
       }
     }
   }
