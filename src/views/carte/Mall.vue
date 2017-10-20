@@ -56,23 +56,23 @@
                     :store="products"
                     @click="goProductDetail">
                   </product-thumbnail-mode>
-                  <mugen-scroll
-                    key="product"
-                    :handler="loadProductBottom"
-                    :handle-on-mount="false"
-                    :should-handle="!productLoading">
-                    <div
-                      v-if="productLoading || noMoreProducts"
-                      class="loading">
-                      <mt-spinner
-                        v-if="productLoading"
-                        type="snake"
-                        :size="18">
-                      </mt-spinner>
-                      <p>{{productLoadingText}}</p>
-                    </div>
-                  </mugen-scroll>
                 </transition>
+                <mugen-scroll
+                  key="product"
+                  :handler="loadProductBottom"
+                  :handle-on-mount="false"
+                  :should-handle="!productLoading">
+                  <div
+                    v-if="productLoading || noMoreProducts"
+                    class="loading">
+                    <mt-spinner
+                      v-if="productLoading"
+                      type="snake"
+                      :size="18">
+                    </mt-spinner>
+                    <p>{{productLoadingText}}</p>
+                  </div>
+                </mugen-scroll>
               </div>
             </template>
             <div
