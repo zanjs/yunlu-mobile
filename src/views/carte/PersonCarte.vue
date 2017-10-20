@@ -611,6 +611,7 @@
     }
   }
   .loading {
+    @include px2rem(margin-top, 10px);
     height: 40px;
     @include font-dpr(15px);
     color: $second-dark;
