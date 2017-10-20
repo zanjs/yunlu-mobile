@@ -133,6 +133,9 @@
         justify-content: center;
         height: inherit;
       }
+      a:active {
+        background-color: rgba(239, 234, 234, .5);
+      }
       i {
         @include font-dpr(24px);
       }
