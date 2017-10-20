@@ -134,13 +134,8 @@
               </div>
             </div>
           </template>
-          <template
-            v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
+          <template v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
             <div class="row-item">
-              <!--<div class="title-container">
-                <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{productDetail.category_name}}</span>
-              </div>-->
               <div class="title-container">
                 <i class="iconfont icon-circle dot"></i>
                 <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
@@ -153,8 +148,7 @@
               </div>
             </div>
           </template>
-          <template
-            v-if="productDetail.properties && productDetail.properties.length > 0">
+          <template v-if="productDetail.properties && productDetail.properties.length > 0">
             <div
               v-for="(item, index) in productDetail.properties"
               :key="index"
@@ -302,50 +296,35 @@
         <span class="font-14 white">立即购买</span>
       </div>
     </section>
-    <section
-      v-if="popUp"
-      class="product-popup-dialog"
-      v-bind:class="{'slide-in-fwd-center': cssAnimation, 'slide-out-bck-center': !cssAnimation}">
+    <section v-if="popUp" class="product-popup-dialog">
       <div class="main absolute-horizontal">
         <div class="title primary-bg white font-16">
           <span>购销渠道关系认证成功</span>
         </div>
         <div class="content white-bg">
-          <div
-            class="item"
-            @click="goLinkEnterpriseDetail(teamLink)">
-            <img
-              v-if="teamLink && teamLink.logo"
-              :src="teamLink.logo">
-            <img
-              v-else
-              src="../../assets/blank.jpg">
+          <div class="item" @click="goLinkEnterpriseDetail(teamLink)">
+            <img v-if="teamLink && teamLink.logo" :src="teamLink.logo">
+            <img v-else src="../../assets/blank.jpg">
             <div class="info">
-              <p class="font-13 second-text">{{teamLink.company}}</p>
+              <p class="font-13 second-text ellipsis">{{teamLink.company}}</p>
               <div>
                 <span class="font-12 third-text">{{teamLink.service.name}}</span>
-                <span class="font-12 third-text">{{teamLink.provice_name}}&middot;{{teamLink.city_name}}</span>
+                <span class="font-12 third-text width-limit ellipsis">{{teamLink.provice_name}}&middot;{{teamLink.city_name}}</span>
+                <span v-if="teamLink.state !== 'approved'" class="font-12 third-text">已注销</span>
               </div>
             </div>
           </div>
-          <div
-            class="item"
-            @click="goLinkProductDetail(productLink)">
-            <img
-              v-if="productLinkFile && productLinkFile.url"
-              :src="productLinkFile.url">
-            <img
-              v-else
-              src="../../assets/imgLoadingError.png">
+          <div class="item" @click="goLinkProductDetail(productLink)">
+            <img v-if="productLinkFile && productLinkFile.url" :src="productLinkFile.url">
+            <img v-else src="../../assets/imgLoadingError.png">
             <div class="info">
               <p>{{productLink.name}}</p>
               <div>
                 <span
                   v-if="productLink.prices && productLink.prices.length > 0 && productLink.prices[0].money !== '定制'"
                   class="product-price">{{productLink.prices[0].money}}元</span>
-                <span
-                  v-else
-                  class="product-price">{{productLink.prices[0].money}}</span>
+                <span v-else class="product-price">{{productLink.prices[0].money}}</span>
+                <span v-if="productLink.state === 'editing'" class="font-12 third-text">已下架</span>
               </div>
             </div>
           </div>
@@ -413,7 +392,6 @@
         productLinkFile: {},
         teamLink: {},
         morePrice: false,
-        cssAnimation: false,
         currentPrice: {},
         currentPriceProperties: [],
         popUp: false,
@@ -497,9 +475,20 @@
         // 当产品类型为StoneMaterial或Medicament时，一定有附加的产品属性，判断时，排除这两种情况。
         if (productDetail.goods_type !== 'StoneMaterial' && productDetail.goods_type !== 'Medicament') {
           let index = 0
+          let subIndex = 0
           for (let i = 0; i < productDetail.properties.length; i++) {
             if (productDetail.properties[i].children.length === 0) {
               index += 1
+            } else {
+              for (let j = 0; j < productDetail.properties[i].children.length; j++) {
+                if (!productDetail.properties[i].children[j].name || !productDetail.properties[i].children[j].value) {
+                  subIndex += 1
+                }
+              }
+              // 该产品一级属性值全为空，则该产品也不可能有二级属性(默认不显示根属性，从一级属性开始)
+              if (subIndex === productDetail.properties[i].children.length) {
+                index += 1
+              }
             }
           }
           return index !== productDetail.properties.length
@@ -763,10 +752,8 @@
       },
       openPopup () {
         this.popUp = true
-        this.cssAnimation = true
       },
       closePopup () {
-        this.cssAnimation = false
         this.allowTouchMove()
         setTimeout(() => {
           this.popUp = false
@@ -1003,13 +990,17 @@
         })
       },
       goLinkEnterpriseDetail (item) {
-        this.closePopup()
-        this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
+        if (item.state === 'approved') {
+          this.closePopup()
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
+        }
       },
       goLinkProductDetail (item) {
-        this.closePopup()
-        this.$router.push({name: 'ProductDetail', params: {id: item.id}})
-        window.location.reload()
+        if (item.state === 'approved') {
+          this.closePopup()
+          this.$router.push({name: 'ProductDetail', params: {id: item.id}})
+          window.location.reload()
+        }
       },
       goEnterprise () {
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
@@ -1459,9 +1450,9 @@
     }
     .content {
       @include px2rem(min-height, 500px);
-      border-bottom: 1px solid $fifth-grey;
+      border-bottom: 1px solid $third-grey;
       .item {
-        border-bottom: 1px solid $fifth-grey;
+        border-bottom: 1px solid $third-grey;
         @include px2rem(height, 108px);
         display: flex;
         align-items: center;
@@ -1478,6 +1469,7 @@
           }
           p {
             line-height: 1;
+            @include px2rem(max-width, 400px);
             @include px2rem(margin-bottom, 20px);
           }
           span {
@@ -1486,6 +1478,10 @@
           .product-price {
             color: #F50E0E;
           }
+          .width-limit {
+            display: inline-flex;
+            @include px2rem(max-width, 200px);
+          }
         }
       }
     }
@@ -1493,64 +1489,6 @@
       @include px2rem(height, 80px);
       @include px2rem(line-height, 80px);
       text-align: center;
-    }
-  }
-  .slide-in-fwd-center {
-    -webkit-animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-            animation: slide-in-fwd-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  }
-  .slide-out-bck-center {
-    -webkit-animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-            animation: slide-out-bck-center 0.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-  }
-
-  @-webkit-keyframes slide-in-fwd-center {
-    0% {
-      -webkit-transform: translateZ(-1400px);
-              transform: translateZ(-1400px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-      opacity: 1;
-    }
-  }
-  @keyframes slide-in-fwd-center {
-    0% {
-      -webkit-transform: translateZ(-1400px);
-              transform: translateZ(-1400px);
-      opacity: 0;
-    }
-    100% {
-      -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes slide-out-bck-center {
-    0% {
-      -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateZ(-1100px);
-              transform: translateZ(-1100px);
-      opacity: 0;
-    }
-  }
-  @keyframes slide-out-bck-center {
-    0% {
-      -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateZ(-1100px);
-              transform: translateZ(-1100px);
-      opacity: 0;
     }
   }
 
@@ -1605,7 +1543,7 @@
     background-color: $white;
     line-height: 1;
     .row-item {
-      @include pm2rem(padding, 0px, 0px, 0px, 32px);
+      @include pm2rem(padding, 0px, 32px, 0px, 32px);
       line-height: 1;
       .content {
         @include font-dpr(13px);
