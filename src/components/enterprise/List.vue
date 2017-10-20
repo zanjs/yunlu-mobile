@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="list-container white-bg">
-      <div
+      <a
         v-for="(item, index) in store"
         :key="index"
         @click="handleClick(item)"
@@ -31,7 +31,7 @@
             <span v-else>&nbsp;</span>
           </div>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -60,6 +60,9 @@
   .list-container {
     border-top: 1px solid $third-grey;
     box-sizing: border-box;
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
     .item {
       align-items: center;
       border-bottom: 1px solid $third-grey;

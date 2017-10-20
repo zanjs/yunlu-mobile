@@ -1,10 +1,11 @@
 <template>
   <section>
     <div class="gallery-list">
-      <div v-for="(item, index) in store"
-           :key="index"
-           @click.stop="handleClick(item)"
-           class="item">
+      <a
+        v-for="(item, index) in store"
+        :key="index"
+        @click.stop="handleClick(item)"
+        class="item">
         <div class="img-box">
           <img
             v-if="item.file_thumb_urls"
@@ -21,7 +22,7 @@
           <span class="name">{{item.name}}</span>
           <span class="money">&yen; ：{{item.prices[0].money}}</span>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -48,6 +49,9 @@
 
   .gallery-list {
     background-color: $white;
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
     .item {
       border-bottom: 1px solid $third-grey;
       @include pm2rem(padding, 10px, 10px, 10px, 10px);
