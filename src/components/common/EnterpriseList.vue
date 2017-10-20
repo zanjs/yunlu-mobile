@@ -1,11 +1,11 @@
 <template>
   <section>
-    <div class="list-container white-bg">
+    <div class="list-container">
       <a
         v-for="(item, index) in store"
         :key="index"
         @click="handleClick(item.organization.id)"
-        class="flex-between item primary-text">
+        class="flex-between item white-bg primary-text">
         <img v-lazy="{
               src: item.organization.logo,
               error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',

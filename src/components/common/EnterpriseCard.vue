@@ -98,7 +98,7 @@
   .card {
     border: 1px solid $third-grey;
     @include px2rem(padding-top, 40px);
-    box-shadow: 0 1px 5px rgba(119, 113, 113, 0.2), 0 2px 2px rgba(189, 188, 188, 0.14), 0 3px 1px -2px rgba(245, 243, 243, 0.12);
+    box-shadow: 0 1px 5px rgba(119, 113, 113, 0.1), 0 2px 2px rgba(189, 188, 188, 0.1), 0 3px 1px -2px rgba(245, 243, 243, 0.1);
     .user-info {
       display: flex;
       @include pm2rem(padding, 0px, 26px, 40px, 26px);

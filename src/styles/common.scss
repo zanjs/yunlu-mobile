@@ -398,7 +398,7 @@ body {
   @include pm2rem(margin, 20px, 0px, 10px, 0px);
   .tab-bar {
     @include px2rem(height, 84px);
-    @include pm2rem(padding, 0px, 22px, 0px, 22px);
+    @include pm2rem(margin, 0px, 22px, 0px, 22px);
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
     text-align: center;
@@ -409,6 +409,9 @@ body {
       @include px2rem(line-height, 84px);
       border: 1px solid $green;
       transition: color, background-color .3s;
+    }
+    .active-bg {
+      background-color: $green;
     }
     .left {
       @include px2rem(border-top-left-radius, 14px);

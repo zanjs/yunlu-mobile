@@ -53,6 +53,7 @@
       img {
         width: 100%;
         height: 100%;
+        box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
       }
       img[lazy=loading] {
         width: 100%;

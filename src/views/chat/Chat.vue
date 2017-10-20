@@ -354,7 +354,6 @@
   }
   .container {
     @include pm2rem(padding, 128px, 0px, 240px, 0px);
-    background-color: $sixth-grey;
   }
   .product-container {
     @include px2rem(padding-top, 248px);

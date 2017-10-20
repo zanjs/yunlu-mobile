@@ -8,7 +8,7 @@
     </common-header>
     <div class="normal-login">
       <div class="item top-item">
-        <img src="../../assets/inputName.png">
+        <p class="primary-text">手机号</p>
         <input
           type="text"
           v-model="mobile"
@@ -16,42 +16,40 @@
           ref="mobileInput">
       </div>
       <div class="item">
-        <img src="../../assets/inputPassword.png">
+        <p class="primary-text">密码</p>
         <input
           type="password"
           v-model="password"
           placeholder="请输入密码">
+        <a @click="forgetPassword()">忘记密码?</a>
       </div>
-    </div>
-    <div class="text-btn">
-      <a @click="forgetPassword()">忘记密码?</a>
     </div>
     <div class="login-btn">
       <a @click="login()">
         登录
       </a>
     </div>
+    <div class="tips">
+      <span class="third-text font-13">点击登录代表您已同意</span>
+      <a class="primary font-13" @click="openProtocol()">《云庐平台服务协议》</a>
+    </div>
     <div class="social-login">
-      <div class="title">
-        <hr size=1>
-        <p>第三方账号登录</p>
-        <hr size=1>
-      </div>
+      <p class="third-text font-13">更多登录方式</p>
       <div class="icons">
         <a
           class="icon-box"
           :href="qqLogin">
-          <img src="../../assets/qqLogin.png">
+          <img src="../../assets/qq.png">
         </a>
         <a
           class="icon-box"
           :href="weixinLogin">
-          <img src="../../assets/weixinLogin.png">
+          <img src="../../assets/weixin.png">
         </a>
         <a
           class="icon-box"
           :href="weiboLogin">
-          <img src="../../assets/weiboLogin.png">
+          <img src="../../assets/weibo.png">
         </a>
       </div>
     </div>
@@ -294,6 +292,9 @@
         } else {
           this.shouldLogin()
         }
+      },
+      openProtocol () {
+        this.$router.push({name: 'Protocol'})
       }
     },
     mounted () {
@@ -314,49 +315,51 @@
     max-width: 540px;
   }
   .normal-login {
-    @include px2rem(padding-top, 147px);
+    @include px2rem(padding-top, 138px);
     .item {
-      @include px2rem(width, 612px);
-      @include px2rem(height, 80px);
+      @include px2rem(width, 582px);
       margin: 0 auto;
       position: relative;
-      img {
-        position: absolute;
-        bottom: 0;
-        @include px2rem(width, 612px);
-        @include px2rem(height, 65px);
+      p {
+        @include font-dpr(16px);
+        line-height: 1;
       }
       input {
-        position: absolute;
-        @include px2rem(left, 116px);
-        @include px2rem(height, 80px);
-        @include px2rem(width, 480px);
+        @include px2rem(margin-top, 30px);
+        @include pm2rem(padding, 18px, 160px, 18px, 0px);
+        @include px2rem(max-width, 582px);
+        @include px2rem(width, 422px);
         background-color: transparent;
         border: none;
         @include font-dpr(14px);
         color: $second-dark;
+        border-bottom: 2px solid $fifth-grey;
+        line-height: 1;
       }
       ::-webkit-input-placeholder{
-        color: $thirteenth-grey;
+        color: $third-dark;
+      }
+      a {
+        position: absolute;
+        @include px2rem(bottom, 18px);
+        right: 0;
+        line-height: normal;
+        @include font-dpr(14px);
+        color: $green;
+      }
+      a:active {
+        opacity: .5;
       }
     }
     .top-item {
       @include px2rem(margin-bottom, 39px);
     }
   }
-  .text-btn {
-    color: $fourteenth-grey;
-    @include font-dpr(15px);
-    @include pm2rem(margin, 28px, 69px, 36px, 0px);
-    display: flex;
-    justify-content: flex-end;
-    align-content: center;
-    line-height: 1;
-  }
   .login-btn {
+    @include pm2rem(margin, 52px, 85px, 78px, 85px);
     a {
       display: block;
-      @include px2rem(width, 650px);
+      @include px2rem(width, 580px);
       margin: 0 auto;
       @include px2rem(height, 86px);
       @include px2rem(margin-bottom, 84px);
@@ -367,39 +370,45 @@
       text-align: center;
     }
     a:active {
-      background-color: rgba(82, 202, 167, .5);
+      opacity: .5;
+    }
+  }
+  .tips {
+    text-align: center;
+    a:active {
+      color: rgba(82, 202, 167, .5);
     }
   }
   .social-login {
-    .title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @include px2rem(margin-bottom, 34px);
-      p {
-        @include font-dpr(15px);
-        @include pm2rem(margin, 0px, 34px, 0px, 34px);
-        text-align: center;
-        color: $third-dark;
-      }
-      hr {
-        background-color: $second-grey;
-        @include px2rem(width, 120px);
-      }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include pm2rem(margin, 260px, 0px, 60px, 0px);
+    p {
+      @include px2rem(margin-right, 16px);
+      line-height: normal;
     }
     .icons {
-      display: flex;
-      @include pm2rem(padding, 0px, 96px, 0px, 96px);
-      flex-direction: column;
+      display: inline-flex;
       align-items: center;
       .icon-box {
-        text-align: center;
-        display: block;
-        @include px2rem(margin-bottom, 44px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include pm2rem(margin, 0px, 40px, 0px, 40px);
+        @include px2rem(width, 40px);
+        @include px2rem(height, 40px);
         img {
-          @include px2rem(width, 400px);
-          @include px2rem(height, 74px);
+          @include px2rem(width, 40px);
+          @include px2rem(height, 40px);
+          display: block;
         }
+      }
+      a:active {
+        opacity: .5;
+      }
+      a:last-child {
+        margin-right: 0;
       }
     }
   }

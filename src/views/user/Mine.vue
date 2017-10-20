@@ -160,13 +160,13 @@
   }
   .menu-container {
     background-color: $white;
-    border-top: 1px solid $fourth-grey;
+    border-top: 1px solid $primary-grey;
     @include px2rem(margin-top, 16px);
     .row-item {
-      @include px2rem(height, 88px);
+      @include px2rem(height, 96px);
       display: flex;
       align-items: center;
-      border-bottom: 1px solid $fourth-grey;
+      border-bottom: 1px solid $primary-grey;
       box-sizing: border-box;
       .box {
         @include px2rem(width, 36px);
@@ -214,9 +214,9 @@
   }
   .copyright {
     text-align: center;
-    @include px2rem(margin-top, 172px);
-    color: #A7A4A4;
-    @include font-dpr(13px);
+    @include px2rem(margin-top, 268px);
+    color: $fifth-grey;
+    @include font-dpr(10px);
   }
 </style>
 

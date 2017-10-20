@@ -457,7 +457,6 @@
   @import "../../styles/mixin";
 
   .container {
-    background-color: $sixth-grey;
     @include pm2rem(padding, 0px, 0px, 98px, 0px);
   }
   .list-container {

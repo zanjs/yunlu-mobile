@@ -1,5 +1,5 @@
 <template>
-  <section class="white-bg">
+  <section>
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -18,20 +18,20 @@
     <div class="four-nav-tabs">
       <div class="tab-bar primary flex font-17">
         <div
-          class="left flex-1"
-          v-bind:class="{'primary-bg white': activeIndex === 0}"
+          class="left flex-1 white-bg"
+          v-bind:class="{'active-bg white': activeIndex === 0}"
           @click.prevent="tabClick(0)">产品</div>
         <div
-          class="middle flex-1"
-          v-bind:class="{'primary-bg white': activeIndex === 1}"
+          class="middle flex-1 white-bg"
+          v-bind:class="{'active-bg white': activeIndex === 1}"
           @click.prevent="tabClick(1)">资讯</div>
         <div
-          class="middle flex-1"
-          v-bind:class="{'primary-bg white': activeIndex === 2}"
+          class="middle flex-1 white-bg"
+          v-bind:class="{'active-bg white': activeIndex === 2}"
           @click.prevent="tabClick(2)">校友班级</div>
         <div
-          class="middle right flex-1"
-          v-bind:class="{'primary-bg white': activeIndex === 3}"
+          class="middle right flex-1 white-bg"
+          v-bind:class="{'active-bg white': activeIndex === 3}"
           @click.prevent="tabClick(3)">校友企业</div>
       </div>
       <div class="tab-container">
