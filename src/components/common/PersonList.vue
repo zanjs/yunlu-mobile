@@ -68,7 +68,6 @@
   }
 
   .list-container {
-    background-color: $white;
     border-top: 1px solid $third-grey;
     @include pm2rem(margin, 10px, 0px, 0px, 0px);
     @include px2rem(min-height, 600px);
@@ -77,6 +76,7 @@
       align-items: center;
       color: $second-dark;
       border-bottom: 1px solid $third-grey;
+      background-color: $white;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       p {
         @include font-dpr(17px);

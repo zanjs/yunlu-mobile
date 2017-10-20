@@ -5,7 +5,7 @@
         v-for="(item, index) in store"
         :key="index"
         @click.stop="handleClick(item)"
-        class="img-box">
+        class="img-box white-bg">
         <img
           v-if="item.file_thumb_urls"
           v-lazy="{
@@ -62,8 +62,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      border: 1px solid $second-grey;
       box-sizing: border-box;
+      border: 1px solid $tenth-grey;
+      box-shadow: 0 4px 6px -2px rgba(181, 181, 181, 0.2);
       img[lazy=loading] {
         @include px2rem(height, 346px);
         width: 100%;

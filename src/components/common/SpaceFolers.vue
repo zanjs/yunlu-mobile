@@ -99,6 +99,7 @@
       align-content: flex-start;
       border: 1px solid $third-grey;
       box-sizing: border-box;
+      box-shadow: 0 1px 5px rgba(119, 113, 113, 0.1), 0 2px 2px rgba(189, 188, 188, 0.1), 0 3px 1px -2px rgba(245, 243, 243, 0.1);
       .item {
         @include px2rem(width, 220px);
         @include px2rem(height, 200px);
@@ -108,6 +109,7 @@
         img {
           @include px2rem(width, 200px);
           @include px2rem(height, 200px);
+          box-shadow: 0 3px 6px -2px rgba(0, 0, 0, .5);
         }
         img[lazy=loading] {
           @include px2rem(width, 200px);

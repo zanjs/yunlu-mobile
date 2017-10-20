@@ -594,6 +594,8 @@
       background-color: rgba(57, 55, 66, .9);
       @include px2rem(width, 270px);
       z-index: 9999 !important;
+      @include px2rem(border-radius, 8px);
+      box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
       .item {
         @include px2rem(height, 90px);
         @include px2rem(padding-left, 30px);
@@ -602,7 +604,7 @@
         align-items: center;
         line-height: normal;
         color: $white;
-        border-bottom: 1px solid $third-dark;
+        border-bottom: 1px solid rgba(166, 166, 166, .5);
         i {
           @include px2rem(margin-right, 40px);
           @include font-dpr(20px);
