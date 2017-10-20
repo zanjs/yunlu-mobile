@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="list-container white-bg">
-      <div
+      <a
         v-for="(item, index) in store"
         :key="index"
         @click="handleClick(item.organization.id)"
@@ -18,7 +18,7 @@
             <span class="flex-1 second">{{item.organization.zone_name || item.organization.display_zone}}</span>
           </div>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 </template>
@@ -48,6 +48,9 @@
     border-top: 1px solid $third-grey;
     @include pm2rem(margin, 10px, 0px, 0px, 0px);
     @include px2rem(min-height, 600px);
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
     .item {
       align-items: center;
       border-bottom: 1px solid $third-grey;
