@@ -9,8 +9,8 @@
     <section>
       <div class="nav-bars full-width">
         <a
-          class="tab"
           v-for="(item, index) in orderFormOptions"
+          class="tab"
           :key="index"
           :class="{'selected': activeIndex === index}"
           @click="selectTab(index)">
@@ -499,6 +499,7 @@
       border-bottom-color: $second-red;
       color: $second-red;
       border-bottom-style: solid;
+      transition: color, border-bottom-color .2s;
     }
   }
   .nav-bar-container {
