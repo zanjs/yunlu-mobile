@@ -1,19 +1,13 @@
 <template>
   <section>
-    <template
-      v-for="(item, index) in store">
-      <div
-        :key="index"
-        v-if="item.photos.length > 0"
-        class="container">
+    <div v-for="(item, index) in store" :key="index">
+      <div v-if="item.photos.length > 0" class="container">
         <div class="title">
           <hr>
           <span>{{item.name}}</span>
           <hr>
         </div>
-        <div
-          v-if="item.photos && item.photos.length > 0"
-          class="gallery-container">
+        <div v-if="item.photos && item.photos.length > 0" class="gallery-container">
           <div
             v-for="(i, indexI) in item.photos"
             :key="indexI"
@@ -35,14 +29,12 @@
             </div>
           </div>
         </div>
-        <div
-          v-else
-          class="empty-folder">
+        <div v-else class="empty-folder">
           <img src="../../assets/noFolderImages.png">
           <p>该文件夹暂无图片</p>
         </div>
       </div>
-    </template>
+    </div>
   </section>
 </template>
 
@@ -74,6 +66,8 @@
   .container {
     @include px2rem(width, 705px);
     margin: 0 auto;
+    @include px2rem(margin-top, 10px);
+    @include px2rem(margin-bottom, -10px);
     .title {
       display: flex;
       justify-content: center;
