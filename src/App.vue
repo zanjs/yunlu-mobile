@@ -41,7 +41,7 @@
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/#${this.$route.path}?provider=wechat&tmp_token=`)}`,
+        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/enterprises/1325?provider=wechat&tmp_token=')}`,
         title: '提醒',
         time: AUTHORIZATION_TIME,
         tips: '登录请求已发送，请等待授权...',
@@ -291,8 +291,10 @@
       },
       shouldLogin () {
         if (this.$route.query.tmp_token) {
+          setLocalStore(`${new Date().getTime()}_log`, window.location)
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (getLocalStore('weixinLogin')) {
+          setLocalStore(`${new Date().getTime()}_log`, window.location)
           Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
