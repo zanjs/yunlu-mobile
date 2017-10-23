@@ -7,7 +7,7 @@ import router from './router'
 import MintUI from 'mint-ui'
 import store from './vuex/store'
 import { AUTH_URL } from './constants/constant'
-import { getStore, setStore, mobileClient, getLocalStore, removeLocalStore } from './config/mUtils'
+import { getStore, setStore, mobileClient, setLocalStore, getLocalStore, removeLocalStore } from './config/mUtils'
 import realtime from './config/leancloud'
 
 router.beforeEach((to, from, next) => {
@@ -49,15 +49,18 @@ router.beforeEach((to, from, next) => {
           // this.showDialog = true
           // this.initImClient(res.data.device_id)
           console.log('需要主控设备授权')
+          setLocalStore('weixinLoginFailed_main_0', res.data)
         } else if (res.data.authentication_token && res.data.id) {
           setStore('user', res.data)
           getSignature(res.data.authentication_token)
         } else {
           console.log('授权登录出错')
+          setLocalStore('weixinLoginFailed_main_1', res.data)
         }
       },
       reject: () => {
         console.log('授权登录出错')
+        setLocalStore('weixinLoginFailed_main_2', '授权登录出错')
       }
     })
   }
@@ -82,9 +85,11 @@ router.beforeEach((to, from, next) => {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信自动授权登录失败')
+      setLocalStore('weixinLoginFailed_main_3', '微信自动授权登录失败')
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
-      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}?provider=wechat&tmp_token=`)}`
+      setLocalStore('weixinLogin', true)
+      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}${window.location.hash.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
       next()
     }
