@@ -330,7 +330,7 @@
       }
     },
     mounted () {
-      this.shouldLogin()
+      // this.shouldLogin()
     },
     updated () {
       this.beforeInit()
