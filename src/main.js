@@ -31,7 +31,7 @@ router.beforeEach((to, from, next) => {
       return query
     }
   }
-  const weixinAuth = (token, next) => {
+  const weixinAuth = (token) => {
     store.dispatch('commonAction', {
       url: '/login_info',
       method: 'get',
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
           console.log('需要主控设备授权')
         } else if (res.data.authentication_token && res.data.id) {
           setStore('user', res.data)
-          getSignature(res.data.authentication_token, next)
+          getSignature(res.data.authentication_token)
         } else {
           console.log('授权登录出错')
         }
@@ -61,7 +61,7 @@ router.beforeEach((to, from, next) => {
       }
     })
   }
-  const getSignature = (token, next) => {
+  const getSignature = (token) => {
     store.dispatch('commonAction', {
       url: '/im/sign',
       method: 'get',
@@ -71,18 +71,15 @@ router.beforeEach((to, from, next) => {
       target: this,
       resolve: (state, res) => {
         setStore('signature', res.data)
-        let time = setTimeout(() => {
-          clearTimeout(time)
-          next()
-        }, 1000)
+        next()
       },
       reject: () => {
       }
     })
   }
-  const autoLogin = (next) => {
+  const autoLogin = () => {
     if (handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
-      weixinAuth(handleUrlQuery().tmpToken, next)
+      weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信自动授权登录失败')
       next()
@@ -98,7 +95,7 @@ router.beforeEach((to, from, next) => {
     setStore(`${to.name}_goHome`, 'true')
   }
   store.dispatch('resetState')
-  autoLogin(next)
+  autoLogin()
   // next()
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
