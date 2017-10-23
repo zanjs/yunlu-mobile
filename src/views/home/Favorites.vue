@@ -193,7 +193,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import FavoritesList from '../../components/product/FavoritesList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
@@ -561,21 +561,10 @@
         } else {
           return this.favoritePerson.length > 0
         }
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
     }
   }
 </script>
