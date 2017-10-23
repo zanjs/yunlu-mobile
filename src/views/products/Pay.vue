@@ -11,15 +11,24 @@
       </div>
       <div class="row">
         <span>总金额：</span>
-        <span
-          v-if="orderForm && orderForm.children.length > 0"
-          class="money">
-          {{handleTotalMoney(orderForm.children)}}
+        <span class="money">
+          &yen;&nbsp;{{handleMoney(buying)}}
         </span>
       </div>
     </div>
     <div class="payment-list">
       <p class="title">支付方式</p>
+      <a
+        v-for="(item, index) in paymentMethods"
+        :key="index"
+        class="white-bg primary-test font-14 flex-between"
+        @click="wechat()">
+        <div class="name">
+          <img src="../../assets/weixinPay.png">
+          <span>{{item}}</span>
+        </div>
+        <i class="iconfont icon-you"></i>
+      </a>
     </div>
   </section>
 </template>
@@ -33,7 +42,9 @@
         header: '支付',
         deliveryId: this.$route.query.id || '',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        orderForm: null
+        orderForm: null,
+        buying: getStore('buying') || [],
+        paymentMethods: ['微信支付']
       }
     },
     components: {
@@ -66,6 +77,15 @@
           }
         })
       },
+      handleMoney (arr) {
+        let money = 0
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = 0; j < arr[i].products.length; j++) {
+            money += parseInt(arr[i].products[j].quantity + '') * parseFloat(arr[i].products[j].price.money + '')
+          }
+        }
+        return money
+      },
       handleTotalMoney (arr) {
         let money = 0
         for (let i = 0; i < arr.length; i++) {
@@ -74,6 +94,9 @@
           }
         }
         return money
+      },
+      wechat () {
+        console.log('wechat')
       }
     },
     mounted () {
@@ -120,6 +143,31 @@
     }
     .list {
       border-top: 1px solid #C9C9C9;
+    }
+    a {
+      @include px2rem(height, 96px);
+      @include pm2rem(padding, 0px, 32px, 0px, 32px);
+      border-top: 1px solid $second-grey;
+      align-items: center;
+      .name {
+        height: inherit;
+        display: flex;
+        align-items: center;
+        line-height: normal;
+        img {
+          @include px2rem(height, 54px);
+          @include px2rem(margin-right, 32px);
+        }
+      }
+      i {
+        color: $fifth-grey;
+      }
+    }
+    a:last-child {
+      border-bottom: 1px solid $second-grey;
+    }
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
     }
   }
 </style>
