@@ -233,7 +233,7 @@
           }
         })
       },
-      authLogin (token, provider) {
+      authLogin (token) {
         this.$store.dispatch('commonAction', {
           url: '/login_info',
           method: 'get',
@@ -315,9 +315,9 @@
         }
       },
       shouldLogin () {
-        if (this.handleUrlQuery().tmpToken) {
-          this.authLogin(this.handleUrlQuery().tmpToken, this.handleUrlQuery().provider)
-        } else if (getLocalStore('weixinLogin')) {
+        if (this.handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
+          this.authLogin(this.handleUrlQuery().tmpToken)
+        } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
           Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
