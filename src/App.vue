@@ -291,11 +291,11 @@
       },
       shouldLogin () {
         if (this.$route.query.tmp_token) {
-          setLocalStore(`${new Date().getTime()}_log_1`, this.$route)
           setLocalStore(`${new Date().getTime()}_log_1`, window.location)
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (getLocalStore('weixinLogin')) {
           setLocalStore(`${new Date().getTime()}_log_2`, window.location)
+          setLocalStore(`${new Date().getTime()}_log_3`, this.$route)
           Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
