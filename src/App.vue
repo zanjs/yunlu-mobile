@@ -290,20 +290,24 @@
         this.showDialog = false
       },
       handleUrl () {
-        let params = window.location.hash.split('?')[1].split('&')
         let query = {
           tmpToken: '',
           provider: ''
         }
-        for (let i = 0; i < params.length; i++) {
-          if (params[i].split('=')[0] === 'tmp_token') {
-            query.tmpToken = params[i].split('=')[1]
+        if (window.location.hash.split('?').length === 1) {
+          return query
+        } else {
+          let params = window.location.hash.split('?').split('&')
+          for (let i = 0; i < params.length; i++) {
+            if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'tmp_token') {
+              query.tmpToken = params[i].split('=')[1]
+            }
+            if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'provider') {
+              query.provider = params[i].split('=')[1]
+            }
           }
-          if (params[i].split('=')[0] === 'provider') {
-            query.provider = params[i].split('=')[1]
-          }
+          return query
         }
-        return query
       },
       shouldLogin () {
         if (this.handleUrl().tmpToken) {
