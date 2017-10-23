@@ -321,13 +321,9 @@
         return tmpArr
       },
       pay () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
-        })
-        /* let groups = this.handlePayingItems(this.purchaseItems)
+        let groups = this.handlePayingItems(this.purchaseItems)
         setStore('paying', groups)
-        this.$router.push({name: 'Pay', query: {id: this.deliverie.id}}) */
+        this.$router.push({name: 'Pay', query: {id: this.deliverie.id}})
       },
       goManageAddress () {
         if (this.deliverie) {
