@@ -297,7 +297,7 @@
         if (window.location.hash.split('?').length === 1) {
           return query
         } else {
-          let params = window.location.hash.split('?').split('&')
+          let params = window.location.hash.split('?')[1].split('&')
           for (let i = 0; i < params.length; i++) {
             if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'tmp_token') {
               query.tmpToken = params[i].split('=')[1]
