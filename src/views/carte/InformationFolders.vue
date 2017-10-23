@@ -35,7 +35,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import InformationGallery from '../../components/common/InformationGallery'
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -176,22 +176,11 @@
             e.preventDefault()
           }
         })
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.getArchives()
-          this.stopTouchMove()
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getArchives()
+      this.stopTouchMove()
     },
     computed: {
       ...mapGetters([

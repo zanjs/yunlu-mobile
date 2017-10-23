@@ -221,8 +221,12 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            Indicator.close()
             this.beforeInit()
+            let time = setTimeout(() => {
+              Indicator.close()
+              clearTimeout(time)
+              window.location.reload()
+            }, 1000)
           },
           reject: () => {
             Indicator.close()
