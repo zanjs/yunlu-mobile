@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { getStore, getLocalStore, removeAllStore, setStore, setLocalStore, mobileClient } from './config/mUtils'
+  import { getStore, getLocalStore, removeAllStore, removeLocalStore, setStore, setLocalStore, mobileClient } from './config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
   import { requestFn } from './config/request'
   import { MessageBox, Indicator, Toast } from 'mint-ui'
@@ -41,7 +41,7 @@
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/enterprises/1325?provider=wechat&tmp_token=')}`,
+        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}?provider=wechat&tmp_token=`)}`,
         title: '提醒',
         time: AUTHORIZATION_TIME,
         tips: '登录请求已发送，请等待授权...',
@@ -240,6 +240,7 @@
           target: this,
           resolve: (state, res) => {
             setStore('device_signature', res.data.sign)
+            removeLocalStore('weixinLogin')
             if (!res.data.authentication_token && res.data.id) {
               this.user = res.data
               this.countDown(AUTHORIZATION_TIME, 1000)
@@ -289,7 +290,7 @@
         }
         this.showDialog = false
       },
-      handleUrl () {
+      handleUrlQuery () {
         let query = {
           tmpToken: '',
           provider: ''
@@ -310,12 +311,9 @@
         }
       },
       shouldLogin () {
-        if (this.handleUrl().tmpToken) {
-          setLocalStore(`${new Date().getTime()}_log_1`, window.location)
-          this.authLogin(this.handleUrl().tmpToken, this.handleUrl().provider)
+        if (this.handleUrlQuery().tmpToken) {
+          this.authLogin(this.handleUrlQuery().tmpToken, this.handleUrlQuery().provider)
         } else if (getLocalStore('weixinLogin')) {
-          setLocalStore(`${new Date().getTime()}_log_2`, window.location)
-          setLocalStore(`${new Date().getTime()}_log_3`, this.handleUrl())
           Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
