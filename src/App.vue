@@ -289,13 +289,29 @@
         }
         this.showDialog = false
       },
+      handleUrl () {
+        let params = window.location.hash.split('?')[1].split('&')
+        let query = {
+          tmpToken: '',
+          provider: ''
+        }
+        for (let i = 0; i < params.length; i++) {
+          if (params[i].split('=')[0] === 'tmp_token') {
+            query.tmpToken = params[i].split('=')[1]
+          }
+          if (params[i].split('=')[0] === 'provider') {
+            query.provider = params[i].split('=')[1]
+          }
+        }
+        return query
+      },
       shouldLogin () {
-        if (this.$route.query.tmp_token) {
+        if (this.handleUrl().tmpToken) {
           setLocalStore(`${new Date().getTime()}_log_1`, window.location)
-          this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
+          this.authLogin(this.handleUrl().tmpToken, this.handleUrl().provider)
         } else if (getLocalStore('weixinLogin')) {
           setLocalStore(`${new Date().getTime()}_log_2`, window.location)
-          setLocalStore(`${new Date().getTime()}_log_3`, this.$route)
+          setLocalStore(`${new Date().getTime()}_log_3`, this.handleUrl())
           Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
