@@ -121,7 +121,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, setStore, removeStore, mobileClient } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
     data () {
@@ -187,21 +187,10 @@
       },
       goHome () {
         this.$router.push({name: 'See'})
-      },
-      goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
-      },
-      shouldLogin () {
-        if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.goLogin()
-        } else {
-          this.getEnterpriseDetail()
-        }
       }
     },
     mounted () {
-      this.shouldLogin()
+      this.getEnterpriseDetail()
     },
     computed: {
       ...mapGetters([

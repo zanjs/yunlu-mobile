@@ -153,7 +153,7 @@
         }
       },
       searchEnterprise (keyword = '') {
-        this.$router.push({name: 'SearchEnterprise', query: {q: keyword}})
+        this.$router.push({name: 'SearchEnterprise', ...(keyword ? {query: {q: keyword}} : {})})
       },
       getSpaces () {
         this.$store.dispatch('commonAction', {
