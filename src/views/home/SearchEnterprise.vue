@@ -216,9 +216,14 @@
     activated () {
       this.showGoTopBtn = false
       if (!this.$store.state.popState) {
+        setScrollTop(0, this.$refs.searchEnterprise)
         this.enterprisePageIndex = 1
         this.loading = true
-        setScrollTop(0, this.$refs.searchEnterprise)
+        this.searchParams = this.$route.query.q || ''
+        this.hasSearch = false
+        this.exclude_service_ids = []
+        this.loadingText = '加载中...'
+        this.noMoreData = false
         this.getServices()
         this.handleGoTopBtn()
       } else {
@@ -244,7 +249,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
   .list {

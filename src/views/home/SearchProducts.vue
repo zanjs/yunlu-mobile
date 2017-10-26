@@ -304,10 +304,15 @@
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'SearchProducts', value: this.$refs.searchProducts.scrollTop})
       if (to.name !== 'ProductDetail') {
+        this.searchParams = ''
+        this.loading = true
+        this.hasSearch = false
+        this.loadingText = '加载中...'
         this.products = []
         this.pageIndex = 1
         this.productsThumbnails = []
         this.noMoreData = false
+        this.showGoTopBtn = false
       }
       next()
     }
@@ -321,7 +326,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
   .search-input {

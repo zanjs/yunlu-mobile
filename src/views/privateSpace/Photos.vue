@@ -320,7 +320,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
 

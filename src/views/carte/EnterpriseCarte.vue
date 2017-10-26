@@ -179,10 +179,9 @@
         hasAddFavorites: false,
         scrollHeight: '14rem',
         scrollActive: false,
-        teams: [],
+        teams: null,
         products: [],
         productsThumbnails: [],
-        enterpriseMembers: [],
         enterpriseInfoFiles: [],
         enterpriseDocuments: []
       }
@@ -236,6 +235,8 @@
             if (this.productPageIndex !== 1) {
               this.loadingText = '没有更多数据了...'
               this.noMoreProducts = true
+            } else {
+              this.products = []
             }
           } else {
             this.getFilesPublisheds(tmppArr, res.data.products, q)
@@ -585,17 +586,10 @@
       this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
-      this.showGoTopBtn = false
-      this.showSearchBar = false
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
-        this.productPageIndex = 1
-        this.noMoreProducts = false
-        this.currentIndex = 0
-        this.favoratesText = '收藏'
-        this.hasAddFavorites = false
+        setScrollTop(0, this.$refs.enterpriseCarte)
         this.hasLogin = !!getStore('user')
         this.token = getStore('user') ? getStore('user').authentication_token : null
-        setScrollTop(0, this.$refs.enterpriseCarte)
         this.getTeams(this.id)
         this.handleSearchBar()
       } else {
@@ -605,15 +599,17 @@
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login') {
+        this.showGoTopBtn = false
+        this.showSearchBar = false
+        this.productPageIndex = 1
+        this.noMoreProducts = false
         this.currentIndex = 0
         this.favoratesText = '收藏'
+        this.loadingText = '加载中...'
         this.hasAddFavorites = false
-        this.hasLogin = !!getStore('user')
-        this.token = getStore('user') ? getStore('user').authentication_token : null
-        this.teams = []
+        this.teams = null
         this.products = []
         this.productsThumbnails = []
-        this.enterpriseMembers = []
         this.enterpriseInfoFiles = []
         this.enterpriseDocuments = []
       }
@@ -629,7 +625,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
 </style>
