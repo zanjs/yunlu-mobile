@@ -826,11 +826,15 @@
         this.noMoreProducts = false
         this.noMoreEnterprises = false
         this.noMorePeople = false
+        setScrollTop(0, this.$refs.alumni)
         this.getEnterpriseDetail()
         this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Alumni || 0, this.$refs.alumni)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Alumni', value: this.$refs.alumni.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Class' && to.name !== 'EnterpriseCarte') {
         this.activeIndex = 0
         this.teams = []

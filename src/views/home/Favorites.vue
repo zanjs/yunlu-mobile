@@ -197,7 +197,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import FavoritesList from '../../components/product/FavoritesList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
@@ -582,10 +582,14 @@
         this.organizationPageIndex = 1
         this.personPageIndex = 1
         this.searchParams = ''
+        setScrollTop(0, this.$refs.favorites)
         this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Favorites || 0, this.$refs.favorites)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Favorites', value: this.$refs.favorites.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'Class' && to.name !== 'ComityCarte' && to.name !== 'Mall' && to.name !== 'Alumni' && to.name !== 'EnterpriseCarte' && to.name !== 'PersonCarte' && to.name !== 'Login') {
         this.favoriteProducts = []
         this.favoritePerson = []

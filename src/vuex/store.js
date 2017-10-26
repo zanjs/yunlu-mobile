@@ -41,7 +41,8 @@ const state = {
   seeCard: {}, // 云视首页发送名片卡片
   deliveries: [], // 收货地址
   popState: false,
-  fromLogin: false
+  fromLogin: false,
+  scrollMap: {} // 页面滚动高度集合
 }
 
 const getters = {
@@ -77,7 +78,8 @@ const getters = {
   seeCard: state => state.seeCard,
   deliveries: state => state.deliveries,
   popState: state => state.popState,
-  fromLogin: state => state.fromLogin
+  fromLogin: state => state.fromLogin,
+  scrollMap: state => state.scrollMap
 }
 
 const actions = {
@@ -125,6 +127,9 @@ const actions = {
   },
   routeChange ({commit}, params) {
     commit(types.ROUTE_CHANGE, {params})
+  },
+  saveScroll ({commit}, params) {
+    commit(types.SAVE_SCROLL, {params})
   }
 }
 
@@ -320,8 +325,11 @@ const mutations = {
   [types.ROUTE_CHANGE] (state, {params}) {
     state.popState = !!params.savedPosition
     state.fromLogin = params.from.name === 'Login'
-  }
+  },
 
+  [types.SAVE_SCROLL] (state, {params}) {
+    state.scrollMap[params.name] = params.value
+  }
 }
 
 export default new Vuex.Store({

@@ -844,11 +844,15 @@
         this.noMoreProducts = false
         this.noMoreEnterprises = false
         this.noMorePeople = false
+        setScrollTop(0, this.$refs.mall)
         this.getEnterpriseDetail()
         this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Mall || 0, this.$refs.mall)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.mall.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte') {
         this.activeIndex = 0
         this.teams = []

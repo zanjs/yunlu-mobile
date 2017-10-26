@@ -295,10 +295,14 @@
     },
     activated () {
       if (!this.$store.state.popState) {
+        setScrollTop(0, this.$refs.searchProducts)
         this.handleGoTopBtn()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.SearchProducts || 0, this.$refs.searchProducts)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'SearchProducts', value: this.$refs.searchProducts.scrollTop})
       if (to.name !== 'ProductDetail') {
         this.products = []
         this.pageIndex = 1

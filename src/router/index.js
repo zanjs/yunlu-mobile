@@ -55,13 +55,14 @@ export default new Router({
       path: '/photos/:id',
       name: 'Photos',
       component: Photos,
+      props: true,
       meta: { keepAlive: true }
     }, {
       path: '/products/:id',
       name: 'ProductDetail',
       component: ProductDetail,
       props: true,
-      meta: { keepAlive: true }
+      meta: { keepAlive: false }
     }, {
       path: '/report',
       name: 'Report',
@@ -299,10 +300,5 @@ export default new Router({
   ],
   scrollBehavior (to, from, savedPosition) {
     store.dispatch('routeChange', {savedPosition, from, to})
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { x: 0, y: 0 }
-    }
   }
 })

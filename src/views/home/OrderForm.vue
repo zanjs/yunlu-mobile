@@ -112,7 +112,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
@@ -475,9 +475,16 @@
       if (!this.$store.state.popState) {
         this.activeIndex = 0
         this.token = getStore('user') ? getStore('user').authentication_token : ''
+        setScrollTop(0, this.$refs.orderForm)
         this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
         this.addTouch()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.OrderForm || 0, this.$refs.orderForm)
       }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'OrderForm', value: this.$refs.orderForm.scrollTop})
+      next()
     }
   }
 </script>
