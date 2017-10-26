@@ -548,6 +548,7 @@
       this.targetUserId = ''
       this.loading = true
       this.favoratesText = '收藏'
+      this.noMoreData = false
       this.loadingText = '加载中...'
       this.hasAddFavorites = false
       this.hasLogin = !!getStore('user')
@@ -557,7 +558,6 @@
       } else {
         setScrollTop(this.$store.state.scrollMap.PersonCarte || 0, this.$refs.personCarte)
       }
-      // 不管前进还是后退到此页面，统一滚动到顶部
       this.beforeGetData()
     },
     beforeRouteLeave (to, from, next) {
@@ -570,6 +570,7 @@
         this.loading = true
         this.favoratesText = '收藏'
         this.loadingText = '加载中...'
+        this.noMoreData = false
         this.hasAddFavorites = false
         this.userCard = null
         this.clusters = []
@@ -588,6 +589,7 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
+    padding-bottom: 1px;
     background-color: $tenth-grey;
   }
   .scroll-container {

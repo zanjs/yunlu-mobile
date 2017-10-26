@@ -627,6 +627,7 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
+    padding-bottom: 1px; // 与容器底部留1px空隙，避免手机QQ滑动到底部之后不能滑动的bug
     background-color: $tenth-grey;
   }
 </style>
