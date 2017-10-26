@@ -2,7 +2,7 @@
 
 #clean the dist folder
 rm -rf /build/test/
-#building product backend
+#copy files to nginx 
 cp -rf /dist /build/test
 #building test backend
 #rm -rf ./dist/*
