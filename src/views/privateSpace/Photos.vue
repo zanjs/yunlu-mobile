@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="wrapper full-width"
+    ref="photos"
+    :style="{height: scrollHeight}">
     <common-header
       :title="headerName"
       @back="goBack()">
@@ -80,23 +83,22 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
     name: 'Photos',
+    props: ['id'],
     data () {
       return {
         headerName: this.$route.query.name,
-        id: this.$route.params.id,
         p: this.$route.query.p || '',
         pageIndex: 1,
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : '',
         photos: [],
         previewPhotos: [],
-        topDistance: 10,
         showPreview: false,
         currentIndex: 1,
         swiperOption: {
@@ -288,12 +290,39 @@
     },
     mounted () {
       this.beforeGetData()
+    },
+    activated () {
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.photos)
+        this.beforeGetData()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Photos || 0, this.$refs.photos)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Photos', value: this.$refs.photos.scrollTop})
+      if (to.name !== 'Report') {
+        this.pageIndex = 1
+        this.currentIndex = 1
+        this.photos = []
+        this.previewPhotos = []
+        this.noMoreData = false
+      }
+      next()
     }
   }
 </script>
 
 <style lang="scss" scoped>
   @import '../../styles/mixin';
+
+  .wrapper {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    @include px2rem(padding-bottom, 80px);
+    background-color: $tenth-grey;
+  }
 
   .container {
     @include pm2rem(padding, 88px, 0px, 10px, 0px);

@@ -845,11 +845,15 @@
         this.noMoreProducts = false
         this.noMoreEnterprises = false
         this.noMorePeople = false
+        setScrollTop(0, this.$refs.class)
         this.getEnterpriseDetail()
         this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Class || 0, this.$refs.class)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Class', value: this.$refs.class.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte') {
         this.activeIndex = 0
         this.teams = []

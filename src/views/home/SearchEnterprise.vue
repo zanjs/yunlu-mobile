@@ -216,12 +216,18 @@
     activated () {
       this.showGoTopBtn = false
       if (!this.$store.state.popState) {
-        console.log('activated', this.$store.state.popState)
         this.enterprisePageIndex = 1
         this.loading = true
+        setScrollTop(0, this.$refs.searchEnterprise)
         this.getServices()
         this.handleGoTopBtn()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.SearchEnterprise || 0, this.$refs.searchEnterprise)
       }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'SearchEnterprise', value: this.$refs.searchEnterprise.scrollTop})
+      next()
     },
     computed: {
       ...mapGetters([

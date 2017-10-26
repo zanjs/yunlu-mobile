@@ -7,7 +7,7 @@ RUN apk --update --no-cache add make git \
 
 COPY . /app
 WORKDIR /app
-RUN npm install && \
+RUN yarn install && \
     npm run build && \
     mv ./docker-entrypoint.sh / && \
     cp -rf ./dist /dist && \
