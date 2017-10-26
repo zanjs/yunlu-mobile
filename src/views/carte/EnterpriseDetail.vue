@@ -124,6 +124,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import { mapGetters } from 'vuex'
   export default {
+    name: 'EnterpriseDetail',
     data () {
       return {
         header: '资信',

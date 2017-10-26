@@ -24,7 +24,7 @@
     </div>
     <div class="icons">
       <a
-        v-if="products && products.length > 0 && store.service.name !== '协会' && store.service.name !== '校友会' && store.service.name !== '班级'"
+        v-if="products && products.length > 0 && store && store.service && store.service.name !== '协会' && store.service.name !== '校友会' && store.service.name !== '班级'"
         @click="handleIconClick({type: 'chat', value: products[0].id})"
         class="icon-box">
         <i class="iconfont icon-huihua1 huihua"></i>

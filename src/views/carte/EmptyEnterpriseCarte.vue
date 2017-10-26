@@ -26,6 +26,7 @@
   import EnterpriseCard from '../../components/common/EnterpriseCard'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'EmptyEnterpriseCarte',
     data () {
       return {
         header: '名片',

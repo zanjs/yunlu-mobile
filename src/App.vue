@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <transition name="router-fade" mode="out-in">
-      <router-view></router-view>
+      <keep-alive :exclude="noKeepAliveComponents">
+        <router-view></router-view>
+      </keep-alive>
     </transition>
     <div
       v-show="showDialog"
@@ -46,7 +48,29 @@
         time: AUTHORIZATION_TIME,
         tips: '登录请求已发送，请等待授权...',
         showDialog: false,
-        interval: null
+        interval: null,
+        noKeepAliveComponents: [
+          'Home',
+          'See',
+          'Chat',
+          'Report',
+          'Register',
+          'ChangePassword',
+          'ForgetPassword',
+          'SetNewPassword',
+          'RegisterNext',
+          'BeforeRegister',
+          'SetPassword',
+          'Maps',
+          'OrderDetail',
+          'Help',
+          'HelpDetail',
+          'AddAddress',
+          'OrderPaying',
+          'Trace',
+          'Address',
+          'Pay'
+        ]
       }
     },
     methods: {

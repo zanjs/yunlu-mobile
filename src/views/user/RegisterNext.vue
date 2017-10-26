@@ -30,6 +30,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore, setStore } from '../../config/mUtils'
   export default {
+    name: 'RegisterNext',
     data () {
       return {
         header: '设置密码',

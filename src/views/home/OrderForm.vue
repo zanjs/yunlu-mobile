@@ -1,5 +1,8 @@
 <template>
-  <section class="container full-width">
+  <section
+    class="container full-width"
+    ref="orderForm"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -32,7 +35,8 @@
               <mugen-scroll
                 :handler="loadBottom"
                 :handle-on-mount="false"
-                :should-handle="!item.loading">
+                :should-handle="!item.loading"
+                scroll-container="orderForm">
                 <div
                   v-if="item.loading || item.noMoreData"
                   class="loading">
@@ -113,6 +117,7 @@
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'OrderForm',
     data () {
       return {
         header: '我的订单',
@@ -180,7 +185,8 @@
         confirmMsg: '确定取消订单？',
         showMenu: false,
         hasChecked: false,
-        checkAll: false
+        checkAll: false,
+        scrollHeight: '14rem'
       }
     },
     components: {
@@ -460,8 +466,18 @@
       }
     },
     mounted () {
-      this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
-      this.addTouch()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      if (!this.$store.state.popState) {
+        this.activeIndex = 0
+        this.token = getStore('user') ? getStore('user').authentication_token : ''
+        this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
+        this.addTouch()
+      }
     }
   }
 </script>
@@ -472,7 +488,7 @@
   .container {
     position: absolute;
     top: 0;
-    bottom: 0;
+    overflow-y: scroll;
     background-color: $tenth-grey;
   }
   .nav-bars {

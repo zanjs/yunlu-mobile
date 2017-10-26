@@ -81,6 +81,7 @@
   import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
+    name: 'Login',
     data () {
       return {
         header: '登录',
@@ -328,6 +329,10 @@
     },
     mounted () {
       this.autoGoBack()
+    },
+    activated () {
+      this.mobile = ''
+      this.password = ''
     }
   }
 </script>

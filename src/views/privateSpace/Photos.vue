@@ -85,6 +85,7 @@
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    name: 'Photos',
     data () {
       return {
         headerName: this.$route.query.name,

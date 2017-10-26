@@ -66,6 +66,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Trace',
     data () {
       return {
         header: '查看物流',

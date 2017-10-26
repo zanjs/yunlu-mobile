@@ -27,6 +27,7 @@
 <script>
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Download',
     data () {
       return {
       }
