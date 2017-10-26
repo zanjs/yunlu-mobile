@@ -577,12 +577,14 @@
     },
     activated () {
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.favorites)
         this.activeIndex = 1
         this.productPageIndex = 1
         this.organizationPageIndex = 1
         this.personPageIndex = 1
         this.searchParams = ''
-        setScrollTop(0, this.$refs.favorites)
+        this.productLoadingText = '加载中...'
+        this.selectedType = 'Product'
         this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
       } else {
         setScrollTop(this.$store.state.scrollMap.Favorites || 0, this.$refs.favorites)
@@ -599,6 +601,7 @@
         this.organizationPageIndex = 1
         this.personPageIndex = 1
         this.searchParams = ''
+        this.productLoadingText = '加载中...'
         this.token = getStore('user') ? getStore('user').authentication_token : null
         this.selectedType = 'Product'
       }
@@ -614,7 +617,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
   .header {

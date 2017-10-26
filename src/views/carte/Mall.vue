@@ -281,7 +281,7 @@
         noMorePeople: false,
         scrollHeight: '10rem',
         scrollActive: false,
-        teams: [],
+        teams: null,
         products: [],
         productsThumbnails: [],
         enterpriseMembers: [],
@@ -347,6 +347,8 @@
               if (this.productPageIndex !== 1) {
                 this.productLoadingText = '没有更多数据了...'
                 this.noMoreProducts = true
+              } else {
+                this.products = []
               }
             } else {
               let tmpArr = this.handleProductThumbnails(res.data.products)
@@ -834,17 +836,10 @@
       this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
-      this.showGoTopBtn = false
-      this.showSearchBar = false
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
-        this.productPageIndex = 1
-        this.enterprisePageIndex = 1
-        this.personPageIndex = 1
-        this.personPageIndex = 1
-        this.noMoreProducts = false
-        this.noMoreEnterprises = false
-        this.noMorePeople = false
         setScrollTop(0, this.$refs.mall)
+        this.token = getStore('user') ? getStore('user').authentication_token : ''
+        this.hasLogin = !!getStore('user')
         this.getEnterpriseDetail()
         this.handleSearchBar()
       } else {
@@ -853,9 +848,21 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.mall.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login') {
+        this.showGoTopBtn = false
+        this.showSearchBar = false
         this.activeIndex = 0
-        this.teams = []
+        this.productPageIndex = 1
+        this.enterprisePageIndex = 1
+        this.personPageIndex = 1
+        this.noMoreProducts = false
+        this.noMoreEnterprises = false
+        this.noMorePeople = false
+        this.hasSearch = false
+        this.hasAddFavorites = false
+        this.favoratesText = '收藏'
+        this.productLoadingText = '加载中...'
+        this.teams = null
         this.products = []
         this.productsThumbnails = []
         this.enterpriseMembers = []
@@ -875,7 +882,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
 </style>

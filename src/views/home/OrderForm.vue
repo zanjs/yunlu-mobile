@@ -474,6 +474,13 @@
     activated () {
       if (!this.$store.state.popState) {
         this.activeIndex = 0
+        this.orderFormOptions = this.orderFormOptions.map(i => {
+          i.loading = true
+          i.pageIndex = 1
+          i.noMoreData = false
+          i.text = '加载中...'
+          return i
+        })
         this.token = getStore('user') ? getStore('user').authentication_token : ''
         setScrollTop(0, this.$refs.orderForm)
         this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
