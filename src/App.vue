@@ -5,33 +5,13 @@
         <router-view></router-view>
       </keep-alive>
     </transition>
-    <div
-      v-show="showDialog"
-      class="popup-dialog full-width">
-      <div class="dialog absolute-horizontal">
-        <header>
-          {{title}}
-        </header>
-        <div class="content">
-          <p>{{tips}}</p>
-          <div>
-            <i class="iconfont icon-shizhong"></i>
-            <span>{{time}}</span>
-          </div>
-        </div>
-        <footer @click="closeDialog()">
-          取消
-        </footer>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-  import { getStore, getLocalStore, removeAllStore, removeLocalStore, removeAllLocalStore, setStore, setLocalStore, mobileClient } from './config/mUtils'
-  import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
+  import { getStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
   import { requestFn } from './config/request'
-  import { MessageBox, Indicator, Toast } from 'mint-ui'
+  import { MessageBox } from 'mint-ui'
   import moment from 'moment'
   export default {
     name: 'app',
@@ -43,12 +23,6 @@
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}?provider=wechat&tmp_token=`)}`,
-        title: '提醒',
-        time: AUTHORIZATION_TIME,
-        tips: '登录请求已发送，请等待授权...',
-        showDialog: false,
-        interval: null,
         noKeepAliveComponents: [
           'Home',
           'See',
@@ -205,164 +179,7 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
-      },
-      async initImClient (id) {
-        this.deviceDelegate = await this.$realtime.createIMClient(`dev_${id}`, {
-          signatureFactory: () => {
-            return new Promise((resolve, reject) => {
-              return resolve({
-                signature: getStore('device_signature').signature,
-                timestamp: getStore('device_signature').timestamp / 1,
-                nonce: getStore('device_signature').nonce
-              })
-            })
-          },
-          conversationSignatureFactory: () => {
-            return new Promise((resolve, reject) => {
-              return resolve({
-                signature: getStore('device_signature').signature,
-                timestamp: getStore('device_signature').timestamp / 1,
-                nonce: getStore('device_signature').nonce
-              })
-            })
-          }
-        })
-        this.$store.dispatch('setDeviceDelegate', this.deviceDelegate)
-        this.deviceDelegate.on('message', message => {
-          if (message.from && message.from === 'system' && message.content && message.content._lcattrs && message.content._lcattrs.token) {
-            this.user.authentication_token = message.content._lcattrs.token
-            setStore('user', this.user)
-            this.getSignature(message.content._lcattrs.token)
-            this.closeDialog()
-          } else if (message.from && message.from === 'system' && message._lcattrs && message._lcattrs.clazz === 'sign_devices.rejected') {
-            this.closeDialog()
-            this.showRejectPopup = true
-            MessageBox.alert('主控设备拒绝了您的登录请求！').then(action => {
-              this.showRejectPopup = false
-            })
-          }
-        })
-      },
-      getSignature (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/im/sign',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            setStore('signature', res.data)
-            this.beforeInit()
-            let time = setTimeout(() => {
-              Indicator.close()
-              clearTimeout(time)
-              window.location.reload()
-            }, 1000)
-          },
-          reject: () => {
-            Indicator.close()
-          }
-        })
-      },
-      authLogin (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/login_info',
-          method: 'get',
-          params: {
-            token: token
-          },
-          data: {},
-          target: this,
-          resolve: (state, res) => {
-            setStore('device_signature', res.data.sign)
-            removeLocalStore('weixinLogin')
-            if (!res.data.authentication_token && res.data.id) {
-              this.user = res.data
-              this.countDown(AUTHORIZATION_TIME, 1000)
-              this.showDialog = true
-              this.initImClient(res.data.device_id)
-            } else if (res.data.authentication_token && res.data.id) {
-              setStore('user', res.data)
-              Indicator.open({
-                text: '正在登录...',
-                spinnerType: 'fading-circle'
-              })
-              this.getSignature(res.data.authentication_token)
-            } else {
-              Toast('授权登录出错')
-            }
-          },
-          reject: () => {
-            Toast('授权登录出错')
-          }
-        })
-      },
-      countDown (seconds, speed = 1000) {
-        const count = () => {
-          let minute = Math.floor(seconds / 60)
-          let second = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60
-          if (seconds < 3600) {
-            this.time = `${minute} : ${second}`
-            seconds -= 1
-            if (this.time === '0 : 00' && this.interval) {
-              clearInterval(this.interval)
-              if (this.deviceDelegate) {
-                this.deviceDelegate.close().then(() => {
-                  // 下线成功（倒计时走完后，没有授权则注销，点击登录，重新登录leancloud）
-                }).catch(console.error.bind(console))
-              }
-              this.closeDialog()
-              return false
-            }
-          }
-        }
-        count()
-        this.interval = setInterval(count, speed)
-      },
-      closeDialog () {
-        if (this.interval) {
-          clearInterval(this.interval)
-        }
-        this.showDialog = false
-      },
-      handleUrlQuery () {
-        let query = {
-          tmpToken: '',
-          provider: ''
-        }
-        if (window.location.hash.split('?').length === 1) {
-          return query
-        } else {
-          let params = window.location.hash.split('?')[1].split('&')
-          for (let i = 0; i < params.length; i++) {
-            if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'tmp_token') {
-              query.tmpToken = params[i].split('=')[1]
-            }
-            if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'provider') {
-              query.provider = params[i].split('=')[1]
-            }
-          }
-          return query
-        }
-      },
-      shouldLogin () {
-        if (this.handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
-          this.authLogin(this.handleUrlQuery().tmpToken)
-        } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
-          Toast({
-            message: '自动登录失败，请手动登录',
-            duration: 1000
-          })
-          return false
-        } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
-          setLocalStore('weixinLogin', 'true')
-          window.location.href = this.weixinLogin
-        }
       }
-    },
-    mounted () {
-      // this.shouldLogin()
     },
     updated () {
       this.beforeInit()
@@ -373,56 +190,6 @@
 <style lang="scss" scoped>
   @import './styles/mixin';
 
-  .popup-dialog {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, .45);
-    z-index: 1004 !important;
-    .dialog {
-      @include px2rem(width, 562px);
-      @include px2rem(top, 300px);
-      background-color: $white;
-      header {
-        background-color: $green;
-        color: $white;
-        @include px2rem(height, 80px);
-        text-align: center;
-        @include px2rem(line-height,80px);
-        @include font-dpr(15px);
-      }
-      .content {
-        background-color: $white;
-        p {
-          @include font-dpr(13px);
-          color: $primary-dark;
-          text-align: center;
-          @include pm2rem(padding, 40px, 0px, 30px, 0px);
-        }
-        div {
-          text-align: center;
-          color: $green;
-          @include pm2rem(padding, 0px, 0px, 30px, 0px);
-          i {
-            @include font-dpr(14px);
-          }
-          span {
-            @include font-dpr(14px);
-          }
-        }
-      }
-      footer {
-        @include px2rem(height, 80px);
-        line-height: normal;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-top: 1px solid $second-grey;
-        @include font-dpr(15px);
-        color: $primary-dark;
-      }
-    }
-  }
 </style>
 
 <style lang="scss">
