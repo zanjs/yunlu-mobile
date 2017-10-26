@@ -81,7 +81,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
       setLocalStore('weixinLogin', true)
-      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}${window.location.hash.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
+      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.pathname.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
       next()
     }
