@@ -70,8 +70,9 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, removeAllStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeAllStore, removeStore, removeLocalStore } from '../../config/mUtils'
   export default {
+    name: 'Mine',
     data () {
       return {
         currentUser: getStore('user')
@@ -88,6 +89,7 @@
       },
       logOut () {
         removeAllStore()
+        removeLocalStore()
         this.$router.replace({name: 'See'})
       },
       contactUs () {

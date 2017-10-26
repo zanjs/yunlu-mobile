@@ -40,6 +40,7 @@
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Address',
     data () {
       return {
         header: '管理收获地址',

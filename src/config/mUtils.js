@@ -89,46 +89,54 @@ export const removeAllLocalStore = () => {
 /**
  * 获取scrollTop的值，兼容所有浏览器
  */
-export const getScrollTop = () => {
-  let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-  return scrollTop
+export const getScrollTop = (dom) => {
+  if (dom) {
+    return dom.scrollTop
+  } else {
+    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+    return scrollTop
+  }
 }
 
 /**
  * 设置scrollTop的值，兼容所有浏览器
  * @param {Number} scrollTop 距离窗口顶部的高度
  */
-export const setScrollTop = (scrollTop = 0) => {
-  if (document.body.scrollTop === 0) {
+export const setScrollTop = (scrollTop = 0, dom) => {
+  if (dom) {
+    dom.scrollTop = scrollTop
+    // 滚动容器有padding，滚动视图时，会导致document.body一同滚动一定的距离(padding或margin的值)
     document.documentElement.scrollTop = scrollTop
-  } else {
     document.body.scrollTop = scrollTop
+  } else {
+    if (document.body.scrollTop === 0) {
+      document.documentElement.scrollTop = scrollTop
+    } else {
+      document.body.scrollTop = scrollTop
+    }
   }
 }
 
 /**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点
  */
-export const showBack = (callback, height) => {
+export const showBack = (callbackFn, height, dom) => {
   let requestFram
   let oldScrollTop
-  this.callback = callback
-
   // 判断是否达到目标点
   const showBackFun = () => {
-    let self = this
-    if (getScrollTop() > height) {
-      self.callback(true)
+    if (getScrollTop(dom) > height) {
+      callbackFn(true)
     } else {
-      self.callback(false)
+      callbackFn(false)
     }
   }
 
   const moveEnd = () => {
-    oldScrollTop = getScrollTop()
+    oldScrollTop = getScrollTop(dom)
     requestFram = requestAnimationFrame(() => {
-      if (getScrollTop() !== oldScrollTop) {
-        oldScrollTop = getScrollTop()
+      if (getScrollTop(dom) !== oldScrollTop) {
+        oldScrollTop = getScrollTop(dom)
         moveEnd()
       } else {
         cancelAnimationFrame(requestFram)
@@ -137,21 +145,11 @@ export const showBack = (callback, height) => {
     })
   }
 
-  document.removeEventListener('scroll', throttle(showBackFun, 200, 200), false)
-
-  // document.removeEventListener('touchstart', throttle(showBackFun, 200, 200), { passive: true, once: true })
-
-  document.removeEventListener('touchmove', throttle(showBackFun, 200, 200), { passive: true, once: true })
-
-  document.removeEventListener('touchend', throttle(moveEnd, 200, 200), { passive: true, once: true })
-
-  document.addEventListener('scroll', throttle(showBackFun, 200, 200), false)
-
-  // document.addEventListener('touchstart', throttle(showBackFun, 200, 200), { passive: true, once: true })
-
-  document.addEventListener('touchmove', throttle(showBackFun, 200, 200), { passive: true, once: true })
-
-  document.addEventListener('touchend', throttle(moveEnd, 200, 200), { passive: true, once: true })
+  if (dom) {
+    dom.addEventListener('scroll', throttle(showBackFun, 200, 200))
+    dom.addEventListener('touchmove', throttle(showBackFun, 200, 200))
+    dom.addEventListener('touchend', throttle(showBackFun, 200, 200))
+  }
 }
 
 export const isPc = () => {

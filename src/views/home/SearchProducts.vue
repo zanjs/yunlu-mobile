@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="searchProducts"
+    :style="{height: scrollHeight}">
     <product-search-bar
       :can-clear="searchParams"
       @clear="resetSearchBar()"
@@ -35,7 +38,8 @@
         <mugen-scroll
           :handler="loadProductBottom"
           :handle-on-mount="false"
-          :should-handle="!loading">
+          :should-handle="!loading"
+          scroll-container="searchProducts">
           <div
             v-if="loading || noMoreData"
             class="loading">
@@ -80,6 +84,7 @@
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    name: 'SearchProducts',
     data () {
       return {
         searchParams: '',
@@ -117,7 +122,9 @@
         ],
         loading: true,
         loadingText: '加载中...',
-        noMoreData: false
+        noMoreData: false,
+        scrollHeight: '14rem',
+        scrollActive: false
       }
     },
     components: {
@@ -138,7 +145,7 @@
         this.productsThumbnails = []
         this.loadingText = '加载中...'
         this.noMoreData = false
-        setScrollTop(0)
+        setScrollTop(0, this.$refs.searchProducts)
       },
       handleInput (e) {
         if (e.target.value === '') {
@@ -256,7 +263,7 @@
         }
       },
       goScroll (scroll) {
-        setScrollTop(scroll)
+        setScrollTop(scroll, this.$refs.searchProducts)
       },
       handleSearchBtn () {
         // 每次搜索需重置分页索引,并重置产品列表
@@ -266,9 +273,12 @@
         document.activeElement.blur()
       },
       handleGoTopBtn () {
-        showBack((status) => {
-          this.showGoTopBtn = status
-        }, this.height)
+        if (!this.scrollActive) {
+          showBack((status) => {
+            this.showGoTopBtn = status
+            this.scrollActive = true
+          }, this.height, this.$refs.searchProducts)
+        }
       },
       loadProductBottom () {
         if (!this.noMoreData) {
@@ -278,7 +288,24 @@
       }
     },
     mounted () {
-      this.handleGoTopBtn()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      if (!this.$store.state.popState) {
+        this.handleGoTopBtn()
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      if (to.name !== 'ProductDetail') {
+        this.products = []
+        this.pageIndex = 1
+        this.productsThumbnails = []
+        this.noMoreData = false
+      }
+      next()
     }
   }
 </script>
@@ -286,6 +313,13 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    @include px2rem(padding-bottom, 80px);
+    background-color: $tenth-grey;
+  }
   .search-input {
     flex: 1;
     border: none;

@@ -47,6 +47,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Report',
     data () {
       return {
         options: [

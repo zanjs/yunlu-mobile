@@ -17,6 +17,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Protocol',
     data () {
       return {
         header: '使用条款和隐私政策',

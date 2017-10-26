@@ -31,6 +31,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'SetNewPassword',
     data () {
       return {
         header: '设置新密码',
