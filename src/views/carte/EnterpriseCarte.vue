@@ -586,6 +586,8 @@
       this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
+      this.showGoTopBtn = false
+      this.showSearchBar = false
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
         setScrollTop(0, this.$refs.enterpriseCarte)
         this.hasLogin = !!getStore('user')
