@@ -21,7 +21,8 @@
         <mugen-scroll
           :handler="loadPhotosBottom"
           :handle-on-mount="false"
-          :should-handle="!photoLoading">
+          :should-handle="!photoLoading"
+          scroll-container="photos">
           <div
             v-if="photoLoading || noMoreData"
             class="loading">
@@ -158,6 +159,7 @@
         },
         photoLoading: false,
         photoLoadingText: '加载中...',
+        scrollHeight: '14rem',
         noMoreData: false
       }
     },
@@ -289,7 +291,10 @@
       }
     },
     mounted () {
-      this.beforeGetData()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
@@ -320,6 +325,7 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
+    padding-bottom: 1px;
     background-color: $tenth-grey;
   }
 
