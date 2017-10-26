@@ -127,7 +127,12 @@
               this.showLogoffPopup = false
               removeAllStore()
               removeAllLocalStore()
-              this.$router.replace({name: 'See'})
+              // 要考虑在云视页面授权到期的情况，在云视页面授权到期下面的路由跳转将不会起作用。
+              if (window.location.pathname === '/see') {
+                window.location.reload()
+              } else {
+                this.$router.replace({name: 'See'})
+              }
             })
           }
         })
