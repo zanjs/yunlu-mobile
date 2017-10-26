@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="personCarte"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -80,7 +83,8 @@
           <mugen-scroll
             :handler="loadFolderBottom"
             :handle-on-mount="false"
-            :should-handle="!loading">
+            :should-handle="!loading"
+            scroll-container="personCarte">
             <div
               v-if="loading || noMoreData"
               class="loading">
@@ -153,7 +157,6 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
-  import { mapGetters } from 'vuex'
   import { Toast } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
   import SpaceFolders from '../../components/common/SpaceFolers'
@@ -161,12 +164,13 @@
   import FavoriteBtn from '../../components/common/FavoriteBtn'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    props: ['user_id'],
+    name: 'PersonCarte',
     data () {
       return {
         header: '名片',
         rightBtnText: '投诉',
         iconClass: 'icon-jubao',
-        user_id: this.$route.params.user_id || '',
         p: this.$route.query.p || '',
         hasLogin: !!getStore('user'),
         token: getStore('user') ? getStore('user').authentication_token : null,
@@ -212,7 +216,11 @@
         favoratesText: '收藏',
         hasAddFavorites: false,
         loadingText: '加载中...',
-        noMoreData: false
+        noMoreData: false,
+        userCard: null,
+        clusters: [],
+        scrollHeight: '14rem',
+        scrollActive: false
       }
     },
     components: {
@@ -237,7 +245,7 @@
         }
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id, resourceClass: 'user'}})
+        this.$router.push({name: 'Report', query: {resourceId: typeof this.userCard.id === 'number' ? this.userCard.user_id : this.userCard.id, resourceClass: 'user'}})
       },
       goReportPhoto () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
@@ -276,8 +284,8 @@
           params: params,
           target: this,
           resolve: (state, res) => {
-            state.userCard = res.data.cards
-            state.clusters = res.data.clusters
+            this.userCard = res.data.cards
+            this.clusters = res.data.clusters
             this.handleFavoriteStatus(res.data.favoriated || false)
             this.$nextTick(() => {
               this.showScrollBtnFn('hoverLeft')
@@ -354,11 +362,7 @@
             this.showPopDialog(0, 'QQ号', item.value)
             break
           case 'address':
-            if (item.value.latitude && item.value.longitude) {
-              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
-            } else {
-              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.userCard.name, address: item.value}})
-            }
+            this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.userCard.name, address: item.value}})
             break
         }
       },
@@ -375,7 +379,7 @@
         if (item.type === 'personal') {
           // 如果点击的是个人空间，则不跳转页面，在当前页面切换显示
           this.header = item.name
-          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.$route.params.user_id, this.token, this.p)
+          this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', item.id, this.user_id, this.token, this.p)
         } else if (item.type === 'association') {
           this.$router.push({name: 'ComityCarte', params: {id: item.team_id}})
         } else if (item.type === 'company') {
@@ -458,9 +462,9 @@
           setStore('beforeLogin', 'true')
           this.$router.push({name: 'Login'})
         } else if (!this.hasAddFavorites) {
-          this.favoriteRequest(typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id)
+          this.favoriteRequest(typeof this.userCard.id === 'number' ? this.userCard.user_id : this.userCard.id)
         } else {
-          this.removeFavorites(typeof this.$store.state.userCard.id === 'number' ? this.$store.state.userCard.user_id : this.$store.state.userCard.id)
+          this.removeFavorites(typeof this.userCard.id === 'number' ? this.userCard.user_id : this.userCard.id)
         }
       },
       removeFavorites (id) {
@@ -531,13 +535,26 @@
       }
     },
     mounted () {
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      // 个人名片页面，不管前进后退都有可能去的是同一个页面，所以这里不宜缓存
+      this.hasLogin = !!getStore('user')
+      this.token = getStore('user') ? getStore('user').authentication_token : null
       this.beforeGetData()
     },
-    computed: {
-      ...mapGetters([
-        'userCard',
-        'clusters'
-      ])
+    beforeRouteLeave (to, from, next) {
+      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders') {
+        this.currentIndex = 1
+        this.userCard = null
+        this.clusters = []
+        this.folders = []
+        this.photos = []
+      }
+      next()
     }
   }
 </script>
@@ -545,6 +562,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    @include px2rem(padding-bottom, 80px);
+    background-color: $tenth-grey;
+  }
   .scroll-container {
     overflow-x: scroll;
     @include px2rem(margin-top, 15px);

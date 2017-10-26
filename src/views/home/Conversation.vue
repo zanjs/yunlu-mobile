@@ -76,6 +76,7 @@
   import moment from 'moment'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Conversation',
     data () {
       return {
         header: '会话',
@@ -267,7 +268,7 @@
         }
       }
     },
-    mounted () {
+    activated () {
       this.getConversationList()
     },
     computed: {

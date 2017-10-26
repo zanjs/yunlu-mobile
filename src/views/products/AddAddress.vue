@@ -88,6 +88,7 @@
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'AddAddress',
     data () {
       return {
         header: this.$route.query.type === 'edit' ? '编辑收货地址' : '添加收货地址',

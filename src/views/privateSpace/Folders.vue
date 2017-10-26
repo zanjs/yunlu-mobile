@@ -79,6 +79,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
   export default {
+    name: 'Folders',
     data () {
       return {
         user_id: this.$route.params.user_id,

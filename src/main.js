@@ -44,23 +44,16 @@ router.beforeEach((to, from, next) => {
         setStore('device_signature', res.data.sign)
         removeLocalStore('weixinLogin')
         if (!res.data.authentication_token && res.data.id) {
-          // this.user = res.data
-          // this.countDown(AUTHORIZATION_TIME, 1000)
-          // this.showDialog = true
-          // this.initImClient(res.data.device_id)
-          console.log('需要主控设备授权')
-          setLocalStore('weixinLoginFailed_main_0', res.data)
+          console.log('需要主控设备授权,App端暂时没有开放绑定第三方账号功能')
         } else if (res.data.authentication_token && res.data.id) {
           setStore('user', res.data)
           getSignature(res.data.authentication_token)
         } else {
           console.log('授权登录出错')
-          setLocalStore('weixinLoginFailed_main_1', res.data)
         }
       },
       reject: () => {
         console.log('授权登录出错')
-        setLocalStore('weixinLoginFailed_main_2', '授权登录出错')
       }
     })
   }
@@ -84,8 +77,7 @@ router.beforeEach((to, from, next) => {
     if (handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
-      console.log('微信自动授权登录失败')
-      setLocalStore('weixinLoginFailed_main_3', '微信自动授权登录失败')
+      console.log('微信授权登录失败')
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
       setLocalStore('weixinLogin', true)
@@ -99,11 +91,11 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
-  store.dispatch('resetState')
+  // store.dispatch('resetState')
   autoLogin()
   // next()
-  document.documentElement.scrollTop = 0
-  document.body.scrollTop = 0
+  // document.documentElement.scrollTop = 0
+  // document.body.scrollTop = 0
 })
 
 Vue.use(realtime)

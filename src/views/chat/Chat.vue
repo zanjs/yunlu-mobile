@@ -51,6 +51,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import moment from 'moment'
   export default {
+    name: 'Chat',
     data () {
       return {
         token: getStore('user') ? getStore('user').authentication_token : '',

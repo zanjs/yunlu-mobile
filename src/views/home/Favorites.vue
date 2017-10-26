@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="favorites"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :right-text="rightBtnText"
@@ -53,7 +56,8 @@
                 key="favoriteProducts"
                 :handler="loadAProductsBottom"
                 :handle-on-mount="false"
-                :should-handle="!productLoading && !inOperation">
+                :should-handle="!productLoading && !inOperation"
+                scroll-container="favorites">
                 <div
                   v-if="productLoading || noMoreProducts"
                   class="loading">
@@ -106,7 +110,7 @@
             </div>
             <div
               v-else
-              key="1"
+              key="2"
               class="empty-container">
               <div class="img-container">
                 <img src="../../assets/noFavorites.png">
@@ -143,7 +147,7 @@
             </div>
             <div
               v-else
-              key="1"
+              key="3"
               class="empty-container">
               <div class="img-container">
                 <img src="../../assets/noFavorites.png">
@@ -199,6 +203,7 @@
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Favorites',
     data () {
       return {
         header: '收藏夹',
@@ -238,7 +243,8 @@
             label: '机构名片'
           }, {
             label: '个人名片'
-          }]
+          }],
+        scrollHeight: '14rem'
       }
     },
     components: {
@@ -564,7 +570,35 @@
       }
     },
     mounted () {
-      this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        this.activeIndex = 1
+        this.productPageIndex = 1
+        this.organizationPageIndex = 1
+        this.personPageIndex = 1
+        this.searchParams = ''
+        this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      if (to.name !== 'ProductDetail' && to.name !== 'Class' && to.name !== 'ComityCarte' && to.name !== 'Mall' && to.name !== 'Alumni' && to.name !== 'EnterpriseCarte' && to.name !== 'PersonCarte' && to.name !== 'Login') {
+        this.favoriteProducts = []
+        this.favoritePerson = []
+        this.favoriteOrganizations = []
+        this.activeIndex = 1
+        this.productPageIndex = 1
+        this.organizationPageIndex = 1
+        this.personPageIndex = 1
+        this.searchParams = ''
+        this.token = getStore('user') ? getStore('user').authentication_token : null
+        this.selectedType = 'Product'
+      }
+      next()
     }
   }
 </script>
@@ -572,6 +606,13 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    @include px2rem(padding-bottom, 80px);
+    background-color: $tenth-grey;
+  }
   .header {
     background-color: $green;
     @include px2rem(height, 88px);

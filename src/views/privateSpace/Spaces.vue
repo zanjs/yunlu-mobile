@@ -94,6 +94,7 @@
   import PopDialog from '../../components/common/PopDialog'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    name: 'Spaces',
     data () {
       return {
         headerName: '私人空间',

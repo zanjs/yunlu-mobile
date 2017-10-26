@@ -42,6 +42,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import { API_URL, VALID_CODE_IMG_URL } from '../../constants/constant'
   export default {
+    name: 'BeforeRegister',
     data () {
       return {
         header: '注册',

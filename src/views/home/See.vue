@@ -131,20 +131,25 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'See',
     data () {
       return {
         hasLogin: !!getStore('user'),
         enterpriseOwner: false,
         card: getStore('user'),
         token: getStore('user') ? getStore('user').authentication_token : '',
-        clientKeyWrods: []
+        clientKeyWrods: [],
+        seeCard: null
       }
     },
     methods: {
       goRoute (route, bool) {
+        if (!bool) {
+          setStore('Login_goHome', 'true')
+        }
         this.$router.push({name: bool ? route : 'Login'})
       },
       send () {
@@ -154,6 +159,7 @@
             duration: 500
           })
         } else {
+          setStore('Login_goHome', 'true')
           this.$router.push({name: 'Login'})
         }
       },
@@ -172,9 +178,9 @@
             let arr = this.handleSeeCard(res.data)
             this.enterpriseOwner = arr.length > 0
             if (arr.length === 0) {
-              state.seeCard = getStore('user')
+              this.seeCard = getStore('user')
             } else {
-              state.seeCard = arr[0]
+              this.seeCard = arr[0]
             }
           },
           reject: () => {
@@ -227,9 +233,7 @@
     },
     computed: {
       ...mapGetters([
-        'user',
-        'unReadeMsgs',
-        'seeCard'
+        'unReadeMsgs'
       ])
     }
   }
