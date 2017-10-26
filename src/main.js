@@ -91,11 +91,7 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
-  // store.dispatch('resetState')
   autoLogin()
-  // next()
-  // document.documentElement.scrollTop = 0
-  // document.body.scrollTop = 0
 })
 
 Vue.use(realtime)
