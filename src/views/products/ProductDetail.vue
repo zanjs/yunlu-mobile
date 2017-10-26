@@ -987,28 +987,9 @@
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
       }
     },
-    activated () {
-      if (!this.$store.state.popState) {
-        this.stopTouchMove()
-        this.getProductDetail(this.id)
-      }
-    },
-    beforeRouteLeave (to, from, next) {
-      if (to.name !== 'Favorites' && to.name !== 'ShoppingCart' && to.name !== 'Chat') {
-        this.selected = '1'
-        this.currentIndex = 1
-        this.popUp = false
-        this.token = getStore('user') ? getStore('user').authentication_token : ''
-        this.productDetail = null
-        this.hasAddFavorites = false
-        this.productDetailFiles = []
-        this.allPriceProperties = []
-        this.archives = []
-        this.teams = null
-        this.productDetailTeam = []
-        this.deliveries = []
-      }
-      next()
+    mounted () {
+      this.stopTouchMove()
+      this.getProductDetail(this.id)
     }
   }
 </script>

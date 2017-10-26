@@ -156,7 +156,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
   import SpaceFolders from '../../components/common/SpaceFolers'
@@ -542,13 +542,27 @@
     },
     activated () {
       // 个人名片页面，不管前进后退都有可能去的是同一个页面，所以这里不宜缓存
+      this.pageIndex = 1
+      this.currentIndex = 1
+      this.targetSpaceId = ''
+      this.targetUserId = ''
       this.hasLogin = !!getStore('user')
       this.token = getStore('user') ? getStore('user').authentication_token : null
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.personCarte)
+      } else {
+        setScrollTop(this.$store.state.scrollMap.PersonCarte || 0, this.$refs.personCarte)
+      }
+      // 不管前进还是后退到此页面，统一滚动到顶部
       this.beforeGetData()
     },
     beforeRouteLeave (to, from, next) {
-      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders') {
+      this.$store.dispatch('saveScroll', {name: 'PersonCarte', value: this.$refs.personCarte.scrollTop})
+      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders' && to.name !== 'Photos') {
+        this.pageIndex = 1
         this.currentIndex = 1
+        this.targetSpaceId = ''
+        this.targetUserId = ''
         this.userCard = null
         this.clusters = []
         this.folders = []

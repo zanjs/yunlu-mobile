@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import { getStore, getLocalStore, removeAllStore, removeLocalStore, setStore, setLocalStore, mobileClient } from './config/mUtils'
+  import { getStore, getLocalStore, removeAllStore, removeLocalStore, removeAllLocalStore, setStore, setLocalStore, mobileClient } from './config/mUtils'
   import { AUTH_URL, AUTHORIZATION_TIME } from './constants/constant'
   import { requestFn } from './config/request'
   import { MessageBox, Indicator, Toast } from 'mint-ui'
@@ -69,7 +69,8 @@
           'OrderPaying',
           'Trace',
           'Address',
-          'Pay'
+          'Pay',
+          'ProductDetail'
         ]
       }
     },
@@ -124,6 +125,7 @@
             MessageBox.alert('授权到期，主设备将当前设备下线').then(action => {
               this.showLogoffPopup = false
               removeAllStore()
+              removeAllLocalStore()
               this.$router.replace({name: 'See'})
             })
           }

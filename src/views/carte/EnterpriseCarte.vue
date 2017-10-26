@@ -595,11 +595,15 @@
         this.hasAddFavorites = false
         this.hasLogin = !!getStore('user')
         this.token = getStore('user') ? getStore('user').authentication_token : null
+        setScrollTop(0, this.$refs.enterpriseCarte)
         this.getTeams(this.id)
         this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.EnterpriseCarte || 0, this.$refs.enterpriseCarte)
       }
     },
     beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
       if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login') {
         this.currentIndex = 0
         this.favoratesText = '收藏'
