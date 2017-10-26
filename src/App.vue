@@ -70,7 +70,8 @@
           'Trace',
           'Address',
           'Pay',
-          'ProductDetail'
+          'ProductDetail',
+          'ShoppingCart'
         ]
       }
     },

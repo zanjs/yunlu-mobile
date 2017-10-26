@@ -546,6 +546,10 @@
       this.currentIndex = 1
       this.targetSpaceId = ''
       this.targetUserId = ''
+      this.loading = true
+      this.favoratesText = '收藏'
+      this.loadingText = '加载中...'
+      this.hasAddFavorites = false
       this.hasLogin = !!getStore('user')
       this.token = getStore('user') ? getStore('user').authentication_token : null
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
@@ -563,6 +567,10 @@
         this.currentIndex = 1
         this.targetSpaceId = ''
         this.targetUserId = ''
+        this.loading = true
+        this.favoratesText = '收藏'
+        this.loadingText = '加载中...'
+        this.hasAddFavorites = false
         this.userCard = null
         this.clusters = []
         this.folders = []
@@ -580,7 +588,6 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
-    @include px2rem(padding-bottom, 80px);
     background-color: $tenth-grey;
   }
   .scroll-container {

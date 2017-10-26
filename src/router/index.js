@@ -228,7 +228,7 @@ export default new Router({
       path: '/shoppingcart',
       name: 'ShoppingCart',
       component: ShoppingCart,
-      meta: { keepAlive: true }
+      meta: { keepAlive: false }
     }, {
       path: '/conversation',
       name: 'Conversation',
