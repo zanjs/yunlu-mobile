@@ -45,6 +45,9 @@
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
             class="number font-26">{{currentPrice.money}}</span>
+          <span
+            v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+            class="number font-26">定制</span>
           <span v-else class="number font-26">&nbsp;</span>
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制' && productDetail.prices[0].money !== '赠品'"
@@ -76,8 +79,11 @@
       <div
         v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
         class="inventory font-13 second-text">
-        库存 ：{{productDetail.prices[0].amount}}
+        库存 ：{{productDetail.prices[0].amount || '定制'}}
       </div>
+      <div
+        v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+        class="inventory font-13 second-text">库存 ：定制</div>
       <div
         v-else
         class="inventory font-13 second-text">
@@ -512,7 +518,7 @@
           target: this,
           resolve: (state, res) => {
             this.allPriceProperties = res.data.properties
-            this.currentPrice = this.productDetail.prices[0]
+            this.currentPrice = this.productDetail.prices[0] || {money: '定制', amount: '定制', properties: []}
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
             this.getProductArchives(productId, teamId)
           },
