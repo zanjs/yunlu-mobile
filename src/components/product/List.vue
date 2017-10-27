@@ -20,7 +20,10 @@
         </div>
         <div class="content">
           <span class="name">{{item.name}}</span>
-          <span class="money">&yen; ：{{item.prices[0].money}}</span>
+          <div class="money">
+            <span class="font-12">&yen;</span>
+            <span class="font-16">{{item.prices.length === 0 ? '定制' : item.prices[0].money}}</span>
+          </div>
         </div>
       </a>
     </div>
@@ -105,10 +108,8 @@
           display: -webkit-box;
         }
         .money {
-          font-weight: bold;
           line-height: 1;
           color: $red;
-          @include font-dpr(13px);
         }
       }
     }
