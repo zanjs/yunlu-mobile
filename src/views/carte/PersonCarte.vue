@@ -543,7 +543,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'PersonCarte', value: this.$refs.personCarte.scrollTop})
-      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders' && to.name !== 'Photos') {
+      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders' && to.name !== 'Photos' && to.name !== 'Maps' && to.name !== 'Login') {
         this.pageIndex = 1
         this.currentIndex = 1
         this.targetSpaceId = ''
