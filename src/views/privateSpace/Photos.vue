@@ -159,7 +159,7 @@
         },
         photoLoading: false,
         photoLoadingText: '加载中...',
-        scrollHeight: '14rem',
+        scrollHeight: '17rem',
         noMoreData: false
       }
     },
@@ -247,27 +247,9 @@
           this.$refs.mySwiper.swiper.slideTo(this.pageSize + index - this.photos.length, 1, true)
         }
         this.showPreview = true
-        this.stopTouchMove()
       },
       closePreview () {
         this.showPreview = false
-        this.allowTouchMove()
-      },
-      stopTouchMove () {
-        let self = this
-        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
-          }
-        })
-      },
-      allowTouchMove () {
-        let self = this
-        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
-            e.preventDefault()
-          }
-        })
       },
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
@@ -312,6 +294,7 @@
         this.photos = []
         this.previewPhotos = []
         this.noMoreData = false
+        this.showPreview = false
       }
       next()
     }
@@ -328,7 +311,6 @@
     padding-bottom: 1px;
     background-color: $tenth-grey;
   }
-
   .container {
     @include pm2rem(padding, 88px, 0px, 10px, 0px);
     .loading {
