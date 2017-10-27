@@ -21,7 +21,7 @@
          <div class="cover">
            <div class="wraper">
             <div class="name">{{item.name}}</div>
-            <div class="money">&yen; ：{{item.prices[0].money}}</div>
+            <div class="money">&yen; ：{{item.prices.length === 0 ? '定制' : item.prices[0].money}}</div>
            </div>
         </div>
       </div>
