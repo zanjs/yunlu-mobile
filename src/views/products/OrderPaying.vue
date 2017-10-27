@@ -146,6 +146,7 @@
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'OrderPaying',
     data () {
       return {
         header: '确认订单',

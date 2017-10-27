@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="mall"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -61,7 +64,8 @@
                   key="product"
                   :handler="loadProductBottom"
                   :handle-on-mount="false"
-                  :should-handle="!productLoading">
+                  :should-handle="!productLoading"
+                  scroll-container="mall">
                   <div
                     v-if="productLoading || noMoreProducts"
                     class="loading">
@@ -109,7 +113,8 @@
                     key="person"
                     :handler="loadPersonBottom"
                     :handle-on-mount="false"
-                    :should-handle="!personLoading">
+                    :should-handle="!personLoading"
+                    scroll-container="comityCarte">
                     <div
                       v-if="personLoading || noMorePeople"
                       class="loading">
@@ -154,7 +159,8 @@
                   key="enterprise"
                   :handler="loadEnterpriseBottom"
                   :handle-on-mount="false"
-                  :should-handle="!enterpriseLoading">
+                  :should-handle="!enterpriseLoading"
+                  scroll-container="comityCarte">
                   <div
                     v-if="enterpriseLoading || noMoreEnterprises"
                     class="loading">
@@ -223,7 +229,6 @@
   import EnterpriseList from '../../components/common/EnterpriseList'
   import PersonList from '../..//components/common/PersonList'
   import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
-  import { mapGetters } from 'vuex'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import PopDialog from '../../components/common/PopDialog'
@@ -233,6 +238,8 @@
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    props: ['id'],
+    name: 'Mall',
     data () {
       return {
         teamId: this.$route.params.id,
@@ -271,7 +278,16 @@
         personLoadingText: '加载中...',
         noMoreProducts: false,
         noMoreEnterprises: false,
-        noMorePeople: false
+        noMorePeople: false,
+        scrollHeight: '10rem',
+        scrollActive: false,
+        teams: null,
+        products: [],
+        productsThumbnails: [],
+        enterpriseMembers: [],
+        enterpriseInfoFiles: [],
+        enterpriseDocuments: [],
+        personMembers: []
       }
     },
     components: {
@@ -295,11 +311,11 @@
           url: '/links/teams',
           method: 'get',
           params: {
-            ids: this.teamId
+            ids: this.id
           },
           target: this,
           resolve: (state, res) => {
-            state.teams = res.data.teams[0]
+            this.teams = res.data.teams[0]
             this.getProducts()
             this.handleFavoriteStatus(res.data.teams[0].enterprise_id)
           },
@@ -315,7 +331,7 @@
           url: '/products',
           method: 'get',
           params: {
-            team_id: this.teamId,
+            team_id: this.id,
             page: this.productPageIndex,
             per_page: this.productPageSize,
             sort: order || '',
@@ -331,6 +347,8 @@
               if (this.productPageIndex !== 1) {
                 this.productLoadingText = '没有更多数据了...'
                 this.noMoreProducts = true
+              } else {
+                this.products = []
               }
             } else {
               let tmpArr = this.handleProductThumbnails(res.data.products)
@@ -376,7 +394,7 @@
           method: 'get',
           params: {
             type: 'product',
-            team_id: this.teamId,
+            team_id: this.id,
             thumbs: ['general'],
             ids: ids
           },
@@ -384,11 +402,11 @@
           resolve: (state, res) => {
             this.productLoading = false
             if (this.productPageIndex === 1) {
-              state.products = this.handleProducts(arr, res.data.files)
-              state.productsThumbnails = res.data.files
+              this.products = this.handleProducts(arr, res.data.files)
+              this.productsThumbnails = res.data.files
             } else {
-              state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
-              state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+              this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
+              this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
             }
           },
           reject: (state, error) => {
@@ -403,13 +421,13 @@
           method: 'get',
           params: {
             type: 'document',
-            team_id: this.teamId,
+            team_id: this.id,
             thumbs: ['general'],
             ids: ids
           },
           target: this,
           resolve: (state, res) => {
-            state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
+            this.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(this.enterpriseDocuments, res.data.files)
             this.getEnterpriseList()
           },
           reject: () => {
@@ -457,12 +475,12 @@
           url: '/archives/stat/types',
           method: 'get',
           params: {
-            team_id: this.teamId
+            team_id: this.id
           },
           target: this,
           resolve: (state, res) => {
-            state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
-            this.getInformation(this.handleDocumentIds(state.enterpriseDocuments))
+            this.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
+            this.getInformation(this.handleDocumentIds(this.enterpriseDocuments))
           },
           reject: () => {
           }
@@ -479,10 +497,10 @@
         this.queryParams = q
         this.enterpriseLoading = true
         this.$store.dispatch('commonAction', {
-          url: `/team/${this.teamId}/guilds`,
+          url: `/team/${this.id}/guilds`,
           method: 'get',
           params: {
-            team_id: this.teamId,
+            team_id: this.id,
             states: ['joined'],
             page: this.enterprisePageIndex,
             per_page: this.enterprisePageSize,
@@ -493,13 +511,13 @@
             this.enterpriseLoading = false
             this.hasSearchEnterprise = q !== ''
             if (this.enterprisePageIndex === 1) {
-              state.enterpriseMembers = res.data.members
+              this.enterpriseMembers = res.data.members
             } else {
               if (res.data.members.length === 0 && this.enterprisePageIndex !== 1) {
                 this.enterpriseLoadingText = '没有更多数据了...'
                 this.noMoreEnterprises = true
               }
-              state.enterpriseMembers = [...state.enterpriseMembers, ...res.data.members]
+              this.enterpriseMembers = [...this.enterpriseMembers, ...res.data.members]
             }
             if (getStore('user')) {
               this.getPersonList()
@@ -514,10 +532,10 @@
         this.personLoading = true
         this.queryParams = q
         this.$store.dispatch('commonAction', {
-          url: `/team/${this.teamId}/members`,
+          url: `/team/${this.id}/members`,
           method: 'get',
           params: {
-            team_id: this.teamId,
+            team_id: this.id,
             token: this.token,
             states: ['accepted'],
             page: this.personPageIndex,
@@ -529,13 +547,13 @@
             this.personLoading = false
             this.hasSearchPerson = q !== ''
             if (this.personPageIndex === 1) {
-              state.personMembers = res.data.preps
+              this.personMembers = res.data.preps
             } else {
               if (res.data.preps.length === 0 && this.personPageIndex !== 1) {
                 this.personLoadingText = '没有更多数据了...'
                 this.noMorePeople = true
               }
-              state.personMembers = [...state.personMembers, ...res.data.preps]
+              this.personMembers = [...this.personMembers, ...res.data.preps]
             }
           },
           reject: () => {
@@ -552,7 +570,7 @@
       goBack () {
         if (this.hasSearch || this.hasSearchEnterprise || this.hasSearchPerson) {
           this.queryParams = ''
-          setScrollTop(0)
+          setScrollTop(0, this.$refs.mall)
           this.productPageIndex = 1 // 从搜索结果返回，需要重置分页数(搜索成功后，会自动上拉加载一次[BUG]，导致分页pageIndex = 2)
           this.enterprisePageIndex = 1
           this.personPageIndex = 1
@@ -565,10 +583,10 @@
         }
       },
       goScroll (scroll) {
-        setScrollTop(scroll)
+        setScrollTop(scroll, this.$refs.mall)
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.$store.state.teams.id, resourceClass: 'product'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
         setStore('beforeLogin', 'true')
@@ -621,25 +639,28 @@
       },
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
-        setScrollTop(158)
+        setScrollTop(158, this.$refs.mall)
         this.search(res)
       },
       handleSearchBar () {
-        showBack((status) => {
-          this.showGoTopBtn = status
-          if (this.activeIndex === 1) {
-            this.showSearchBar = false
-          } else if (this.activeIndex === 0) {
-            this.showSearchBar = status
-            this.header = status ? '产品' : '名片'
-          } else if (this.activeIndex === 2) {
-            this.showSearchBar = status
-            this.header = status ? '个人会员' : '名片'
-          } else if (this.activeIndex === 3) {
-            this.showSearchBar = status
-            this.header = status ? '企业会员' : '名片'
-          }
-        }, this.height)
+        if (!this.scrollActive) {
+          showBack((status) => {
+            this.showGoTopBtn = status
+            this.scrollActive = true
+            if (this.activeIndex === 1) {
+              this.showSearchBar = false
+            } else if (this.activeIndex === 0) {
+              this.showSearchBar = status
+              this.header = status ? '产品' : '名片'
+            } else if (this.activeIndex === 2) {
+              this.showSearchBar = status
+              this.header = status ? '个人会员' : '名片'
+            } else if (this.activeIndex === 3) {
+              this.showSearchBar = status
+              this.header = status ? '企业会员' : '名片'
+            }
+          }, this.height, this.$refs.mall)
+        }
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
@@ -672,9 +693,9 @@
             break
           case 'address':
             if (item.value.latitude && item.value.longitude) {
-              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.teams.company}})
             } else {
-              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.teams.company, address: item.value.address}})
+              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.teams.company, address: item.value.address}})
             }
             break
         }
@@ -688,7 +709,7 @@
         this.showDialog = true
       },
       openInformationFolders (item) {
-        this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
+        this.$router.push({name: 'InformationFolders', params: {id: this.id}, query: {type: item.name || ''}})
       },
       showListChange (val) {
         this.showList = val
@@ -732,17 +753,17 @@
       },
       removeFavorites () {
         this.$store.dispatch('commonAction', {
-          url: `/favorites/${this.teamId}`,
+          url: `/favorites/${this.id}`,
           method: 'delete',
           params: {},
           data: {
             token: this.token,
-            id: this.teamId,
+            id: this.id,
             type: 'Organization'
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorable_id === this.teamId) {
+            if (res.data.favorable_id === this.id) {
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
               Toast({
@@ -766,11 +787,11 @@
           params: {},
           data: {
             token: this.token,
-            team_id: this.teamId
+            team_id: this.id
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorites && res.data.favorites.id === parseInt(this.teamId)) {
+            if (res.data.favorites && res.data.favorites.id === parseInt(this.id)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
               Toast({
@@ -809,20 +830,49 @@
       }
     },
     mounted () {
-      this.getEnterpriseDetail()
-      this.handleSearchBar()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
-    computed: {
-      ...mapGetters([
-        'teams',
-        'loadSuccess',
-        'products',
-        'productsThumbnails',
-        'enterpriseMembers',
-        'enterpriseInfoFiles',
-        'enterpriseDocuments',
-        'personMembers'
-      ])
+    activated () {
+      this.showGoTopBtn = false
+      this.showSearchBar = false
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.mall)
+        this.token = getStore('user') ? getStore('user').authentication_token : ''
+        this.hasLogin = !!getStore('user')
+        this.getEnterpriseDetail()
+        this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Mall || 0, this.$refs.mall)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.mall.scrollTop})
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login') {
+        this.showGoTopBtn = false
+        this.showSearchBar = false
+        this.activeIndex = 0
+        this.productPageIndex = 1
+        this.enterprisePageIndex = 1
+        this.personPageIndex = 1
+        this.noMoreProducts = false
+        this.noMoreEnterprises = false
+        this.noMorePeople = false
+        this.hasSearch = false
+        this.hasAddFavorites = false
+        this.favoratesText = '收藏'
+        this.productLoadingText = '加载中...'
+        this.teams = null
+        this.products = []
+        this.productsThumbnails = []
+        this.enterpriseMembers = []
+        this.enterpriseInfoFiles = []
+        this.enterpriseDocuments = []
+        this.personMembers = []
+      }
+      next()
     }
   }
 </script>
@@ -830,4 +880,11 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    background-color: $tenth-grey;
+  }
 </style>

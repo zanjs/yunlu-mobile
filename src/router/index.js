@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../vuex/store'
 const Spaces = resolve => require(['../views/privateSpace/Spaces'], resolve)
 const Folders = resolve => require(['../views/privateSpace/Folders'], resolve)
 const Photos = resolve => require(['../views/privateSpace/Photos'], resolve)
@@ -48,71 +49,94 @@ const Pay = resolve => require(['../views/products/Pay'], resolve)
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/photos/:id',
       name: 'Photos',
-      component: Photos
+      component: Photos,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/products/:id',
       name: 'ProductDetail',
-      component: ProductDetail
+      component: ProductDetail,
+      props: true,
+      meta: { keepAlive: false }
     }, {
       path: '/report',
       name: 'Report',
-      component: Report
+      component: Report,
+      meta: { keepAlive: false }
     }, {
       path: '/card',
       name: 'Card',
-      component: PersonCarte
+      component: PersonCarte,
+      meta: { keepAlive: true }
     }, {
       path: '/users/:user_id',
       name: 'PersonCarte',
-      component: PersonCarte
+      component: PersonCarte,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/zone',
       name: 'Zone',
-      component: Spaces
+      component: Spaces,
+      meta: { keepAlive: true }
     }, {
       path: '/users/:user_id/spaces/:space_id',
       name: 'Spaces',
-      component: Spaces
+      component: Spaces,
+      meta: { keepAlive: true }
     }, {
       path: '/photos',
       name: 'FoldersPhotos',
-      component: Folders
+      component: Folders,
+      meta: { keepAlive: true }
     }, {
       path: '/users/:user_id/folders/:id',
       name: 'Folders',
-      component: Folders
+      component: Folders,
+      meta: { keepAlive: true }
     }, {
       path: '/enterprises/:id',
       name: 'EnterpriseCarte',
-      component: EnterpriseCarte
+      component: EnterpriseCarte,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/associations/:id',
       name: 'ComityCarte',
-      component: ComityCarte
+      component: ComityCarte,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/malls/:id',
       name: 'Mall',
-      component: Mall
+      component: Mall,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/enterprisedetails/:id',
       name: 'EnterpriseDetail',
-      component: EnterpriseDetail
+      component: EnterpriseDetail,
+      meta: { keepAlive: true }
     }, {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: { keepAlive: true }
     }, {
       path: '/register',
       name: 'Register',
-      component: Register
+      component: Register,
+      meta: { keepAlive: false }
     }, {
       path: '/protocl',
       name: 'Protocol',
-      component: Protocol
+      component: Protocol,
+      meta: { keepAlive: true }
     }, {
       path: '/',
       name: 'Home',
@@ -121,125 +145,160 @@ export default new Router({
         {
           path: 'see',
           component: See,
-          name: 'See'
+          name: 'See',
+          meta: { keepAlive: false }
         }
       ]
     }, {
       path: '/download',
       name: 'Download',
-      component: Download
+      component: Download,
+      meta: { keepAlive: true }
     }, {
       path: '/mine',
       name: 'Mine',
-      component: Mine
+      component: Mine,
+      meta: { keepAlive: true }
     }, {
       path: '/changepassword',
       name: 'ChangePassword',
-      component: ChangePassword
+      component: ChangePassword,
+      meta: { keepAlive: false }
     }, {
       path: '/searchenterprises',
       name: 'SearchEnterprise',
-      component: SearchEnterprise
+      component: SearchEnterprise,
+      meta: { keepAlive: true }
     }, {
       path: '/forgetpassword',
       name: 'ForgetPassword',
-      component: ForgetPassword
+      component: ForgetPassword,
+      meta: { keepAlive: false }
     }, {
       path: '/setnewpassword',
       name: 'SetNewPassword',
-      component: SetNewPassword
+      component: SetNewPassword,
+      meta: { keepAlive: false }
     }, {
       path: '/registernext/:mobile',
       name: 'RegisterNext',
-      component: RegisterNext
+      component: RegisterNext,
+      meta: { keepAlive: false }
     }, {
       path: '/informationfolders/:id',
       name: 'InformationFolders',
-      component: InformationFolders
+      component: InformationFolders,
+      meta: { keepAlive: true }
     }, {
       path: '/emptyenterprisecarte',
       name: 'EmptyEnterpriseCarte',
-      component: EmptyEnterpriseCarte
+      component: EmptyEnterpriseCarte,
+      meta: { keepAlive: true }
     }, {
       path: '/reportexpired',
       name: 'ReportExpired',
-      component: ReportExpired
+      component: ReportExpired,
+      meta: { keepAlive: true }
     }, {
       path: '/beforeregister',
       name: 'BeforeRegister',
-      component: BeforeRegister
+      component: BeforeRegister,
+      meta: { keepAlive: false }
     }, {
       path: '/setpassword',
       name: 'SetPassword',
-      component: SetPassword
+      component: SetPassword,
+      meta: { keepAlive: false }
     }, {
       path: '/chat',
       name: 'Chat',
-      component: Chat
+      component: Chat,
+      meta: { keepAlive: false }
     }, {
       path: '/maps',
       name: 'Maps',
-      component: Maps
+      component: Maps,
+      meta: { keepAlive: false }
     }, {
       path: '/favorites',
       name: 'Favorites',
-      component: Favorites
+      component: Favorites,
+      meta: { keepAlive: true }
     }, {
       path: '/shoppingcart',
       name: 'ShoppingCart',
-      component: ShoppingCart
+      component: ShoppingCart,
+      meta: { keepAlive: false }
     }, {
       path: '/conversation',
       name: 'Conversation',
-      component: Conversation
+      component: Conversation,
+      meta: { keepAlive: true }
     }, {
       path: '/orderform',
       name: 'OrderForm',
-      component: OrderForm
+      component: OrderForm,
+      meta: { keepAlive: true }
     }, {
       path: '/orderdetail/:id',
       name: 'OrderDetail',
-      component: OrderDetail
+      component: OrderDetail,
+      meta: { keepAlive: false }
     }, {
       path: '/searchproducts',
       name: 'SearchProducts',
-      component: SearchProducts
+      component: SearchProducts,
+      meta: { keepAlive: true }
     }, {
       path: '/help',
       name: 'Help',
-      component: Help
+      component: Help,
+      meta: { keepAlive: false }
     }, {
       path: '/helps/:id',
       name: 'HelpDetail',
-      component: HelpDetail
+      component: HelpDetail,
+      meta: { keepAlive: false }
     }, {
       path: '/alumnis/:id',
       name: 'Alumni',
-      component: Alumni
+      component: Alumni,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/classes/:id',
       name: 'Class',
-      component: Class
+      component: Class,
+      props: true,
+      meta: { keepAlive: true }
     }, {
       path: '/addaddress',
       name: 'AddAddress',
-      component: AddAddress
+      component: AddAddress,
+      meta: { keepAlive: false }
     }, {
       path: '/orderpaying',
       name: 'OrderPaying',
-      component: OrderPaying
+      component: OrderPaying,
+      meta: { keepAlive: false }
     }, {
       path: '/trace/:id',
       name: 'Trace',
-      component: Trace
+      component: Trace,
+      meta: { keepAlive: false }
     }, {
       path: '/address',
       name: 'Address',
-      component: Address
+      component: Address,
+      meta: { keepAlive: false }
     }, {
       path: '/pay',
       name: 'Pay',
-      component: Pay
+      component: Pay,
+      meta: { keepAlive: false }
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    store.dispatch('routeChange', {savedPosition, from, to})
+  }
 })

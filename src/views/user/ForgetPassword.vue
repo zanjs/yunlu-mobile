@@ -41,6 +41,7 @@
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'ForgetPassword',
     data () {
       return {
         header: '忘记密码',

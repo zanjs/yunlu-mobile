@@ -47,6 +47,7 @@
 <script>
   import { Tabbar, TabItem, TabContainer, TabContainerItem } from 'mint-ui'
   export default {
+    name: 'Home',
     data () {
       return {
         selected: 'home',

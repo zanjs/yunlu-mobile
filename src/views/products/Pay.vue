@@ -37,6 +37,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Pay',
     data () {
       return {
         header: '支付',

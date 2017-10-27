@@ -1,5 +1,8 @@
 <template>
-  <section class="container full-width">
+  <section
+    class="container full-width"
+    ref="orderForm"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -32,7 +35,8 @@
               <mugen-scroll
                 :handler="loadBottom"
                 :handle-on-mount="false"
-                :should-handle="!item.loading">
+                :should-handle="!item.loading"
+                scroll-container="orderForm">
                 <div
                   v-if="item.loading || item.noMoreData"
                   class="loading">
@@ -108,11 +112,12 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import OrderFormList from '../../components/orderForm/OrderFormList'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'OrderForm',
     data () {
       return {
         header: '我的订单',
@@ -180,7 +185,8 @@
         confirmMsg: '确定取消订单？',
         showMenu: false,
         hasChecked: false,
-        checkAll: false
+        checkAll: false,
+        scrollHeight: '14rem'
       }
     },
     components: {
@@ -460,8 +466,32 @@
       }
     },
     mounted () {
-      this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
-      this.addTouch()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      if (!this.$store.state.popState) {
+        this.activeIndex = 0
+        this.orderFormOptions = this.orderFormOptions.map(i => {
+          i.loading = true
+          i.pageIndex = 1
+          i.noMoreData = false
+          i.text = '加载中...'
+          return i
+        })
+        this.token = getStore('user') ? getStore('user').authentication_token : ''
+        setScrollTop(0, this.$refs.orderForm)
+        this.getOrderForms(0, this.orderFormOptions[0].pageIndex, this.orderFormOptions[0].pageSize)
+        this.addTouch()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.OrderForm || 0, this.$refs.orderForm)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'OrderForm', value: this.$refs.orderForm.scrollTop})
+      next()
     }
   }
 </script>
@@ -472,7 +502,8 @@
   .container {
     position: absolute;
     top: 0;
-    bottom: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
     background-color: $tenth-grey;
   }
   .nav-bars {

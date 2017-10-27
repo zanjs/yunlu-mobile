@@ -39,6 +39,7 @@
   import { Toast } from 'mint-ui'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Register',
     data () {
       return {
         header: '注册',

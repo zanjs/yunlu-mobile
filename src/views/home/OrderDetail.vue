@@ -122,6 +122,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'OrderDetail',
     data () {
       return {
         header: '订单详情',

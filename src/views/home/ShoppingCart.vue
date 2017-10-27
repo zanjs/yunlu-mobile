@@ -67,6 +67,7 @@
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'ShoppingCart',
     data () {
       return {
         header: '购物车',

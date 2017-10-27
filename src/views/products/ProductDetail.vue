@@ -15,54 +15,39 @@
       @home="goHome()"
       v-bind:class="{'header': !hideDownloadBar}">
     </product-header>
-    <div
-      class="swipe"
-      v-bind:class="{'header': !hideDownloadBar}">
-      <template v-if="productDetailFiles && productDetailFiles.length">
-        <swiper :options="swiperOption">
-          <swiper-slide
-            v-for="(item, index) in productDetailFiles"
-            :key="index">
-            <div
-              v-lazy:background-image="{
-                src: item.url,
-                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-              }"
-              class="swipe-img"
-              @click="viewFullScreenPic(productDetailFiles)">
-            </div>
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
-      </template>
-      <img
-        v-else
-        src="../../assets/imgLoadingError.png">
+    <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
+      <swiper :options="swiperOption">
+        <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
+          <div
+            v-lazy:background-image="{
+              src: item.url,
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }"
+            class="swipe-img"
+            @click="viewFullScreenPic(productDetailFiles)">
+          </div>
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
       <span
         v-if="productDetailFiles && productDetailFiles.length"
         class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
-      <span
-        v-else
-        class="page-nav white font-16">0/0</span>
+      <span v-else class="page-nav white font-16">0/0</span>
     </div>
     <section class="info-container white-bg">
       <div
         v-if="productDetail && productDetail.name"
         class="name font-17">{{productDetail.name}}</div>
-      <div
-        v-else
-        class="name font-17">*****</div>
+      <div v-else class="name font-17">&nbsp;</div>
       <div class="flex-between money">
         <div>
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
             class="number font-26">{{currentPrice.money}}</span>
+          <span v-else class="number font-26">&nbsp;</span>
           <span
-            v-else
-            class="number font-26">0.00</span>
-          <span
-            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制'"
+            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制' && productDetail.prices[0].money !== '赠品'"
             class="unit font-13">元</span>
         </div>
         <div @click="expandMorePrice()">
@@ -75,7 +60,7 @@
         </div>
         <div class="more-price white-bg font-16" :class="{'menu-active': morePrice}">
           <div class="menu-list">
-            <ul>
+            <ul v-if="productDetail && productDetail.prices">
               <li
                 v-for="(item, index) in productDetail.prices"
                 :key="index"
@@ -148,7 +133,7 @@
               </div>
             </div>
           </template>
-          <template v-if="productDetail.properties && productDetail.properties.length > 0">
+          <template v-if="productDetail && productDetail.properties && productDetail.properties.length > 0">
             <div
               v-for="(item, index) in productDetail.properties"
               :key="index"
@@ -212,33 +197,27 @@
         </mt-tab-container-item>
       </mt-tab-container>
     </section>
-    <section
-      class="company-info white-bg"
-      @click="goEnterprise()">
+    <section class="company-info white-bg" @click="goEnterprise()">
       <div class="wraper">
         <div class="company-img">
           <img
             v-if="productDetailTeam && productDetailTeam.logo"
             :src="productDetailTeam.logo">
-          <img
-            v-else
-            src="../../assets/blank.jpg">
+          <div v-else></div>
         </div>
-         <div class="content-wraper ellipsis">
+        <div class="content-wraper ellipsis">
           <div class="company-content">
             <div
               v-if="productDetailTeam && productDetailTeam.company"
               class="title ellipsis font-16">
               {{productDetailTeam.company}}
             </div>
-            <span
-              v-else
-              class="title ellipsis font-16">***</span>
+            <span v-else class="title ellipsis font-16">&nbsp;</span>
             <div class="info font-14">
               <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
-              <span v-else>***</span>
+              <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
-              <span v-else>0件商品</span>
+              <span v-else>&nbsp;</span>
             </div>
           </div>
          </div>
@@ -357,11 +336,12 @@
 <script>
   import ProductHeader from '../../components/header/Head'
   import DownloadBar from '../../components/common/DownloadBar'
-  import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    props: ['id'],
+    name: 'ProductDetail',
     data () {
       return {
         selected: '1',
@@ -415,7 +395,14 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        hideDownloadBar: getStore('hideDownloadBar')
+        hideDownloadBar: getStore('hideDownloadBar'),
+        productDetail: null,
+        productDetailFiles: [],
+        allPriceProperties: [],
+        archives: [],
+        teams: null,
+        productDetailTeam: [],
+        deliveries: []
       }
     },
     components: {
@@ -432,7 +419,7 @@
       goDownload () {
         this.$router.push({name: 'Download'})
       },
-      getProductDetail (productId = this.productId) {
+      getProductDetail (productId = this.id) {
         this.$store.dispatch('commonAction', {
           url: `/products/${productId}`,
           method: 'get',
@@ -442,10 +429,10 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (productId === this.productId) {
+            if (productId === this.id) {
               this.hasAddFavorites = res.data.products.favorable
               this.favoratesText = res.data.products.favorable ? '已收藏' : '收藏'
-              state.productDetail = res.data.products
+              this.productDetail = res.data.products
               this.currentTeamId = res.data.products.organization_id
               this.hasProperties = this.handleProperties(res.data.products)
               this.visits(res.data.products.organization_id)
@@ -518,8 +505,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.allPriceProperties = res.data.properties
-            this.currentPrice = state.productDetail.prices[0]
+            this.allPriceProperties = res.data.properties
+            this.currentPrice = this.productDetail.prices[0]
             this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, res.data.properties)
             this.getProductArchives(productId, teamId)
           },
@@ -567,9 +554,9 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (productId === this.productId) {
-              state.productDetailFiles = res.data.files
-              this.getAllPriceProperties(state.productDetail.category_id, productId, teamId)
+            if (productId === this.id) {
+              this.productDetailFiles = res.data.files
+              this.getAllPriceProperties(this.productDetail.category_id, productId, teamId)
             } else {
               // 关联产品图片只需获取封面(传的ids参数也是只有一个元素的数组)
               this.productLinkFile = res.data.files[0]
@@ -587,7 +574,7 @@
           params: {},
           target: this,
           resolve: (state, res) => {
-            state.archives = res.data.archives
+            this.archives = res.data.archives
             this.getOrganization(productId, teamId)
           },
           reject: () => {
@@ -614,7 +601,7 @@
           }
         })
       },
-      getOrganization (productId = this.productId, teamId = '') {
+      getOrganization (productId = this.id, teamId = '') {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -623,8 +610,8 @@
           },
           target: this,
           resolve: (state, res) => {
-            if (productId === this.productId) {
-              state.productDetailTeam = res.data.teams[0]
+            if (productId === this.id) {
+              this.productDetailTeam = res.data.teams[0]
             } else {
               this.teamLink = res.data.teams[0]
               this.openPopup()
@@ -702,7 +689,7 @@
       changePrice (item) {
         this.currentPrice = item
         this.expandMorePrice()
-        this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.$store.state.allPriceProperties)
+        this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.allPriceProperties)
       },
       viewArchives (item) {
         this.getArchivesFiles(this.handleProductFiles(item.files))
@@ -734,7 +721,7 @@
         }
       },
       goReport () {
-        this.$router.push({name: 'Report', query: {resourceId: this.productId, resourceClass: 'product'}})
+        this.$router.push({name: 'Report', query: {resourceId: this.id, resourceClass: 'product'}})
       },
       goHome () {
         this.$router.push({name: 'See'})
@@ -759,11 +746,11 @@
           params: {},
           data: {
             token: this.token,
-            product_id: this.productId
+            product_id: this.id
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorites && res.data.favorites.id === parseInt(this.productId)) {
+            if (res.data.favorites && res.data.favorites.id === parseInt(this.id)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
               Toast({
@@ -785,7 +772,7 @@
       },
       removeFavorites () {
         this.$store.dispatch('commonAction', {
-          url: `/favorites/${this.productId}`,
+          url: `/favorites/${this.id}`,
           method: 'delete',
           params: {},
           data: {
@@ -819,7 +806,7 @@
         if (!this.hasLogin) {
           this.goLogin()
         } else {
-          this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.currentTeamId, productId: this.productId, productImg: this.$store.state.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.$store.state.productDetail.name}})
+          this.$router.push({name: 'Chat', query: {type: 'Product', teamId: this.currentTeamId, productId: this.id, productImg: this.productDetailFiles[0].url, productPrice: this.currentPrice.money, productName: this.productDetail.name}})
         }
       },
       openShoppingCar () {
@@ -946,17 +933,7 @@
     },
     mounted () {
       this.stopTouchMove()
-      this.getProductDetail(this.productId)
-    },
-    computed: {
-      ...mapGetters([
-        'productDetail',
-        'productDetailFiles',
-        'allPriceProperties',
-        'archives',
-        'teams',
-        'productDetailTeam'
-      ])
+      this.getProductDetail(this.id)
     }
   }
 </script>
@@ -1190,6 +1167,11 @@
         img {
           @include px2rem(width, 82px);
           @include px2rem(height, 82px);
+        }
+        div {
+          @include px2rem(width, 82px);
+          @include px2rem(height, 82px);
+          background-color: $third-grey;
         }
       }
       .content-wraper {
@@ -1458,11 +1440,11 @@
     }
   }
   .prodcutdetail-price-item {
-    @include pm2rem(padding, 36px, 0px, 0px, 38px);
+    @include pm2rem(padding, 36px, 0px, 0px, 0px);
     background-color: $white;
     .row-item {
       display: block;
-      @include pm2rem(margin, 0px, 0px, 36px, 0px);
+      @include pm2rem(margin, 0px, 38px, 36px, 38px);
       @include font-dpr(14px);
       color: $second-dark;
     }
