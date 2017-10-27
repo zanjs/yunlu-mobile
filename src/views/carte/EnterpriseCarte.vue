@@ -600,7 +600,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'Maps') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'Maps' && to.name !== 'ShoppingCart') {
         this.showGoTopBtn = false
         this.showSearchBar = false
         this.productPageIndex = 1
