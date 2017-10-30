@@ -37,7 +37,7 @@
       return {
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
-        deviceDelegate: null,
+        // deviceDelegate: null,
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
