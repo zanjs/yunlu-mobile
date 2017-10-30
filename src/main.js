@@ -81,7 +81,7 @@ router.beforeEach((to, from, next) => {
     })
   }
   const autoLogin = () => {
-    if (handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
+    if (handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信自动授权登录失败')
