@@ -338,7 +338,7 @@
         border: none;
         @include font-dpr(14px);
         color: $second-dark;
-        border-bottom: 2px solid $fifth-grey;
+        border-bottom: 1px solid $fifth-grey;
         line-height: 1;
       }
       ::-webkit-input-placeholder{
