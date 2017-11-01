@@ -312,7 +312,7 @@
             this.cancelOrderId = item.params
             break
           case 'pay': // 付款
-            this.notOpen()
+            this.pay(item)
             break
           case 'remind': // 提醒发货
             this.remindRequest(item.params)
@@ -358,6 +358,10 @@
             }
           }
         })
+      },
+      pay (item) {
+        console.log(item)
+        this.notOpen()
       },
       notOpen () {
         Toast({
