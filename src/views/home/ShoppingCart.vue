@@ -439,7 +439,6 @@
     },
     mounted () {
       this.getProducts()
-      this.getDeliveries(this.token)
     }
   }
 </script>
