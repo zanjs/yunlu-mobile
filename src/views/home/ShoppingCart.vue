@@ -209,7 +209,7 @@
         for (let i = 0; i < this.purchaseItems.length; i++) {
           if (item.item.id === this.purchaseItems[i].id) {
             for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-              if (this.purchaseItems[i].purchase_items[j].price.money === '定制') {
+              if (this.purchaseItems[i].purchase_items[j].price.money === '定制' || this.purchaseItems[i].purchase_items[j].price.money === '赠品' || this.purchaseItems[i].purchase_items[j].quantity === '定制') {
                 flag = true
                 continue
               } else {
@@ -223,7 +223,7 @@
         }
         if (flag) {
           Toast({
-            message: '定制商品暂时不能下单',
+            message: '定制或赠送商品暂时不能下单',
             duration: 500
           })
         }
@@ -232,9 +232,9 @@
         this.handleTotalMoney()
       },
       checkItem (item) {
-        if (item.item.price.money === '定制') {
+        if (item.item.price.money === '定制' || item.item.price.money === '赠品' || item.item.quantity === '定制') {
           Toast({
-            message: '定制商品暂时不能下单',
+            message: '定制或赠送商品暂时不能下单',
             duration: 500
           })
         } else {
@@ -426,10 +426,10 @@
         this.$router.push({name: 'ProductDetail', params: {id: item.price.product.id}})
       },
       handleAllCheck () {
-        let flag = false
         for (let i = 0; i < this.purchaseItems.length; i++) {
+          let flag = false
           for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-            if (this.purchaseItems[i].purchase_items[j].price.money === '定制') {
+            if (this.purchaseItems[i].purchase_items[j].price.money === '定制' || this.purchaseItems[i].purchase_items[j].price.money === '赠品' || this.purchaseItems[i].purchase_items[j].quantity === '定制') {
               flag = true
               continue
             } else {
