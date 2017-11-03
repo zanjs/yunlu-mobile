@@ -48,7 +48,7 @@
                   {{i.price.money}}
                 </div>
                 <div
-                  v-if="i.price.amount !== '定制'"
+                  v-if="i.price.amount !== '定制' && i.price.money !== '赠品'"
                   class="count-bar">
                   <i
                     v-if="i.quantity > 1"
