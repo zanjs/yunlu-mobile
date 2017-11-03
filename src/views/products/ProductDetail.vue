@@ -259,7 +259,7 @@
         </div>
       </div>
       <div
-        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
+        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制' || currentPrice.money === '赠品'"
         class="btn-box btn-shopping-car disabled">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
@@ -267,7 +267,7 @@
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
-        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制'"
+        v-if="currentPrice.money === '定制' || currentPrice.amount === '定制' || currentPrice.money === '赠品'"
         class="btn-box btn-buy disabled">
         <span class="font-14 white">立即购买</span>
       </div>
