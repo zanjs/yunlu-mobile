@@ -205,26 +205,47 @@
         return tmpArr
       },
       checkGroup (item) {
+        let flag = false
         for (let i = 0; i < this.purchaseItems.length; i++) {
           if (item.item.id === this.purchaseItems[i].id) {
-            this.purchaseItems[i].checked = !item.checked
             for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-              this.purchaseItems[i].purchase_items[j].checked = !item.checked
+              if (this.purchaseItems[i].purchase_items[j].price.money === '定制') {
+                flag = true
+                continue
+              } else {
+                this.purchaseItems[i].purchase_items[j].checked = !item.checked
+              }
+            }
+            if (!flag) {
+              this.purchaseItems[i].checked = !item.checked
             }
           }
+        }
+        if (flag) {
+          Toast({
+            message: '定制或赠送商品暂时不能下单',
+            duration: 500
+          })
         }
         this.checkAll = this.isGroupChecked(this.purchaseItems)
         this.isItemChecked()
         this.handleTotalMoney()
       },
       checkItem (item) {
-        for (let i = 0; i < this.purchaseItems.length; i++) {
-          if (item.parentItem.id === this.purchaseItems[i].id) {
-            for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-              if (item.item.id === this.purchaseItems[i].purchase_items[j].id) {
-                this.purchaseItems[i].purchase_items[j].checked = !item.checked
-                this.purchaseItems[i].checked = this.isGroupChecked(this.purchaseItems[i].purchase_items)
-                this.checkAll = this.isGroupChecked(this.purchaseItems)
+        if (item.item.price.money === '定制' || item.item.price.money === '赠品' || item.item.quantity === '定制') {
+          Toast({
+            message: '定制或赠送商品暂时不能下单',
+            duration: 500
+          })
+        } else {
+          for (let i = 0; i < this.purchaseItems.length; i++) {
+            if (item.parentItem.id === this.purchaseItems[i].id) {
+              for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
+                if (item.item.id === this.purchaseItems[i].purchase_items[j].id) {
+                  this.purchaseItems[i].purchase_items[j].checked = !item.checked
+                  this.purchaseItems[i].checked = this.isGroupChecked(this.purchaseItems[i].purchase_items)
+                  this.checkAll = this.isGroupChecked(this.purchaseItems)
+                }
               }
             }
           }
@@ -367,9 +388,17 @@
       },
       handleAllCheck () {
         for (let i = 0; i < this.purchaseItems.length; i++) {
-          this.purchaseItems[i].checked = !this.checkAll
+          let flag = false
           for (let j = 0; j < this.purchaseItems[i].purchase_items.length; j++) {
-            this.purchaseItems[i].purchase_items[j].checked = !this.checkAll
+            if (this.purchaseItems[i].purchase_items[j].price.money === '定制' || this.purchaseItems[i].purchase_items[j].price.money === '赠品' || this.purchaseItems[i].purchase_items[j].quantity === '定制') {
+              flag = true
+              continue
+            } else {
+              this.purchaseItems[i].purchase_items[j].checked = !this.checkAll
+            }
+          }
+          if (!flag) {
+            this.purchaseItems[i].checked = !this.checkAll
           }
         }
         this.checkAll = !this.checkAll
