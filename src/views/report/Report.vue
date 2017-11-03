@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="wrapper full-width"
+    ref="report"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       @back="goBack()">
@@ -47,6 +50,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Report',
     data () {
       return {
         options: [
@@ -78,7 +82,8 @@
         token: getStore('user') ? getStore('user').authentication_token : '',
         resourceId: this.$route.query.resourceId,
         resourceClass: this.$route.query.resourceClass,
-        reportSuccess: false
+        reportSuccess: false,
+        scrollHeight: '17rem'
       }
     },
     components: {
@@ -136,6 +141,12 @@
           this.$router.go(-1)
         }
       }
+    },
+    mounted () {
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     }
   }
 </script>
@@ -143,6 +154,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .wrapper {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    background-color: $tenth-grey;
+  }
   .tips-container {
     background-color: $tenth-grey;
     @include px2rem(margin-top, 88px);

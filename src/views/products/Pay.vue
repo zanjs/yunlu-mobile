@@ -7,12 +7,12 @@
     <div class="order-info">
       <div class="row">
         <span>订单号：</span>
-        <span v-if="orderForm && orderForm.code">{{orderForm.code}}</span>
+        <span v-if="code">{{code}}</span>
       </div>
       <div class="row">
         <span>总金额：</span>
         <span class="money">
-          &yen;&nbsp;{{handleMoney(buying)}}
+          &yen;&nbsp;{{amount}}
         </span>
       </div>
     </div>
@@ -36,14 +36,15 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
+  import { Toast } from 'mint-ui'
   export default {
+    name: 'Pay',
     data () {
       return {
         header: '支付',
-        deliveryId: this.$route.query.id || '',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        orderForm: null,
-        buying: getStore('buying') || [],
+        code: this.$route.query.code || '',
+        amount: this.$route.query.amount || '',
         paymentMethods: ['微信支付']
       }
     },
@@ -59,48 +60,16 @@
           this.$router.go(-1)
         }
       },
-      createOrderForm () {
-        this.$store.dispatch('commonAction', {
-          url: '/order_forms',
-          method: 'post',
-          params: {},
-          data: {
-            token: this.token,
-            delivery_id: this.deliveryId,
-            groups: getStore('paying')
-          },
-          target: this,
-          resolve: (state, res) => {
-            this.orderForm = res.data.order_forms
-          },
-          reject: () => {
-          }
-        })
-      },
-      handleMoney (arr) {
-        let money = 0
-        for (let i = 0; i < arr.length; i++) {
-          for (let j = 0; j < arr[i].products.length; j++) {
-            money += parseInt(arr[i].products[j].quantity + '') * parseFloat(arr[i].products[j].price.money + '')
-          }
-        }
-        return money
-      },
-      handleTotalMoney (arr) {
-        let money = 0
-        for (let i = 0; i < arr.length; i++) {
-          for (let j = 0; j < arr[i].items.length; j++) {
-            money += parseFloat(arr[i].items[j].price + '') * parseInt(arr[i].items[j].quantity + '')
-          }
-        }
-        return money
-      },
       wechat () {
         console.log('wechat')
+        this.notOpen()
+      },
+      notOpen () {
+        Toast({
+          message: '暂未开放',
+          duration: 500
+        })
       }
-    },
-    mounted () {
-      this.createOrderForm()
     }
   }
 </script>

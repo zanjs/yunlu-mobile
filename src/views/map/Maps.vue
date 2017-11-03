@@ -17,6 +17,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Maps',
     data () {
       return {
         headerName: this.$route.query.title || '',

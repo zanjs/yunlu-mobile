@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="searchEnterprise"
+    :style="{height: scrollHeight}">
     <common-header
       :title="title"
       @back="goBack()">
@@ -13,7 +16,7 @@
         v-model="searchParams"
         :placeholder="placeholder">
     </search>
-    <div class="list">
+    <div class="list full-width">
       <template v-if="allEnterprises && allEnterprises.length > 0">
         <list
           :store="allEnterprises"
@@ -22,7 +25,8 @@
         <mugen-scroll
           :handler="loadEnterpriseBottom"
           :handle-on-mount="false"
-          :should-handle="!loading">
+          :should-handle="!loading"
+          scroll-container="searchEnterprise">
           <div
             v-if="loading || noMoreData"
             class="loading">
@@ -61,6 +65,7 @@
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    name: 'SearchEnterprise',
     data () {
       return {
         title: '企业',
@@ -74,7 +79,9 @@
         exclude_service_ids: [], // 企业搜索需要过滤掉班级,页面维护一套services数组，里面包含了所有服务类型
         loading: true,
         loadingText: '加载中...',
-        noMoreData: false
+        noMoreData: false,
+        scrollHeight: '15rem',
+        scrollActive: false
       }
     },
     components: {
@@ -117,7 +124,7 @@
         if (res.data) {
           this.hasSearch = q !== ''
           if (this.enterprisePageIndex === 1) {
-            setScrollTop(0)
+            setScrollTop(0, this.$refs.searchEnterprise)
             state.allEnterprises = res.data.enterprises
           } else {
             if (res.data.enterprises.length === 0) {
@@ -131,11 +138,12 @@
       resetSearchBar () {
         this.searchParams = ''
         this.hasSearch = false
+        this.loading = true
         this.enterprisePageIndex = 1
         this.noMoreData = false
         this.loadingText = '加载中...'
         this.throttle(this.getEnterprises, this)
-        setScrollTop(0)
+        setScrollTop(0, this.$refs.searchEnterprise)
       },
       // 节流函数
       throttle (method, context) {
@@ -182,12 +190,15 @@
       },
       // 滚动到页面指定位置
       goScroll (scroll = 0) {
-        setScrollTop(scroll)
+        setScrollTop(scroll, this.$refs.searchEnterprise)
       },
       handleGoTopBtn () {
-        showBack((status) => {
-          this.showGoTopBtn = status
-        }, this.height)
+        if (!this.scrollActive) {
+          showBack((status) => {
+            this.showGoTopBtn = status
+            this.scrollActive = true
+          }, this.height, this.$refs.searchEnterprise)
+        }
       },
       loadEnterpriseBottom () {
         if (!this.noMoreData) {
@@ -197,8 +208,31 @@
       }
     },
     mounted () {
-      this.getServices()
-      this.handleGoTopBtn()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      this.showGoTopBtn = false
+      if (!this.$store.state.popState) {
+        setScrollTop(0, this.$refs.searchEnterprise)
+        this.enterprisePageIndex = 1
+        this.loading = true
+        this.searchParams = this.$route.query.q || ''
+        this.hasSearch = false
+        this.exclude_service_ids = []
+        this.loadingText = '加载中...'
+        this.noMoreData = false
+        this.getServices()
+        this.handleGoTopBtn()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.SearchEnterprise || 0, this.$refs.searchEnterprise)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'SearchEnterprise', value: this.$refs.searchEnterprise.scrollTop})
+      next()
     },
     computed: {
       ...mapGetters([
@@ -211,9 +245,16 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    background-color: $tenth-grey;
+  }
   .list {
-    @include pm2rem(padding, 176px, 0px, 10px, 0px);
     position: relative;
+    @include pm2rem(padding, 176px, 0px, 10px, 0px);
     .empty-products {
       text-align: center;
       .img-container {

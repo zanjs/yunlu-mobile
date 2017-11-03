@@ -81,6 +81,7 @@
   import { AUTH_URL, AUTHORIZATION_TIME } from '../../constants/constant'
   import { Toast, MessageBox, Indicator } from 'mint-ui'
   export default {
+    name: 'Login',
     data () {
       return {
         header: '登录',
@@ -95,9 +96,9 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/#/login?provider=qq&tmp_token=')}`,
+        qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/login?provider=qq&tmp_token=')}`,
         weiboLogin: `${AUTH_URL}/member/auth/weibo`,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/#/login?provider=wechat&tmp_token=')}`
+        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/login?provider=wechat&tmp_token=')}`
       }
     },
     components: {
@@ -299,6 +300,10 @@
     },
     mounted () {
       this.autoGoBack()
+    },
+    activated () {
+      this.mobile = ''
+      this.password = ''
     }
   }
 </script>
@@ -333,7 +338,7 @@
         border: none;
         @include font-dpr(14px);
         color: $second-dark;
-        border-bottom: 2px solid $fifth-grey;
+        border-bottom: 1px solid $fifth-grey;
         line-height: 1;
       }
       ::-webkit-input-placeholder{

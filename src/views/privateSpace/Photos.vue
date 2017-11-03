@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="wrapper full-width"
+    ref="photos"
+    :style="{height: scrollHeight}">
     <common-header
       :title="headerName"
       @back="goBack()">
@@ -18,7 +21,8 @@
         <mugen-scroll
           :handler="loadPhotosBottom"
           :handle-on-mount="false"
-          :should-handle="!photoLoading">
+          :should-handle="!photoLoading"
+          scroll-container="photos">
           <div
             v-if="photoLoading || noMoreData"
             class="loading">
@@ -80,22 +84,22 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Gallery from '../../components/common/Gallery'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Toast } from 'mint-ui'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    name: 'Photos',
+    props: ['id'],
     data () {
       return {
         headerName: this.$route.query.name,
-        id: this.$route.params.id,
         p: this.$route.query.p || '',
         pageIndex: 1,
         pageSize: 24,
         token: getStore('user') ? getStore('user').authentication_token : '',
         photos: [],
         previewPhotos: [],
-        topDistance: 10,
         showPreview: false,
         currentIndex: 1,
         swiperOption: {
@@ -155,6 +159,7 @@
         },
         photoLoading: false,
         photoLoadingText: '加载中...',
+        scrollHeight: '17rem',
         noMoreData: false
       }
     },
@@ -242,27 +247,9 @@
           this.$refs.mySwiper.swiper.slideTo(this.pageSize + index - this.photos.length, 1, true)
         }
         this.showPreview = true
-        this.stopTouchMove()
       },
       closePreview () {
         this.showPreview = false
-        this.allowTouchMove()
-      },
-      stopTouchMove () {
-        let self = this
-        document.getElementById('app').addEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
-            e.preventDefault() // 最关键的一句，禁止浏览器默认行为
-          }
-        })
-      },
-      allowTouchMove () {
-        let self = this
-        document.getElementById('app').removeEventListener('touchmove', (e) => { // 监听滚动事件
-          if (self.showPreview) {
-            e.preventDefault()
-          }
-        })
       },
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.photos[this.currentIndex - 1].id, resourceClass: 'photo'}})
@@ -286,7 +273,30 @@
       }
     },
     mounted () {
-      this.beforeGetData()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.photos)
+        this.beforeGetData()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Photos || 0, this.$refs.photos)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Photos', value: this.$refs.photos.scrollTop})
+      if (to.name !== 'Report') {
+        this.pageIndex = 1
+        this.currentIndex = 1
+        this.photos = []
+        this.previewPhotos = []
+        this.noMoreData = false
+        this.showPreview = false
+      }
+      next()
     }
   }
 </script>
@@ -294,6 +304,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .wrapper {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    background-color: $tenth-grey;
+  }
   .container {
     @include pm2rem(padding, 88px, 0px, 10px, 0px);
     .loading {

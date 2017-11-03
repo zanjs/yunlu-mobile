@@ -26,5 +26,7 @@ export const CHECK_CONVERSATION = 'CHECK_CONVERSATION'
 export const CHECK_ALL_CONVERSATION = 'CHECK_ALL_CONVERSATION'
 // 过滤出需要删除的会话
 export const HANDLE_DELETE_CONVERSATIONS = 'HANDLE_DELETE_CONVERSATIONS'
-// 切换路由时，重置某些state中的数组，避免数据未加载时，显示上一次获取的数据
-export const RESET_STATE = 'RESET_STATE'
+// 路由前进时，请求新数据，路由后退时，不请求新数据
+export const ROUTE_CHANGE = 'ROUTE_CHANGE'
+// 从列表页前进时，需保存列表滚动高度(每个列表页的滚动容器是自定义的，因此不能用window的滚动高度代替)
+export const SAVE_SCROLL = 'SAVE_SCROLL'

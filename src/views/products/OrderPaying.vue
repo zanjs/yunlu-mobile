@@ -146,6 +146,7 @@
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'OrderPaying',
     data () {
       return {
         header: '确认订单',
@@ -321,9 +322,31 @@
         return tmpArr
       },
       pay () {
-        let groups = this.handlePayingItems(this.purchaseItems)
-        setStore('paying', groups)
-        this.$router.push({name: 'Pay', query: {id: this.deliverie.id}})
+        this.$store.dispatch('commonAction', {
+          url: '/order_forms',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            delivery_id: this.deliverie.id,
+            groups: this.handlePayingItems(this.purchaseItems)
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.$router.push({name: 'Pay', query: {code: res.data.order_forms.code, amount: this.handleMoney(this.purchaseItems)}})
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleMoney (arr) {
+        let money = 0
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = 0; j < arr[i].products.length; j++) {
+            money += parseInt(arr[i].products[j].quantity + '') * parseFloat(arr[i].products[j].price.money + '')
+          }
+        }
+        return money
       },
       goManageAddress () {
         if (this.deliverie) {

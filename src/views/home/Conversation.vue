@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="conversation"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       @back="goBack()">
@@ -68,14 +71,14 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { mapGetters } from 'vuex'
-  import moment from 'moment'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'Conversation',
     data () {
       return {
         header: '会话',
@@ -86,7 +89,8 @@
         checkAll: false,
         conversations: [],
         showConfirm: false,
-        confirmMsg: '确定要删除选中的会话吗?'
+        confirmMsg: '确定要删除选中的会话吗?',
+        scrollHeight: '14rem'
       }
     },
     components: {
@@ -133,7 +137,7 @@
             state.yunLuConversations = res.data.conferences
             state.originConversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'), getStore('unReadMsgs') || [])
             state.originConversationList.sort((a, b) => {
-              return moment(b.timestamp).isAfter(a.timestamp)
+              return Date.parse(b.timestamp) - Date.parse(a.timestamp)
             })
             state.conversationList = [...state.originConversationList]
           },
@@ -268,7 +272,22 @@
       }
     },
     mounted () {
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+    },
+    activated () {
       this.getConversationList()
+      if (!this.$store.state.popState) {
+        setScrollTop(0, this.$refs.conversation)
+      } else {
+        setScrollTop(this.$store.state.scrollMap.Conversation || 0, this.$refs.conversation)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Conversation', value: this.$refs.conversation.scrollTop})
+      next()
     },
     computed: {
       ...mapGetters([
@@ -282,6 +301,13 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    background-color: $tenth-grey;
+  }
   .header {
     background-color: $green;
     @include px2rem(height, 88px);

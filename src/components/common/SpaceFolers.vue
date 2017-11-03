@@ -103,7 +103,7 @@
         img {
           @include px2rem(width, 200px);
           @include px2rem(height, 200px);
-          box-shadow: 0 3px 6px -2px rgba(0, 0, 0, .5);
+          box-shadow: 0px 0px 6px 1px rgba(160, 160, 160, 0.2);
         }
         img[lazy=loading] {
           @include px2rem(width, 200px);

@@ -39,7 +39,10 @@ const state = {
   comityDetail: {}, // 协会详情
   clientKeyWrods: [], // 云视首页关键字卡片数组(企业数量大于100会在首页显示)
   seeCard: {}, // 云视首页发送名片卡片
-  deliveries: [] // 收货地址
+  deliveries: [], // 收货地址
+  popState: false,
+  fromLogin: false,
+  scrollMap: {} // 页面滚动高度集合
 }
 
 const getters = {
@@ -73,7 +76,10 @@ const getters = {
   comityDetail: state => state.comityDetail,
   clientKeyWrods: state => state.clientKeyWrods,
   seeCard: state => state.seeCard,
-  deliveries: state => state.deliveries
+  deliveries: state => state.deliveries,
+  popState: state => state.popState,
+  fromLogin: state => state.fromLogin,
+  scrollMap: state => state.scrollMap
 }
 
 const actions = {
@@ -119,8 +125,11 @@ const actions = {
     commit(types.FETCH_BEGIN, params)
     api.validCodeRequest(params, res => commit(types.FETCH_SUCCESS, {params, res}), err => commit(types.FETCH_FAILED, {params, err}))
   },
-  resetState ({commit}) {
-    commit(types.RESET_STATE)
+  routeChange ({commit}, params) {
+    commit(types.ROUTE_CHANGE, {params})
+  },
+  saveScroll ({commit}, params) {
+    commit(types.SAVE_SCROLL, {params})
   }
 }
 
@@ -313,22 +322,13 @@ const mutations = {
     state.originConversationList = [...state.conversationList]
   },
 
-  [types.RESET_STATE] (state) {
-    state.products = []
-    state.productsThumbnails = []
-    state.productDetailFiles = []
-    state.allPriceProperties = []
-    state.archives = []
-    state.informationFolderArchives = []
-    state.enterpriseDocuments = []
-    state.enterpriseInfoFiles = []
-    state.enterpriseMembers = []
-    state.personMembers = []
-    state.productDetailTeam = []
-    state.userCard = {}
-    state.clusters = []
-    state.clientKeyWrods = []
-    state.teams = null
+  [types.ROUTE_CHANGE] (state, {params}) {
+    state.popState = !!params.savedPosition
+    state.fromLogin = params.from.name === 'Login'
+  },
+
+  [types.SAVE_SCROLL] (state, {params}) {
+    state.scrollMap[params.name] = params.value
   }
 }
 

@@ -17,6 +17,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'HelpDetail',
     data () {
       return {
         header: '帮助手册',

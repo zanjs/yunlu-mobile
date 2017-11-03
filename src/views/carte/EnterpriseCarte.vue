@@ -1,5 +1,8 @@
 <template>
-  <section>
+  <section
+    class="container full-width"
+    ref="enterpriseCarte"
+    :style="{height: scrollHeight}">
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -52,7 +55,8 @@
                 <mugen-scroll
                   :handler="loadProductBottom"
                   :handle-on-mount="false"
-                  :should-handle="!loading">
+                  :should-handle="!loading"
+                  scroll-container="enterpriseCarte">
                   <div
                     v-if="loading || noMoreProducts"
                     class="loading">
@@ -134,7 +138,6 @@
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
-  import { mapGetters } from 'vuex'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -144,6 +147,8 @@
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   export default {
+    props: ['id'],
+    name: 'EnterpriseCarte',
     data () {
       return {
         teamId: this.$route.params.id,
@@ -171,7 +176,14 @@
         loadingText: '加载中...',
         noMoreProducts: false,
         favoratesText: '收藏',
-        hasAddFavorites: false
+        hasAddFavorites: false,
+        scrollHeight: '14rem',
+        scrollActive: false,
+        teams: null,
+        products: [],
+        productsThumbnails: [],
+        enterpriseInfoFiles: [],
+        enterpriseDocuments: []
       }
     },
     components: {
@@ -188,15 +200,15 @@
       MugenScroll
     },
     methods: {
-      async getTeams (teamId = this.teamId) {
-        let {state, res} = await requestFn({
+      async getTeams (teamId = this.id) {
+        let {res} = await requestFn({
           url: '/links/teams',
           params: {
             ids: teamId
           }
         })
         if (res.data) {
-          state.teams = res.data.teams[0]
+          this.teams = res.data.teams[0]
           this.getProducts()
           this.handleFavoriteStatus(res.data.teams[0].enterprise_id)
         }
@@ -208,7 +220,7 @@
         let {res} = await requestFn({
           url: '/products',
           params: {
-            team_id: this.teamId,
+            team_id: this.id,
             page: this.productPageIndex,
             per_page: this.productPageSize,
             sort: order || '',
@@ -223,6 +235,8 @@
             if (this.productPageIndex !== 1) {
               this.loadingText = '没有更多数据了...'
               this.noMoreProducts = true
+            } else {
+              this.products = []
             }
           } else {
             this.getFilesPublisheds(tmppArr, res.data.products, q)
@@ -265,13 +279,13 @@
           method: 'get',
           params: {
             type: 'document',
-            team_id: this.teamId,
+            team_id: this.id,
             thumbs: ['general'],
             ids: ids
           },
           target: this,
           resolve: (state, res) => {
-            state.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(state.enterpriseDocuments, res.data.files)
+            this.enterpriseInfoFiles = this.handleEnterpriseInfoFiles(this.enterpriseDocuments, res.data.files)
           },
           reject: () => {
           }
@@ -318,12 +332,12 @@
           url: '/archives/stat/types',
           method: 'get',
           params: {
-            team_id: this.teamId
+            team_id: this.id
           },
           target: this,
           resolve: (state, res) => {
-            state.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
-            this.getInformation(this.handleDocumentIds(state.enterpriseDocuments))
+            this.enterpriseDocuments = res.data.types.filter(i => i.file_id !== null)
+            this.getInformation(this.handleDocumentIds(this.enterpriseDocuments))
           },
           reject: () => {
           }
@@ -337,11 +351,11 @@
         return tmpArr
       },
       async getFilesPublisheds (ids, arr, q) {
-        let {state, res} = await requestFn({
+        let {res} = await requestFn({
           url: '/links/files/publisheds',
           params: {
             type: 'product',
-            team_id: this.teamId,
+            team_id: this.id,
             thumbs: ['general'],
             ids: ids
           }
@@ -349,18 +363,18 @@
         this.loading = false
         if (res.data) {
           if (this.productPageIndex === 1) {
-            state.products = this.handleProducts(arr, res.data.files)
-            state.productsThumbnails = res.data.files
+            this.products = this.handleProducts(arr, res.data.files)
+            this.productsThumbnails = res.data.files
           } else {
-            state.products = [...state.products, ...this.handleProducts(arr, res.data.files)]
-            state.productsThumbnails = [...state.productsThumbnails, ...res.data.files]
+            this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
+            this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
           }
           this.getEnterpriseDocument()
         }
       },
       goBack () {
         if (this.hasSearch) {
-          setScrollTop(0)
+          setScrollTop(0, this.$refs.enterpriseCarte)
           this.getProducts('', 'price')
         } else if (getStore('EnterpriseCarte_goHome')) {
           removeStore('EnterpriseCarte_goHome')
@@ -386,24 +400,27 @@
       handleSearchBtn (res) {
         // 每次搜索需重置分页索引，并滚动到指定高度(让搜索框显示出来，表明这是搜索结果)
         this.productPageIndex = 1
-        setScrollTop(158)
+        setScrollTop(158, this.$refs.enterpriseCarte)
         this.search(res)
         document.activeElement.blur()
       },
       handleSearchBar () {
-        showBack((status) => {
-          this.showGoTopBtn = status
-          if (this.currentIndex === 1) {
-            this.showSearchBar = false
-            this.header = '名片'
-          } else {
-            this.showSearchBar = status
-            this.header = status ? '产品' : '名片'
-          }
-        }, this.height)
+        if (!this.scrollActive) {
+          showBack((status) => {
+            this.showGoTopBtn = status
+            this.scrollActive = true // 滚动监听被激活，不需要再次监听
+            if (this.currentIndex === 1) {
+              this.showSearchBar = false
+              this.header = '名片'
+            } else {
+              this.showSearchBar = status
+              this.header = status ? '产品' : '名片'
+            }
+          }, this.height, this.$refs.enterpriseCarte)
+        }
       },
       goScroll (scroll) {
-        setScrollTop(scroll)
+        setScrollTop(scroll, this.$refs.enterpriseCarte)
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
@@ -435,9 +452,9 @@
             break
           case 'address':
             if (item.value.latitude && item.value.longitude) {
-              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.$store.state.teams.company}})
+              this.$router.push({name: 'Maps', query: {lat: item.value.latitude, lng: item.value.longitude, title: this.teams.company}})
             } else {
-              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.$store.state.teams.company, address: item.value.address}})
+              this.$router.push({name: 'Maps', query: {lat: '', lng: '', title: this.teams.company, address: item.value.address}})
             }
             break
         }
@@ -455,7 +472,7 @@
         this.showDialog = true
       },
       openInformationFolders (item) {
-        this.$router.push({name: 'InformationFolders', params: {id: this.teamId}, query: {type: item.name || ''}})
+        this.$router.push({name: 'InformationFolders', params: {id: this.id}, query: {type: item.name || ''}})
       },
       showListChange (val) {
         this.showList = val
@@ -486,17 +503,17 @@
       },
       removeFavorites () {
         this.$store.dispatch('commonAction', {
-          url: `/favorites/${this.teamId}`,
+          url: `/favorites/${this.id}`,
           method: 'delete',
           params: {},
           data: {
             token: this.token,
-            id: this.teamId,
+            id: this.id,
             type: 'Organization'
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorable_id + '' === this.teamId + '') {
+            if (res.data.favorable_id + '' === this.id + '') {
               this.hasAddFavorites = false
               this.favoratesText = '收藏'
               Toast({
@@ -520,11 +537,11 @@
           params: {},
           data: {
             token: this.token,
-            team_id: this.teamId
+            team_id: this.id
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorites && res.data.favorites.id === parseInt(this.teamId)) {
+            if (res.data.favorites && res.data.favorites.id === parseInt(this.id)) {
               this.hasAddFavorites = true
               this.favoratesText = '已收藏'
               Toast({
@@ -563,18 +580,42 @@
       }
     },
     mounted () {
-      this.getTeams(this.teamId)
-      this.handleSearchBar()
+      let appHeight = document.getElementById('app').offsetHeight
+      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
-    computed: {
-      ...mapGetters([
-        'teams',
-        'loadSuccess',
-        'products',
-        'productsThumbnails',
-        'enterpriseDocuments',
-        'enterpriseInfoFiles'
-      ])
+    activated () {
+      this.showGoTopBtn = false
+      this.showSearchBar = false
+      if (!this.$store.state.popState || this.$store.state.fromLogin) {
+        setScrollTop(0, this.$refs.enterpriseCarte)
+        this.hasLogin = !!getStore('user')
+        this.token = getStore('user') ? getStore('user').authentication_token : null
+        this.getTeams(this.id)
+        this.handleSearchBar()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.EnterpriseCarte || 0, this.$refs.enterpriseCarte)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+        this.showGoTopBtn = false
+        this.showSearchBar = false
+        this.productPageIndex = 1
+        this.noMoreProducts = false
+        this.currentIndex = 0
+        this.favoratesText = '收藏'
+        this.loadingText = '加载中...'
+        this.hasAddFavorites = false
+        this.teams = null
+        this.products = []
+        this.productsThumbnails = []
+        this.enterpriseInfoFiles = []
+        this.enterpriseDocuments = []
+      }
+      next()
     }
   }
 </script>
@@ -582,4 +623,11 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: absolute;
+    top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px; // 与容器底部留1px空隙，避免手机QQ滑动到底部之后不能滑动的bug
+    background-color: $tenth-grey;
+  }
 </style>

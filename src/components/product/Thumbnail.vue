@@ -21,7 +21,12 @@
          <div class="cover">
            <div class="wraper">
             <div class="name">{{item.name}}</div>
-            <div class="money">&yen; ：{{item.prices[0].money}}</div>
+            <div class="money">
+              <span class="font-12">&yen;</span>
+              <span class="font-18">
+                {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
+              </span>
+            </div>
            </div>
         </div>
       </div>
@@ -106,6 +111,7 @@
           display: flex;
           flex-direction: column;
           align-items: flex-start;
+          justify-content: center;
           box-sizing: border-box;
           div {
             text-overflow: ellipsis;
@@ -120,7 +126,6 @@
             position: relative;
           }
           .money {
-            font-weight: bold;
             box-sizing: border-box;
             color: #FF0000;
           }

@@ -32,6 +32,7 @@
   import { setStore, getStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'ChangePassword',
     data () {
       return {
         header: '修改密码',

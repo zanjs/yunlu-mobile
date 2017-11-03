@@ -40,6 +40,7 @@
   import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
+    name: 'InformationFolders',
     data () {
       return {
         header: '资讯',

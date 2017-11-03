@@ -16,10 +16,10 @@ router.beforeEach((to, from, next) => {
       tmpToken: '',
       provider: ''
     }
-    if (window.location.hash.split('?').length === 1) {
+    if (window.location.search.split('?').length === 1) {
       return query
     } else {
-      let params = window.location.hash.split('?')[1].split('&')
+      let params = window.location.search.split('?')[1].split('&')
       for (let i = 0; i < params.length; i++) {
         if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'tmp_token') {
           query.tmpToken = params[i].split('=')[1]
@@ -44,23 +44,16 @@ router.beforeEach((to, from, next) => {
         setStore('device_signature', res.data.sign)
         removeLocalStore('weixinLogin')
         if (!res.data.authentication_token && res.data.id) {
-          // this.user = res.data
-          // this.countDown(AUTHORIZATION_TIME, 1000)
-          // this.showDialog = true
-          // this.initImClient(res.data.device_id)
-          console.log('需要主控设备授权')
-          setLocalStore('weixinLoginFailed_main_0', res.data)
+          console.log('需要主控设备授权,App端暂时没有开放绑定第三方账号功能')
         } else if (res.data.authentication_token && res.data.id) {
           setStore('user', res.data)
           getSignature(res.data.authentication_token)
         } else {
           console.log('授权登录出错')
-          setLocalStore('weixinLoginFailed_main_1', res.data)
         }
       },
       reject: () => {
         console.log('授权登录出错')
-        setLocalStore('weixinLoginFailed_main_2', '授权登录出错')
       }
     })
   }
@@ -84,12 +77,11 @@ router.beforeEach((to, from, next) => {
     if (handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
-      console.log('微信自动授权登录失败')
-      setLocalStore('weixinLoginFailed_main_3', '微信自动授权登录失败')
+      console.log('微信授权登录失败')
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
       setLocalStore('weixinLogin', true)
-      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`/${window.location.hash}${window.location.hash.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
+      window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.search}${window.location.search.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
       next()
     }
@@ -99,11 +91,7 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
-  store.dispatch('resetState')
   autoLogin()
-  // next()
-  document.documentElement.scrollTop = 0
-  document.body.scrollTop = 0
 })
 
 Vue.use(realtime)
