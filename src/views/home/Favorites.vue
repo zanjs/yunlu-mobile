@@ -617,6 +617,7 @@
     position: absolute;
     top: 0;
     overflow-y: scroll;
+    padding-bottom: 1px;
     background-color: $tenth-grey;
   }
   .header {
