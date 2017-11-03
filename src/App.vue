@@ -2,7 +2,7 @@
   <div id="app">
     <transition name="router-fade" mode="out-in">
       <keep-alive :exclude="noKeepAliveComponents">
-        <router-view></router-view>
+        <router-view :key="$route.path"></router-view>
       </keep-alive>
     </transition>
   </div>
