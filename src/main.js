@@ -73,6 +73,17 @@ router.beforeEach((to, from, next) => {
       }
     })
   }
+  const saveUuid = () => {
+    if (window.location.search.split('?').length > 1) {
+      let params = window.location.search.split('?')[1].split('&')
+      for (let i = 0; i < params.length; i++) {
+        if (params[i].split('=').length > 1 && params[i].split('=')[0] === 'sharer_uuid') {
+          setStore('shortUuid', params[i].split('=')[1])
+          break
+        }
+      }
+    }
+  }
   const autoLogin = () => {
     if (handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
@@ -91,6 +102,7 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
+  saveUuid()
   autoLogin()
 })
 
