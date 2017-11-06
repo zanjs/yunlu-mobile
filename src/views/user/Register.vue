@@ -107,7 +107,8 @@
             code: this.code,
             name: this.mobile,
             dev_name: 'iPhone 6',
-            dev_class: 'web'
+            dev_class: 'web',
+            ...(getStore('shortUuid') ? {short_uuid: getStore('shortUuid')} : {})
           },
           target: this,
           resolve: (state, res) => {
