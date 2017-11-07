@@ -1,7 +1,6 @@
 <template>
   <header
-    class="head-product full-width"
-    :class="{'download': showDownload}">
+    class="head-product full-width">
     <div
       class="left icon-box flex"
       @click="goBack()">
@@ -59,7 +58,6 @@
       }
     },
     name: 'ProductHeader',
-    props: ['showDownload'],
     methods: {
       openDropMenu () {
         this.showMenu = true
@@ -151,9 +149,6 @@
         @include pm2rem(margin, 0px, 0px, 0px, 28px);
       }
     }
-  }
-  .download {
-    @include px2rem(top, 120px);
   }
   .title {
     .title-text {
