@@ -207,7 +207,7 @@
       }
       .price-wrapper {
         @include pm2rem(margin, 0px, 30px, 0px, 30px);
-        @include pm2rem(padding, 30px, 10px, 30px, 10px);
+        @include pm2rem(padding, 30px, 10px, 10px, 10px);
         border-bottom: 1px solid $second-grey;
         p {
           @include px2rem(margin-bottom, 30px);
