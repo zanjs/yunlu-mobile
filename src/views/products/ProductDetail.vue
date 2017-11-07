@@ -6,34 +6,35 @@
         @download="goDownload()">
       </download-bar>
     </template>
-    <product-header
-      :show-download="!hideDownloadBar"
-      @back="goBack()"
-      @open-favorites="openFavorites()"
-      @report="goReport()"
-      @search-near-by="searchNearBy()"
-      @home="goHome()"
-      v-bind:class="{'header': !hideDownloadBar}">
-    </product-header>
-    <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
-      <swiper :options="swiperOption">
-        <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
-          <div
-            v-lazy:background-image="{
-              src: item.url,
-              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-            }"
-            class="swipe-img"
-            @click="viewFullScreenPic(productDetailFiles)">
-          </div>
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-      <span
-        v-if="productDetailFiles && productDetailFiles.length"
-        class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
-      <span v-else class="page-nav white font-16">0/0</span>
+    <div style="position: relative; transform-style: preserve-3d;">
+      <product-header
+        @back="goBack()"
+        @open-favorites="openFavorites()"
+        @report="goReport()"
+        @search-near-by="searchNearBy()"
+        @home="goHome()"
+        v-bind:class="{'header': !hideDownloadBar}">
+      </product-header>
+      <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
+            <div
+              v-lazy:background-image="{
+                src: item.url,
+                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+              }"
+              class="swipe-img"
+              @click="viewFullScreenPic(productDetailFiles)">
+            </div>
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+        <span
+          v-if="productDetailFiles && productDetailFiles.length"
+          class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
+        <span v-else class="page-nav white font-16">0/0</span>
+      </div>
     </div>
     <section class="info-container white-bg">
       <div
@@ -42,6 +43,7 @@
       <div v-else class="name font-17">&nbsp;</div>
       <div class="flex-between money">
         <div>
+          <span class="number font-13">&yen;</span>
           <span
             v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
             class="number font-26">{{currentPrice.money}}</span>
@@ -49,31 +51,6 @@
             v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
             class="number font-26">定制</span>
           <span v-else class="number font-26">&nbsp;</span>
-          <span
-            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0 && productDetail.prices[0].money !== '定制' && productDetail.prices[0].money !== '赠品'"
-            class="unit font-13">元</span>
-        </div>
-        <div @click="expandMorePrice()">
-          <span class="more font-14">更多价格</span>
-          <div
-            class="icon-box"
-            v-bind:class="{'up active': morePrice, 'inactive': !morePrice}">
-            <i class="iconfont icon-gengduo primary font-15"></i>
-          </div>
-        </div>
-        <div class="more-price white-bg font-16" :class="{'menu-active': morePrice}">
-          <div class="menu-list">
-            <ul v-if="productDetail && productDetail.prices">
-              <li
-                v-for="(item, index) in productDetail.prices"
-                :key="index"
-                @click="changePrice(item)">
-                <a class="item">
-                  {{item.money}}
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
       <div
@@ -89,6 +66,12 @@
         class="inventory font-13 second-text">
         库存 ：0
       </div>
+    </section>
+    <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
+      <a class="flex-between" @click="expandMorePrice()">
+        <span class="font-14 second-text">{{priceText}}</span>
+        <i class="iconfont icon-you primary font-14"></i>
+      </a>
     </section>
     <section>
       <mt-navbar
@@ -263,7 +246,7 @@
         class="btn-box btn-shopping-car disabled">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
-      <div v-else class="btn-box btn-shopping-car" @click="addShoppingCar()">
+      <div v-else class="btn-box btn-shopping-car" @click="expandMorePrice()">
         <span class="font-14 white">{{shoppingCarText}}</span>
       </div>
       <div
@@ -271,7 +254,7 @@
         class="btn-box btn-buy disabled">
         <span class="font-14 white">立即购买</span>
       </div>
-      <div v-else class="btn-box btn-buy" @click="buyNow()">
+      <div v-else class="btn-box btn-buy" @click="expandMorePrice()">
         <span class="font-14 white">立即购买</span>
       </div>
     </section>
@@ -342,11 +325,29 @@
         </swiper-slide>
       </swiper>
     </div>
+    <div v-if="productDetail && productDetail.prices && productDetail.prices.length >= 1">
+      <product-sku
+        :show="morePrice"
+        :store="productDetail"
+        :img="productDetailFiles"
+        :price="currentPrice"
+        :choosed="hasChoosePrice"
+        :quantity="quantity"
+        @increase="increase"
+        @decrease="decrease"
+        @handle-quantity="handleInput"
+        @change-price="changePrice"
+        @close="closeSku"
+        @add-shopping-cart="addShoppingCar"
+        @buy-now="buyNow">
+      </product-sku>
+    </div>
   </section>
 </template>
 
 <script>
   import ProductHeader from '../../components/header/Head'
+  import ProductSku from '../../components/product/ProductSku'
   import DownloadBar from '../../components/common/DownloadBar'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
@@ -368,6 +369,9 @@
         purchaseItemsCount: '0', // 超过99显示99+
         shoppingCarText: '加入购物车',
         favoratesText: '收藏',
+        priceText: '请选择更多商品价格',
+        hasChoosePrice: false,
+        quantity: 1,
         productLink: {},
         productLinkFile: {},
         teamLink: {},
@@ -419,6 +423,7 @@
     },
     components: {
       ProductHeader,
+      ProductSku,
       DownloadBar,
       swiper,
       swiperSlide
@@ -696,12 +701,35 @@
         this.currentIndex = index + 1
       },
       expandMorePrice () {
-        this.morePrice = !this.morePrice
+        if (this.productDetail.prices.length === 1) {
+          this.hasChoosePrice = true
+        }
+        this.morePrice = true
+      },
+      closeSku () {
+        this.morePrice = false
       },
       changePrice (item) {
         this.currentPrice = item
-        this.expandMorePrice()
+        this.priceText = `已选：￥${item.money}`
+        this.hasChoosePrice = true
+        this.handleInput(item)
         this.currentPriceProperties = this.handlePricePropertyes(this.currentPrice, this.allPriceProperties)
+      },
+      handleInput (item) {
+        if (parseInt(item.quantity + '') >= parseInt(item.amount + '')) {
+          this.quantity = parseInt(item.amount + '')
+        } else if (parseInt(item.quantity + '') <= 0 || !item.quantity) {
+          this.quantity = 1
+        } else {
+          this.quantity = parseInt(item.quantity)
+        }
+      },
+      increase () {
+        this.quantity += 1
+      },
+      decrease () {
+        this.quantity -= 1
       },
       viewArchives (item) {
         this.getArchivesFiles(this.handleProductFiles(item.files))
@@ -824,14 +852,29 @@
       openShoppingCar () {
         this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
       },
-      addShoppingCar () {
-        if (this.hasLogin) {
-          this.addShoppingCarRequest()
+      checkBeforeBuying () {
+        if (!this.hasChoosePrice) {
+          Toast({
+            message: '请选择一个价格',
+            duration: 500
+          })
+          return false
         } else {
-          this.goLogin()
+          return true
         }
       },
-      addShoppingCarRequest () {
+      addShoppingCar (quantity) {
+        if (this.checkBeforeBuying()) {
+          if (this.hasLogin) {
+            this.addShoppingCarRequest(quantity)
+            this.closeSku()
+            this.quantity = 1
+          } else {
+            this.goLogin()
+          }
+        }
+      },
+      addShoppingCarRequest (quantity) {
         this.$store.dispatch('commonAction', {
           url: '/purchase_items',
           method: 'post',
@@ -839,7 +882,7 @@
           data: {
             token: this.token,
             price_id: this.currentPrice.id,
-            quantity: 1
+            quantity: quantity
           },
           target: this,
           resolve: (state, res) => {
@@ -869,15 +912,18 @@
           }
         })
       },
-      buyNow () {
-        if (this.hasLogin) {
-          Toast({
-            message: '暂未开放',
-            duration: 500
-          })
-        } else {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+      buyNow (quantity) {
+        if (this.checkBeforeBuying()) {
+          this.closeSku()
+          this.quantity = 1
+          if (this.hasLogin) {
+            Toast({
+              message: '暂未开放',
+              duration: 500
+            })
+          } else {
+            this.goLogin()
+          }
         }
       },
       openFavorites () {
@@ -1017,7 +1063,8 @@
   }
   .info-container {
     @include pm2rem(padding, 42px, 0px, 0px, 26px);
-    border-bottom: 1px solid $fifth-grey;
+    border-bottom: 1px solid $third-grey;
+    @include px2rem(margin-bottom, 22px);
     .name {
       @include pm2rem(margin, 0px, 0px, 30px, 0px);
       font-weight: 800;
@@ -1029,15 +1076,6 @@
       .number {
         color: #FF0000;
       }
-      .unit {
-        color: #343434;
-      }
-      .more {
-        color: $dark;
-      }
-      .icon-box {
-        display: inline-block;
-      }
       .up {
         transform: rotate(-90deg);
       }
@@ -1047,93 +1085,28 @@
       .inactive {
         animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
       }
-      .more-price {
-        position: absolute;
-        @include px2rem(right, 70px);
-        @include px2rem(width, 180px);
-        @include px2rem(top, 60px);
-        text-align: center;
-        color: #FF0000;
-        z-index: 1002;
-        overflow: hidden;
-        .menu-list {
-          position: absolute;
-          width: 100%;
-          transform: translate3d(0, -100%, 0);
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height .3s cubic-bezier(0.3, .03, .08, .65);
-          background-color: $white;
-          box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
-          ul {
-            overflow-y: auto;
-          }
-          .item {
-            display: block;
-            transition: transform .2s ease-in,opacity .4s ease-in;
-            transform: translate3d(0, -20% ,0);
-            opacity: 0;
-            @include px2rem(height, 70px);
-            @include px2rem(line-height, 70px);
-            border: 1px solid $fifth-grey;
-            border-bottom: none;
-          }
-          li:last-child {
-            .item {
-              border-bottom: 1px solid $fifth-grey;
-            }
-          }
-        }
-        &.menu-active {
-          overflow: visible;
-          .menu-list {
-            @include px2rem(max-height, 280px);
-            overflow: visible;
-            transform: translate3d(0,0,0);
-            .item {
-              opacity: 1;
-              transform: translate3d(0,0,0);
-            }
-            li:nth-last-child(1) .item {
-              transition-delay: .16s;
-            }
-            li:nth-last-child(2) .item {
-              transition-delay: .2s;
-            }
-            li:nth-last-child(3) .item {
-              transition-delay: .24s;
-            }
-            li:nth-last-child(4) .item {
-              transition-delay: .28s;
-            }
-            li:nth-last-child(5) .item {
-              transition-delay: .32s;
-            }
-            li:nth-last-child(6) .item {
-              transition-delay: .36s;
-            }
-            li:nth-last-child(7) .item {
-              transition-delay: .4s;
-            }
-            li:nth-last-child(8) .item {
-              transition-delay: .44s;
-            }
-            li:nth-last-child(9) .item {
-              transition-delay: .48s;
-            }
-            li:nth-last-child(10) .item {
-              transition-delay: .52s;
-            }
-          }
-        }
-      }
     }
     .inventory {
       @include pm2rem(padding, 0px, 0px, 22px, 0px);
     }
   }
+  .price-container {
+    @include px2rem(margin-bottom, 22px);
+    border-top: 1px solid $third-grey;
+    border-bottom: 1px solid $third-grey;
+    a {
+      @include px2rem(height, 96px);
+      @include pm2rem(padding, 0px, 26px, 0px, 26px);
+      align-items: center;
+      line-height: normal;
+    }
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
+    }
+  }
   .nav-bar {
     @include px2rem(height, 100px);
+    border-top: 1px solid $third-grey;
     .mint-tab-item {
       @include font-dpr-important(17px);
       border-bottom: 1px solid $fifth-grey !important;
@@ -1471,7 +1444,7 @@
     }
   }
   .productdetail-product-item {
-    @include pm2rem(padding, 0px, 30px, 0px, 0px);
+    @include pm2rem(padding, 20px, 30px, 20px, 0px);
     background-color: $white;
     line-height: 1;
     .row-item {
