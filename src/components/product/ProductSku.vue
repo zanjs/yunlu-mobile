@@ -276,29 +276,27 @@
   }
 
   .slide-in-enter-active, {
-    animation: fadeInUp .3s 0s 1 both;
+    animation: fadeInUp ease-out .3s 0s 1 both;
 	}
 
 	.slide-in-leave-active {
-    animation: fadeOutDown .3s 0s 1 both;
+    animation: fadeOutDown ease-out .2s 0s 1 both;
 	}
 
   .fade-in-active {
-    animation: fadeIn 0.3s 0s 1 both;
+    animation: fadeIn 0.2s 0s 1 both;
   }
 
   .fade-out-active {
-    animation: fadeOut 0.3s 0s 1 both;
+    animation: fadeOut 0.2s 0s 1 both;
   }
 
   @keyframes fadeInUp {
     from {
-      opacity: 0;
-      transform: translate3d(0, 100%, 0);
+      transform: translate3d(0, 110%, 0);
     }
 
     to {
-      opacity: 1;
       transform: none;
     }
   }
@@ -325,13 +323,11 @@
 
   @keyframes fadeOutDown {
     from {
-      opacity: 1;
       transform: translate3d(0, 0, 0);
     }
 
     to {
-      opacity: 0;
-      transform: translate3d(0, 100%, 0);
+      transform: translate3d(0, 110%, 0);
     }
   }
 </style>
