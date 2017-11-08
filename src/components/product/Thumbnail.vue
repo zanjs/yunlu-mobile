@@ -120,14 +120,15 @@
             width: 100%;
           }
           .name {
-            @include pm2rem(margin, 16px, 0px, 16px, 0px);
-            line-height: 1;
+            @include pm2rem(margin, 10px, 0px, 14px, 0px);
+            line-height: normal;
             box-sizing: border-box;
             position: relative;
           }
           .money {
             box-sizing: border-box;
             color: #FF0000;
+            line-height: normal;
           }
         }
       }
