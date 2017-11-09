@@ -11,7 +11,8 @@
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }">
       <div class="cover">
-        {{item.name}}（{{item.files.length}})
+        <span class="ellipsis">{{item.name}}</span>
+        <span>({{item.files.length}})</span>
       </div>
     </div>
   </section>
@@ -79,6 +80,7 @@ export default {
         justify-content: center;
         color: $white;
         @include font-dpr(13px);
+        line-height: normal;
         align-items: center;
       }
     }
