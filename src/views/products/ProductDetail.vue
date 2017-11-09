@@ -1495,7 +1495,7 @@
     }
   }
   .productdetail-product-item {
-    @include pm2rem(padding, 20px, 30px, 20px, 0px);
+    @include px2rem(padding-right, 30px);
     background-color: $white;
     line-height: 1;
     .row-item {
