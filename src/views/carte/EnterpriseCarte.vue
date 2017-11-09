@@ -472,7 +472,7 @@
         this.showDialog = true
       },
       openInformationFolders (item) {
-        this.$router.push({name: 'InformationFolders', params: {id: this.id}, query: {type: item.name || ''}})
+        this.$router.push({name: 'InformationFolders', params: {id: this.id}, query: {type: item.name || 'Null'}})
       },
       showListChange (val) {
         this.showList = val

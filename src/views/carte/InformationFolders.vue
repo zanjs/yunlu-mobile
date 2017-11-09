@@ -37,7 +37,6 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import InformationGallery from '../../components/common/InformationGallery'
-  import { mapGetters } from 'vuex'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   export default {
     name: 'InformationFolders',
@@ -45,7 +44,7 @@
       return {
         header: '资讯',
         teamId: this.$route.params.id,
-        type: this.$route.query.type,
+        type: this.$route.query.type || 'Null',
         token: getStore('user') ? getStore('user').authentication_token : '',
         pageIndex: 1,
         pageSize: 20,
@@ -53,6 +52,7 @@
         showPreview: false,
         previewImgs: [],
         currentIndex: 1,
+        informationFolderArchives: [],
         swiperOption: {
           notNextTick: false,
           autoplay: 0,
@@ -105,7 +105,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.informationFolderArchives = res.data.archives
             this.tmpArchives = res.data.archives
             let ids = this.handleFileIds(res.data.archives)
             this.getCovers(ids)
@@ -149,7 +148,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            state.informationFolderArchives = this.handleArchives(this.tmpArchives, res.data.files)
+            this.informationFolderArchives = this.handleArchives(this.tmpArchives, res.data.files)
           },
           reject: () => {
           }
@@ -182,11 +181,6 @@
     mounted () {
       this.getArchives()
       this.stopTouchMove()
-    },
-    computed: {
-      ...mapGetters([
-        'informationFolderArchives'
-      ])
     }
   }
 </script>
