@@ -45,7 +45,8 @@
           'Address',
           'Pay',
           'ProductDetail',
-          'ShoppingCart'
+          'ShoppingCart',
+          'InformationFolders'
         ]
       }
     },
