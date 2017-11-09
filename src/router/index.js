@@ -188,7 +188,7 @@ export default new Router({
       path: '/informationfolders/:id',
       name: 'InformationFolders',
       component: InformationFolders,
-      meta: { keepAlive: true }
+      meta: { keepAlive: false }
     }, {
       path: '/emptyenterprisecarte',
       name: 'EmptyEnterpriseCarte',
