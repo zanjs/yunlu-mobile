@@ -430,10 +430,10 @@ body {
   }
   .tab-container {
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
