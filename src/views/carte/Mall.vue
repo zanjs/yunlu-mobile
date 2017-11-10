@@ -1,212 +1,210 @@
 <template>
-  <section
-    class="container full-width"
-    ref="mall"
-    :style="{height: scrollHeight}">
-    <common-header
-      :title="header"
-      :icon-class="iconClass"
-      :right-text="rightBtnText"
-      @right-click="goReport()"
-      @back="goBack()">
-    </common-header>
-    <div class="card-container">
-      <enterprise-card
-        :store="teams"
-        :products="products"
-        @icon-click="iconClick"
-        @click="goEnterpriseDetail">
-      </enterprise-card>
-    </div>
-    <div class="four-nav-tabs">
-      <div class="tab-bar primary flex font-17">
-        <div
-          class="left flex-1 white-bg"
-          v-bind:class="{'active-bg white': activeIndex === 0}"
-          @click.prevent="tabClick(0)">产品</div>
-        <div
-          class="middle flex-1 white-bg"
-          v-bind:class="{'active-bg white': activeIndex === 1}"
-          @click.prevent="tabClick(1)">资讯</div>
-        <div
-          class="middle flex-1 white-bg"
-          v-bind:class="{'active-bg white': activeIndex === 2}"
-          @click.prevent="tabClick(2)">个人会员</div>
-        <div
-          class="middle right flex-1 white-bg"
-          v-bind:class="{'active-bg white': activeIndex === 3}"
-          @click.prevent="tabClick(3)">企业会员</div>
-      </div>
-      <div class="tab-container">
-        <transition
-          name="fade"
-          :appear="true"
-          mode="out-in">
-          <template v-if="activeIndex === 0">
-            <template v-if="products && products.length > 0">
-              <div>
-                <transition
-                  name="fade"
-                  :appear="true"
-                  mode="out-in">
-                  <product-list-mode
-                    v-if="showList"
-                    :store="products"
-                    @click="goProductDetail">
-                  </product-list-mode>
-                  <product-thumbnail-mode
-                    v-else
-                    :store="products"
-                    @click="goProductDetail">
-                  </product-thumbnail-mode>
-                </transition>
-                <mugen-scroll
-                  key="product"
-                  :handler="loadProductBottom"
-                  :handle-on-mount="false"
-                  :should-handle="!productLoading"
-                  scroll-container="mall">
-                  <div
-                    v-if="productLoading || noMoreProducts"
-                    class="loading">
-                    <mt-spinner
-                      v-if="productLoading"
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>{{productLoadingText}}</p>
+  <section>
+    <div class="container full-width">
+      <common-header
+        :title="header"
+        :icon-class="iconClass"
+        :right-text="rightBtnText"
+        @right-click="goReport()"
+        @back="goBack()">
+      </common-header>
+      <div class="container" ref="mall" :style="{height: scrollHeight}">
+        <div class="card-container">
+          <enterprise-card
+            :store="teams"
+            :products="products"
+            @icon-click="iconClick"
+            @click="goEnterpriseDetail">
+          </enterprise-card>
+        </div>
+        <div class="four-nav-tabs">
+          <div class="tab-bar primary flex font-17">
+            <div
+              class="left flex-1 white-bg"
+              v-bind:class="{'active-bg white': activeIndex === 0}"
+              @click.prevent="tabClick(0)">产品</div>
+            <div
+              class="middle flex-1 white-bg"
+              v-bind:class="{'active-bg white': activeIndex === 1}"
+              @click.prevent="tabClick(1)">资讯</div>
+            <div
+              class="middle flex-1 white-bg"
+              v-bind:class="{'active-bg white': activeIndex === 2}"
+              @click.prevent="tabClick(2)">个人会员</div>
+            <div
+              class="middle right flex-1 white-bg"
+              v-bind:class="{'active-bg white': activeIndex === 3}"
+              @click.prevent="tabClick(3)">企业会员</div>
+          </div>
+          <div class="tab-container">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
+              <template v-if="activeIndex === 0">
+                <template v-if="products && products.length > 0">
+                  <div>
+                    <transition
+                      name="fade"
+                      :appear="true"
+                      mode="out-in">
+                      <product-list-mode
+                        v-if="showList"
+                        :store="products"
+                        @click="goProductDetail">
+                      </product-list-mode>
+                      <product-thumbnail-mode
+                        v-else
+                        :store="products"
+                        @click="goProductDetail">
+                      </product-thumbnail-mode>
+                    </transition>
+                    <mugen-scroll
+                      key="product"
+                      :handler="loadProductBottom"
+                      :handle-on-mount="false"
+                      :should-handle="!productLoading"
+                      :threshold="0.1"
+                      scroll-container="mall">
+                      <div class="loading">
+                        <mt-spinner
+                          v-show="!noMoreProducts"
+                          type="snake"
+                          :size="18">
+                        </mt-spinner>
+                        <p>{{productLoadingText}}</p>
+                      </div>
+                    </mugen-scroll>
                   </div>
-                </mugen-scroll>
-              </div>
-            </template>
-            <div
-              v-else
-              key="product1"
-              class="no-data">
-              <img src="../../assets/noProduct.png">
-            </div>
-          </template>
-          <template v-if="activeIndex === 1">
-            <template  v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-              <information-list
-                key="information"
-                :store="enterpriseInfoFiles"
-                @click="openInformationFolders">
-              </information-list>
-            </template>
-            <div
-              v-else
-              key="information1"
-              class="no-data">
-              <img src="../../assets/noInformation.png">
-            </div>
-          </template>
-          <template v-if="activeIndex === 2">
-            <template v-if="hasLogin">
-              <template v-if="personMembers && personMembers.length > 0">
-                <div key="person">
-                  <person-list
-                    :store="personMembers"
-                    @click="goPersonCarte">
-                  </person-list>
-                  <mugen-scroll
-                    key="person"
-                    :handler="loadPersonBottom"
-                    :handle-on-mount="false"
-                    :should-handle="!personLoading"
-                    scroll-container="comityCarte">
-                    <div
-                      v-if="personLoading || noMorePeople"
-                      class="loading">
-                      <mt-spinner
-                        v-if="personLoading"
-                        type="snake"
-                        :size="18">
-                      </mt-spinner>
-                      <p>{{personLoadingText}}</p>
-                    </div>
-                  </mugen-scroll>
+                </template>
+                <div
+                  v-else
+                  key="product1"
+                  class="no-data">
+                  <img src="../../assets/noProduct.png">
                 </div>
               </template>
-              <div
-                v-else
-                key="person1"
-                class="no-data">
-                <img src="../../assets/noPerson.png">
-              </div>
-            </template>
-            <template v-else>
-              <div
-                key="noLogin"
-                class="tab-tips-container">
-                <p class="second-text">登录后才能查看</p>
-                <div class="login-btn">
-                  <a
-                    @click="goLogin()"
-                    class="primary-bg white font-13">登录</a>
+              <template v-if="activeIndex === 1">
+                <template  v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
+                  <information-list
+                    key="information"
+                    :store="enterpriseInfoFiles"
+                    @click="openInformationFolders">
+                  </information-list>
+                </template>
+                <div
+                  v-else
+                  key="information1"
+                  class="no-data">
+                  <img src="../../assets/noInformation.png">
                 </div>
-              </div>
-            </template>
-          </template>
-          <template v-if="activeIndex === 3">
-            <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
-              <div key="enterprise">
-                <enterprise-list
-                  :store="enterpriseMembers"
-                  @click="goEnterpriseCarte">
-                </enterprise-list>
-                <mugen-scroll
-                  key="enterprise"
-                  :handler="loadEnterpriseBottom"
-                  :handle-on-mount="false"
-                  :should-handle="!enterpriseLoading"
-                  scroll-container="comityCarte">
+              </template>
+              <template v-if="activeIndex === 2">
+                <template v-if="hasLogin">
+                  <template v-if="personMembers && personMembers.length > 0">
+                    <div key="person">
+                      <person-list
+                        :store="personMembers"
+                        @click="goPersonCarte">
+                      </person-list>
+                      <mugen-scroll
+                        key="person"
+                        :handler="loadPersonBottom"
+                        :handle-on-mount="false"
+                        :should-handle="!personLoading"
+                        :threshold="0.1"
+                        scroll-container="comityCarte">
+                        <div class="loading">
+                          <mt-spinner
+                            v-show="!noMorePeople"
+                            type="snake"
+                            :size="18">
+                          </mt-spinner>
+                          <p>{{personLoadingText}}</p>
+                        </div>
+                      </mugen-scroll>
+                    </div>
+                  </template>
                   <div
-                    v-if="enterpriseLoading || noMoreEnterprises"
-                    class="loading">
-                    <mt-spinner
-                      v-if="enterpriseLoading"
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>{{enterpriseLoadingText}}</p>
+                    v-else
+                    key="person1"
+                    class="no-data">
+                    <img src="../../assets/noPerson.png">
                   </div>
-                </mugen-scroll>
-              </div>
-            </template>
-            <div
-              v-else
-              key="enterprise1"
-              class="no-data">
-              <img src="../../assets/noEnterprise.png">
-            </div>
-          </template>
-        </transition>
+                </template>
+                <template v-else>
+                  <div
+                    key="noLogin"
+                    class="tab-tips-container">
+                    <p class="second-text">登录后才能查看</p>
+                    <div class="login-btn">
+                      <a
+                        @click="goLogin()"
+                        class="primary-bg white font-13">登录</a>
+                    </div>
+                  </div>
+                </template>
+              </template>
+              <template v-if="activeIndex === 3">
+                <template v-if="enterpriseMembers && enterpriseMembers.length > 0">
+                  <div key="enterprise">
+                    <enterprise-list
+                      :store="enterpriseMembers"
+                      @click="goEnterpriseCarte">
+                    </enterprise-list>
+                    <mugen-scroll
+                      key="enterprise"
+                      :handler="loadEnterpriseBottom"
+                      :handle-on-mount="false"
+                      :should-handle="!enterpriseLoading"
+                      :threshold="0.1"
+                      scroll-container="comityCarte">
+                      <div class="loading">
+                        <mt-spinner
+                          v-show="!noMoreEnterprises"
+                          type="snake"
+                          :size="18">
+                        </mt-spinner>
+                        <p>{{enterpriseLoadingText}}</p>
+                      </div>
+                    </mugen-scroll>
+                  </div>
+                </template>
+                <div
+                  v-else
+                  key="enterprise1"
+                  class="no-data">
+                  <img src="../../assets/noEnterprise.png">
+                </div>
+              </template>
+            </transition>
+          </div>
+        </div>
       </div>
-      <search
-        :show="showSearchBar"
-        @search="handleSearchBtn(queryParams)">
-        <input
-          slot="input"
-          type="search"
-          v-model="queryParams"
-          @keyup.enter.prevent="handleSearchBtn(queryParams)"
-          :placeholder="placeholder">
-      </search>
-      <order
-        :show="showSearchBar && activeIndex === 0"
-        :order-up="orderUp"
-        :show-list="showList"
-        @order-change="orderChange"
-        @switch="showListChange">
-      </order>
-      <template v-if="showDialog">
-        <pop-dialog
-          :store="message"
-          @close="closeDialog">
-        </pop-dialog>
-      </template>
     </div>
+    <search
+      :show="showSearchBar"
+      @search="handleSearchBtn(queryParams)">
+      <input
+        slot="input"
+        type="search"
+        v-model="queryParams"
+        @keyup.enter.prevent="handleSearchBtn(queryParams)"
+        :placeholder="placeholder">
+    </search>
+    <order
+      :show="showSearchBar && activeIndex === 0"
+      :order-up="orderUp"
+      :show-list="showList"
+      @order-change="orderChange"
+      @switch="showListChange">
+    </order>
+    <template v-if="showDialog">
+      <pop-dialog
+        :store="message"
+        @close="closeDialog">
+      </pop-dialog>
+    </template>
     <favorite-btn
       :show="teams"
       :single="!showGoTopBtn"
@@ -340,20 +338,9 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            // this.queryParams = ''
             this.getEnterpriseDocument()
-            if (res.data.products.length === 0) {
-              this.productLoading = false
-              if (this.productPageIndex !== 1) {
-                this.productLoadingText = '没有更多数据了...'
-                this.noMoreProducts = true
-              } else {
-                this.products = []
-              }
-            } else {
-              let tmpArr = this.handleProductThumbnails(res.data.products)
-              this.getFilesPublisheds(tmpArr, res.data.products, q)
-            }
+            let tmpArr = this.handleProductThumbnails(res.data.products)
+            this.getFilesPublisheds(tmpArr, res.data.products, q)
           },
           reject: () => {
             this.productLoading = false
@@ -401,17 +388,15 @@
           target: this,
           resolve: (state, res) => {
             this.productLoading = false
-            if (this.productPageIndex === 1) {
-              this.products = this.handleProducts(arr, res.data.files)
-              this.productsThumbnails = res.data.files
-            } else {
-              this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
-              this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
+            if (arr.length < this.productPageSize) {
+              this.productLoadingText = '没有更多数据了...'
+              this.noMoreProducts = true
             }
+            this.products = this.productPageIndex === 1 ? this.handleProducts(arr, res.data.files) : [...this.products, ...this.handleProducts(arr, res.data.files)]
+            this.productsThumbnails = this.productPageIndex === 1 ? res.data.files : [...this.productsThumbnails, ...res.data.files]
           },
           reject: (state, error) => {
             this.productLoading = false
-            console.log(state, error)
           }
         })
       },
@@ -510,15 +495,11 @@
           resolve: (state, res) => {
             this.enterpriseLoading = false
             this.hasSearchEnterprise = q !== ''
-            if (this.enterprisePageIndex === 1) {
-              this.enterpriseMembers = res.data.members
-            } else {
-              if (res.data.members.length === 0 && this.enterprisePageIndex !== 1) {
-                this.enterpriseLoadingText = '没有更多数据了...'
-                this.noMoreEnterprises = true
-              }
-              this.enterpriseMembers = [...this.enterpriseMembers, ...res.data.members]
+            if (res.data.members.length < this.enterprisePageSize) {
+              this.enterpriseLoadingText = '没有更多数据了...'
+              this.noMoreEnterprises = true
             }
+            this.enterpriseMembers = this.enterprisePageIndex === 1 ? res.data.members : [...this.enterpriseMembers, ...res.data.members]
             if (getStore('user')) {
               this.getPersonList()
             }
@@ -546,15 +527,11 @@
           resolve: (state, res) => {
             this.personLoading = false
             this.hasSearchPerson = q !== ''
-            if (this.personPageIndex === 1) {
-              this.personMembers = res.data.preps
-            } else {
-              if (res.data.preps.length === 0 && this.personPageIndex !== 1) {
-                this.personLoadingText = '没有更多数据了...'
-                this.noMorePeople = true
-              }
-              this.personMembers = [...this.personMembers, ...res.data.preps]
+            if (res.data.preps.length < this.personPageSize) {
+              this.personLoadingText = '没有更多数据了...'
+              this.noMorePeople = true
             }
+            this.personMembers = this.personPageIndex === 1 ? res.data.preps : [...this.personMembers, ...res.data.preps]
           },
           reject: () => {
             this.personLoading = false
@@ -881,10 +858,8 @@
   @import '../../styles/mixin';
 
   .container {
-    position: absolute;
-    top: 0;
     overflow-y: scroll;
     padding-bottom: 1px;
-    background-color: $tenth-grey;
+    -webkit-overflow-scrolling: touch;
   }
 </style>
