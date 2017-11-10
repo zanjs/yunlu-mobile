@@ -1,6 +1,18 @@
 <template>
   <section>
-    <div class="gallery">
+    <div v-if="loading && store.length === 0" class="gallery">
+      <div
+        v-for="(item, index) in num"
+        :key="index"
+        class="loading-box animated-background">
+        <div class="img-loading"></div>
+        <div class="text-area">
+          <div class="name-loading"></div>
+          <div class="money-loading"></div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="gallery">
       <div
         v-for="(item, index) in store"
         :key="index"
@@ -18,8 +30,8 @@
           v-else
           src="../../assets/imgLoadingError.png"
           class="empty">
-         <div class="cover">
-           <div class="wraper">
+        <div class="cover">
+          <div class="wraper">
             <div class="name">{{item.name}}</div>
             <div class="money">
               <span class="font-12">&yen;</span>
@@ -27,7 +39,7 @@
                 {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
               </span>
             </div>
-           </div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,7 +53,7 @@
       }
     },
     name: 'ProductThumbnailMode',
-    props: ['store'],
+    props: ['store', 'loading', 'num'],
     methods: {
       handleClick (item) {
         this.$emit('click', item)
@@ -130,6 +142,40 @@
             color: #FF0000;
             line-height: normal;
           }
+        }
+      }
+    }
+    .loading-box {
+      @include px2rem(width, 346px);
+      @include px2rem(height, 460px);
+      @include pm2rem(margin, 0px, 14px, 20px, 0px);
+      box-sizing: border-box;
+      border: 1px solid $tenth-grey;
+      background-color: $white;
+      box-shadow: 0 4px 6px -2px rgba(181, 181, 181, 0.2);
+      .img-loading {
+        width: inherit;
+        background-color: $ninth-grey;
+        @include px2rem(height, 346px);
+      }
+      .text-area {
+        position: relative;
+        @include px2rem(height, 114px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-around;
+        @include px2rem(padding-left, 10px);
+        width: inherit;
+        .name-loading {
+          @include px2rem(width, 200px);
+          @include px2rem(height, 34px);
+          background-color: $ninth-grey;
+        }
+        .money-loading {
+          @include px2rem(width, 120px);
+          @include px2rem(height, 32px);
+          background-color: $ninth-grey;
         }
       }
     }

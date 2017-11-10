@@ -17,9 +17,11 @@
       class="list full-width"
       ref="searchEnterprise"
       :style="{height: scrollHeight}">
-      <template v-if="allEnterprises && allEnterprises.length > 0">
+      <template v-if="loading || allEnterprises && allEnterprises.length > 0">
         <list
           :store="allEnterprises"
+          :loading="loading"
+          :num="enterprisePageSize"
           @click="goEnterpriseCarte">
         </list>
         <mugen-scroll
@@ -38,7 +40,7 @@
           </div>
         </mugen-scroll>
       </template>
-      <template v-if="allEnterprises && allEnterprises.length === 0">
+      <template v-else>
         <div class="empty-products">
           <div class="img-container">
             <img src="../../assets/noSearchProducts.png">
