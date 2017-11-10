@@ -34,7 +34,7 @@
               :appear="true"
               mode="out-in">
               <template v-if="showProduct">
-                <template v-if="products && products.length > 0">
+                <template v-if="loading || products && products.length > 0">
                   <div>
                     <transition
                       name="fade"
@@ -48,6 +48,8 @@
                       <product-thumbnail-mode
                         v-else
                         :store="products"
+                        :loading="loading"
+                        :num="productPageSize"
                         @click="goProductDetail">
                       </product-thumbnail-mode>
                     </transition>
@@ -596,6 +598,7 @@
         this.noMoreProducts = false
         this.currentIndex = 0
         this.favoratesText = '收藏'
+        this.loading = true
         this.loadingText = '加载中...'
         this.hasAddFavorites = false
         this.teams = null
