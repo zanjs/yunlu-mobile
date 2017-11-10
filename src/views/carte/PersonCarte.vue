@@ -1,143 +1,143 @@
 <template>
-  <section
-    class="container full-width"
-    ref="personCarte"
-    :style="{height: scrollHeight}">
-    <common-header
-      :title="header"
-      :icon-class="iconClass"
-      :right-text="rightBtnText"
-      @right-click="goReport()"
-      @back="goBack()">
-    </common-header>
-    <div class="card-container">
-      <card
-        :store="userCard"
-        @click="cardClick">
-      </card>
-    </div>
-    <div
-      v-if="clusters && clusters.length === 0"
-      class="no-data">
-      <img src="../../assets/noPersonCarte.png">
-    </div>
-    <template v-else>
-      <div class="scroll-container">
-        <div
-          class="hover move-left"
-          ref="hoverLeft">
-          <div
-            v-show="showScrollBtn"
-            class="btn move-left"
-            @click="scrollHorizontal(false)">
-            <i class="iconfont icon-zuo"></i>
-          </div>
+  <section>
+    <div class="full-width">
+      <common-header
+        :title="header"
+        :icon-class="iconClass"
+        :right-text="rightBtnText"
+        @right-click="goReport()"
+        @back="goBack()">
+      </common-header>
+      <div class="container" ref="personCarte" :style="{height: scrollHeight}">
+        <div class="card-container">
+          <card
+            :store="userCard"
+            @click="cardClick">
+          </card>
         </div>
         <div
-          class="carte-container white-bg"
-          ref="scrollTarget">
-          <a
-            v-for="(item, index) in clusters"
-            :key="index"
-            @click="goCarte(item)"
-            class="flex item">
-            <img
-              v-if="item.type === 'personal'"
-              src="../../assets/spaceLogo.png">
-            <img
-              v-if="item.type === 'company'"
-              src="../../assets/enterpriseLogo.png">
-            <img
-              v-if="item.type === 'association'"
-              src="../../assets/associationLogo.png">
-            <img
-              v-if="item.type === 'class'"
-              src="../../assets/classLogo.png">
-            <img
-              v-if="item.type === 'school'"
-              src="../../assets/alumniLogo.png">
-            <img
-              v-if="item.type === 'mall'"
-              src="../../assets/mallLogo.png">
-            <span class="ellipsis second-text font-13">{{item.name}}</span>
-          </a>
+          v-if="clusters && clusters.length === 0"
+          class="no-data">
+          <img src="../../assets/noPersonCarte.png">
         </div>
-        <div
-          class="hover move-right"
-          ref="hoverRight">
-          <div
-            v-show="showScrollBtn"
-            class="btn move-right"
-            @click="scrollHorizontal(true)">
-            <i class="iconfont icon-you"></i>
-          </div>
-        </div>
-      </div>
-      <template v-if="folders && folders.length > 0">
-        <div>
-          <space-folders
-            :store="folders"
-            @view-more="goFolder"
-            @view-full-screen="showFullScreenPreview">
-          </space-folders>
-          <mugen-scroll
-            :handler="loadFolderBottom"
-            :handle-on-mount="false"
-            :should-handle="!loading"
-            scroll-container="personCarte">
+        <template v-else>
+          <div class="scroll-container">
             <div
-              v-if="loading || noMoreData"
-              class="loading">
-              <mt-spinner
-                v-if="loading"
-                type="snake"
-                :size="18">
-              </mt-spinner>
-              <p>{{loadingText}}</p>
-            </div>
-          </mugen-scroll>
-        </div>
-        <template v-if="showPreview">
-          <div class="flex-between option-bar full-width">
-            <div class="left">
+              class="hover move-left"
+              ref="hoverLeft">
               <div
-                class="flex close white"
-                @click="closePreview()">
-                <i class="iconfont icon-fanhui"></i>
+                v-show="showScrollBtn"
+                class="btn move-left"
+                @click="scrollHorizontal(false)">
+                <i class="iconfont icon-zuo"></i>
               </div>
-              <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
             </div>
             <div
-              class="report flex white"
-              @click="goReportPhoto">
-              <i class="iconfont icon-jubao"></i>
+              class="carte-container white-bg"
+              ref="scrollTarget">
+              <a
+                v-for="(item, index) in clusters"
+                :key="index"
+                @click="goCarte(item)"
+                class="flex item">
+                <img
+                  v-if="item.type === 'personal'"
+                  src="../../assets/spaceLogo.png">
+                <img
+                  v-if="item.type === 'company'"
+                  src="../../assets/enterpriseLogo.png">
+                <img
+                  v-if="item.type === 'association'"
+                  src="../../assets/associationLogo.png">
+                <img
+                  v-if="item.type === 'class'"
+                  src="../../assets/classLogo.png">
+                <img
+                  v-if="item.type === 'school'"
+                  src="../../assets/alumniLogo.png">
+                <img
+                  v-if="item.type === 'mall'"
+                  src="../../assets/mallLogo.png">
+                <span class="ellipsis second-text font-13">{{item.name}}</span>
+              </a>
+            </div>
+            <div
+              class="hover move-right"
+              ref="hoverRight">
+              <div
+                v-show="showScrollBtn"
+                class="btn move-right"
+                @click="scrollHorizontal(true)">
+                <i class="iconfont icon-you"></i>
+              </div>
             </div>
           </div>
-          <swiper
-            :options="swiperOption"
-            class="full-screen-swiper">
-            <!-- slides -->
-            <swiper-slide
-              class="swiper-zoom-container full-screen-bg"
-              v-for="(item, index) in photos"
-              :key="item.url">
-              <img
-                v-lazy="{
-                  src: item.url,
-                  error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-                  loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-                }"
-                alt="">
-            </swiper-slide>
-          </swiper>
+          <template v-if="folders && folders.length > 0">
+            <div>
+              <space-folders
+                :store="folders"
+                @view-more="goFolder"
+                @view-full-screen="showFullScreenPreview">
+              </space-folders>
+              <mugen-scroll
+                :handler="loadFolderBottom"
+                :handle-on-mount="false"
+                :should-handle="!loading"
+                :threshold="0.1"
+                scroll-container="personCarte">
+                <div class="loading">
+                  <mt-spinner
+                    v-show="!noMoreData"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{loadingText}}</p>
+                </div>
+              </mugen-scroll>
+            </div>
+            <template v-if="showPreview">
+              <div class="flex-between option-bar full-width">
+                <div class="left">
+                  <div
+                    class="flex close white"
+                    @click="closePreview()">
+                    <i class="iconfont icon-fanhui"></i>
+                  </div>
+                  <span class="page-nav flex">{{currentIndex}}/{{photos.length}}</span>
+                </div>
+                <div
+                  class="report flex white"
+                  @click="goReportPhoto">
+                  <i class="iconfont icon-jubao"></i>
+                </div>
+              </div>
+              <swiper
+                :options="swiperOption"
+                class="full-screen-swiper">
+                <!-- slides -->
+                <swiper-slide
+                  class="swiper-zoom-container full-screen-bg"
+                  v-for="(item, index) in photos"
+                  :key="item.url">
+                  <img
+                    v-lazy="{
+                      src: item.url,
+                      error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                      loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+                    }"
+                    alt="">
+                </swiper-slide>
+              </swiper>
+            </template>
+          </template>
+          <template v-else>
+            <div class="no-data">
+              <img src="../../assets/noFile.png">
+            </div>
+          </template>
         </template>
-      </template>
-      <template v-else>
-        <div class="no-data">
-          <img src="../../assets/noFile.png">
-        </div>
-      </template>
-    </template>
+      </div>
+    </div>
     <favorite-btn
       :show="userCard"
       :single="true"
@@ -312,15 +312,11 @@
           target: this,
           resolve: (state, res) => {
             this.loading = false
-            if (this.pageIndex === 1) {
-              this.folders = res.data.gallery
-            } else {
-              if (res.data.gallery.length === 0 && this.pageIndex !== 1) {
-                this.noMoreData = true
-                this.loadingText = '没有更多数据了...'
-              }
-              this.folders = [...this.folders, ...res.data.gallery]
+            if (res.data.gallery.length < this.pageSize) {
+              this.noMoreData = true
+              this.loadingText = '没有更多数据了...'
             }
+            this.folders = this.pageIndex === 1 ? res.data.gallery : [...this.folders, ...res.data.gallery]
           },
           reject: () => {
             this.loading = false
@@ -567,11 +563,9 @@
   @import '../../styles/mixin';
 
   .container {
-    position: absolute;
-    top: 0;
     overflow-y: scroll;
     padding-bottom: 1px;
-    background-color: $tenth-grey;
+    -webkit-overflow-scrolling: touch;
   }
   .scroll-container {
     overflow-x: scroll;
@@ -639,11 +633,10 @@
     }
   }
   .loading {
-    @include px2rem(margin-top, 10px);
-    height: 40px;
+    @include px2rem(height, 120px);
     @include font-dpr(15px);
     color: $second-dark;
-    line-height: 40px;
+    line-height: normal;
     display: flex;
     align-items: center;
     justify-content: center;

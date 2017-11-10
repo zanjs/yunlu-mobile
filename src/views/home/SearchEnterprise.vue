@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="container full-width"
-    ref="searchEnterprise"
-    :style="{height: scrollHeight}">
+  <section class="full-width">
     <common-header
       :title="title"
       @back="goBack()">
@@ -16,7 +13,10 @@
         v-model="searchParams"
         :placeholder="placeholder">
     </search>
-    <div class="list full-width">
+    <div
+      class="list full-width"
+      ref="searchEnterprise"
+      :style="{height: scrollHeight}">
       <template v-if="allEnterprises && allEnterprises.length > 0">
         <list
           :store="allEnterprises"
@@ -26,22 +26,17 @@
           :handler="loadEnterpriseBottom"
           :handle-on-mount="false"
           :should-handle="!loading"
+          :threshold="0.1"
           scroll-container="searchEnterprise">
-          <div
-            v-if="loading || noMoreData"
-            class="loading">
+          <div class="loading">
             <mt-spinner
-              v-if="loading"
+              v-show="!noMoreData"
               type="snake"
               :size="18">
             </mt-spinner>
             <p>{{loadingText}}</p>
           </div>
         </mugen-scroll>
-        <back-to-top
-          :show="showGoTopBtn"
-          @click="goScroll(0)">
-        </back-to-top>
       </template>
       <template v-if="allEnterprises && allEnterprises.length === 0">
         <div class="empty-products">
@@ -52,6 +47,10 @@
         </div>
       </template>
     </div>
+    <back-to-top
+      :show="showGoTopBtn"
+      @click="goScroll(0)">
+    </back-to-top>
   </section>
 </template>
 
@@ -123,14 +122,14 @@
         this.loading = false
         if (res.data) {
           this.hasSearch = q !== ''
+          if (res.data.enterprises.length < this.enterprisePageSize) {
+            this.noMoreData = true
+            this.loadingText = '没有更多数据了...'
+          }
           if (this.enterprisePageIndex === 1) {
             setScrollTop(0, this.$refs.searchEnterprise)
             state.allEnterprises = res.data.enterprises
           } else {
-            if (res.data.enterprises.length === 0) {
-              this.noMoreData = true
-              this.loadingText = '没有更多数据了...'
-            }
             state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
           }
         }
@@ -245,16 +244,11 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .container {
-    position: absolute;
-    top: 0;
-    overflow-y: scroll;
-    padding-bottom: 1px;
-    background-color: $tenth-grey;
-  }
   .list {
     position: relative;
-    @include pm2rem(padding, 176px, 0px, 10px, 0px);
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    @include px2rem(padding-top, 176px);
     .empty-products {
       text-align: center;
       .img-container {
@@ -265,10 +259,10 @@
       }
     }
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: flex;
       align-items: center;
       justify-content: center;
