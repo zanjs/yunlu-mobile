@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="container full-width"
-    ref="searchProducts"
-    :style="{height: scrollHeight}">
+  <section class="full-width">
     <product-search-bar
       :can-clear="searchParams"
       @clear="resetSearchBar()"
@@ -18,19 +15,20 @@
         placeholder="搜一搜"
         ref="searchInput">
     </product-search-bar>
+    <search-products-order
+      v-if="hasSearch"
+      class="option-bar"
+      :sort-type="sort"
+      @sort="sortProducts">
+    </search-products-order>
     <hot-tags
       v-if="!hasSearch"
       :tags="tags"
       class="tags-area"
       @click="goLink">
     </hot-tags>
-    <div class="product-list-container">
+    <div class="product-list-container container" ref="searchProducts" :style="{height: scrollHeight}">
       <template v-if="hasSearch && products && products.length > 0">
-        <search-products-order
-          class="option-bar"
-          :sort-type="sort"
-          @sort="sortProducts">
-        </search-products-order>
         <product-list-mode
           :store="products"
           @click="goProductDetail">
@@ -39,29 +37,19 @@
           :handler="loadProductBottom"
           :handle-on-mount="false"
           :should-handle="!loading"
+          :threshold="0.1"
           scroll-container="searchProducts">
-          <div
-            v-if="loading || noMoreData"
-            class="loading">
+          <div class="loading">
             <mt-spinner
-              v-if="loading"
+              v-show="!noMoreData"
               type="snake"
               :size="18">
             </mt-spinner>
             <p>{{loadingText}}</p>
           </div>
         </mugen-scroll>
-        <back-to-top
-          :show="showGoTopBtn"
-          @click="goScroll(0)">
-        </back-to-top>
       </template>
       <template v-if="hasSearch && products && products.length === 0">
-        <search-products-order
-          class="option-bar"
-          :sort-type="sort"
-          @sort="sortProducts">
-        </search-products-order>
         <div class="empty-products">
           <div class="img-container">
             <img src="../../assets/noSearchProducts.png">
@@ -70,6 +58,10 @@
         </div>
       </template>
     </div>
+    <back-to-top
+      :show="showGoTopBtn"
+      @click="goScroll(0)">
+    </back-to-top>
   </section>
 </template>
 
@@ -181,18 +173,15 @@
           }
         })
         if (res.data) {
-          if (res.data.products.length === 0) {
-            this.loading = false
-            this.hasSearch = true
-            this.products = [...res.data.products, ...this.products]
-            if (this.pageIndex !== 1) {
-              this.noMoreData = true
-              this.loadingText = '没有更多数据了...'
-            }
-          } else {
-            let tmpArr = this.handleProductThumbnails(res.data.products)
-            this.getFilesPublisheds(tmpArr, res.data.products)
+          if (res.data.products.length < this.pageSize) {
+            this.noMoreData = true
+            this.loadingText = '没有更多数据了...'
           }
+          this.products = this.pageIndex === 1 ? res.data.products : [...res.data.products, ...this.products]
+          this.loading = false
+          this.hasSearch = true
+          let tmpArr = this.handleProductThumbnails(res.data.products)
+          this.getFilesPublisheds(tmpArr, res.data.products)
         } else {
           this.loading = false
         }
@@ -323,11 +312,9 @@
   @import "../../styles/mixin";
 
   .container {
-    position: absolute;
-    top: 0;
     overflow-y: scroll;
     padding-bottom: 1px;
-    background-color: $tenth-grey;
+    -webkit-overflow-scrolling: touch;
   }
   .search-input {
     flex: 1;
@@ -355,28 +342,28 @@
   .tags-area {
     @include px2rem(padding-top, 98px);
   }
+  .option-bar {
+    position: fixed;
+    @include px2rem(top, 98px);
+    width: 100%;
+    max-width: 540px;
+    z-index: 2;
+    box-shadow: 0 4px 8px -4px rgba(0, 0, 0, .2);
+  }
   .product-list-container {
     position: relative;
-    @include pm2rem(padding, 172px, 0px, 10px, 0px);
+    @include px2rem(padding-top, 172px);
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: flex;
       align-items: center;
       justify-content: center;
       p {
         @include px2rem(margin-left, 20px);
       }
-    }
-    .option-bar {
-      position: fixed;
-      @include px2rem(top, 98px);
-      width: 100%;
-      max-width: 540px;
-      z-index: 2;
-      box-shadow: 0 4px 8px -4px rgba(0, 0, 0, .2);
     }
     .empty-products {
       color: $third-dark;

@@ -1,110 +1,106 @@
 <template>
-  <section
-    class="container full-width"
-    ref="enterpriseCarte"
-    :style="{height: scrollHeight}">
-    <common-header
-      :title="header"
-      :icon-class="iconClass"
-      :right-text="rightBtnText"
-      @right-click="goReport(teams)"
-      @back="goBack()">
-    </common-header>
-    <div class="card-container">
-      <enterprise-card
-        :store="teams"
-        :products="products"
-        @icon-click="iconClick"
-        @click="goEnterpriseDetail">
-      </enterprise-card>
-    </div>
-    <div class="four-nav-tabs">
-      <div class="tab-bar primary flex font-17">
-        <div
-          class="left flex-1 white-bg"
-          v-bind:class="{'active-bg white': showProduct}"
-          @click.prevent="tabClick(0)">产品</div>
-        <div
-          class="middle right flex-1 white-bg"
-          v-bind:class="{'active-bg white': !showProduct}"
-          @click.prevent="tabClick(1)">资讯</div>
-      </div>
-      <div class="tab-container">
-        <transition
-          name="fade"
-          :appear="true"
-          mode="out-in">
-          <template v-if="showProduct">
-            <template v-if="products && products.length > 0">
-              <div>
-                <transition
-                  name="fade"
-                  :appear="true"
-                  mode="out-in">
-                  <product-list-mode
-                    v-if="showList"
-                    :store="products"
-                    @click="goProductDetail">
-                  </product-list-mode>
-                  <product-thumbnail-mode
-                    v-else
-                    :store="products"
-                    @click="goProductDetail">
-                  </product-thumbnail-mode>
-                </transition>
-                <mugen-scroll
-                  :handler="loadProductBottom"
-                  :handle-on-mount="false"
-                  :should-handle="!loading"
-                  scroll-container="enterpriseCarte">
-                  <div
-                    v-if="loading || noMoreProducts"
-                    class="loading">
-                    <mt-spinner
-                      v-show="loading"
-                      type="snake"
-                      :size="18">
-                    </mt-spinner>
-                    <p>{{loadingText}}</p>
+  <section>
+    <div class="full-width">
+      <common-header
+        :title="header"
+        :icon-class="iconClass"
+        :right-text="rightBtnText"
+        @right-click="goReport(teams)"
+        @back="goBack()">
+      </common-header>
+      <div class="container" ref="enterpriseCarte" :style="{height: scrollHeight}">
+        <div class="card-container">
+          <enterprise-card
+            :store="teams"
+            :products="products"
+            @icon-click="iconClick"
+            @click="goEnterpriseDetail">
+          </enterprise-card>
+        </div>
+        <div class="four-nav-tabs">
+          <div class="tab-bar primary flex font-17">
+            <div
+              class="left flex-1 white-bg"
+              v-bind:class="{'active-bg white': showProduct}"
+              @click.prevent="tabClick(0)">产品</div>
+            <div
+              class="middle right flex-1 white-bg"
+              v-bind:class="{'active-bg white': !showProduct}"
+              @click.prevent="tabClick(1)">资讯</div>
+          </div>
+          <div class="tab-container">
+            <transition
+              name="fade"
+              :appear="true"
+              mode="out-in">
+              <template v-if="showProduct">
+                <template v-if="products && products.length > 0">
+                  <div>
+                    <transition
+                      name="fade"
+                      :appear="true"
+                      mode="out-in">
+                      <product-list-mode
+                        v-if="showList"
+                        :store="products"
+                        @click="goProductDetail">
+                      </product-list-mode>
+                      <product-thumbnail-mode
+                        v-else
+                        :store="products"
+                        @click="goProductDetail">
+                      </product-thumbnail-mode>
+                    </transition>
+                    <mugen-scroll
+                      :handler="loadProductBottom"
+                      :handle-on-mount="false"
+                      :should-handle="!loading"
+                      :threshold="0.1"
+                      scroll-container="enterpriseCarte">
+                      <div class="loading">
+                        <mt-spinner
+                          v-show="!noMoreProducts"
+                          type="snake"
+                          :size="18">
+                        </mt-spinner>
+                        <p>{{loadingText}}</p>
+                      </div>
+                    </mugen-scroll>
                   </div>
-                </mugen-scroll>
-              </div>
-            </template>
-            <div
-              v-else
-              key="product1"
-              class="no-data">
-                <img src="../../assets/noProduct.png">
-            </div>
-          </template>
-          <template v-else>
-            <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
-              <information-list
-                key="information"
-                :store="enterpriseInfoFiles"
-                @click="openInformationFolders">
-              </information-list>
-            </template>
-            <div
-              v-else
-              key="information1"
-              class="no-data">
-              <img src="../../assets/noInformation.png">
-            </div>
-          </template>
-        </transition>
-        <favorite-btn
-          :show="teams"
-          :single="!showGoTopBtn"
-          :text="favoratesText"
-          @click="favoriteAction()">
-        </favorite-btn>
-        <back-to-top
-          :show="showGoTopBtn"
-          @click="goScroll(0)">
-        </back-to-top>
+                </template>
+                <div
+                  v-else
+                  key="product1"
+                  class="no-data">
+                    <img src="../../assets/noProduct.png">
+                </div>
+              </template>
+              <template v-else>
+                <template v-if="enterpriseInfoFiles && enterpriseInfoFiles.length > 0">
+                  <information-list
+                    key="information"
+                    :store="enterpriseInfoFiles"
+                    @click="openInformationFolders">
+                  </information-list>
+                </template>
+                <div
+                  v-else
+                  key="information1"
+                  class="no-data">
+                  <img src="../../assets/noInformation.png">
+                </div>
+              </template>
+            </transition>
+          </div>
+        </div>
       </div>
     </div>
+    <favorite-btn
+      :show="teams"
+      :single="!showGoTopBtn"
+      :text="favoratesText"
+      @click="favoriteAction()">
+    </favorite-btn>
     <search
       :show="showSearchBar"
       @search="handleSearchBtn(queryParams)">
@@ -128,6 +124,10 @@
         @close="closeDialog">
       </pop-dialog>
     </template>
+    <back-to-top
+      :show="showGoTopBtn"
+      @click="goScroll(0)">
+    </back-to-top>
   </section>
 </template>
 
@@ -229,18 +229,9 @@
         })
         if (res.data) {
           this.hasSearch = q !== ''
+          this.getEnterpriseDocument()
           let tmppArr = this.handleProductThumbnails(res.data.products)
-          if (res.data.products.length === 0) {
-            this.loading = false
-            if (this.productPageIndex !== 1) {
-              this.loadingText = '没有更多数据了...'
-              this.noMoreProducts = true
-            } else {
-              this.products = []
-            }
-          } else {
-            this.getFilesPublisheds(tmppArr, res.data.products, q)
-          }
+          this.getFilesPublisheds(tmppArr, res.data.products, q)
         } else {
           this.loading = false
         }
@@ -362,14 +353,12 @@
         })
         this.loading = false
         if (res.data) {
-          if (this.productPageIndex === 1) {
-            this.products = this.handleProducts(arr, res.data.files)
-            this.productsThumbnails = res.data.files
-          } else {
-            this.products = [...this.products, ...this.handleProducts(arr, res.data.files)]
-            this.productsThumbnails = [...this.productsThumbnails, ...res.data.files]
+          if (arr.length < this.productPageSize) {
+            this.loadingText = '没有更多数据了...'
+            this.noMoreProducts = true
           }
-          this.getEnterpriseDocument()
+          this.products = this.productPageIndex === 1 ? this.handleProducts(arr, res.data.files) : [...this.products, ...this.handleProducts(arr, res.data.files)]
+          this.productsThumbnails = this.productPageIndex === 1 ? res.data.files : [...this.productsThumbnails, ...res.data.files]
         }
       },
       goBack () {
@@ -624,10 +613,8 @@
   @import '../../styles/mixin';
 
   .container {
-    position: absolute;
-    top: 0;
     overflow-y: scroll;
-    padding-bottom: 1px; // 与容器底部留1px空隙，避免手机QQ滑动到底部之后不能滑动的bug
-    background-color: $tenth-grey;
+    padding-bottom: 1px; // 避免安卓手机QQ浏览器，滑动到底部后第一次不能直接上滑的bug
+    -webkit-overflow-scrolling: touch;
   }
 </style>
