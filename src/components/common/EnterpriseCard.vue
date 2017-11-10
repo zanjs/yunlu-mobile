@@ -7,14 +7,15 @@
       </div>
       <div class="content">
         <p v-if="store && store.company" class="font-17 ellipsis">{{store.company}}</p>
-        <p v-else class="font-17 ellipsis">&nbsp;</p>
+        <p v-else class="font-17 ellipsis empty-name"></p>
         <div class="icon-container">
-          <template v-if="store && store.state && store.state !== 'approved'">
+          <div v-if="!store || !store.state" class="svg"></div>
+          <template v-else-if="store && store.state && store.state !== 'approved'">
             <svg class="icon large" aria-hidden="true">
               <use xlink:href="#icon-zhenshi3"></use>
             </svg>
           </template>
-          <template v-if="store && store.state && store.state === 'approved'">
+          <template v-else-if="store && store.state && store.state === 'approved'">
             <svg class="icon large" aria-hidden="true">
               <use xlink:href="#icon-zhenshi4"></use>
             </svg>
@@ -106,7 +107,7 @@
         @include px2rem(width, 180px);
         @include px2rem(height, 180px);
         div {
-          background-color: $sixth-grey;
+          background-color: $ninth-grey;
         }
         div, img {
           @include px2rem(max-width, 180px);
@@ -122,6 +123,11 @@
         @include px2rem(width, 448px);
         @include px2rem(height, 185px);
         flex-direction: column;
+        .empty-name {
+          @include px2rem(width, 400px);
+          @include px2rem(height, 40px);
+          background-color: $ninth-grey;
+        }
         .icon-container {
           display: flex;
           align-items: center;
@@ -129,6 +135,14 @@
           .large {
             @include font-dpr(23px);
           }
+        }
+        .svg {
+          display: block;
+          @include px2rem(height, 50px);
+          @include px2rem(width, 50px);
+          @include px2rem(border-radius, 25px);
+          @include pm2rem(margin, 20px, 18px, 30px, 0px);
+          background-color: $ninth-grey;
         }
         svg {
           @include pm2rem(margin, 20px, 18px, 30px, 0px);

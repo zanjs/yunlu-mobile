@@ -1,6 +1,18 @@
 <template>
   <section>
-    <div class="list-container white-bg">
+    <div v-if="loading && store.length === 0" class="list-container">
+      <div v-for="(item, index) in num" :key="index" class="flex-between item-loading primary-text">
+        <div class="img-loading"></div>
+        <div class="flex-between flex-1 content-loading">
+          <div class="name-loading"></div>
+          <div class="service-loading">
+            <div class="type-loading"></div>
+            <div class="address-loading"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="list-container white-bg">
       <a
         v-for="(item, index) in store"
         :key="index"
@@ -42,7 +54,7 @@
       return {
       }
     },
-    props: ['store'],
+    props: ['store', 'loading', 'num'],
     methods: {
       handleClick (item) {
         this.$emit('click', item)
@@ -74,7 +86,7 @@
           @include px2rem(margin-bottom, 22px);
         }
         div {
-          display: inherit
+          display: inherit;
         }
       }
     }
@@ -105,6 +117,44 @@
       @include px2rem(width, 118px);
       @include px2rem(height, 118px);
       @include px2rem(margin-right, 30px);
+    }
+    .item-loading {
+      align-items: center;
+      @include pm2rem(padding, 10px, 20px, 10px, 20px);
+      background-color: $white;
+      border-bottom: 1px solid $third-grey;
+      .img-loading {
+        @include px2rem(width, 118px);
+        @include px2rem(height, 118px);
+        @include px2rem(margin-right, 30px);
+        background-color: $ninth-grey;
+      }
+      .content-loading {
+        flex-direction: column;
+        height: inherit;
+        .name-loading {
+          @include px2rem(width, 460px);
+          @include px2rem(height, 36px);
+          @include px2rem(margin-bottom, 22px);
+          background-color: $ninth-grey;
+        }
+        .service-loading {
+          @include px2rem(width, 400px);
+          @include px2rem(height, 24px);
+          display: flex;
+          justify-content: space-between;
+          .type-loading {
+            @include px2rem(width, 120px);
+            height: inherit;
+            background-color: $ninth-grey;
+          }
+          .address-loading {
+            @include px2rem(width, 140px);
+            height: inherit;
+            background-color: $ninth-grey;
+          }
+        }
+      }
     }
   }
 </style>
