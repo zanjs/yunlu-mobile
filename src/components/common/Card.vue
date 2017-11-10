@@ -9,9 +9,9 @@
         class="avatar-loading">
       </div>
       <div class="content">
-        <p v-if="store && store.name">{{store.name}}</p>
-        <p v-else>&nbsp;</p>
-        <div v-if="!store || !store.name" class="level">&nbsp;</div>
+        <p class="font-17 ellipsis" v-if="store && store.name">{{store.name}}</p>
+        <p v-else class="empty-name">&nbsp;</p>
+        <div v-if="!store || !store.name" class="svg">&nbsp;</div>
         <template v-else-if="store && store.mobiles && store.mobiles.length > 0">
           <div class="level">
             <svg class="icon" aria-hidden="true">
@@ -103,12 +103,22 @@
       .avatar-loading {
         @include px2rem(width, 156px);
         @include px2rem(height, 156px);
-        background-color: $sixth-grey;
+        background-color: $ninth-grey;
       }
       .content {
         @include px2rem(margin-left, 26px);
-        p {
-          @include font-dpr(17px);
+        .empty-name {
+          @include px2rem(width, 400px);
+          @include px2rem(height, 40px);
+          background-color: $ninth-grey;
+        }
+        .svg {
+          display: block;
+          @include px2rem(height, 50px);
+          @include px2rem(width, 50px);
+          @include px2rem(border-radius, 25px);
+          @include pm2rem(margin, 20px, 18px, 30px, 0px);
+          background-color: $ninth-grey;
         }
         .level {
           @include px2rem(margin-top, 20px);
