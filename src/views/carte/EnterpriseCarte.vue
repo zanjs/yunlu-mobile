@@ -38,7 +38,7 @@
                   <div>
                     <transition
                       name="fade"
-                      :appear="true"
+                      :appear="false"
                       mode="out-in">
                       <product-list-mode
                         v-if="showList"
