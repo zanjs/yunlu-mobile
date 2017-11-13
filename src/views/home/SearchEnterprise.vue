@@ -28,7 +28,6 @@
           :handler="loadEnterpriseBottom"
           :handle-on-mount="false"
           :should-handle="!loading"
-          :threshold="0.1"
           scroll-container="searchEnterprise">
           <div class="loading">
             <mt-spinner
@@ -61,7 +60,6 @@
   import Search from '../../components/common/Search'
   import List from '../../components/enterprise/List'
   import BackToTop from '../../components/common/BackToTop'
-  import { mapGetters } from 'vuex'
   import { getStore, removeStore, showBack, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
@@ -82,7 +80,8 @@
         loadingText: '加载中...',
         noMoreData: false,
         scrollHeight: '15rem',
-        scrollActive: false
+        scrollActive: false,
+        allEnterprises: []
       }
     },
     components: {
@@ -112,7 +111,7 @@
       },
       async getEnterprises (q = '') {
         this.loading = true
-        let {state, res} = await requestFn({
+        let {res} = await requestFn({
           url: '/enterprises',
           params: {
             page: this.enterprisePageIndex,
@@ -121,7 +120,6 @@
             exclude_service_ids: this.exclude_service_ids
           }
         })
-        this.loading = false
         if (res.data) {
           this.hasSearch = q !== ''
           if (res.data.enterprises.length < this.enterprisePageSize) {
@@ -130,11 +128,12 @@
           }
           if (this.enterprisePageIndex === 1) {
             setScrollTop(0, this.$refs.searchEnterprise)
-            state.allEnterprises = res.data.enterprises
+            this.allEnterprises = res.data.enterprises
           } else {
-            state.allEnterprises = [...state.allEnterprises, ...res.data.enterprises]
+            this.allEnterprises = [...this.allEnterprises, ...res.data.enterprises]
           }
         }
+        this.loading = false
       },
       resetSearchBar () {
         this.searchParams = ''
@@ -233,12 +232,10 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'SearchEnterprise', value: this.$refs.searchEnterprise.scrollTop})
+      if (to.name === 'See') {
+        this.allEnterprises = []
+      }
       next()
-    },
-    computed: {
-      ...mapGetters([
-        'allEnterprises'
-      ])
     }
   }
 </script>
@@ -250,7 +247,7 @@
     position: relative;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    @include px2rem(padding-top, 176px);
+    @include pm2rem(margin, 176px, 0px, 0px, 0px);
     .empty-products {
       text-align: center;
       .img-container {

@@ -365,6 +365,8 @@
     @include pm2rem(padding, 28px, 26px, 100px, 26px);
     border-top: 4px solid $primary-grey;
     flex-wrap: wrap;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     .card {
       position: relative;
       @include px2rem(border-radius, 10px);
