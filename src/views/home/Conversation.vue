@@ -372,6 +372,8 @@
     }
   }
   .list-container {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     @include pm2rem(padding, 176px, 0px, 98px, 0px);
   }
   .option-bar {
