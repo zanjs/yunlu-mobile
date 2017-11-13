@@ -538,6 +538,8 @@
     @include pm2rem(padding, 0px, 0px, 98px, 0px);
   }
   .list-container {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     @include pm2rem(padding, 88px, 0px, 0px, 0px);
     background-color: $primary-grey;
   }

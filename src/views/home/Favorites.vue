@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="container full-width"
-    ref="favorites"
-    :style="{height: scrollHeight}">
+  <section class="container full-width">
     <common-header
       :title="header"
       :right-text="rightBtnText"
@@ -39,6 +36,8 @@
       </div>
       <div
         class='nav-bar-container full-width'
+        ref="favorites"
+        :style="{height: scrollHeight}"
         :class="{'nav-bar-bottom': inOperation}">
         <transition name="fade" :appear="true" mode="out-in">
           <template v-if="activeIndex === 1">
@@ -57,12 +56,11 @@
                 :handler="loadAProductsBottom"
                 :handle-on-mount="false"
                 :should-handle="!productLoading && !inOperation"
+                :threshold="0.1"
                 scroll-container="favorites">
-                <div
-                  v-if="productLoading || noMoreProducts"
-                  class="loading">
+                <div class="loading">
                   <mt-spinner
-                    v-if="productLoading"
+                    v-show="!noMoreProducts"
                     type="snake"
                     :size="18">
                   </mt-spinner>
@@ -95,12 +93,11 @@
                 key="favoriteOrganizations"
                 :handler="loadAOrganizationsBottom"
                 :handle-on-mount="false"
+                :threshold="0.1"
                 :should-handle="!organizationLoading && !inOperation">
-                <div
-                  v-if="organizationLoading || noMoreOrganizations"
-                  class="loading">
+                <div class="loading">
                   <mt-spinner
-                    v-if="organizationLoading"
+                    v-show="!noMoreOrganizations"
                     type="snake"
                     :size="18">
                   </mt-spinner>
@@ -133,11 +130,11 @@
                 key="favoritePerson"
                 :handler="loadAPersonBottom"
                 :handle-on-mount="false"
+                :threshold="0.1"
                 :should-handle="!personLoading && !inOperation">
-                <div
-                  v-show="personLoading"
-                  class="loading">
+                <div class="loading">
                   <mt-spinner
+                    v-show="!noMorePeople"
                     type="snake"
                     :size="18">
                   </mt-spinner>
@@ -290,6 +287,16 @@
         this.getFavorites(this.searchParams, this.activeIndex, 1, 20, this.selectedType)
         document.activeElement.blur()
       },
+      handlePageSize (type) {
+        switch (type) {
+          case 'Product':
+            return this.productPageSize
+          case 'Organization':
+            return this.organizationPageSize
+          case 'User':
+            return this.personPageSize
+        }
+      },
       getFavorites (q = this.searchParams, activeIndex = 1, pageIndex = 1, pageSize = 20, type = 'Product') {
         this.handleLoading(activeIndex, true)
         this.$store.dispatch('commonAction', {
@@ -305,13 +312,9 @@
           target: this,
           resolve: (state, res) => {
             this.hasSearch = q !== ''
-            if (res.data.favorites.length === 0) {
-              if (pageIndex !== 1) {
-                this.handleNoMoreDataTips(activeIndex)
-              } else {
-                this.setFavoritesData(activeIndex, [], 1)
-              }
+            if (res.data.favorites.length < this.handlePageSize(type)) {
               this.handleLoading(activeIndex, false)
+              this.handleNoMoreDataTips(activeIndex)
             } else {
               this.setFavoritesData(activeIndex, res.data.favorites, pageIndex)
             }
@@ -519,6 +522,7 @@
         this.checkAll = this.hasChecked = !bool
       },
       loadAProductsBottom () {
+        console.log('123')
         if (!this.noMoreProducts) {
           this.productPageIndex += 1
           this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
@@ -572,7 +576,7 @@
     mounted () {
       let appHeight = document.getElementById('app').offsetHeight
       let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
-      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+      let divHeight = ((appHeight - 133) / parseFloat(rootFontSize + '')).toFixed(2)
       this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
@@ -614,28 +618,9 @@
   @import "../../styles/mixin";
 
   .container {
-    position: absolute;
-    top: 0;
     overflow-y: scroll;
     padding-bottom: 1px;
-    background-color: $tenth-grey;
-  }
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
+    -webkit-overflow-scrolling: touch;
   }
   .search-bar {
     position: fixed;
@@ -729,13 +714,13 @@
     }
   }
   .nav-bar-container {
+    overflow-y: scroll;
     @include px2rem(padding-top, 266px);
-    @include px2rem(margin-bottom, 10px);
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: flex;
       align-items: center;
       justify-content: center;
