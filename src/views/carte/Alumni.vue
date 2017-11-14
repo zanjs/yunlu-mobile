@@ -213,7 +213,7 @@
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
   import EnterpriseList from '../../components/common/EnterpriseList'
-  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
   import PopDialog from '../../components/common/PopDialog'
@@ -549,8 +549,7 @@
         this.$router.push({name: 'Report', query: {resourceId: this.teams.id, resourceClass: 'product'}})
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       tabClick (val) {
         this.activeIndex = val
@@ -637,8 +636,7 @@
         switch (item.type) {
           case 'chat':
             if (!this.hasLogin) {
-              setStore('beforeLogin', 'true')
-              this.$router.push({name: 'Login'})
+              this.goLogin()
             } else {
               this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.value}})
             }
@@ -704,8 +702,7 @@
       },
       favoriteAction () {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest()
         } else {
@@ -805,13 +802,18 @@
         this.hasLogin = !!getStore('user')
         this.getEnterpriseDetail()
         this.handleSearchBar()
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
+        }
       } else {
         setScrollTop(this.$store.state.scrollMap.Alumni || 0, this.$refs.alumni)
       }
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Alumni', value: this.$refs.alumni.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Class' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Class' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
         this.showGoTopBtn = false
         this.showSearchBar = false
         this.activeIndex = 0

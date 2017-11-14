@@ -68,7 +68,6 @@
           },
           target: this,
           resolve: (state, res) => {
-            setStore('afterRegistration', 'true')
             this.autoLogin()
           },
           reject: () => {
@@ -85,7 +84,8 @@
           target: this,
           resolve: (state, res) => {
             setStore('signature', res.data)
-            this.$router.go(-3)
+            setStore('shareIntegral', 'true')
+            this.$router.go(getStore('shareRegist') ? -3 : -4)
           },
           reject: () => {
           }

@@ -51,7 +51,6 @@
           'SetNewPassword',
           'RegisterNext',
           'BeforeRegister',
-          'SetPassword',
           'Maps',
           'OrderDetail',
           'Help',
@@ -211,7 +210,7 @@
       },
       goRegist () {
         this.closeIntergralDialog()
-        setStore('shareIntegral', 'true')
+        setStore('shareRegist', 'true')
         this.$router.push({name: 'BeforeRegister'})
       },
       closeIntergralDialog () {
