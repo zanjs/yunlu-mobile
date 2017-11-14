@@ -5,11 +5,28 @@
         <router-view :key="$route.path"></router-view>
       </keep-alive>
     </transition>
+    <integral-dialog
+      v-show="registModal"
+      @login="goLogin"
+      @regist="goRegist"
+      @close="closeIntergralDialog">
+    </integral-dialog>
+    <regist-dialog
+      v-show="registSuccessModal"
+      :num="num"
+      :money="money"
+      @help="help"
+      @view-integral="viewIntegral"
+      @close="closeRegistDialog">
+    </regist-dialog>
   </div>
 </template>
 
 <script>
-  import { getStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
+  import { getStore, setStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
+  import IntegralDialog from './components/common/IntegralDialog'
+  import RegistDialog from './components/common/RegistDialog'
+  import { mapGetters } from 'vuex'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
@@ -47,8 +64,14 @@
           'ProductDetail',
           'ShoppingCart',
           'InformationFolders'
-        ]
+        ],
+        num: getStore('shortUuid') ? 600 : 1000,
+        money: getStore('shortUuid') ? 6 : 10
       }
+    },
+    components: {
+      IntegralDialog,
+      RegistDialog
     },
     methods: {
       beforeInit () {
@@ -180,10 +203,43 @@
           // 打开被关闭的会话后，要更细被关闭的会话列表
           this.getClosedConversationList()
         }
+      },
+      goLogin () {
+        this.closeIntergralDialog()
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      goRegist () {
+        this.closeIntergralDialog()
+        setStore('shareIntegral', 'true')
+        this.$router.push({name: 'BeforeRegister'})
+      },
+      closeIntergralDialog () {
+        this.$store.dispatch('switchIntegralDialog', {status: false})
+      },
+      closeRegistDialog () {
+        this.$store.dispatch('switchRegistDialog', {status: false})
+      },
+      help () {
+        this.closeRegistDialog()
+        this.$router.push({name: 'Help'})
+      },
+      viewIntegral () {
+        this.closeRegistDialog()
+        this.$router.push({name: 'Download'})
+      },
+      updateIntegral () {
+
       }
     },
     updated () {
       this.beforeInit()
+    },
+    computed: {
+      ...mapGetters([
+        'registModal',
+        'registSuccessModal'
+      ])
     }
   }
 </script>
