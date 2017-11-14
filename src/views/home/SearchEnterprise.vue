@@ -247,6 +247,8 @@
     position: relative;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    margin-bottom: 1px;
     @include pm2rem(padding, 176px, 0px, 0px, 0px);
     .empty-products {
       text-align: center;
