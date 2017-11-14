@@ -70,7 +70,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getStore, removeAllStore, removeStore, removeLocalStore } from '../../config/mUtils'
+  import { getStore, removeAllStore, removeStore, setLocalStore, removeLocalStore } from '../../config/mUtils'
   export default {
     name: 'Mine',
     data () {
@@ -90,6 +90,7 @@
       logOut () {
         removeAllStore()
         removeLocalStore()
+        setLocalStore('weixinLogin', true)
         this.$router.replace({name: 'See'})
       },
       contactUs () {
