@@ -98,7 +98,7 @@
       </div>
     </div>
     <favorite-btn
-      :show="teams"
+      :show="!!teams"
       :single="!showGoTopBtn"
       :text="favoratesText"
       @click="favoriteAction()">
@@ -452,7 +452,7 @@
       },
       goLogin () {
         setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       showPopDialog (type, name, value) {
         this.message = {
@@ -585,13 +585,16 @@
         this.token = getStore('user') ? getStore('user').authentication_token : null
         this.getTeams(this.id)
         this.handleSearchBar()
+        if (this.$store.state.fromLogin) {
+          this.$store.dispatch('switchRegistDialog', {status: true})
+        }
       } else {
         setScrollTop(this.$store.state.scrollMap.EnterpriseCarte || 0, this.$refs.enterpriseCarte)
       }
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
         this.showGoTopBtn = false
         this.showSearchBar = false
         this.productPageIndex = 1
