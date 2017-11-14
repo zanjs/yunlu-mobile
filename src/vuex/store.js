@@ -44,7 +44,7 @@ const state = {
   fromLogin: false,
   scrollMap: {}, // 页面滚动高度集合
   registModal: false, // 提示注册的对话框
-  registSuccessModal: true // 注册成功奖励积分的对话框
+  registSuccessModal: false // 注册成功奖励积分的对话框
 }
 
 const getters = {
