@@ -987,9 +987,17 @@
       },
       goEnterprise () {
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
+      },
+      handleIntegralModal () {
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
+        }
       }
     },
     mounted () {
+      this.handleIntegralModal()
       this.stopTouchMove()
       this.getProductDetail(this.id)
     }

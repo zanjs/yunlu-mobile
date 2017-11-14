@@ -106,10 +106,7 @@
     },
     methods: {
       goBack (social = false, provider = '') {
-        if (getStore('afterRegistration')) {
-          removeStore('afterRegistration') // 注册成功设置完密码后，登录进入首页(优先级最高)
-          this.$router.replace({name: 'See'})
-        } else if (getStore('beforeLogin')) {
+        if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
           this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
@@ -212,6 +209,7 @@
         this.showDialog = false
       },
       goRegister () {
+        removeStore('shareRegist') // 在注册积分模态窗中点击注册，返回原页面，再点击登录，从登录页面点击注册，并注册成功，之后返回的页面层级比直接跳转注册页面返回的页面层级多一层。
         this.$router.push({name: 'BeforeRegister'})
       },
       forgetPassword () {

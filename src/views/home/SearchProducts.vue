@@ -314,6 +314,7 @@
   .container {
     overflow-y: scroll;
     padding-bottom: 1px;
+    box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
   }
   .search-input {

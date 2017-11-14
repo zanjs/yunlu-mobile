@@ -156,7 +156,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
-  import { getStore, setStore, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   import PopDialog from '../../components/common/PopDialog'
   import SpaceFolders from '../../components/common/SpaceFolers'
@@ -392,8 +392,7 @@
         }
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       shouldLogin () {
         if (!this.token) {
@@ -437,8 +436,7 @@
       },
       favoriteAction () {
         if (!this.hasLogin) {
-          setStore('beforeLogin', 'true')
-          this.$router.push({name: 'Login'})
+          this.goLogin()
         } else if (!this.hasAddFavorites) {
           this.favoriteRequest(typeof this.userCard.id === 'number' ? this.userCard.user_id : this.userCard.id)
         } else {
@@ -532,6 +530,11 @@
       this.token = getStore('user') ? getStore('user').authentication_token : null
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
         setScrollTop(0, this.$refs.personCarte)
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
+        }
       } else {
         setScrollTop(this.$store.state.scrollMap.PersonCarte || 0, this.$refs.personCarte)
       }
@@ -539,7 +542,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'PersonCarte', value: this.$refs.personCarte.scrollTop})
-      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders' && to.name !== 'Photos' && to.name !== 'Maps' && to.name !== 'Login') {
+      if (to.name !== 'Chat' && to.name !== 'Report' && to.name !== 'Folders' && to.name !== 'Photos' && to.name !== 'Maps' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help') {
         this.pageIndex = 1
         this.currentIndex = 1
         this.targetSpaceId = ''

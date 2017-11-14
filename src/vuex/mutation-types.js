@@ -30,3 +30,7 @@ export const HANDLE_DELETE_CONVERSATIONS = 'HANDLE_DELETE_CONVERSATIONS'
 export const ROUTE_CHANGE = 'ROUTE_CHANGE'
 // 从列表页前进时，需保存列表滚动高度(每个列表页的滚动容器是自定义的，因此不能用window的滚动高度代替)
 export const SAVE_SCROLL = 'SAVE_SCROLL'
+// 第三方分享进行交互操作，弹出需要注册或登录的对话框
+export const SWITCH_INTEGRAL_DIALOG = 'SWITCH_INTEGRAL_DIALOG'
+// 注册成功，领取积分弹窗
+export const SWITCH_REGIST_DIALOG = 'SWITCH_REGIST_DIALOG'
