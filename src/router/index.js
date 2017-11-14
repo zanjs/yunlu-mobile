@@ -26,7 +26,6 @@ const InformationFolders = resolve => require(['../views/carte/InformationFolder
 const EmptyEnterpriseCarte = resolve => require(['../views/carte/EmptyEnterpriseCarte'], resolve)
 const ReportExpired = resolve => require(['../views/report/ReportExpired'], resolve)
 const BeforeRegister = resolve => require(['../views/user/BeforeRegister'], resolve)
-const SetPassword = resolve => require(['../views/user/SetPassword'], resolve)
 const Chat = resolve => require(['../views/chat/Chat'], resolve)
 const Maps = resolve => require(['../views/map/Maps'], resolve)
 const Favorites = resolve => require(['../views/home/Favorites'], resolve)
@@ -203,11 +202,6 @@ export default new Router({
       path: '/beforeregister',
       name: 'BeforeRegister',
       component: BeforeRegister,
-      meta: { keepAlive: false }
-    }, {
-      path: '/setpassword',
-      name: 'SetPassword',
-      component: SetPassword,
       meta: { keepAlive: false }
     }, {
       path: '/chat',

@@ -139,7 +139,7 @@
   import ProductThumbnailMode from '../../components/product/Thumbnail'
   import ProductListMode from '../../components/product/List'
   import InformationList from '../../components/common/InformationList'
-  import { getStore, setStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, showBack, removeStore, setScrollTop } from '../../config/mUtils'
   import PopDialog from '../../components/common/PopDialog'
   import Search from '../../components/common/Search'
   import Order from '../../components/common/Order'
@@ -451,7 +451,6 @@
         }
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
         this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       showPopDialog (type, name, value) {
@@ -585,8 +584,10 @@
         this.token = getStore('user') ? getStore('user').authentication_token : null
         this.getTeams(this.id)
         this.handleSearchBar()
-        if (this.$store.state.fromLogin) {
-          this.$store.dispatch('switchRegistDialog', {status: true})
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
         }
       } else {
         setScrollTop(this.$store.state.scrollMap.EnterpriseCarte || 0, this.$refs.enterpriseCarte)
@@ -594,7 +595,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'EnterpriseCarte', value: this.$refs.enterpriseCarte.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
         this.showGoTopBtn = false
         this.showSearchBar = false
         this.productPageIndex = 1
