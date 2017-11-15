@@ -120,7 +120,7 @@ export const setScrollTop = (scrollTop = 0, dom) => {
 /**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点
  */
-export const showBack = (callbackFn, height, dom) => {
+export const showBack = (callbackFn, height, dom, delay = 200, duration = 200) => {
   let requestFram
   let oldScrollTop
   // 判断是否达到目标点
@@ -146,9 +146,9 @@ export const showBack = (callbackFn, height, dom) => {
   }
 
   if (dom) {
-    dom.addEventListener('scroll', throttle(showBackFun, 200, 200))
-    dom.addEventListener('touchmove', throttle(showBackFun, 200, 200))
-    dom.addEventListener('touchend', throttle(showBackFun, 200, 200))
+    dom.addEventListener('scroll', throttle(showBackFun, delay, duration))
+    dom.addEventListener('touchmove', throttle(showBackFun, delay, duration))
+    dom.addEventListener('touchend', throttle(showBackFun, delay, duration))
   }
 }
 

@@ -40,7 +40,7 @@
     line-height: normal;
     align-items: center;
     justify-content: space-between;
-    z-index: 2;
+    z-index: 3;
     background: url("../../assets/confirmQQ.png") no-repeat;
     background-size: cover;
     .icon-box {
