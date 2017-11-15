@@ -52,6 +52,7 @@
           'RegisterNext',
           'BeforeRegister',
           'Maps',
+          'NewMall',
           'OrderDetail',
           'Help',
           'HelpDetail',
