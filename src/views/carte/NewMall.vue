@@ -1,10 +1,52 @@
 <template>
   <section class="full-width">
-    <div class="absolute-horizontal top-bg">
-
-    </div>
-    <mall-header>
+    <div class="absolute-horizontal top-bg"></div>
+    <mall-header class="mall-header">
     </mall-header>
+    <div class="full-width fixed-nav-bar" :class="{'nav-show': hideIcon}">
+      <div class="flex nav-bars">
+        <a class="bar" :class="{'selected': activeIndex === 0}" @click="selectTab(0)">
+          <div class="icon-box nav-icon">
+            <i class="iconfont icon-shangjia"></i>
+            <span>全部产品</span>
+          </div>
+          <div class="icon-box nav-text">
+            <span>商城首页</span>
+          </div>
+          <div class="border"></div>
+        </a>
+        <a class="bar" :class="{'selected': activeIndex === 1}" @click="selectTab(1)">
+          <div class="icon-box nav-icon">
+            <i class="iconfont icon-shangjia"></i>
+            <span>全部产品</span>
+          </div>
+          <div class="icon-box nav-text">
+            <span>全部产品</span>
+          </div>
+          <div class="border"></div>
+        </a>
+        <a class="bar" :class="{'selected': activeIndex === 2}" @click="selectTab(2)">
+          <div class="icon-box nav-icon">
+            <i class="iconfont icon-shangjia"></i>
+            <span>企业会员</span>
+          </div>
+          <div class="icon-box nav-text">
+            <span>企业会员</span>
+          </div>
+          <div class="border"></div>
+        </a>
+        <a class="bar" :class="{'selected': activeIndex === 3}" @click="selectTab(3)">
+          <div class="icon-box nav-icon">
+            <i class="iconfont icon-shangjia"></i>
+            <span>个人会员</span>
+          </div>
+          <div class="icon-box nav-text">
+            <span>个人会员</span>
+          </div>
+          <div class="border"></div>
+        </a>
+      </div>
+    </div>
     <div class="container" ref="newMallContainer" :style="{height: scrollHeight}">
       <div class="flex card">
         <div class="flex content">
@@ -99,7 +141,7 @@
           showBack((status) => {
             this.hideIcon = status
             this.scrollActive = true // 滚动监听被激活，不需要再次监听
-          }, this.height, this.$refs.newMallContainer)
+          }, this.height, this.$refs.newMallContainer, 0, 0)
         }
       },
       handleScrollHeight () {
@@ -124,11 +166,24 @@
     overflow-y: scroll;
     padding-bottom: 1px; // 避免安卓手机QQ浏览器，滑动到底部后第一次不能直接上滑的bug
     -webkit-overflow-scrolling: touch;
+    z-index: 2;
   }
   .top-bg {
     @include px2rem(height, 210px);
     width: 100%;
     max-width: 540px;
+    z-index: 2;
+  }
+  .mall-header {
+    z-index: 3;
+  }
+  .fixed-nav-bar {
+    position: fixed;
+    @include px2rem(top, 70px);
+    @include px2rem(height, 110px);
+    overflow: hidden;
+    z-index: 1;
+    display: none;
   }
   .card {
     @include px2rem(padding-top, 100px);
@@ -136,6 +191,7 @@
     position: relative;
     background: url("../../assets/confirmQQ.png") no-repeat;
     background-size: cover;
+    z-index: 2;
     .content {
       flex: 1;
       @include px2rem(height, 110px);
@@ -176,10 +232,24 @@
     overflow: hidden;
     @include px2rem(height, 110px);
     position: relative;
+    z-index: 2;
   }
   .nav-hide {
     position: fixed;
     @include px2rem(top, 70px);
+    z-index: 1;
+    .nav-bars {
+      transform: translateY(-100%);
+    }
+    .nav-icon {
+      transform: translateY(-100%);
+    }
+    .nav-text {
+      transform: translateY(-100%);
+    }
+  }
+  .nav-show {
+    display: block;
     .nav-icon {
       transform: translateY(-100%);
     }
@@ -238,6 +308,7 @@
     }
   }
   .tabs {
+    z-index: 2;
     p {
       @include px2rem(height, 88px);
     }
