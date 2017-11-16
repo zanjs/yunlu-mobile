@@ -2,7 +2,9 @@
   <section class="full-width">
     <search-header
       @back="goBack()"
-      @search="handleSearchBtn(queryParams)">
+      @search="handleSearchBtn(queryParams)"
+      :show-cancel="hasSearch"
+      @cancel="cancelSearch()">
       <input
         slot="input"
         type="search"
@@ -10,7 +12,7 @@
         @keyup.enter.prevent="handleSearchBtn(queryParams)"
         :placeholder="placeholder">
     </search-header>
-    <section class="menu-container">
+    <section class="full-width absolute-horizontal menu-container">
       <section class="menu-left" id="wrapper-menu" ref="wrapperMenu">
         <ul v-if="loading || menuList.length === 0">
           <li
@@ -67,7 +69,8 @@
               <a
                 v-for="(product, indexI) in item.children"
                 :key="indexI"
-                class="list-item">
+                class="list-item"
+                @click="goSingleCategory(product.id)">
                 <img :src="product.thumb">
                 <p class="second-text font-14 ellipsis">{{product.name}}</p>
               </a>
@@ -75,6 +78,17 @@
           </li>
         </ul>
       </section>
+    </section>
+    <section
+      v-show="hasSearch"
+      class="full-width absolute-horizontal search-list">
+      <ul>
+        <li
+          v-for="(item, index) in searchResults"
+          :key="index">
+          <a class="flex primary-text font-16" @click="goSingleCategory(item.id)">{{item.name}}</a>
+        </li>
+      </ul>
     </section>
   </section>
 </template>
@@ -95,7 +109,9 @@
         perLoadProductLength: 9,
         productListTop: [], // 分类高度的集合
         menuIndexChange: false,
-        menuScroll: null
+        menuScroll: null,
+        searchResults: [],
+        hasSearch: false
       }
     },
     components: {
@@ -103,7 +119,8 @@
     },
     methods: {
       handleSearchBtn (queryParams) {
-        console.log(queryParams)
+        this.hasSearch = true
+        this.searchCategories(queryParams)
       },
       goBack () {
         if (getStore('Categories_goHome')) {
@@ -112,6 +129,9 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      goSingleCategory (id) {
+        this.$router.push({name: 'CategoryProducts', params: {id: id}})
       },
       getCategories () {
         this.$store.dispatch('commonAction', {
@@ -139,15 +159,15 @@
           },
           target: this,
           resolve: (state, res) => {
-            this.menuList = res.data.categories
-            this.loading = false
-            this.$nextTick(() => {
-              this.getProductListHeight()
-            })
+            this.searchResults = res.data.categories
           },
           reject: () => {
           }
         })
+      },
+      cancelSearch () {
+        this.queryParams = ''
+        this.hasSearch = false
       },
       getProductListHeight () {
         let listContainer = this.$refs.productCategories
@@ -206,13 +226,10 @@
   @import "../../styles/mixin";
 
   .menu-container {
-    display: flex;
     @include px2rem(padding-top, 88px);
     overflow-y: hidden;
-    position: absolute;
     box-sizing: border-box;
-    right: 0;
-    left: 0;
+    display: flex;
     height: 100%;
     .menu-left {
       @include px2rem(width, 200px);
@@ -303,6 +320,24 @@
           }
         }
       }
+    }
+  }
+  .search-list {
+    height: 100%;
+    @include px2rem(padding-top, 88px);
+    ul {
+      background-color: $white;
+    }
+    a {
+      justify-content: flex-start;
+      border-bottom: 1px solid $second-grey;
+      @include pm2rem(padding, 0px, 30px, 0px, 30px);
+      box-sizing: border-box;
+      line-height: normal;
+      @include px2rem(height, 96px);
+    }
+    a:active {
+      background-color: rgba(239, 234, 234, .5);
     }
   }
 </style>

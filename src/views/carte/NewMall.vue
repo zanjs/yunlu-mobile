@@ -1,7 +1,8 @@
 <template>
   <section class="full-width">
     <div class="absolute-horizontal top-bg"></div>
-    <mall-header class="mall-header"
+    <mall-header
+      class="mall-header"
       @back="goBack()"
       @search="handleSearchBtn(queryParams)"
       @click-categories="goCategories()"
@@ -131,7 +132,7 @@
 <script>
   import MallHeader from '../../components/header/MallHeader'
   import BackToTop from '../../components/common/BackToTop'
-  import { showBack, setScrollTop } from '../../config/mUtils'
+  import { showBack, getStore, removeStore, setScrollTop } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -173,7 +174,12 @@
         setScrollTop(scroll, this.$refs.newMallContainer)
       },
       goBack () {
-        this.$router.go(-1)
+        if (getStore('NewMall_goHome')) {
+          removeStore('NewMall_goHome')
+          this.$router.push({name: 'See'})
+        } else {
+          this.$router.go(-1)
+        }
       },
       handleSearchBtn (queryParams) {
         console.log(queryParams)
