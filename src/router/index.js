@@ -45,6 +45,7 @@ const OrderDetail = resolve => require(['../views/home/OrderDetail'], resolve)
 const Trace = resolve => require(['../views/products/Trace'], resolve)
 const Address = resolve => require(['../views/products/Address'], resolve)
 const Pay = resolve => require(['../views/products/Pay'], resolve)
+const Categories = resolve => require(['../views/products/Categories'], resolve)
 
 Vue.use(Router)
 
@@ -296,6 +297,11 @@ export default new Router({
       path: '/pay',
       name: 'Pay',
       component: Pay,
+      meta: { keepAlive: false }
+    }, {
+      path: '/categories',
+      name: 'Categories',
+      component: Categories,
       meta: { keepAlive: false }
     }
   ],

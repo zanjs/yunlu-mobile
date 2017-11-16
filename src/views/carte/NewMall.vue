@@ -1,7 +1,17 @@
 <template>
   <section class="full-width">
     <div class="absolute-horizontal top-bg"></div>
-    <mall-header class="mall-header">
+    <mall-header class="mall-header"
+      @back="goBack()"
+      @search="handleSearchBtn(queryParams)"
+      @click-categories="goCategories()"
+      @report="goReport()">
+      <input
+        slot="input"
+        type="search"
+        v-model="queryParams"
+        @keyup.enter.prevent="handleSearchBtn(queryParams)"
+        :placeholder="placeholder">
     </mall-header>
     <div class="full-width fixed-nav-bar" :class="{'nav-show': hideIcon}">
       <div class="flex nav-bars">
@@ -77,7 +87,7 @@
           </a>
           <a class="bar" :class="{'selected': activeIndex === 1}" @click="selectTab(1)">
             <div class="icon-box nav-icon">
-              <i class="iconfont icon-shangjia"></i>
+              <p>999+</p>
               <span>全部产品</span>
             </div>
             <div class="icon-box nav-text">
@@ -87,7 +97,7 @@
           </a>
           <a class="bar" :class="{'selected': activeIndex === 2}" @click="selectTab(2)">
             <div class="icon-box nav-icon">
-              <i class="iconfont icon-shangjia"></i>
+              <p>598</p>
               <span>企业会员</span>
             </div>
             <div class="icon-box nav-text">
@@ -97,7 +107,7 @@
           </a>
           <a class="bar" :class="{'selected': activeIndex === 3}" @click="selectTab(3)">
             <div class="icon-box nav-icon">
-              <i class="iconfont icon-shangjia"></i>
+              <p>648</p>
               <span>个人会员</span>
             </div>
             <div class="icon-box nav-text">
@@ -113,12 +123,15 @@
         </div>
       </div>
     </div>
+    <back-to-top :show="showGoTopBtn" @click="goScroll(0)">
+    </back-to-top>
   </section>
 </template>
 
 <script>
   import MallHeader from '../../components/header/MallHeader'
-  import { showBack } from '../../config/mUtils'
+  import BackToTop from '../../components/common/BackToTop'
+  import { showBack, setScrollTop } from '../../config/mUtils'
   export default {
     data () {
       return {
@@ -126,11 +139,15 @@
         height: 65,
         scrollActive: false,
         hideIcon: false,
-        scrollHeight: '15rem'
+        scrollHeight: '15rem',
+        showGoTopBtn: false,
+        queryParams: '',
+        placeholder: '请输入关键字'
       }
     },
     components: {
-      MallHeader
+      MallHeader,
+      BackToTop
     },
     methods: {
       selectTab (index) {
@@ -140,6 +157,7 @@
         if (!this.scrollActive) {
           showBack((status) => {
             this.hideIcon = status
+            this.showGoTopBtn = status
             this.scrollActive = true // 滚动监听被激活，不需要再次监听
           }, this.height, this.$refs.newMallContainer, 0, 0)
         }
@@ -150,6 +168,21 @@
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
         this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
         this.height = rootFontSize * 130 / 75
+      },
+      goScroll (scroll) {
+        setScrollTop(scroll, this.$refs.newMallContainer)
+      },
+      goBack () {
+        this.$router.go(-1)
+      },
+      handleSearchBtn (queryParams) {
+        console.log(queryParams)
+      },
+      goCategories () {
+        this.$router.push({name: 'Categories'})
+      },
+      goReport () {
+        console.log('report')
       }
     },
     mounted () {
@@ -182,7 +215,7 @@
     @include px2rem(top, 70px);
     @include px2rem(height, 110px);
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     display: none;
   }
   .card {
@@ -272,6 +305,10 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        p {
+          @include font-dpr(16px);
+          @include line-height(27px);
+        }
         i {
           @include font-dpr(18px);
         }
@@ -303,7 +340,7 @@
         color: #F96B09;
       }
       .border {
-        @include px2rem(height, 8px);
+        @include px2rem(height, 4px);
       }
     }
   }
