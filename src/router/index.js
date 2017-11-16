@@ -46,6 +46,7 @@ const Trace = resolve => require(['../views/products/Trace'], resolve)
 const Address = resolve => require(['../views/products/Address'], resolve)
 const Pay = resolve => require(['../views/products/Pay'], resolve)
 const Categories = resolve => require(['../views/products/Categories'], resolve)
+const CategoryProducts = resolve => require(['../views/products/CategoryProducts'], resolve)
 
 Vue.use(Router)
 
@@ -302,6 +303,12 @@ export default new Router({
       path: '/categories',
       name: 'Categories',
       component: Categories,
+      meta: { keepAlive: false }
+    }, {
+      path: '/category_products/:id',
+      name: 'CategoryProducts',
+      component: CategoryProducts,
+      props: true,
       meta: { keepAlive: false }
     }
   ],
