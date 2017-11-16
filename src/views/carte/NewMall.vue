@@ -1,7 +1,17 @@
 <template>
   <section class="full-width">
     <div class="absolute-horizontal top-bg"></div>
-    <mall-header class="mall-header">
+    <mall-header class="mall-header"
+      @back="goBack()"
+      @search="handleSearchBtn(queryParams)"
+      @click-categories="goCategories()"
+      @report="goReport()">
+      <input
+        slot="input"
+        type="search"
+        v-model="queryParams"
+        @keyup.enter.prevent="handleSearchBtn(queryParams)"
+        :placeholder="placeholder">
     </mall-header>
     <div class="full-width fixed-nav-bar" :class="{'nav-show': hideIcon}">
       <div class="flex nav-bars">
@@ -113,9 +123,7 @@
         </div>
       </div>
     </div>
-    <back-to-top
-      :show="showGoTopBtn"
-      @click="goScroll(0)">
+    <back-to-top :show="showGoTopBtn" @click="goScroll(0)">
     </back-to-top>
   </section>
 </template>
@@ -132,7 +140,9 @@
         scrollActive: false,
         hideIcon: false,
         scrollHeight: '15rem',
-        showGoTopBtn: false
+        showGoTopBtn: false,
+        queryParams: '',
+        placeholder: '请输入关键字'
       }
     },
     components: {
@@ -161,6 +171,18 @@
       },
       goScroll (scroll) {
         setScrollTop(scroll, this.$refs.newMallContainer)
+      },
+      goBack () {
+        this.$router.go(-1)
+      },
+      handleSearchBtn (queryParams) {
+        console.log(queryParams)
+      },
+      goCategories () {
+        this.$router.push({name: 'Categories'})
+      },
+      goReport () {
+        console.log('report')
       }
     },
     mounted () {

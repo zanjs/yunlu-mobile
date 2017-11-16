@@ -16,14 +16,6 @@
         style="display: none;">
       </iframe>
     </form>
-    <div class="flex icon-text" @click="goCategorise()">
-      <i class="iconfont icon-liebiao1"></i>
-      <span>分类</span>
-    </div>
-    <div class="flex icon-text" @click="goReport()">
-      <i class="iconfont icon-jubao"></i>
-      <span>投诉</span>
-    </div>
   </section>
 </template>
 
@@ -34,16 +26,9 @@
 
       }
     },
-    props: ['canClear'],
     methods: {
       goBack () {
         this.$emit('back')
-      },
-      goCategorise () {
-        this.$emit('click-categories')
-      },
-      goReport () {
-        this.$emit('report')
       },
       handleSearch () {
         this.$emit('search')
@@ -58,17 +43,22 @@
   .container {
     position: fixed;
     display: flex;
-    @include px2rem(height, 100px);
+    @include px2rem(height, 88px);
     line-height: normal;
     align-items: center;
     justify-content: space-between;
     z-index: 3;
-    background: url("../../assets/confirmQQ.png") no-repeat;
-    background-size: cover;
+    background-color: $green;
+    @include pm2rem(padding, 0px, 130px, 0px, 30px);
+    box-sizing: border-box;
     .icon-box {
-      @include px2rem(width, 120px);
+      @include px2rem(width, 100px);
       height: inherit;
       color: $white;
+      justify-content: flex-start;
+      i {
+        @include font-dpr(20px);
+      }
     }
     .input-container {
       height: inherit;
@@ -103,16 +93,6 @@
         @include px2rem(padding-top, 8px);
         color: $eleventh-grey;
         @include px2rem(line-height, 58px);
-      }
-    }
-    .icon-text {
-      color: $white;
-      flex-direction: column;
-      line-height: normal;
-      @include px2rem(width, 120px);
-      height: inherit;
-      span {
-        @include px2rem(margin-top, 10px);
       }
     }
   }
