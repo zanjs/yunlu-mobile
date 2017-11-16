@@ -16,6 +16,12 @@
         style="display: none;">
       </iframe>
     </form>
+    <a
+      v-show="showCancel"
+      class="full-width flex cancel-btn white font-15"
+      @click="cancel()">
+      取消
+    </a>
   </section>
 </template>
 
@@ -26,12 +32,16 @@
 
       }
     },
+    props: ['showCancel'],
     methods: {
       goBack () {
         this.$emit('back')
       },
       handleSearch () {
         this.$emit('search')
+      },
+      cancel () {
+        this.$emit('cancel')
       }
     }
   }
@@ -94,6 +104,13 @@
         color: $eleventh-grey;
         @include px2rem(line-height, 58px);
       }
+    }
+    .cancel-btn {
+      position: absolute;
+      @include px2rem(right, 30px);
+      line-height: normal;
+      @include px2rem(width, 100px);
+      cursor: pointer;
     }
   }
 </style>
