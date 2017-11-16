@@ -177,9 +177,6 @@
             this.noMoreData = true
             this.loadingText = '没有更多数据了...'
           }
-          this.products = this.pageIndex === 1 ? res.data.products : [...res.data.products, ...this.products]
-          this.loading = false
-          this.hasSearch = true
           let tmpArr = this.handleProductThumbnails(res.data.products)
           this.getFilesPublisheds(tmpArr, res.data.products)
         } else {
