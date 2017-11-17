@@ -98,6 +98,7 @@
   import BScroll from 'better-scroll'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
+    name: 'Categories',
     data () {
       return {
         queryParams: '',
@@ -218,6 +219,23 @@
     },
     mounted () {
       this.getCategories()
+    },
+    activated () {
+      if (!this.$store.state.popState) {
+        this.getCategories()
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      if (to.name !== 'CategoryProducts') {
+        this.pageIndex = 1
+        this.loading = true
+        this.menuIndexChange = false
+        this.searchResults = []
+        this.hasSearch = false
+        this.productListTop = []
+        this.menuScroll = null
+      }
+      next()
     }
   }
 </script>
@@ -327,6 +345,7 @@
     @include px2rem(padding-top, 88px);
     ul {
       background-color: $white;
+      height: 100%;
     }
     a {
       justify-content: flex-start;
