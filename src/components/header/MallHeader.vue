@@ -63,7 +63,7 @@
     align-items: center;
     justify-content: space-between;
     z-index: 3;
-    background: url("../../assets/confirmQQ.png") no-repeat;
+    background: url("../../assets/mallBg.png") no-repeat;
     background-size: cover;
     .icon-box {
       @include px2rem(width, 120px);
