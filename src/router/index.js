@@ -124,7 +124,7 @@ export default new Router({
       name: 'NewMall',
       component: NewMall,
       props: true,
-      meta: { keepAlive: false }
+      meta: { keepAlive: true }
     }, {
       path: '/enterprisedetails/:id',
       name: 'EnterpriseDetail',
