@@ -54,18 +54,24 @@
           <img src="../../assets/noProduct.png">
       </div>
     </section>
+    <back-to-top
+      :show="showGoTopBtn"
+      @click="goScroll(0)">
+    </back-to-top>
   </section>
 </template>
 
 <script>
   import SearchHeader from '../../components/header/SearchHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop, showBack } from '../../config/mUtils'
   import SearchProductsOrder from '../../components/product/Order'
   import ProductThumbnailMode from '../../components/product/Thumbnail'
+  import BackToTop from '../../components/common/BackToTop'
   import { requestFn } from '../../config/request'
   import MugenScroll from 'vue-mugen-scroll'
   import { Toast } from 'mint-ui'
   export default {
+    name: 'CategoryProducts',
     props: ['id'],
     data () {
       return {
@@ -79,14 +85,18 @@
         loading: true,
         loadingText: '加载中...',
         noMoreProducts: false,
-        scrollHeight: '15rem'
+        scrollHeight: '15rem',
+        height: 160,
+        showGoTopBtn: false,
+        scrollActive: false
       }
     },
     components: {
       SearchHeader,
       SearchProductsOrder,
       ProductThumbnailMode,
-      MugenScroll
+      MugenScroll,
+      BackToTop
     },
     methods: {
       goBack () {
@@ -201,11 +211,46 @@
       },
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
+      },
+      // 滚动到页面指定位置
+      goScroll (scroll = 0) {
+        setScrollTop(scroll, this.$refs.categoryProducts)
+      },
+      handleGoTopBtn () {
+        if (!this.scrollActive) {
+          showBack((status) => {
+            this.showGoTopBtn = status
+            this.scrollActive = true
+          }, this.height, this.$refs.categoryProducts)
+        }
       }
     },
     mounted () {
       this.handleScrollHeight()
-      this.getProducts()
+    },
+    activated () {
+      this.showGoTopBtn = false
+      if (!this.$store.state.popState) {
+        setScrollTop(0, this.$refs.categoryProducts)
+        this.getProducts()
+        this.handleGoTopBtn()
+      } else {
+        setScrollTop(this.$store.state.scrollMap.CategoryProducts || 0, this.$refs.categoryProducts)
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'CategoryProducts', value: this.$refs.categoryProducts.scrollTop})
+      if (to.name !== 'ProductDetail') {
+        this.pageIndex = 1
+        this.loading = true
+        this.queryParams = this.$route.query.q || ''
+        this.hasSearch = false
+        this.loadingText = '加载中...'
+        this.noMoreProducts = false
+        this.products = []
+        this.productsThumbnails = []
+      }
+      next()
     }
   }
 </script>
