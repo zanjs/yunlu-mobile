@@ -303,13 +303,13 @@ export default new Router({
       path: '/categories',
       name: 'Categories',
       component: Categories,
-      meta: { keepAlive: false }
+      meta: { keepAlive: true }
     }, {
       path: '/category_products/:id',
       name: 'CategoryProducts',
       component: CategoryProducts,
       props: true,
-      meta: { keepAlive: false }
+      meta: { keepAlive: true }
     }
   ],
   scrollBehavior (to, from, savedPosition) {
