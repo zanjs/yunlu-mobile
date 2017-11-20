@@ -17,7 +17,7 @@
         class="img-box white-bg">
         <img
           v-lazy="{
-            src: item.file_thumb_urls,
+            src: item.logo,
             error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }"

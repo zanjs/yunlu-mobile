@@ -16,13 +16,15 @@
         style="display: none;">
       </iframe>
     </form>
-    <div class="flex icon-text" @click="goCategorise()">
-      <i class="iconfont icon-liebiao1"></i>
-      <span>分类</span>
-    </div>
-    <div class="flex icon-text" @click="goReport()">
-      <i class="iconfont icon-jubao"></i>
-      <span>投诉</span>
+    <div class="flex icon-container">
+      <div class="flex icon-text" @click="goCategorise()">
+        <i class="iconfont icon-fenlei1"></i>
+        <span>分类</span>
+      </div>
+      <div class="flex icon-text" @click="goReport()">
+        <i class="iconfont icon-jubao"></i>
+        <span>投诉</span>
+      </div>
     </div>
   </section>
 </template>
@@ -105,15 +107,16 @@
         @include px2rem(line-height, 58px);
       }
     }
+    .icon-container {
+      height: inherit;
+      @include px2rem(padding-left, 30px);
+    }
     .icon-text {
       color: $white;
       flex-direction: column;
       line-height: normal;
-      @include px2rem(width, 120px);
+      @include pm2rem(margin, 10px, 30px, 0px, 5px);
       height: inherit;
-      span {
-        @include px2rem(margin-top, 10px);
-      }
     }
   }
 </style>
