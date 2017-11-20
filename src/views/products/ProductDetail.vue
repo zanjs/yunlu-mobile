@@ -767,8 +767,7 @@
         this.$router.push({name: 'See'})
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
@@ -827,9 +826,7 @@
               this.favoratesText = '收藏'
               Toast({
                 message: '你已成功取消收藏',
-                className: 'toast-content',
-                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
-                duration: 1000
+                duration: 500
               })
             } else {
               Toast({
