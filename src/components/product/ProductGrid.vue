@@ -19,25 +19,25 @@
         @click.stop="handleClick(item)"
         class="img-box white-bg">
         <img
-          v-if="item.file_thumb_urls"
           v-lazy="{
-            src: item.file_thumb_urls,
+            src: item.logo_url,
             error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }"
           class="normal">
-        <img
-          v-else
-          src="../../assets/imgLoadingError.png"
-          class="empty">
         <div class="cover">
           <div class="wraper">
-            <div class="name">{{item.name}}</div>
-            <div class="money">
-              <span class="font-12">&yen;</span>
-              <span class="font-18">
-                {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
-              </span>
+            <div class="ellipsis name">{{item.name}}</div>
+            <div class="flex info">
+              <div class="flex money">
+                <span class="font-12">&yen;</span>
+                <span class="font-18 ellipsis">
+                  {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
+                </span>
+              </div>
+              <div class="flex icon-box" @click.stop="handleFavorite(item)">
+                <i class="iconfont icon-shoucang2"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -57,6 +57,9 @@
     methods: {
       handleClick (item) {
         this.$emit('click', item)
+      },
+      handleFavorite (item) {
+        this.$emit('favorite', item)
       }
     }
   }
@@ -125,22 +128,39 @@
           align-items: flex-start;
           justify-content: center;
           box-sizing: border-box;
-          div {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 100%;
-          }
           .name {
-            @include pm2rem(margin, 10px, 0px, 14px, 0px);
+            @include pm2rem(margin, 10px, 0px, 0px, 0px);
             line-height: normal;
             box-sizing: border-box;
             position: relative;
+            width: 100%;
           }
-          .money {
+          .info {
+            flex: 1;
             box-sizing: border-box;
             color: #FF0000;
             line-height: normal;
+            justify-content: space-between;
+            width: 100%;
+            .money {
+              align-items: baseline;
+              justify-content: flex-start;
+              span {
+                @include px2rem(margin-right, 10px);
+              }
+              & span:last-child {
+                @include px2rem(width, 200px);
+              }
+            }
+            .icon-box {
+              height: 100%;
+              @include px2rem(width, 80px);
+              line-height: normal;
+              color: $second-grey;
+              i {
+                @include font-dpr(18px);
+              }
+            }
           }
         }
       }
