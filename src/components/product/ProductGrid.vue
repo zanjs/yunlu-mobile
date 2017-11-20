@@ -36,7 +36,8 @@
                 </span>
               </div>
               <div class="flex icon-box" @click.stop="handleFavorite(item)">
-                <i class="iconfont icon-shoucang2"></i>
+                <i v-if="item.favorable" class="iconfont icon-xuanzhong1 active"></i>
+                <i v-else class="iconfont icon-shoucang2"></i>
               </div>
             </div>
           </div>
@@ -159,6 +160,9 @@
               color: $second-grey;
               i {
                 @include font-dpr(18px);
+              }
+              .active {
+                color: $second-red;
               }
             }
           }

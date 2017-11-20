@@ -64,6 +64,7 @@
           <img src="../../assets/blank.jpg">
           <div class="name">
             <span v-if="teams && teams.name" class="font-16">{{teams.name}}</span>
+            <span v-else class="font-16">&nbsp;</span>
             <div class="flex favorite">
               <i class="iconfont icon-shoucang1"></i>
               <span class="font-12">{{favoratesText}}</span>
@@ -139,7 +140,7 @@
               </a>
             </div>
           </div>
-          <div v-else class="section-wrapper" :class="{'icon-hide': hideIcon}">
+          <div v-if="!homeLoading && categories.length > 0" class="section-wrapper" :class="{'icon-hide': hideIcon}">
             <div class="section-content">
               <a
                 v-for="(item, index) in categories"
@@ -150,7 +151,7 @@
               </a>
             </div>
           </div>
-          <div class="section-wrapper">
+          <div  v-if="homeLoading || products.length > 0" class="section-wrapper">
             <div class="flex section-title">
               <hr>
               <span class="font-14 third-text">热卖爆款</span>
@@ -174,7 +175,7 @@
               :store="malls"
               :loading="homeLoading"
               :num="preLoadMallsLength"
-              @click="goProductDetail">
+              @click="goMall">
             </mall-grid>
           </div>
         </section>
@@ -195,6 +196,7 @@
   import BackToTop from '../../components/common/BackToTop'
   import { showBack, getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
+  import { Toast } from 'mint-ui'
   export default {
     props: ['id'],
     name: 'Mall',
@@ -272,6 +274,9 @@
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.teams.enterprise_id, resourceClass: 'product'}})
       },
+      goMall (item) {
+        this.$router.push({path: `/malls/${item.id}`})
+      },
       getMall () {
         this.$store.dispatch('commonAction', {
           url: `/mall/${this.id}`,
@@ -313,7 +318,87 @@
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
       handleFavorite (item) {
-        console.log(item)
+        if (!this.hasLogin) {
+          this.$store.dispatch('switchIntegralDialog', {status: true})
+        } else if (!item.favorable) {
+          this.favoritesRequest(item.id)
+        } else {
+          this.removeFavorites(item.id)
+        }
+      },
+      removeFavorites (id) {
+        this.$store.dispatch('commonAction', {
+          url: `/favorites/${id}`,
+          method: 'delete',
+          params: {},
+          data: {
+            token: this.token,
+            type: 'Product'
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorable_type && res.data.favorable_type === 'Product') {
+              Toast({
+                message: '你已成功取消收藏',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+                duration: 1000
+              })
+              let index = this.handleIndex(this.products, id)
+              this.products[index].favorable = !this.products[index].favorable
+              this.$set(this.products, index, this.products[index])
+            } else {
+              Toast({
+                message: '取消收藏该产品失败',
+                duration: 1000
+              })
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      favoritesRequest (id) {
+        this.$store.dispatch('commonAction', {
+          url: '/favorites',
+          method: 'post',
+          params: {},
+          data: {
+            token: this.token,
+            product_id: id
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.favorites && res.data.favorites.id === parseInt(id)) {
+              Toast({
+                message: '你已成功收藏该产品',
+                className: 'toast-content',
+                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+                duration: 1000
+              })
+              let index = this.handleIndex(this.products, res.data.favorites.id)
+              this.products[index].favorable = !this.products[index].favorable
+              this.$set(this.products, index, this.products[index])
+            } else {
+              Toast({
+                message: '收藏该产品失败',
+                duration: 1000
+              })
+            }
+          },
+          reject: () => {
+          }
+        })
+      },
+      handleIndex (arr, item) {
+        let index = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].id === item) {
+            index = i
+            break
+          }
+        }
+        return index
       },
       handleFavoriteStatus (id) {
         if (this.hasLogin) {
@@ -360,6 +445,7 @@
       this.handleNavBar()
     },
     activated () {
+      this.hideIcon = false
       this.showGoTopBtn = false
       if (!this.$store.state.popState || this.$store.state.fromLogin) {
         setScrollTop(0, this.$refs.newMallContainer)
@@ -374,6 +460,25 @@
       } else {
         setScrollTop(this.$store.state.scrollMap.Mall || 0, this.$refs.newMallContainer)
       }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.newMallContainer.scrollTop})
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+        this.showGoTopBtn = false
+        this.hideIcon = false
+        this.scrollActive = false
+        this.queryParams = ''
+        this.hasAddFavorites = false
+        this.favoratesText = '收藏'
+        this.productOrder = 1
+        this.homeLoading = true
+        this.teams = null
+        this.productPageIndex = 1
+        this.categories = []
+        this.malls = []
+        this.products = []
+      }
+      next()
     }
   }
 </script>
