@@ -61,12 +61,14 @@
     <div class="container" ref="newMallContainer" :style="{height: scrollHeight}">
       <div class="flex card">
         <div class="flex content">
-          <img src="../../assets/blank.jpg">
+          <div v-if="homeLoading || !teams || (teams && !teams.logo)" class="empty-img"></div>
+          <img v-else :src="teams.logo">
           <div class="name">
             <span v-if="teams && teams.name" class="font-16">{{teams.name}}</span>
             <span v-else class="font-16">&nbsp;</span>
-            <div class="flex favorite">
-              <i class="iconfont icon-shoucang1"></i>
+            <div class="flex favorite" @click="favoriteAction()">
+              <i v-if="hasAddFavorites" class="iconfont icon-xuanzhong1 active"></i>
+              <i v-else class="iconfont icon-shoucang2"></i>
               <span class="font-12">{{favoratesText}}</span>
             </div>
           </div>
@@ -256,8 +258,8 @@
         setScrollTop(scroll, this.$refs.newMallContainer)
       },
       goBack () {
-        if (getStore('NewMall_goHome')) {
-          removeStore('NewMall_goHome')
+        if (getStore('Mall_goHome')) {
+          removeStore('Mall_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -317,74 +319,119 @@
       goProductDetail (item) {
         this.$router.push({name: 'ProductDetail', params: {id: item.id}})
       },
-      handleFavorite (item) {
+      goLogin () {
+        this.$store.dispatch('switchIntegralDialog', {status: true})
+      },
+      favoriteAction () {
         if (!this.hasLogin) {
-          this.$store.dispatch('switchIntegralDialog', {status: true})
-        } else if (!item.favorable) {
-          this.favoritesRequest(item.id)
+          this.goLogin()
+        } else if (!this.hasAddFavorites) {
+          this.favoritesRequest(this.teams.id, {team_id: this.teams.id}, 'mall')
         } else {
-          this.removeFavorites(item.id)
+          this.removeFavorites(this.teams.id, {type: 'Organization'}, 'mall')
         }
       },
-      removeFavorites (id) {
+      handleFavorite (item) {
+        if (!this.hasLogin) {
+          this.goLogin()
+        } else if (!item.favorable) {
+          this.favoritesRequest(item.id, {product_id: item.id}, 'product')
+        } else {
+          this.removeFavorites(item.id, {type: 'Product'}, 'product')
+        }
+      },
+      handleRemoveFavorites (id, res, str) {
+        if (str === 'product') {
+          if (res.data.favorable_type && res.data.favorable_type === 'Product') {
+            Toast({
+              message: '你已成功取消收藏该产品',
+              duration: 500
+            })
+            let index = this.handleIndex(this.products, id)
+            this.products[index].favorable = !this.products[index].favorable
+            this.$set(this.products, index, this.products[index])
+          } else {
+            Toast({
+              message: '取消收藏该产品失败',
+              duration: 1000
+            })
+          }
+        } else {
+          if (res.data.favorable_id + '' === id + '') {
+            this.hasAddFavorites = false
+            this.favoratesText = '收藏'
+            Toast({
+              message: '您已取消收藏该商城',
+              duration: 500
+            })
+          }
+        }
+      },
+      handleAddFavorites (id, res, str) {
+        if (str === 'product') {
+          if (res.data.favorites && res.data.favorites.id === parseInt(id)) {
+            Toast({
+              message: '你已成功收藏该产品',
+              className: 'toast-content',
+              iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+              duration: 1000
+            })
+            let index = this.handleIndex(this.products, res.data.favorites.id)
+            this.products[index].favorable = !this.products[index].favorable
+            this.$set(this.products, index, this.products[index])
+          } else {
+            Toast({
+              message: '收藏该产品失败',
+              duration: 1000
+            })
+          }
+        } else {
+          if (res.data.favorites && res.data.favorites.id === parseInt(id)) {
+            this.hasAddFavorites = true
+            this.favoratesText = '已收藏'
+            Toast({
+              message: '你已成功收藏该商城',
+              className: 'toast-content',
+              iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
+              duration: 1000
+            })
+          } else {
+            Toast({
+              message: '收藏该企业失败',
+              duration: 1000
+            })
+          }
+        }
+      },
+      removeFavorites (id, obj, str) {
         this.$store.dispatch('commonAction', {
           url: `/favorites/${id}`,
           method: 'delete',
           params: {},
           data: {
             token: this.token,
-            type: 'Product'
+            ...obj
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorable_type && res.data.favorable_type === 'Product') {
-              Toast({
-                message: '你已成功取消收藏',
-                className: 'toast-content',
-                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
-                duration: 1000
-              })
-              let index = this.handleIndex(this.products, id)
-              this.products[index].favorable = !this.products[index].favorable
-              this.$set(this.products, index, this.products[index])
-            } else {
-              Toast({
-                message: '取消收藏该产品失败',
-                duration: 1000
-              })
-            }
+            this.handleRemoveFavorites(id, res, str)
           },
           reject: () => {
           }
         })
       },
-      favoritesRequest (id) {
+      favoritesRequest (id, obj, str) {
         this.$store.dispatch('commonAction', {
           url: '/favorites',
           method: 'post',
           params: {},
           data: {
             token: this.token,
-            product_id: id
+            ...obj
           },
           target: this,
           resolve: (state, res) => {
-            if (res.data.favorites && res.data.favorites.id === parseInt(id)) {
-              Toast({
-                message: '你已成功收藏该产品',
-                className: 'toast-content',
-                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
-                duration: 1000
-              })
-              let index = this.handleIndex(this.products, res.data.favorites.id)
-              this.products[index].favorable = !this.products[index].favorable
-              this.$set(this.products, index, this.products[index])
-            } else {
-              Toast({
-                message: '收藏该产品失败',
-                duration: 1000
-              })
-            }
+            this.handleAddFavorites(id, res, str)
           },
           reject: () => {
           }
@@ -525,6 +572,13 @@
         @include px2rem(border-radius, 20px);
         @include pm2rem(margin, 0px, 20px, 0px, 30px);
       }
+      .empty-img {
+        @include px2rem(width, 80px);
+        @include px2rem(height, 80px);
+        @include px2rem(border-radius, 20px);
+        @include pm2rem(margin, 0px, 20px, 0px, 30px);
+        background-color: $ninth-grey;
+      }
       .name {
         flex: 1;
         flex-direction: column;
@@ -538,6 +592,9 @@
           }
           span {
             @include px2rem(margin-left, 20px);
+          }
+          .active {
+            color: $second-red;
           }
         }
       }
