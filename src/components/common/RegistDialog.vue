@@ -15,12 +15,12 @@
           </div>
           <div class="absolute-horizontal num-bg">
             <div class="text-wrapper">
-              <p>可提现余额</p>
+              <p>可抵扣购物金额</p>
               <p>&yen;&nbsp;{{money || 6}}</p>
             </div>
           </div>
           <div class="help">
-            <a @click="help">如何提现？</a>
+            <a @click="help">积分购物？</a>
           </div>
         </div>
         <div class="button">
