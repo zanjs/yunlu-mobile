@@ -19,29 +19,33 @@
         @click="handleClick(item)"
         class="flex-between item primary-text">
         <img
-          v-if="item.organization && item.organization.logo"
           v-lazy="{
-            src: item.organization.logo,
+            src: item.logo,
             error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }">
-        <img
-          v-else
-          src="../../assets/blank.jpg">
         <div class="flex-between content flex-1 ellipsis">
           <p class="font-15 ellipsis">{{item.name}}</p>
           <div class="font-13 third-text">
             <span
               v-if="item.organization && item.organization.service && item.organization.service.name"
               class="flex-1">{{item.organization.service.name}}</span>
-            <span v-else>&nbsp;</span>
             <span
               v-if="item.organization && item.organization.provice_name && item.organization.city_name"
               class="flex-1">
               {{item.organization.provice_name}}{{item.organization.city_name}}
             </span>
-            <span v-else>&nbsp;</span>
+            <span class="flex-1">月销{{item.order_form_count}}笔</span>
           </div>
+        </div>
+        <div
+          v-if="index < 3"
+          class="flex icon-box">
+          <svg class="icon" aria-hidden="true">
+            <use v-if="index === 0" xlink:href="#icon-jinpai"></use>
+            <use v-if="index === 1" xlink:href="#icon-yinpai"></use>
+            <use v-if="index === 2" xlink:href="#icon-tongpai"></use>
+          </svg>
         </div>
       </a>
     </div>
@@ -81,13 +85,23 @@
       border-bottom: 1px solid $third-grey;
       @include pm2rem(padding, 10px, 20px, 10px, 20px);
       .content {
-        line-height: 1;
+        line-height: normal;
         flex-direction: column;
         p {
           @include px2rem(margin-bottom, 22px);
         }
         div {
           display: inherit;
+          span {
+            @include px2rem(margin-right, 20px);
+          }
+        }
+      }
+      .icon-box {
+        @include px2rem(width, 80px);
+        @include px2rem(height, 80px);
+        svg {
+          @include font-dpr(34px);
         }
       }
     }

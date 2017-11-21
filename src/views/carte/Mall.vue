@@ -203,7 +203,7 @@
           v-if="activeIndex === 1"
           key="two"
           :class="{'product-icon-hide': hideIcon}">
-          <transition name=fade mode="out-in">
+          <transition name="fade" mode="out-in">
             <div v-if="productLoading || allProducts && allProducts.length > 0">
               <transition
                 name="fade"
@@ -251,7 +251,23 @@
             </div>
           </transition>
         </section>
-        <section v-if="activeIndex === 2" key="three"></section>
+        <section v-if="activeIndex === 2" key="three">
+          <transition name="fade" mode="out-in">
+            <div v-if="enterprises.length > 0">
+              <enterprise-list
+                :store="enterprises"
+                :loading="false"
+                :num="10">
+              </enterprise-list>
+            </div>
+            <div
+              v-else
+              key="noEnterprise"
+              class="no-data">
+              <img src="../../assets/noEnterprise.png">
+            </div>
+          </transition>
+        </section>
         <section v-if="activeIndex === 3" key="four"></section>
       </transition>
     </div>
@@ -356,7 +372,9 @@
         person: [],
         personLength: 0,
         noMoreProducts: false,
-        productLoadingText: '加载中...'
+        productLoadingText: '加载中...',
+        noMoreEnterprises: false,
+        enterpriseLoadingText: '加载中...'
       }
     },
     components: {
@@ -639,6 +657,7 @@
             }
             this.allProducts = this.productPageIndex === 1 ? res.data.products : [...this.allProducts, ...res.data.products]
             this.allProductsLength = res.data.meta.total
+            this.getEnterprises()
           },
           reject: () => {
             this.productLoading = false
@@ -691,6 +710,9 @@
         this.minPrice = ''
         this.maxPrice = ''
         this.priceRange = ''
+        this.productPageIndex = 1 // 使用/清除过滤时，将产品分页重置为第一页
+        this.noMoreProducts = false
+        this.productLoadingText = '加载中...'
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
@@ -704,6 +726,9 @@
         } else if (!this.maxPrice && this.minPrice) {
           this.priceRange = `${this.minPrice}`
         }
+        this.productPageIndex = 1 // 使用/清除过滤时，将产品分页重置为第一页
+        this.noMoreProducts = false
+        this.productLoadingText = '加载中...'
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
@@ -735,6 +760,27 @@
         method.tId = setTimeout(() => {
           method.call(context)
         }, 500)
+      },
+      getEnterprises () {
+        this.$store.dispatch('commonAction', {
+          url: `/mall/${this.id}/org_members`,
+          method: 'get',
+          params: {
+            page: this.enterprisePageIndex,
+            per_page: this.enterprisePageSize
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.members.length < this.enterprisePageSize) {
+              this.enterpriseLoadingText = '没有更多数据了...'
+              this.noMoreEnterprises = true
+            }
+            this.enterprises = this.enterprisePageIndex === 1 ? res.data.members : [...this.enterprises, ...res.data.members]
+          },
+          reject: () => {
+            this.productLoading = false
+          }
+        })
       }
     },
     mounted () {
@@ -768,7 +814,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.newMallContainer.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories') {
         this.showGoTopBtn = false
         this.hideIcon = false
         this.scrollActive = false
@@ -1015,7 +1061,6 @@
   }
   .order-hide {
     position: fixed;
-    display: block;
     @include px2rem(top, 180px);
   }
   .product-icon-hide {
