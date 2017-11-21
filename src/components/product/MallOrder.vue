@@ -22,7 +22,7 @@
         <i class="iconfont icon-youshangjiaoshaixuan"></i>
       </a>
       <a class="flex" @click="swithList(showList)">
-        <i class="iconfont icon-inactive" :class="{'icon-liebiao': showList, 'icon-liebiao1': !showList}"></i>
+        <i class="iconfont icon-inactive" :class="{'icon-liebiao': !showList, 'icon-liebiao1': showList}"></i>
       </a>
     </div>
   </section>
