@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-        <a class="flex btn">
+        <a class="flex btn" @click="goMallDetail()">
           商城详情
         </a>
       </div>
@@ -781,6 +781,9 @@
             this.productLoading = false
           }
         })
+      },
+      goMallDetail () {
+        this.$router.push({path: `/malldetail/${this.id}`})
       }
     },
     mounted () {
@@ -814,7 +817,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.newMallContainer.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories' && to.name !== 'MallDetail') {
         this.showGoTopBtn = false
         this.hideIcon = false
         this.scrollActive = false
