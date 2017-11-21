@@ -10,6 +10,7 @@
       <input
         slot="input"
         type="search"
+        @input="handleInput"
         v-model="queryParams"
         @keyup.enter.prevent="handleSearchBtn(queryParams)"
         :placeholder="placeholder">
@@ -131,7 +132,7 @@
           :sort-type="sortType"
           :order-up="orderUp"
           :show-list="showList"
-          :hasFilter="selectedArea"
+          :hasFilter="selectedArea || priceRange"
           @order-change="orderChange"
           @switch="showListChange"
           @sort-type-change="changeSortType"
@@ -203,14 +204,28 @@
           key="two"
           :class="{'product-icon-hide': hideIcon}">
           <transition name=fade mode="out-in">
-            <div>
-              <product-grid
-                :store="allProducts"
-                :loading="productLoading"
-                :num="productPageSize"
-                @click="goProductDetail"
-                @favorite="handleFavorite">
-              </product-grid>
+            <div v-if="productLoading || allProducts && allProducts.length > 0">
+              <transition
+                name="fade"
+                :appear="false"
+                mode="out-in">
+                <product-grid
+                  key="productGrid"
+                  v-if="!showList"
+                  :store="allProducts"
+                  :loading="productLoading"
+                  :num="productPageSize"
+                  @click="goProductDetail"
+                  @favorite="handleFavorite">
+                </product-grid>
+                <product-list
+                  key="productList"
+                  v-if="showList"
+                  :store="allProducts"
+                  @click="goProductDetail"
+                  @favorite="handleFavorite">
+                </product-list>
+              </transition>
               <mugen-scroll
                 key="product"
                 :handler="loadProductBottom"
@@ -228,6 +243,12 @@
                 </div>
               </mugen-scroll>
             </div>
+            <div
+              v-else
+              key="noProduct"
+              class="no-data">
+              <img src="../../assets/noProduct.png">
+            </div>
           </transition>
         </section>
         <section v-if="activeIndex === 2" key="three"></section>
@@ -235,13 +256,13 @@
       </transition>
     </div>
     <mall-order
-      v-show="activeIndex === 1"
+      v-show="activeIndex === 1 && hideIcon"
       class="full-width order"
       :class="{'order-hide': hideIcon}"
       :sort-type="sortType"
       :order-up="orderUp"
       :show-list="showList"
-      :hasFilter="selectedArea"
+      :hasFilter="selectedArea || priceRange"
       @order-change="orderChange"
       @switch="showListChange"
       @sort-type-change="changeSortType"
@@ -255,6 +276,18 @@
       @choose-area="choooseArea"
       @reset="resetArea"
       @save="filterProducts">
+      <input
+        class="flex"
+        placeholder="最低价"
+        slot="input-left"
+        v-model.number="minPrice"
+        type="number">
+      <input
+        class="flex"
+        placeholder="最高价"
+        slot="input-right"
+        v-model.number="maxPrice"
+        type="number">
     </product-filter>
     <back-to-top :show="showGoTopBtn" @click="goScroll(0)">
     </back-to-top>
@@ -264,9 +297,11 @@
 <script>
   import MallHeader from '../../components/header/MallHeader'
   import ProductGrid from '../../components/product/ProductGrid'
+  import ProductList from '../../components/product/ProductList'
   import MallGrid from '../../components/enterprise/MallGrid'
   import MallOrder from '../../components/product/MallOrder'
   import BackToTop from '../../components/common/BackToTop'
+  import EnterpriseList from '../../components/enterprise/EnterpriseList'
   import ProductFilter from '../../components/product/ProductFilter'
   import { showBack, getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import { requestFn } from '../../config/request'
@@ -304,6 +339,9 @@
         orderUp: true,
         showList: false,
         useFilter: false, // 使用价格区间或者城市过滤
+        minPrice: '',
+        maxPrice: '',
+        priceRange: '',
         areas: [],
         selectedArea: '',
         preLoadCategoriesLength: 8,
@@ -328,7 +366,9 @@
       MallGrid,
       MallOrder,
       ProductFilter,
-      MugenScroll
+      MugenScroll,
+      ProductList,
+      EnterpriseList
     },
     methods: {
       selectTab (index) {
@@ -444,9 +484,15 @@
               message: '你已成功取消收藏该产品',
               duration: 500
             })
-            let index = this.handleIndex(this.products, id)
-            this.products[index].favorable = !this.products[index].favorable
-            this.$set(this.products, index, this.products[index])
+            if (this.activeIndex === 0) {
+              let index = this.handleIndex(this.products, id)
+              this.products[index].favorable = !this.products[index].favorable
+              this.$set(this.products, index, this.products[index])
+            } else if (this.activeIndex === 1) {
+              let index = this.handleIndex(this.allProducts, id)
+              this.allProducts[index].favorable = !this.allProducts[index].favorable
+              this.$set(this.allProducts, index, this.allProducts[index])
+            }
           } else {
             Toast({
               message: '取消收藏该产品失败',
@@ -473,9 +519,15 @@
               iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
               duration: 1000
             })
-            let index = this.handleIndex(this.products, res.data.favorites.id)
-            this.products[index].favorable = !this.products[index].favorable
-            this.$set(this.products, index, this.products[index])
+            if (this.activeIndex === 0) {
+              let index = this.handleIndex(this.products, res.data.favorites.id)
+              this.products[index].favorable = !this.products[index].favorable
+              this.$set(this.products, index, this.products[index])
+            } else if (this.activeIndex === 1) {
+              let index = this.handleIndex(this.allProducts, res.data.favorites.id)
+              this.allProducts[index].favorable = !this.allProducts[index].favorable
+              this.$set(this.allProducts, index, this.allProducts[index])
+            }
           } else {
             Toast({
               message: '收藏该产品失败',
@@ -573,7 +625,9 @@
             per_page: this.productPageSize,
             ...(this.sortType === 2 ? {sort: this.orderUp ? 1 : -1} : {}),
             ...(q === '' ? {} : {q: q}),
-            ...(zoneCode === '' ? {} : {zone_code: zoneCode})
+            ...(zoneCode === '' ? {} : {zone_code: zoneCode}),
+            ...(this.priceRange === '' ? {} : {price_range: this.priceRange}),
+            ...(this.token ? {token: this.token} : {})
           },
           target: this,
           resolve: (state, res) => {
@@ -621,6 +675,7 @@
       },
       changeSortType (num) {
         this.sortType = num
+        this.getProducts(this.queryParams, this.selectedArea)
       },
       switchFilter (val) {
         this.useFilter = val
@@ -633,10 +688,22 @@
       },
       resetArea () {
         this.selectedArea = ''
+        this.minPrice = ''
+        this.maxPrice = ''
+        this.priceRange = ''
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
       filterProducts () {
+        this.minPrice = Math.abs(parseInt(this.minPrice)) > Math.abs(parseInt(this.maxPrice)) ? Math.abs(parseInt(this.maxPrice)) : Math.abs(parseInt(this.minPrice))
+        this.maxPrice = Math.abs(parseInt(this.minPrice)) > Math.abs(parseInt(this.maxPrice)) ? Math.abs(parseInt(this.minPrice)) : Math.abs(parseInt(this.maxPrice))
+        if (this.maxPrice && this.minPrice) {
+          this.priceRange = `${this.minPrice},${this.maxPrice}`
+        } else if (this.maxPrice && !this.minPrice) {
+          this.priceRange = `0,${this.maxPrice}`
+        } else if (!this.maxPrice && this.minPrice) {
+          this.priceRange = `${this.minPrice}`
+        }
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
@@ -645,6 +712,29 @@
           this.productPageIndex += 1
           this.getProducts(this.queryParams, this.selectedArea)
         }
+      },
+      handleInput (e) {
+        if (e.target.value === '') {
+          this.resetSearchBar()
+        }
+        this.productPageIndex = 1
+      },
+      resetSearchBar () {
+        this.queryParams = ''
+        this.hasSearch = false
+        this.productLoading = true
+        this.productPageIndex = 1
+        this.noMoreProducts = false
+        this.productLoadingText = '加载中...'
+        this.throttle(this.getProducts, this)
+        setScrollTop(0, this.$refs.newMallContainer)
+      },
+      // 节流函数
+      throttle (method, context) {
+        clearTimeout(method.tId)
+        method.tId = setTimeout(() => {
+          method.call(context)
+        }, 500)
       }
     },
     mounted () {
@@ -925,6 +1015,7 @@
   }
   .order-hide {
     position: fixed;
+    display: block;
     @include px2rem(top, 180px);
   }
   .product-icon-hide {
@@ -943,6 +1034,17 @@
     justify-content: center;
     p {
       @include px2rem(margin-left, 20px);
+    }
+  }
+  .no-data {
+    @include pm2rem(padding, 100px, 20px, 100px, 0px);
+    @include pm2rem(margin, 20px, 22px, 0px, 22px);
+    background-color: $white;
+    text-align: center;
+    border: 1px solid #E7E7E7;
+    img {
+      @include px2rem(width, 260px);
+      height: auto;
     }
   }
 </style>

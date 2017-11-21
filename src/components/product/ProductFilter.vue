@@ -8,9 +8,9 @@
             价格区间(元)
           </p>
           <div class="flex input-container">
-            <input class="flex" placeholder="最低价">
+            <slot name="input-left"></slot>
             <div class="absolute-horizontal line"></div>
-            <input class="flex" placeholder="最高价">
+            <slot name="input-right"></slot>
           </div>
         </section>
         <section class="area-wrapper" v-if="areas && areas.length == 3">
@@ -144,7 +144,7 @@
       }
       .line {
         @include px2rem(height, 6px);
-        @include px2rem(width, 40px);
+        @include px2rem(width, 20px);
         background-color: $third-dark;
       }
     }
