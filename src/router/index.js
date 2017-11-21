@@ -47,6 +47,7 @@ const Address = resolve => require(['../views/products/Address'], resolve)
 const Pay = resolve => require(['../views/products/Pay'], resolve)
 const Categories = resolve => require(['../views/products/Categories'], resolve)
 const CategoryProducts = resolve => require(['../views/products/CategoryProducts'], resolve)
+const MallDetail = resolve => require(['../views/carte/MallDetail'], resolve)
 
 Vue.use(Router)
 
@@ -310,6 +311,12 @@ export default new Router({
       component: CategoryProducts,
       props: true,
       meta: { keepAlive: true }
+    }, {
+      path: '/malldetail/:id',
+      name: 'MallDetail',
+      component: MallDetail,
+      props: true,
+      meta: { keepAlive: false }
     }
   ],
   scrollBehavior (to, from, savedPosition) {
