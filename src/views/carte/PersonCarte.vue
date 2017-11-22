@@ -569,6 +569,18 @@
     overflow-y: scroll;
     padding-bottom: 1px;
     -webkit-overflow-scrolling: touch;
+    .loading {
+      @include px2rem(height, 120px);
+      @include font-dpr(15px);
+      color: $second-dark;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      p {
+        @include px2rem(margin-left, 20px);
+      }
+    }
   }
   .scroll-container {
     overflow-x: scroll;
@@ -633,18 +645,6 @@
     }
     a:active {
       background-color: $tenth-grey;
-    }
-  }
-  .loading {
-    @include px2rem(height, 120px);
-    @include font-dpr(15px);
-    color: $second-dark;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    p {
-      @include px2rem(margin-left, 20px);
     }
   }
   .option-bar {
