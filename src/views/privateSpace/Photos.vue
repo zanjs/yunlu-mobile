@@ -1,48 +1,49 @@
 <template>
   <section
-    class="wrapper full-width"
-    ref="photos"
-    :style="{height: scrollHeight}">
+    class="full-width">
     <common-header
       :title="headerName"
       @back="goBack()">
     </common-header>
-    <transition
-      name="fade"
-      :appear="true"
-      mode="out-in">
-      <section
-        v-if="photos && photos.length > 0"
-        class="container">
-        <gallery
-          :data-source="photos"
-          @click="showFullScreenPreview">
-        </gallery>
-        <mugen-scroll
-          :handler="loadPhotosBottom"
-          :handle-on-mount="false"
-          :should-handle="!photoLoading"
-          scroll-container="photos">
-          <div
-            v-if="photoLoading || noMoreData"
-            class="loading">
-            <mt-spinner
-              v-if="photoLoading"
-              type="snake"
-              :size="18">
-            </mt-spinner>
-            <p>{{photoLoadingText}}</p>
+    <section class="full-width list-wrapper" ref="photos" :style="{height: scrollHeight}">
+      <transition
+        name="fade"
+        :appear="true"
+        mode="out-in">
+        <section
+          v-if="photos && photos.length > 0"
+          class="container">
+          <gallery
+            :data-source="photos"
+            @click="showFullScreenPreview">
+          </gallery>
+          <mugen-scroll
+            :handler="loadPhotosBottom"
+            :handle-on-mount="false"
+            :should-handle="!photoLoading"
+            :threshold="0.1"
+            scroll-container="photos">
+            <div
+              v-if="photoLoading || noMoreData"
+              class="loading">
+              <mt-spinner
+                v-if="photoLoading"
+                type="snake"
+                :size="18">
+              </mt-spinner>
+              <p>{{photoLoadingText}}</p>
+            </div>
+          </mugen-scroll>
+        </section>
+        <template v-else>
+          <div>
+            <div class="no-data">
+              <img src="../../assets/noFile.png">
+            </div>
           </div>
-        </mugen-scroll>
-      </section>
-      <template v-else>
-        <div class="empty">
-          <div class="no-data">
-            <img src="../../assets/noFile.png">
-          </div>
-        </div>
-      </template>
-    </transition>
+        </template>
+      </transition>
+    </section>
     <div v-show="showPreview">
       <div class="option-bar full-width">
         <div class="left">
@@ -304,20 +305,22 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
-  .wrapper {
+  .list-wrapper {
     position: absolute;
-    top: 0;
     overflow-y: scroll;
+    top: 0;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
     padding-bottom: 1px;
-    background-color: $tenth-grey;
+    @include px2rem(padding-top, 88px);
   }
   .container {
-    @include pm2rem(padding, 88px, 0px, 10px, 0px);
+    @include pm2rem(padding, 0px, 0px, 10px, 0px);
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -325,9 +328,6 @@
         @include px2rem(margin-left, 20px);
       }
     }
-  }
-  .empty {
-    @include px2rem(padding-top, 88px);
   }
   .option-bar {
     position: fixed;
