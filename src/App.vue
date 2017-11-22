@@ -62,7 +62,9 @@
           'Pay',
           'ProductDetail',
           'ShoppingCart',
-          'InformationFolders'
+          'InformationFolders',
+          'MallDetail',
+          'JoinIn'
         ],
         num: getStore('shortUuid') ? 600 : 1000,
         money: getStore('shortUuid') ? 6 : 10
