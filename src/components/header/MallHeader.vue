@@ -64,7 +64,7 @@
     line-height: normal;
     align-items: center;
     justify-content: space-between;
-    z-index: 3;
+    z-index: 4;
     background: url("../../assets/mallBg.png") no-repeat;
     background-size: cover;
     .icon-box {

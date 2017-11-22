@@ -160,6 +160,7 @@
       },
       closePreview () {
         this.showPreview = false
+        this.currentIndex = 1
       },
       stopTouchMove () {
         let self = this

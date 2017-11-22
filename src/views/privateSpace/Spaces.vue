@@ -4,77 +4,79 @@
       :title="headerName"
       @back="goBack()">
     </common-header>
-    <div class="card-container">
-      <card
-        :store="userCard"
-        @click="cardClick">
-      </card>
-    </div>
-    <template v-if="folders && folders.length > 0">
-      <div class="space-container">
-        <div>
-          <space-folders
-            :store="folders"
-            @view-more="goFolder"
-            @view-full-screen="showFullScreenPreview">
-          </space-folders>
-          <mugen-scroll
-            :handler="loadFolderBottom"
-            :handle-on-mount="false"
-            :should-handle="!loading">
-            <div
-              v-if="loading || noMoreData"
-              class="loading">
-              <mt-spinner
-                v-if="loading"
-                type="snake"
-                :size="18">
-              </mt-spinner>
-              <p>{{loadingText}}</p>
-            </div>
-          </mugen-scroll>
-        </div>
+    <div class="wrapper" ref="spaceContainer" :style="{height: scrollHeight}">
+      <div class="card-container">
+        <card
+          :store="userCard"
+          @click="cardClick">
+        </card>
       </div>
-      <template v-if="showPreview">
-        <div class="option-bar full-width">
-          <div class="left">
-            <div
-              class="close"
-              @click="closePreview()">
-              <i class="iconfont icon-fanhui"></i>
-            </div>
-            <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
-          </div>
-          <div
-            class="report"
-            @click="goReportPhoto">
-            <i class="iconfont icon-jubao"></i>
+      <template v-if="folders && folders.length > 0">
+        <div class="space-container">
+          <div>
+            <space-folders
+              :store="folders"
+              @view-more="goFolder"
+              @view-full-screen="showFullScreenPreview">
+            </space-folders>
+            <mugen-scroll
+              :handler="loadFolderBottom"
+              :handle-on-mount="false"
+              :should-handle="!loading"
+              :threshold="0.1"
+              scroll-container="spaceContainer">
+              <div class="loading">
+                <mt-spinner
+                  v-show="!noMoreData"
+                  type="snake"
+                  :size="18">
+                </mt-spinner>
+                <p>{{loadingText}}</p>
+              </div>
+            </mugen-scroll>
           </div>
         </div>
-        <swiper
-          :options="swiperOption"
-          class="full-screen-swiper">
-          <!-- slides -->
-          <swiper-slide
-            class="swiper-zoom-container full-screen-bg"
-            v-for="(item, index) in photos"
-            :key="item.url">
-            <img
-              v-lazy="{
-                src: item.url,
-                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-              }"
-              alt="">
-          </swiper-slide>
-        </swiper>
+        <template v-if="showPreview">
+          <div class="option-bar full-width">
+            <div class="left">
+              <div
+                class="close"
+                @click="closePreview()">
+                <i class="iconfont icon-fanhui"></i>
+              </div>
+              <span class="page-nav">{{currentIndex}}/{{photos.length}}</span>
+            </div>
+            <div
+              class="report"
+              @click="goReportPhoto">
+              <i class="iconfont icon-jubao"></i>
+            </div>
+          </div>
+          <swiper
+            :options="swiperOption"
+            class="full-screen-swiper">
+            <!-- slides -->
+            <swiper-slide
+              class="swiper-zoom-container full-screen-bg"
+              v-for="(item, index) in photos"
+              :key="item.url">
+              <img
+                v-lazy="{
+                  src: item.url,
+                  error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                  loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+                }"
+                alt="">
+            </swiper-slide>
+          </swiper>
+        </template>
       </template>
-    </template>
-    <template v-else>
-      <div class="no-data">
-        <img src="../../assets/noFile.png">
-      </div>
-    </template>
+      <template v-else>
+        <div class="no-data">
+          <img src="../../assets/noFile.png">
+        </div>
+      </template>
+    </div>
     <template v-if="showDialog">
       <pop-dialog
         :store="message"
@@ -141,7 +143,8 @@
         },
         loading: false,
         loadingText: '加载中...',
-        noMoreData: false
+        noMoreData: false,
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -177,15 +180,11 @@
             this.loading = false
             state.userCard = res.data.cards
             this.headerName = res.data.cluster
-            if (this.pageIndex === 1) {
-              this.folders = res.data.gallery
-            } else {
-              if (res.data.gallery.length === 0) {
-                this.noMoreData = true
-                this.loadingText = '没有更多数据了...'
-              }
-              this.folders = [...this.folders, ...res.data.gallery]
+            if (res.data.gallery.length < this.pageSize) {
+              this.noMoreData = true
+              this.loadingText = '没有更多数据了...'
             }
+            this.folders = this.pageIndex === 1 ? res.data.gallery : [...this.folders, ...res.data.gallery]
           },
           reject: () => {
             this.loading = false
@@ -284,9 +283,16 @@
           removeStore('shareIntegral')
           removeStore('shareRegist')
         }
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
+      this.handleScrollHeight()
       this.handleIntegralModal()
       this.getData()
     },
@@ -302,14 +308,22 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .wrapper {
+    // position: absolute;
+    // top: 0;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+    -webkit-overflow-scrolling: touch;
+    background-color: $tenth-grey;
+  }
   .card-container {
     @include pm2rem(padding, 96px, 22px, 0px, 22px);
   }
   .loading {
-    height: 40px;
+    @include px2rem(height, 120px);
     @include font-dpr(15px);
     color: $second-dark;
-    line-height: 40px;
+    line-height: normal;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -967,7 +967,7 @@
     overflow-y: scroll;
     padding-bottom: 1px; // 避免安卓手机QQ浏览器，滑动到底部后第一次不能直接上滑的bug
     -webkit-overflow-scrolling: touch;
-    z-index: 2;
+    z-index: 3;
   }
   .top-bg {
     @include px2rem(height, 210px);
@@ -992,7 +992,7 @@
     position: relative;
     background: url("../../assets/mallBg.png") no-repeat;
     background-size: cover;
-    z-index: 2;
+    z-index: 3;
     .content {
       flex: 1;
       @include px2rem(height, 110px);
@@ -1037,6 +1037,7 @@
       color: #F75541;
       line-height: normal;
       background-color: $white;
+      z-index: 3;
     }
   }
   .nav-container {
