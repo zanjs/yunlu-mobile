@@ -259,6 +259,22 @@
                 :loading="false"
                 :num="10">
               </enterprise-list>
+              <mugen-scroll
+                key="enterprise"
+                :handler="loadEnterpriseBottom"
+                :handle-on-mount="false"
+                :should-handle="!enterpriseLoading"
+                :threshold="0.1"
+                scroll-container="newMallContainer">
+                <div class="loading">
+                  <mt-spinner
+                    v-show="!noMoreEnterprises"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{enterpriseLoadingText}}</p>
+                </div>
+              </mugen-scroll>
             </div>
             <div
               v-else
@@ -268,7 +284,47 @@
             </div>
           </transition>
         </section>
-        <section v-if="activeIndex === 3" key="four"></section>
+        <section v-if="activeIndex === 3" key="four">
+          <template v-if="hasLogin">
+            <div v-if="person.length > 0">
+              <person-members
+                :store="person"
+                :loading="false"
+                :num="10">
+              </person-members>
+              <mugen-scroll
+                key="person"
+                :handler="loadPersonBottom"
+                :handle-on-mount="false"
+                :should-handle="!personLoading"
+                :threshold="0.1"
+                scroll-container="newMallContainer">
+                <div class="loading">
+                  <mt-spinner
+                    v-show="!noMorePerson"
+                    type="snake"
+                    :size="18">
+                  </mt-spinner>
+                  <p>{{personLoadingText}}</p>
+                </div>
+              </mugen-scroll>
+            </div>
+            <div
+              v-else
+              key="noPerson"
+              class="no-data">
+              <img src="../../assets/noPerson.png">
+            </div>
+          </template>
+          <template v-else>
+            <div key="noLogin" class="tab-tips-container">
+              <p class="second-text">登录后才能查看</p>
+              <div class="login-btn">
+                <a @click="goLogin()" class="primary-bg white font-13">登录</a>
+              </div>
+            </div>
+          </template>
+        </section>
       </transition>
     </div>
     <mall-order
@@ -305,6 +361,11 @@
         v-model.number="maxPrice"
         type="number">
     </product-filter>
+    <add-btn
+      v-show="activeIndex === 3 && canJoin"
+      :single="!showGoTopBtn"
+      @click="joinMember">
+    </add-btn>
     <back-to-top :show="showGoTopBtn" @click="goScroll(0)">
     </back-to-top>
   </section>
@@ -317,6 +378,8 @@
   import MallGrid from '../../components/enterprise/MallGrid'
   import MallOrder from '../../components/product/MallOrder'
   import BackToTop from '../../components/common/BackToTop'
+  import AddBtn from '../../components/common/AddBtn'
+  import PersonMembers from '../../components/common/PersonMembers'
   import EnterpriseList from '../../components/enterprise/EnterpriseList'
   import ProductFilter from '../../components/product/ProductFilter'
   import { showBack, getStore, removeStore, setScrollTop } from '../../config/mUtils'
@@ -374,7 +437,10 @@
         noMoreProducts: false,
         productLoadingText: '加载中...',
         noMoreEnterprises: false,
-        enterpriseLoadingText: '加载中...'
+        enterpriseLoadingText: '加载中...',
+        personLoadingText: '加载中...',
+        noMorePerson: false,
+        canJoin: false
       }
     },
     components: {
@@ -386,7 +452,9 @@
       ProductFilter,
       MugenScroll,
       ProductList,
-      EnterpriseList
+      EnterpriseList,
+      AddBtn,
+      PersonMembers
     },
     methods: {
       selectTab (index) {
@@ -445,16 +513,18 @@
             this.categories = res.data.categories
             this.malls = res.data.malls
             this.products = res.data.products
+            this.allProductsLength = res.data.count.product_count
+            this.enterprisesLength = res.data.count.organization_members_count
+            this.personLength = res.data.count.person_members_count
             this.homeLoading = false
             this.getProducts()
             this.shouldGetAreas()
-            this.handleFavoriteStatus(res.data.teams[0].enterprise_id)
           },
           reject: () => {
           }
         })
       },
-      getEnterpriseDetail () {
+      getTeams () {
         this.$store.dispatch('commonAction', {
           url: '/links/teams',
           method: 'get',
@@ -627,9 +697,20 @@
           }
         })
         if (res.data) {
+          this.canJoin = res.data.enterprises.organization.can_join_to_team
           this.hasAddFavorites = res.data.enterprises.organization.favorable
           this.favoratesText = res.data.enterprises.organization.favorable ? '已收藏' : '收藏'
         }
+      },
+      arrayFindItem (arr, key) {
+        let tmpObj = null
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].group_type === key) {
+            tmpObj = arr[i]
+            break
+          }
+        }
+        return tmpObj
       },
       getProducts (q = this.queryParams, zoneCode = '') {
         this.queryParams = q
@@ -656,7 +737,6 @@
               this.noMoreProducts = true
             }
             this.allProducts = this.productPageIndex === 1 ? res.data.products : [...this.allProducts, ...res.data.products]
-            this.allProductsLength = res.data.meta.total
             this.getEnterprises()
           },
           reject: () => {
@@ -738,6 +818,18 @@
           this.getProducts(this.queryParams, this.selectedArea)
         }
       },
+      loadEnterpriseBottom () {
+        if (!this.noMoreEnterprises) {
+          this.enterprisePageIndex += 1
+          this.getEnterprises()
+        }
+      },
+      loadPersonBottom () {
+        if (!this.noMorePerson) {
+          this.personPageIndex += 1
+          this.getPersonMembers()
+        }
+      },
       handleInput (e) {
         if (e.target.value === '') {
           this.resetSearchBar()
@@ -762,6 +854,7 @@
         }, 500)
       },
       getEnterprises () {
+        this.enterpriseLoading = true
         this.$store.dispatch('commonAction', {
           url: `/mall/${this.id}/org_members`,
           method: 'get',
@@ -776,14 +869,45 @@
               this.noMoreEnterprises = true
             }
             this.enterprises = this.enterprisePageIndex === 1 ? res.data.members : [...this.enterprises, ...res.data.members]
+            this.enterpriseLoading = false
           },
           reject: () => {
             this.productLoading = false
           }
         })
       },
+      getPersonMembers () {
+        this.personLoading = true
+        this.$store.dispatch('commonAction', {
+          url: `/mall/${this.id}/person_members`,
+          method: 'get',
+          params: {
+            page: this.personPageIndex,
+            per_page: this.personPageSize
+          },
+          target: this,
+          resolve: (state, res) => {
+            if (res.data.members.length < this.personPageSize) {
+              this.personLoadingText = '没有更多数据了...'
+              this.noMorePerson = true
+            }
+            this.person = this.personPageIndex === 1 ? res.data.members : [...this.person, ...res.data.members]
+            this.personLoading = false
+          },
+          reject: () => {
+            this.personLoading = false
+          }
+        })
+      },
       goMallDetail () {
         this.$router.push({path: `/malldetail/${this.id}`})
+      },
+      joinMember () {
+        if (!this.hasLogin) {
+          this.goLogin()
+        } else {
+          this.$router.push({name: 'JoinIn', params: {id: this.id}, query: {name: this.teams.name}})
+        }
       }
     },
     mounted () {
@@ -805,7 +929,7 @@
         setScrollTop(0, this.$refs.newMallContainer)
         this.hasLogin = !!getStore('user')
         this.token = getStore('user') ? getStore('user').authentication_token : null
-        this.getEnterpriseDetail()
+        this.getTeams()
         if (getStore('shareIntegral')) {
           this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
           removeStore('shareIntegral')
@@ -817,7 +941,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.newMallContainer.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories' && to.name !== 'MallDetail') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories' && to.name !== 'MallDetail' && to.name !== 'JoinIn') {
         this.showGoTopBtn = false
         this.hideIcon = false
         this.scrollActive = false
