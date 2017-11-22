@@ -4,9 +4,9 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="container">
+    <div v-if="!loading" class="container">
       <section class="info-wrapper">
-        <a class="item">
+        <a class="item" @click="goMall()">
           <span>加入机构</span>
           <span>{{name}}</span>
         </a>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div v-else class="flex no-constitution-wrapper">
-          <span class="no-constitution">暂未发布章程详情</span>
+          <img src="../../assets/noConstitution.png">
         </div>
         <div v-show="files.length > 0" class="flex join-tips">
           <div class="switch">
@@ -57,6 +57,7 @@
         </div>
       </section>
     </div>
+    <div class=""></div>
     <div v-if="showPreview">
       <div class="option-bar full-width">
         <div class="close"
@@ -90,7 +91,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import { Toast } from 'mint-ui'
+  import { Toast, Indicator } from 'mint-ui'
   export default {
     props: ['id'],
     name: 'JoinIn',
@@ -110,6 +111,7 @@
         previewImgs: [],
         currentIndex: 1,
         showPreview: false,
+        loading: true,
         swiperOption: {
           notNextTick: false,
           autoplay: 0,
@@ -155,6 +157,15 @@
         }
         return tmpArr
       },
+      openIndicator () {
+        Indicator.open({
+          text: '加载中...',
+          spinnerType: 'snake'
+        })
+      },
+      closeIndicator () {
+        Indicator.close()
+      },
       getJoinDetails () {
         this.$store.dispatch('commonAction', {
           url: `/team/${this.id}/archives`,
@@ -175,10 +186,16 @@
             this.getFiles(this.fileIds)
           },
           reject: (state, error) => {
+            this.loading = false
+            this.closeIndicator()
           }
         })
       },
+      goMall () {
+        this.$router.push({path: `/malls/${this.id}`})
+      },
       getFiles (ids) {
+        this.loading = true
         this.$store.dispatch('commonAction', {
           url: '/links/files/publisheds',
           method: 'get',
@@ -192,8 +209,12 @@
           target: this,
           resolve: (state, res) => {
             this.files = res.data.files
+            this.loading = false
+            this.closeIndicator()
           },
           reject: (state, error) => {
+            this.loading = false
+            this.closeIndicator()
           }
         })
       },
@@ -264,6 +285,7 @@
       }
     },
     mounted () {
+      this.openIndicator()
       this.getJoinDetails()
       this.stopTouchMove()
     }
@@ -314,12 +336,11 @@
 
       }
       .no-constitution-wrapper {
-        @include px2rem(height, 300px);
+        @include px2rem(height, 400px);
         @include px2rem(padding-right, 30px);
-        span {
-          line-height: normal;
-          @include font-dpr(36px);
-          color: $fifth-grey;
+        img {
+          @include px2rem(width, 368px);
+          @include px2rem(height, 322px);
         }
       }
       .img-container {

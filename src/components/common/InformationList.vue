@@ -36,7 +36,17 @@
 
       }
     },
-    props: ['store', 'num', 'loading'],
+    props: {
+      store: {
+        required: true
+      },
+      num: {
+        default: 10
+      },
+      loading: {
+        default: true
+      }
+    },
     methods: {
       handleClick (item) {
         this.$emit('click', item)
