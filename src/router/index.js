@@ -48,6 +48,7 @@ const Pay = resolve => require(['../views/products/Pay'], resolve)
 const Categories = resolve => require(['../views/products/Categories'], resolve)
 const CategoryProducts = resolve => require(['../views/products/CategoryProducts'], resolve)
 const MallDetail = resolve => require(['../views/carte/MallDetail'], resolve)
+const JoinIn = resolve => require(['../views/carte/JoinIn'], resolve)
 
 Vue.use(Router)
 
@@ -315,6 +316,12 @@ export default new Router({
       path: '/malldetail/:id',
       name: 'MallDetail',
       component: MallDetail,
+      props: true,
+      meta: { keepAlive: false }
+    }, {
+      path: '/joinin/:id',
+      name: 'JoinIn',
+      component: JoinIn,
       props: true,
       meta: { keepAlive: false }
     }

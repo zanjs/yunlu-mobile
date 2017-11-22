@@ -58,7 +58,7 @@
       return {
       }
     },
-    name: 'EnterpriseList',
+    name: 'PersonMembers',
     props: ['store', 'loading', 'num'],
     methods: {
       handleClick (item) {
