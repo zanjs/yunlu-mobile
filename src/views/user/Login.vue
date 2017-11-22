@@ -96,9 +96,9 @@
         user: null,
         interval: null,
         showRejectPopup: false,
-        qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/login?provider=qq&' + getStore('shortUuid') + 'tmp_token=')}`,
+        qqLogin: `${AUTH_URL}/member/auth/qq_connect?url=${encodeURIComponent('/login?provider=qq&tmp_token=')}`,
         weiboLogin: `${AUTH_URL}/member/auth/weibo`,
-        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/login?provider=wechat&share_uuid=' + getStore('shortUuid') + '&tmp_token=')}`
+        weixinLogin: `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent('/login?provider=wechat&tmp_token=')}`
       }
     },
     components: {
