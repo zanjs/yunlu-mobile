@@ -6,8 +6,11 @@
         <div v-else></div>
       </div>
       <div class="content">
-        <p v-if="store && store.company" class="font-17 ellipsis">{{store.company}}</p>
-        <p v-else class="font-17 ellipsis empty-name"></p>
+        <p v-if="store && store.company" class="font-17 name">{{store.company}}</p>
+        <div v-else>
+          <p class="font-17 empty-name"></p>
+          <p class="font-17 empty-name"></p>
+        </div>
         <div class="icon-container">
           <div v-if="!store || !store.state" class="svg"></div>
           <template v-else-if="store && store.state && store.state !== 'approved'">
@@ -123,10 +126,24 @@
         @include px2rem(width, 448px);
         @include px2rem(height, 185px);
         flex-direction: column;
+        .name {
+          line-height: 1.5;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          word-break: break-all;
+          float: left;
+          @include px2rem(height, 140px);
+        }
         .empty-name {
           @include px2rem(width, 400px);
           @include px2rem(height, 40px);
+          @include px2rem(margin-bottom, 10px);
           background-color: $ninth-grey;
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
         .icon-container {
           display: flex;
