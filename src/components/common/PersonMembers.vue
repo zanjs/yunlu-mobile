@@ -20,21 +20,13 @@
         class="flex-between item primary-text">
         <img
           v-lazy="{
-            src: item.logo,
+            src: item.img,
             error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
             loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
           }">
         <div class="flex-between content flex-1 ellipsis">
-          <p class="font-15 ellipsis">{{item.name}}</p>
+          <p class="font-15 ellipsis">{{item.home_name}}</p>
           <div class="font-13 third-text">
-            <span
-              v-if="item.service_name"
-              class="flex-1">{{item.service_name}}</span>
-            <span
-              v-if="item.location"
-              class="flex-1">
-              {{item.location}}
-            </span>
             <span class="flex-1">月销{{item.order_form_count}}笔</span>
           </div>
         </div>
