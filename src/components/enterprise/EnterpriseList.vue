@@ -29,7 +29,7 @@
           <div class="font-13 third-text">
             <span
               v-if="item.service_name"
-              class="flex-1">{{item.service_name}}</span>
+              class="flex-1">{{item.service_name.name}}</span>
             <span
               v-if="item.location"
               class="flex-1">
