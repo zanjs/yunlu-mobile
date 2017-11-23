@@ -1,6 +1,5 @@
 <template>
   <section class="full-width">
-    <div class="absolute-horizontal top-bg"></div>
     <mall-header
       class="mall-header"
       @back="goBack()"
@@ -969,12 +968,6 @@
     -webkit-overflow-scrolling: touch;
     z-index: 3;
   }
-  .top-bg {
-    @include px2rem(height, 210px);
-    width: 100%;
-    max-width: 540px;
-    z-index: 2;
-  }
   .mall-header {
     z-index: 3;
   }
@@ -1038,6 +1031,7 @@
       line-height: normal;
       background-color: $white;
       z-index: 3;
+      cursor: pointer;
     }
   }
   .nav-container {
