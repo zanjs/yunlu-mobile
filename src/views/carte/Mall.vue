@@ -174,7 +174,10 @@
           <div  v-if="homeLoading || products.length > 0" class="section-wrapper">
             <div class="flex section-title">
               <hr>
-              <span class="font-14 third-text">热卖爆款</span>
+              <p>
+                <i class="iconfont icon-huo"></i>
+                <span class="font-14 third-text">热卖爆款</span>
+              </p>
               <hr>
             </div>
             <product-grid
@@ -188,7 +191,10 @@
           <div class="section-wrapper">
             <div class="flex section-title">
               <hr>
-              <span class="font-14 third-text">商城推荐</span>
+              <p>
+                <i class="iconfont icon-tuijian"></i>
+                <span class="font-14 third-text">商城推荐</span>
+              </p>
               <hr>
             </div>
             <mall-grid
@@ -1158,8 +1164,13 @@
         border-top: 1px solid $third-dark;
         border-bottom: none;
       }
-      span {
+      p {
         @include pm2rem(margin, 0px, 30px, 0px, 30px);
+        i {
+          @include font-dpr(16px);
+          color: $third-dark;
+          @include px2rem(margin-right, 10px);
+        }
       }
     }
     .section-content {
