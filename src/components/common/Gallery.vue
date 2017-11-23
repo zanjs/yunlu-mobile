@@ -1,16 +1,25 @@
 <template>
   <section>
     <div class="gallery">
-      <img
-        v-for="(item, index) in dataSource"
-        :key="index"
-        v-lazy="{
-          src: item.thumb_url,
-          error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-          loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-        }"
-        class="photo"
-        @click="handleClick(index)">
+      <template v-if="loading && dataSource.length === 0">
+        <div
+          v-for="(item, index) in num"
+          :key="index"
+          class="empty-img">
+        </div>
+      </template>
+      <template v-else>
+        <img
+          v-for="(item, index) in dataSource"
+          :key="index"
+          v-lazy="{
+            src: item.thumb_url,
+            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+          }"
+          class="photo"
+          @click="handleClick(index)">
+      </template>
     </div>
   </section>
 </template>
@@ -21,7 +30,17 @@
       }
     },
     name: 'Gallery',
-    props: ['dataSource'],
+    props: {
+      dataSource: {
+        required: true
+      },
+      num: {
+        default: 24
+      },
+      loading: {
+        default: true
+      }
+    },
     methods: {
       handleClick (index) {
         this.$emit('click', index)
@@ -43,7 +62,13 @@
     .photo {
       @include px2rem(width, 236px);
       @include px2rem(height, 236px);
-      @include pm2rem(margin, 0px, 8px, 10px, 0px)
+      @include pm2rem(margin, 0px, 8px, 10px, 0px);
+    }
+    .empty-img {
+      @include px2rem(width, 236px);
+      @include px2rem(height, 236px);
+      @include pm2rem(margin, 0px, 8px, 10px, 0px);
+      background-color: $ninth-grey;
     }
     img[lazy=loading] {
       @include px2rem(width, 236px);
