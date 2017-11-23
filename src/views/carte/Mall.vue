@@ -256,7 +256,8 @@
               <enterprise-list
                 :store="enterprises"
                 :loading="false"
-                :num="10">
+                :num="10"
+                @click="goEnterprise">
               </enterprise-list>
               <mugen-scroll
                 key="enterprise"
@@ -499,6 +500,21 @@
       },
       goMall (item) {
         this.$router.push({path: `/malls/${item.id}`})
+      },
+      goEnterprise (item) {
+        if (!item.service_name) {
+          this.$router.push({name: 'EmptyEnterpriseCarte', query: {name: item.name}})
+        } else if (item.service_name.aliaz === 'association') {
+          this.$router.push({name: 'ComityCarte', params: {id: item.id}})
+        } else if (item.service_name.aliaz === 'school') {
+          this.$router.push({name: 'Alumni', params: {id: item.id}})
+        } else if (item.service_name.aliaz === 'class') {
+          this.$router.push({name: 'Class', params: {id: item.id}})
+        } else if (item.service_name.aliaz === 'mall') {
+          this.$router.push({name: 'Mall', params: {id: item.id}})
+        } else {
+          this.$router.push({name: 'EnterpriseCarte', params: {id: item.id}})
+        }
       },
       getMall () {
         this.$store.dispatch('commonAction', {
@@ -869,6 +885,7 @@
             }
             this.enterprises = this.enterprisePageIndex === 1 ? res.data.members : [...this.enterprises, ...res.data.members]
             this.enterpriseLoading = false
+            this.getPersonMembers()
           },
           reject: () => {
             this.productLoading = false
