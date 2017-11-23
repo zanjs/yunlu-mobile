@@ -144,11 +144,6 @@
             v-if="homeLoading && categories.length === 0"
             class="section-wrapper  empty-wrapper"
             :class="{'icon-hide': hideIcon}">
-            <div class="flex section-title">
-              <hr>
-              <span class="font-14 third-text">推荐类别</span>
-              <hr>
-            </div>
             <div class="section-content">
               <a
                 v-for="(item, index) in preLoadCategoriesLength"
