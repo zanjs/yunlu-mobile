@@ -11,10 +11,12 @@
         :appear="true"
         mode="out-in">
         <section
-          v-if="photos && photos.length > 0"
+          v-if="photoLoading || photos.length > 0"
           class="container">
           <gallery
             :data-source="photos"
+            :num="preLoadPhotoLength"
+            :loading="photoLoading"
             @click="showFullScreenPreview">
           </gallery>
           <mugen-scroll
@@ -158,7 +160,8 @@
             }
           }
         },
-        photoLoading: false,
+        photoLoading: true,
+        preLoadPhotoLength: 24,
         photoLoadingText: '加载中...',
         scrollHeight: '17rem',
         noMoreData: false

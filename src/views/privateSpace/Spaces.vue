@@ -141,7 +141,7 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        loading: false,
+        loading: true,
         loadingText: '加载中...',
         noMoreData: false,
         scrollHeight: '15rem'
