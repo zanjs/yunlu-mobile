@@ -290,7 +290,8 @@
               <person-members
                 :store="person"
                 :loading="false"
-                :num="10">
+                :num="10"
+                @click="goPersonCarte">
               </person-members>
               <mugen-scroll
                 key="person"
@@ -914,6 +915,9 @@
             this.personLoading = false
           }
         })
+      },
+      goPersonCarte (item) {
+        this.$router.push({path: `/users/${item.uuid}`})
       },
       goMallDetail () {
         this.$router.push({path: `/malldetail/${this.id}`})

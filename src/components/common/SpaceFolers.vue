@@ -67,7 +67,6 @@
     @include px2rem(width, 705px);
     margin: 0 auto;
     @include px2rem(margin-top, 10px);
-    @include px2rem(margin-bottom, -10px);
     .title {
       display: flex;
       justify-content: center;
