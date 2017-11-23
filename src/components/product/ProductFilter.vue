@@ -1,64 +1,69 @@
 <template>
-  <section v-show="show" class="full-width">
-    <div class="full-width filter-bg" @click.stop="closeFilter()"></div>
-    <div class="container">
-      <div class="wrapper">
-        <section class="price-wrapper">
-          <p class="title font-14 third-text">
-            价格区间(元)
-          </p>
-          <div class="flex input-container">
-            <slot name="input-left"></slot>
-            <div class="absolute-horizontal line"></div>
-            <slot name="input-right"></slot>
-          </div>
-        </section>
-        <section class="area-wrapper" v-if="areas && areas.length == 3">
-          <p class="title font-14 third-text">区域</p>
-          <div class="flex area">
-            <a
-              v-for="(item, index) in areas[0].data"
-              :key="index"
-              class="flex item"
-              :class="{'active': selectedArea === item.code}"
-              @click="chooseArea(item.code)">
-              {{item.name}}
-            </a>
-          </div>
-        </section>
-        <section class="area-wrapper" v-if="areas && areas.length == 3">
-          <p class="title font-14 third-text">城市</p>
-          <div class="flex area">
-            <a
-              v-for="(item, index) in areas[1].data"
-              :key="index"
-              class="flex item"
-              :class="{'active': selectedArea === item.code}"
-              @click="chooseArea(item.code)">
-              {{item.name}}
-            </a>
-          </div>
-        </section>
-        <section class="area-wrapper bottom" v-if="areas && areas.length == 3">
-          <p class="title font-14 third-text">省份</p>
-          <div class="flex area">
-            <a
-              v-for="(item, index) in areas[2].data"
-              :key="index"
-              class="flex item"
-              :class="{'active': selectedArea === item.code}"
-              @click="chooseArea(item.code)">
-              {{item.name}}
-            </a>
-          </div>
-        </section>
+  <section class="full-width">
+    <transition name="fade">
+      <div v-show="show" class="full-width filter-bg" @click.stop="closeFilter()"></div>
+    </transition>
+    <transition name="slide-right">
+      <div v-if="show" class="container">
+        <div class="wrapper">
+          <section class="price-wrapper">
+            <p class="title font-14 third-text">
+              价格区间(元)
+            </p>
+            <div class="flex input-container">
+              <slot name="input-left"></slot>
+              <div class="absolute-horizontal line"></div>
+              <slot name="input-right"></slot>
+            </div>
+          </section>
+          <section class="area-wrapper" v-if="areas && areas.length == 3">
+            <p class="title font-14 third-text">区域</p>
+            <div class="flex area">
+              <a
+                v-for="(item, index) in areas[0].data"
+                :key="index"
+                class="flex item"
+                :class="{'active': selectedArea === item.code}"
+                @click="chooseArea(item.code)">
+                {{item.name}}
+              </a>
+            </div>
+          </section>
+          <section class="area-wrapper" v-if="areas && areas.length == 3">
+            <p class="title font-14 third-text">城市</p>
+            <div class="flex area">
+              <a
+                v-for="(item, index) in areas[1].data"
+                :key="index"
+                class="flex item"
+                :class="{'active': selectedArea === item.code}"
+                @click="chooseArea(item.code)">
+                {{item.name}}
+              </a>
+            </div>
+          </section>
+          <section class="area-wrapper bottom" v-if="areas && areas.length == 3">
+            <p class="title font-14 third-text">省份</p>
+            <div class="flex area">
+              <a
+                v-for="(item, index) in areas[2].data"
+                :key="index"
+                class="flex item"
+                :class="{'active': selectedArea === item.code}"
+                @click="chooseArea(item.code)">
+                {{item.name}}
+              </a>
+            </div>
+          </section>
+        </div>
+        <div class="flex full-width buttons">
+          <a class="flex" @click="clearArea()">清除</a>
+          <a class="flex" @click="save()">确定</a>
+        </div>
       </div>
-      <div class="flex full-width buttons">
-        <a class="flex" @click="clearArea()">清除</a>
-        <a class="flex" @click="save()">确定</a>
-      </div>
-    </div>
+    </transition>
   </section>
+  </transition>
 </template>
 
 <script>
@@ -95,7 +100,7 @@
     background-color: rgba(0, 0, 0, .5);
     top: 0;
     bottom: 0;
-    z-index: 3;
+    z-index: 5;
   }
   .container {
     position: fixed;
@@ -105,7 +110,7 @@
     top: 0;
     bottom: 0;
     background-color: $white;
-    z-index: 3;
+    z-index: 5;
   }
   .wrapper {
     position: relative;
@@ -189,5 +194,12 @@
     a:active {
       background-color: rgba(239, 234, 234, .5);
     }
+  }
+
+  .slide-right-enter-active, .slide-right-leave-active {
+    transition: transform .3s ease-out;
+  }
+  .slide-right-enter, .slide-right-leave-active {
+    transform: translateX(100%);
   }
 </style>
