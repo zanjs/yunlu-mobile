@@ -4,9 +4,9 @@
       <div class="flex item">
         <a :class="{'icon-active': sortType === 0}" @click="changeSortType(0)">综合</a>
       </div>
-      <div class="flex item">
+      <!-- <div class="flex item">
         <a :class="{'icon-active': sortType === 1}" @click="changeSortType(1)">销量</a>
-      </div>
+      </div> -->
       <div class="flex item box">
         <a @click="changeOrder(orderUp)">
           <span :class="{'icon-active': sortType === 2}">价格</span>

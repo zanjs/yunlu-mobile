@@ -352,13 +352,13 @@
       @reset="resetArea"
       @save="filterProducts">
       <input
-        class="flex"
+        class="flex input-filter"
         placeholder="最低价"
         slot="input-left"
         v-model.number="minPrice"
         type="number">
       <input
-        class="flex"
+        class="flex input-filter"
         placeholder="最高价"
         slot="input-right"
         v-model.number="maxPrice"
@@ -787,7 +787,7 @@
       orderChange (val) {
         this.orderUp = val
         this.sortType = 2
-        this.productPageIndex = 1 // 调整价格排序后，需要从第一页重新开始获取产品数据
+        this.resetPageIndex() // 调整价格排序后，需要从第一页重新开始获取产品数据
         this.getProducts(this.queryParams, this.selectedArea)
       },
       showListChange (val) {
@@ -795,7 +795,22 @@
       },
       changeSortType (num) {
         this.sortType = num
+        this.resetPageIndex()
         this.getProducts(this.queryParams, this.selectedArea)
+      },
+      // 每次切换排序方式，都要把分页索引重置
+      resetPageIndex () {
+        this.productLoading = true
+        this.productPageIndex = 1
+        this.enterprisePageIndex = 1
+        this.personPageIndex = 1
+        this.noMoreProducts = false
+        this.noMoreEnterprises = false
+        this.noMorePerson = false
+        this.productLoadingText = '加载中...'
+        this.enterpriseLoadingText = '加载中...'
+        this.personLoadingText = '加载中...'
+        setScrollTop(0, this.$refs.newMallContainer)
       },
       switchFilter (val) {
         this.useFilter = val
@@ -811,9 +826,7 @@
         this.minPrice = ''
         this.maxPrice = ''
         this.priceRange = ''
-        this.productPageIndex = 1 // 使用/清除过滤时，将产品分页重置为第一页
-        this.noMoreProducts = false
-        this.productLoadingText = '加载中...'
+        this.resetPageIndex()
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
@@ -827,9 +840,7 @@
         } else if (!this.maxPrice && this.minPrice) {
           this.priceRange = `${this.minPrice}`
         }
-        this.productPageIndex = 1 // 使用/清除过滤时，将产品分页重置为第一页
-        this.noMoreProducts = false
-        this.productLoadingText = '加载中...'
+        this.resetPageIndex()
         this.getProducts(this.queryParams, this.selectedArea)
         this.closeFilter()
       },
@@ -861,11 +872,8 @@
         this.queryParams = ''
         this.hasSearch = false
         this.productLoading = true
-        this.productPageIndex = 1
-        this.noMoreProducts = false
-        this.productLoadingText = '加载中...'
+        this.resetPageIndex()
         this.throttle(this.getProducts, this)
-        setScrollTop(0, this.$refs.newMallContainer)
       },
       // 节流函数
       throttle (method, context) {
@@ -993,6 +1001,17 @@
     padding-bottom: 1px; // 避免安卓手机QQ浏览器，滑动到底部后第一次不能直接上滑的bug
     -webkit-overflow-scrolling: touch;
     z-index: 3;
+  }
+  .input-filter {
+    @include px2rem(width, 200px);
+    @include px2rem(height, 60px);
+    line-height: normal;
+    border: none;
+    @include pm2rem(padding, 0px, 20px, 0px, 20px);
+    box-sizing: border-box;
+    text-align: center;
+    @include font-dpr(14px);
+    color: $second-dark;
   }
   .mall-header {
     z-index: 3;
