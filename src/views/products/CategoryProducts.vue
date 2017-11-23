@@ -122,7 +122,7 @@
         })
         if (res.data) {
           if (res.data.products.length < this.pageSize) {
-            this.noMoreData = true
+            this.noMoreProducts = true
             this.loadingText = '没有更多数据了...'
           }
           let tmpArr = this.handleProductThumbnails(res.data.products)
@@ -198,7 +198,7 @@
         }
       },
       loadProductBottom () {
-        if (!this.noMoreData) {
+        if (!this.noMoreProducts) {
           this.pageIndex += 1
           this.getProducts(this.sort, this.queryParams)
         }

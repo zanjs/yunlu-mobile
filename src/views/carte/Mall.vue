@@ -164,7 +164,8 @@
               <a
                 v-for="(item, index) in categories"
                 :key="index"
-                class="flex item">
+                class="flex item"
+                @click="goSingleCategory(item.id)">
                 <img :src="item.thumb">
                 <p class="flex ellipsis font-12">{{item.name}}</p>
               </a>
@@ -492,6 +493,9 @@
         this.productPageIndex = 1
         this.getProducts(queryParams, this.selectedArea)
         document.activeElement.blur()
+      },
+      goSingleCategory (id) {
+        this.$router.push({name: 'CategoryProducts', params: {id: id}})
       },
       goCategories () {
         this.$router.push({name: 'Categories'})
@@ -961,7 +965,7 @@
     },
     beforeRouteLeave (to, from, next) {
       this.$store.dispatch('saveScroll', {name: 'Mall', value: this.$refs.newMallContainer.scrollTop})
-      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories' && to.name !== 'MallDetail' && to.name !== 'JoinIn') {
+      if (to.name !== 'ProductDetail' && to.name !== 'InformationFolders' && to.name !== 'Chat' && to.name !== 'PersonCarte' && to.name !== 'EnterpriseCarte' && to.name !== 'Login' && to.name !== 'BeforeRegister' && to.name !== 'Help' && to.name !== 'Maps' && to.name !== 'ShoppingCart' && to.name !== 'EnterpriseDetail' && to.name !== 'Report' && to.name !== 'Categories' && to.name !== 'MallDetail' && to.name !== 'JoinIn' && to.name !== 'CategoryProducts') {
         this.showGoTopBtn = false
         this.hideIcon = false
         this.scrollActive = false
