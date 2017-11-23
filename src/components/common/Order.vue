@@ -64,8 +64,9 @@
     width: 100%;
     max-width: 540px;
     box-shadow: 0 6px 8px -4px rgba(0, 0, 0, .2);
-    transition: opacity .3s;
-    opacity: 0;
+    opacity: .8;
+    transform: translateY(-140px);
+    transition: all .3s ease-in-out;
     .item {
       height: inherit;
       display: flex;
@@ -106,8 +107,8 @@
       transition: color .3s;
     }
     &.active {
-      transition: opacity .3s;
       opacity: 1;
+      transform: translateY(0);
     }
   }
 </style>

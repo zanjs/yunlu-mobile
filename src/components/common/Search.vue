@@ -45,8 +45,9 @@
     border: none;
     box-sizing: border-box;
     box-shadow: 0 1px 5px rgba(0,0,0,.2);
-    transition: opacity .3s;
-    opacity: 0;
+    opacity: .8;
+    transform: translateY(-140px);
+    transition: all .3s ease-in-out;
     input {
       background-color: $ninth-grey;
       width: 100%;
@@ -74,7 +75,7 @@
     }
   }
   .active {
-    transition: opacity .3s;
+    transform: translateY(0);
     opacity: 1;
   }
 
