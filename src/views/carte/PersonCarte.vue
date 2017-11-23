@@ -139,7 +139,7 @@
       </div>
     </div>
     <favorite-btn
-      :show="userCard"
+      :show="!!userCard"
       :single="true"
       :text="favoratesText"
       @click="favoriteAction()">
