@@ -352,7 +352,7 @@
                 message: '您已成功提醒发货~',
                 className: 'toast-content',
                 iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
-                position: 'bottom',
+                position: 'center',
                 duration: 1000
               })
             }
@@ -360,8 +360,7 @@
         })
       },
       pay (item) {
-        console.log(item)
-        this.notOpen()
+        this.$router.push({name: 'Pay', query: {code: item.params.code, amount: item.params.amount}})
       },
       notOpen () {
         Toast({
