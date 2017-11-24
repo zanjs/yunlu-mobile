@@ -46,7 +46,6 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
-  import { AUTH_URL } from '../../constants/constant'
   import { Toast } from 'mint-ui'
   export default {
     name: 'Pay',
@@ -90,7 +89,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${AUTH_URL + window.location.search}&back=1`)
+            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.origin + window.location.search}&back=1`)
           },
           reject: () => {
           }
