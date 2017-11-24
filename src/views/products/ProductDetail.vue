@@ -869,7 +869,11 @@
         }
       },
       openShoppingCar () {
-        this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
+        if (this.hasLogin) {
+          this.$router.push({name: 'ShoppingCart'})
+        } else {
+          this.goLogin()
+        }
       },
       checkBeforeBuying () {
         if (!this.hasChoosePrice) {
@@ -933,36 +937,36 @@
       },
       buyNow (quantity) {
         if (this.checkBeforeBuying()) {
-          this.closeSku()
-          this.quantity = 1
-          setStore('buying', [{
-            team: {
-              company: this.productDetailTeam.company,
-              id: this.productDetailTeam.id,
-              logo: this.productDetailTeam.logo
-            },
-            products: [{
-              id: null, // 进入确认订单页面后，此id为空，更改购买数量时，不需要发请求更改
-              quantity: quantity,
-              price: {
-                id: this.currentPrice.id,
-                warehouse: null,
-                amount: this.currentPrice.amount,
-                money: this.currentPrice.money,
-                product: {
-                  id: this.productDetail.id,
-                  name: this.productDetail.name,
-                  state: this.productDetail.state,
-                  organization_id: this.productDetail.organization_id,
-                  file_id: this.productDetailFiles[0].id,
-                  file_url: this.productDetailFiles[0].url,
-                  file_thumb_url: this.productDetailFiles[0].thumb_urls[0]
-                }
-              },
-              checked: true
-            }]
-          }])
           if (this.hasLogin) {
+            this.closeSku()
+            this.quantity = 1
+            setStore('buying', [{
+              team: {
+                company: this.productDetailTeam.company,
+                id: this.productDetailTeam.id,
+                logo: this.productDetailTeam.logo
+              },
+              products: [{
+                id: null, // 进入确认订单页面后，此id为空，更改购买数量时，不需要发请求更改
+                quantity: quantity,
+                price: {
+                  id: this.currentPrice.id,
+                  warehouse: null,
+                  amount: this.currentPrice.amount,
+                  money: this.currentPrice.money,
+                  product: {
+                    id: this.productDetail.id,
+                    name: this.productDetail.name,
+                    state: this.productDetail.state,
+                    organization_id: this.productDetail.organization_id,
+                    file_id: this.productDetailFiles[0].id,
+                    file_url: this.productDetailFiles[0].url,
+                    file_thumb_url: this.productDetailFiles[0].thumb_urls[0]
+                  }
+                },
+                checked: true
+              }]
+            }])
             if (this.deliveries.length === 0) {
               removeStore('editAddress')
               this.$router.push({name: 'AddAddress'})
