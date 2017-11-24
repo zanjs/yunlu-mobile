@@ -71,6 +71,10 @@
       @include px2rem(width, 120px);
       height: inherit;
       color: $white;
+      i {
+        @include font-dpr(20px);
+        line-height: normal;
+      }
     }
     .input-container {
       height: inherit;
