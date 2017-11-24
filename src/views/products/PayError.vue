@@ -37,9 +37,9 @@
       goBack () {
         if (getStore('PayError_goHome')) {
           removeStore('PayError_goHome')
-          this.$router.push({name: 'See'})
+          this.$router.replace({name: 'See'})
         } else {
-          this.$router.go(-1)
+          this.$router.replace({name: 'See'})
         }
       },
       viewOrder () {
