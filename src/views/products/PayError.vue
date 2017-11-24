@@ -5,11 +5,11 @@
       @back="goBack()">
     </common-header>
     <div class="success-img">
-      <img src="../../assets/paySuccess.png">
-      <p>支付成功，请耐心等待商家发货</p>
+      <img src="../../assets/payError.png">
+      <p>您的订单处理出现异常，请重新下单</p>
       <div class="flex-between button-group">
         <a class="flex white-btn" @click="viewOrder()">查看订单</a>
-        <a class="flex green-btn" @click="continueToBuy()">继续购买</a>
+        <a class="flex green-btn" @click="payAgain()">重新支付</a>
       </div>
     </div>
     <div class="tips">
@@ -22,10 +22,12 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
-    name: 'PaySuccess',
+    name: 'PayError',
     data () {
       return {
-        header: '云庐收银台'
+        header: '云庐收银台',
+        token: getStore('user') ? getStore('user').authentication_token : '',
+        code: this.$route.query.code || ''
       }
     },
     components: {
@@ -33,8 +35,8 @@
     },
     methods: {
       goBack () {
-        if (getStore('PaySuccess_goHome')) {
-          removeStore('PaySuccess_goHome')
+        if (getStore('PayError_goHome')) {
+          removeStore('PayError_goHome')
           this.$router.push({name: 'See'})
         } else {
           this.$router.go(-1)
@@ -43,8 +45,21 @@
       viewOrder () {
         this.$router.replace({name: 'OrderForm'})
       },
-      continueToBuy () {
-        this.$router.replace({name: 'See'})
+      payAgain () {
+        this.$store.dispatch('commonAction', {
+          url: '/prepay/wechat/h5',
+          method: 'get',
+          params: {
+            token: this.token,
+            code: this.code
+          },
+          target: this,
+          resolve: (state, res) => {
+            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.href}&back=1`)
+          },
+          reject: () => {
+          }
+        })
       }
     }
   }

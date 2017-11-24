@@ -50,6 +50,7 @@ const CategoryProducts = resolve => require(['../views/products/CategoryProducts
 const MallDetail = resolve => require(['../views/carte/MallDetail'], resolve)
 const JoinIn = resolve => require(['../views/carte/JoinIn'], resolve)
 const PaySuccess = resolve => require(['../views/products/PaySuccess'], resolve)
+const PayError = resolve => require(['../views/products/PayError'], resolve)
 
 Vue.use(Router)
 
@@ -329,6 +330,12 @@ export default new Router({
       path: '/paysuccess',
       name: 'PaySuccess',
       component: PaySuccess,
+      props: true,
+      meta: { keepAlive: false }
+    }, {
+      path: '/payerror',
+      name: 'PayError',
+      component: PayError,
       props: true,
       meta: { keepAlive: false }
     }

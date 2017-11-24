@@ -89,7 +89,7 @@
           },
           target: this,
           resolve: (state, res) => {
-            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.origin + window.location.search}&back=1`)
+            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.href}&back=1`)
           },
           reject: () => {
           }
