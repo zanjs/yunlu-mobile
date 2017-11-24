@@ -45,7 +45,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, mobileClient } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     name: 'Pay',
@@ -57,7 +57,7 @@
         code: this.$route.query.code || '',
         amount: this.$route.query.amount || '',
         paymentMethods: ['微信支付'],
-        selectedItem: '',
+        selectedItem: '微信支付',
         dialogVisible: false
       }
     },
@@ -69,14 +69,23 @@
         if (getStore('Paying_goHome')) {
           removeStore('Paying_goHome')
           this.$router.push({name: 'See'})
+        } else if (this.isRedirect) {
+          this.$router.replace({name: 'See'})
         } else {
           this.$router.go(-1)
         }
       },
       pay (item) {
         if (item === '微信支付') {
-          this.selectedItem = item
-          this.payRequest()
+          if (mobileClient() === 'weixin') {
+            Toast({
+              message: '暂不支持在微信中直接支付,请更换其他浏览器,可以在【我的订单】-【待付款】中继续支付',
+              duration: 2000
+            })
+          } else {
+            this.selectedItem = item
+            this.payRequest()
+          }
         }
       },
       payRequest () {
@@ -93,12 +102,6 @@
           },
           reject: () => {
           }
-        })
-      },
-      notOpen () {
-        Toast({
-          message: '暂未开放',
-          duration: 500
         })
       },
       goPaySuccess () {
