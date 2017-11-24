@@ -134,7 +134,7 @@
       <a
         v-else
         class="flex pay-btn white font-17"
-        @click="pay()">
+        @click="checkBeforePay()">
         支付
       </a>
     </section>
@@ -152,6 +152,7 @@
         header: '确认订单',
         deliverie: null,
         token: getStore('user') ? getStore('user').authentication_token : '',
+        mobile: getStore('user') ? getStore('user').mobile : '',
         purchaseItems: getStore('buying') ? getStore('buying') : [],
         message: '希望掌柜快点发货！'
       }
@@ -320,6 +321,16 @@
           tmpArr.push(obj)
         }
         return tmpArr
+      },
+      checkBeforePay () {
+        if (!this.mobile) {
+          Toast({
+            message: '未绑定手机号无法进行此操作',
+            duration: 1000
+          })
+        } else {
+          this.pay()
+        }
       },
       pay () {
         this.$store.dispatch('commonAction', {
