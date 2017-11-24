@@ -31,6 +31,14 @@ router.beforeEach((to, from, next) => {
       return query
     }
   }
+  const cleanUrl = () => {
+    let tmpSearchUrl = ''
+    if (window.location.search.indexOf('&provider=wechat&tmp_token=') > -1) {
+      let url = window.location.search.split('provider')[0]
+      tmpSearchUrl = url.substring(0, url.length - 1)
+    }
+    return window.location.pathname + tmpSearchUrl
+  }
   const weixinAuth = (token) => {
     store.dispatch('commonAction', {
       url: '/login_info',
@@ -67,7 +75,9 @@ router.beforeEach((to, from, next) => {
       target: this,
       resolve: (state, res) => {
         setStore('signature', res.data)
-        next()
+        // 调用next()前需要将url中的tmp_token和provider去掉，避免在微信中使用其他浏览器打开时，url带有上面两个参数，而这两个参数已经使用过了，所以在第三方浏览器打开会报错。
+        let url = cleanUrl()
+        next({path: url})
       },
       reject: () => {
       }
@@ -85,7 +95,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   const autoLogin = () => {
-    if (handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
+    if (mobileClient() === 'weixin' && handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信授权登录失败')
