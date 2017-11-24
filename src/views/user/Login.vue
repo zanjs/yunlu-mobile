@@ -108,11 +108,7 @@
       goBack (social = false, provider = '') {
         if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
-          if (getStore('user') && getStore('user').authentication_token && getStore('buying')) { // 产品详情页正在购买的产品信息
-            this.getDeliveries(getStore('user').authentication_token)
-          } else {
-            this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
-          }
+          this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
           removeStore('Login_goHome')
           this.$router.replace({name: 'See'})
@@ -294,31 +290,6 @@
           this.goBack()
         } else {
           this.shouldLogin()
-        }
-      },
-      // 获取收货地址（只有从商品详情页，点击立即购买进入登录页，返回时才需要获取收货地址）
-      getDeliveries (token) {
-        this.$store.dispatch('commonAction', {
-          url: '/deliveries',
-          method: 'get',
-          params: {
-            token: token
-          },
-          target: this,
-          resolve: (state, res) => {
-            state.deliveries = res.data.deliveries
-            this.$router.replace({name: 'AddAddress'})
-            this.buyingBack(state.deliveries)
-          },
-          reject: () => {
-          }
-        })
-      },
-      buyingBack (deliveries) {
-        if (deliveries.length > 0) {
-          this.$router.replace({name: 'OrderPaying'})
-        } else {
-          this.$router.replace({name: 'AddAddress'})
         }
       },
       openProtocol () {
