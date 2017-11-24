@@ -66,7 +66,7 @@
           <div v-if="homeLoading || !teams || (teams && !teams.logo)" class="empty-img"></div>
           <img v-else :src="teams.logo">
           <div class="name">
-            <span v-if="teams && teams.name" class="font-16">{{teams.name}}</span>
+            <span v-if="teams && teams.name" class="font-16 team-name">{{teams.name}}</span>
             <span v-else class="font-16">&nbsp;</span>
             <div class="flex favorite" @click="favoriteAction()">
               <i v-if="hasAddFavorites" class="iconfont icon-xuanzhong1 active"></i>
@@ -1023,6 +1023,7 @@
     overflow: hidden;
     z-index: 2;
     display: none;
+    box-sizing: border-box;
   }
   .card {
     @include px2rem(padding-top, 100px);
@@ -1037,7 +1038,7 @@
       img {
         @include px2rem(width, 80px);
         @include px2rem(height, 80px);
-        @include px2rem(border-radius, 20px);
+        @include px2rem(border-radius, 10px);
         @include pm2rem(margin, 0px, 20px, 0px, 30px);
       }
       .empty-img {
@@ -1051,6 +1052,9 @@
         flex: 1;
         flex-direction: column;
         color: $white;
+        .team-name {
+          font-weight: bold;
+        }
         .favorite {
           justify-content: flex-start;
           line-height: normal;
@@ -1088,6 +1092,7 @@
   }
   .noshadow {
     box-shadow: none;
+    border-bottom: none;
   }
   .nav-hide {
     position: fixed;
@@ -1226,7 +1231,7 @@
     }
   }
   .icon-hide {
-    @include px2rem(padding-top, 110px);
+    @include px2rem(margin-top, 130px);
   }
   .order {
     @include px2rem(top, 320px);
@@ -1236,7 +1241,7 @@
     @include px2rem(top, 180px);
   }
   .product-icon-hide {
-    @include px2rem(padding-top, 180px);
+    @include px2rem(margin-top, 190px);
   }
   .mall-order {
     z-index: 2;
