@@ -220,7 +220,7 @@ const mutations = {
     let tmpArr = []
     for (let i = 0; i < params.length; i++) {
       // 需要把系统消息过滤掉(流程消息)，只保留用户聊天(单聊、群聊、客服)消息
-      if (params[i].lastMessage.from !== 'system') {
+      if (params[i].lastMessage.from !== 'system' && !params[i].system) {
         tmpArr.push({id: params[i].id})
         state.unReadeMsgs = params
       }
