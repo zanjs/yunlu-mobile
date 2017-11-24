@@ -847,7 +847,11 @@
         }
       },
       openShoppingCar () {
-        this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
+        if (this.hasLogin) {
+          this.$router.push({name: 'ShoppingCart'})
+        } else {
+          this.goLogin()
+        }
       },
       checkBeforeBuying () {
         if (!this.hasChoosePrice) {
@@ -911,9 +915,9 @@
       },
       buyNow (quantity) {
         if (this.checkBeforeBuying()) {
-          this.closeSku()
-          this.quantity = 1
           if (this.hasLogin) {
+            this.closeSku()
+            this.quantity = 1
             Toast({
               message: '暂未开放',
               duration: 500
