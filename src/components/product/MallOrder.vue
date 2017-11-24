@@ -62,7 +62,7 @@
     background-color: $white;
     border-bottom: 1px solid $second-grey;
     border-top: 1px solid $second-grey;
-    box-shadow: 0px 4px 4px -2px rgba(199, 194, 194, .4);
+    box-shadow: 0px 4px 4px -4px rgba(199, 194, 194, .4);
     z-index: 2;
     .left {
       flex: 2;
