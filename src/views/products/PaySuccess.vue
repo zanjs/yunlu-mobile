@@ -41,7 +41,7 @@
         }
       },
       viewOrder () {
-        this.$router.replace({name: 'OrderForm'})
+        this.$router.replace({name: 'OrderForm', query: {index: 2}})
       },
       continueToBuy () {
         this.$router.replace({name: 'See'})
