@@ -87,7 +87,14 @@
           },
           target: this,
           resolve: (state, res) => {
-            window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.href}&back=1`)
+            if (res.data.success) {
+              window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.href}&back=1`)
+            } else {
+              Toast({
+                message: res.data.result && res.data.result.err_code_des ? res.data.result.err_code_des : '支付失败，请重试',
+                duration: '1000'
+              })
+            }
           },
           reject: () => {
           }
