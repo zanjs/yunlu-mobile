@@ -163,20 +163,20 @@
             return '等待卖家发货' // 待发货（已提醒）
           case 'paid':
             return '等待卖家发货' // 待发货
-          case 'refunding':
-            return '请求售后'
-          case 'accepted':
-            return '同意售后'
-          case 'rejected':
-            return '拒绝售后'
-          case 'commented':
-            return '评论'
+          case 'delivered':
+            return '已发货'
+          case 'receipted':
+            return '已收货'
           case 'canceled':
-            return '交易关闭'
+            return '交易取消'
           case 'finished':
             return '交易成功'
+          case 'settling':
+            return '交易成功'
+          case 'settlement':
+            return '交易成功'
           default:
-            return '交易关闭'
+            return ''
         }
       }
     }

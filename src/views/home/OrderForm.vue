@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="container full-width"
-    ref="orderForm"
-    :style="{height: scrollHeight}">
+  <section>
     <common-header
       :title="header"
       :icon-class="iconClass"
@@ -20,7 +17,7 @@
           <div class="label">{{item.title}}</div>
         </a>
       </div>
-      <div class='nav-bar-container'>
+      <div class='nav-bar-container' ref="orderForm" :style="{height: scrollHeight}">
         <div v-for="(item, index) in orderFormOptions" :key="index">
           <template v-if="activeIndex === index">
             <div v-if="item.forms.length > 0">
@@ -36,12 +33,11 @@
                 :handler="loadBottom"
                 :handle-on-mount="false"
                 :should-handle="!item.loading"
+                :threshold="0.1"
                 scroll-container="orderForm">
-                <div
-                  v-if="item.loading || item.noMoreData"
-                  class="loading">
+                <div class="loading">
                   <mt-spinner
-                    v-if="item.loading"
+                    v-show="!item.noMoreData"
                     type="snake"
                     :size="18">
                   </mt-spinner>
@@ -123,7 +119,7 @@
         header: '我的订单',
         iconClass: 'icon-fenlei',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        activeIndex: 0,
+        activeIndex: parseInt(this.$route.query.index) || 0,
         orderFormOptions: [
           {
             loading: true,
@@ -208,8 +204,12 @@
         this.activeIndex = index
       },
       // 处理返回的订单
-      handleOrderForms (index, orderForms) {
-        this.orderFormOptions[index].forms = [...this.orderFormOptions[index].forms, ...this.orderFormsFilter(orderForms)]
+      handleOrderForms (index, pageIndex, pageSize, orderForms) {
+        if (orderForms.length < pageSize) {
+          this.orderFormOptions[index].noMoreData = true
+          this.orderFormOptions[index].text = '没有更多数据了...'
+        }
+        this.orderFormOptions[index].forms = pageIndex === 1 ? this.orderFormsFilter(orderForms) : [...this.orderFormOptions[index].forms, ...this.orderFormsFilter(orderForms)]
         this.orderFormOptions[index].loading = false
         if (index === 4) {
           return false
@@ -271,22 +271,10 @@
           data: {},
           target: this,
           resolve: (state, res) => {
-            if (pageIndex === 1) {
-              this.orderFormOptions[index].forms = this.orderFormsFilter(res.data.order_forms)
-              this.orderFormOptions[index].loading = false
-              if (index === 4) {
-                return false
-              }
-              this.getOrderForms(index + 1, this.orderFormOptions[index + 1].pageIndex, this.orderFormOptions[index + 1].pageSize)
-            } else {
-              if (res.data.order_forms.length === 0) {
-                this.orderFormOptions[index].noMoreData = true
-                this.orderFormOptions[index].text = '没有更多数据了...'
-              }
-              this.handleOrderForms(index, res.data.order_forms)
-            }
+            this.handleOrderForms(index, pageIndex, pageSize, res.data.order_forms)
           },
           reject: () => {
+            this.orderFormOptions[index].loading = false
           }
         })
       },
@@ -476,7 +464,7 @@
     },
     activated () {
       if (!this.$store.state.popState) {
-        this.activeIndex = 0
+        this.activeIndex = parseInt(this.$route.query.index) || 0
         this.orderFormOptions = this.orderFormOptions.map(i => {
           i.loading = true
           i.pageIndex = 1
@@ -502,13 +490,6 @@
 <style lang='scss' scoped>
   @import '../../styles/mixin';
 
-  .container {
-    position: absolute;
-    top: 0;
-    overflow-y: scroll;
-    padding-bottom: 1px;
-    background-color: $tenth-grey;
-  }
   .nav-bars {
     position: fixed;
     @include px2rem(top, 88px);
@@ -538,12 +519,15 @@
   }
   .nav-bar-container {
     @include px2rem(padding-top, 178px);
-    @include px2rem(margin-bottom, 10px);
+    box-sizing: border-box;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+     padding-bottom: 1px;
     .loading {
-      height: 40px;
+      @include px2rem(height, 120px);
       @include font-dpr(15px);
       color: $second-dark;
-      line-height: 40px;
+      line-height: normal;
       display: flex;
       align-items: center;
       justify-content: center;
