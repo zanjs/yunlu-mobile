@@ -27,7 +27,7 @@
       return {
         header: '云庐收银台',
         token: getStore('user') ? getStore('user').authentication_token : '',
-        code: this.$route.query.code || ''
+        code: this.$route.params.id || ''
       }
     },
     components: {
