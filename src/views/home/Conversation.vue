@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="container full-width"
-    ref="conversation"
-    :style="{height: scrollHeight}">
+  <section>
     <common-header
       :title="header"
       @back="goBack()">
@@ -20,13 +17,17 @@
         <i class="iconfont icon-sousuo"></i>
       </div>
     </div>
+    <section class="list-wrapper" ref="conversation" :style="{height: scrollHeight}">
+      <template v-if="conversationList && conversationList.length > 0">
+        <conversation-list
+          class="list-container"
+          :store="conversationList"
+          @click="goChat"
+          @check="handleItemCheck">
+        </conversation-list>
+      </template>
+    </section>
     <template v-if="conversationList && conversationList.length > 0">
-      <conversation-list
-        class="list-container"
-        :store="conversationList"
-        @click="goChat"
-        @check="handleItemCheck">
-      </conversation-list>
       <div class="option-bar full-width">
         <div
           class="check-btn"
@@ -301,13 +302,6 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .container {
-    // position: absolute;
-    // top: 0;
-    // overflow-y: scroll;
-    // padding-bottom: 1px;
-    // background-color: $tenth-grey;
-  }
   .header {
     background-color: $green;
     @include px2rem(height, 88px);
@@ -341,7 +335,7 @@
       border: none;
       @include font-dpr(14px);
       @include px2rem(border-radius, 14px);
-      line-height: 1;
+      line-height: normal;
       background-color: $ninth-grey;
       color: $second-dark;
       @include px2rem(height, 66px);
@@ -371,9 +365,12 @@
       }
     }
   }
-  .list-container {
+  .list-wrapper {
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 1px;
+  }
+  .list-container {
     @include pm2rem(padding, 176px, 0px, 98px, 0px);
   }
   .option-bar {
