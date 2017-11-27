@@ -197,7 +197,7 @@
         })
       },
       pay (item) {
-        this.notOpen()
+        this.$router.push({name: 'Pay', query: {code: item.code, amount: item.amount}})
       },
       notOpen () {
         Toast({
