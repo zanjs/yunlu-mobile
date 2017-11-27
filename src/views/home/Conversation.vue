@@ -302,11 +302,11 @@
   @import "../../styles/mixin";
 
   .container {
-    position: absolute;
-    top: 0;
-    overflow-y: scroll;
-    padding-bottom: 1px;
-    background-color: $tenth-grey;
+    // position: absolute;
+    // top: 0;
+    // overflow-y: scroll;
+    // padding-bottom: 1px;
+    // background-color: $tenth-grey;
   }
   .header {
     background-color: $green;
