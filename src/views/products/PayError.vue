@@ -89,7 +89,7 @@
         @include px2rem(height, 68px);
         @include px2rem(border-radius, 10px);
         line-height: normal;
-        @include font-dpr(16px);
+        @include font-dpr(14px);
       }
       .white-btn {
         color: $primary-dark;
