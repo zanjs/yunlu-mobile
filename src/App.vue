@@ -202,7 +202,7 @@
               user_id: linkId
             }
           })
-          // 打开被关闭的会话后，要更细被关闭的会话列表
+          // 打开被关闭的会话后，要更新被关闭的会话列表
           this.getClosedConversationList()
         }
       },

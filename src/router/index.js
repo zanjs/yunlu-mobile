@@ -333,7 +333,7 @@ export default new Router({
       props: true,
       meta: { keepAlive: false }
     }, {
-      path: '/payerror',
+      path: '/payerror/:id',
       name: 'PayError',
       component: PayError,
       props: true,
