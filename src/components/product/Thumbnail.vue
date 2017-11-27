@@ -35,7 +35,7 @@
             <div class="name">{{item.name}}</div>
             <div class="money">
               <span class="font-12">&yen;</span>
-              <span class="font-18">
+              <span class="font-16">
                 {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
               </span>
             </div>
