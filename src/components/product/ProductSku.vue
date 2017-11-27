@@ -35,49 +35,51 @@
             </div>
           </div>
         </div>
-        <div class="price-wrapper">
-          <p class="font-16 second-text">价格:</p>
-          <tag
-            :tags="store.prices"
-            :price="price"
-            :active="choosed"
-            @tag-click="tagClick"></tag>
-        </div>
-        <div class="number-wrapper">
-          <p class="font-16 second-text">数量</p>
-          <div
-            v-if="price.amount !== '定制' && price.money !== '赠品'"
-            class="count-bar">
-            <i
-              v-if="quantity > 1"
-              class="iconfont icon-jianshao"
-              @click.stop="decrease()"></i>
-            <i
-              v-if="quantity === 1"
-              class="iconfont icon-jianshao disabled"
-              @click.stop="doNothing"></i>
+        <div class="sheet-content">
+          <div class="price-wrapper">
+            <p class="font-16 second-text">价格:</p>
+            <tag
+              :tags="store.prices"
+              :price="price"
+              :active="choosed"
+              @tag-click="tagClick"></tag>
+          </div>
+          <div class="number-wrapper">
+            <p class="font-16 second-text">数量</p>
             <div
-              class="count"
-              @click.stop="doNothing">
-              <input
+              v-if="price.amount !== '定制' && price.money !== '赠品'"
+              class="count-bar">
+              <i
+                v-if="quantity > 1"
+                class="iconfont icon-jianshao"
+                @click.stop="decrease()"></i>
+              <i
+                v-if="quantity === 1"
+                class="iconfont icon-jianshao disabled"
+                @click.stop="doNothing"></i>
+              <div
+                class="count"
+                @click.stop="doNothing">
+                <input
+                  v-if="parseInt(quantity + '') < parseInt(price.amount + '')"
+                  type="number"
+                  @blur="handleInput($event.target.value, price.amount)"
+                  :value="quantity">
+                <span
+                  v-if="parseInt(quantity + '') === parseInt(price.amount + '')">
+                  {{quantity}}
+                </span>
+              </div>
+              <i
                 v-if="parseInt(quantity + '') < parseInt(price.amount + '')"
-                type="number"
-                @blur="handleInput($event.target.value, price.amount)"
-                :value="quantity">
-              <span
-                v-if="parseInt(quantity + '') === parseInt(price.amount + '')">
-                {{quantity}}
-              </span>
+                class="iconfont icon-tianjia"
+                @click.stop="increase()"></i>
+              <i
+                v-if="parseInt(quantity + '') === parseInt(price.amount + '')"
+                class="iconfont icon-tianjia disabled"
+                @click.stop="doNothing">
+              </i>
             </div>
-            <i
-              v-if="parseInt(quantity + '') < parseInt(price.amount + '')"
-              class="iconfont icon-tianjia"
-              @click.stop="increase()"></i>
-            <i
-              v-if="parseInt(quantity + '') === parseInt(price.amount + '')"
-              class="iconfont icon-tianjia disabled"
-              @click.stop="doNothing">
-            </i>
           </div>
         </div>
         <div class="btn-wrapper">
@@ -149,7 +151,7 @@
       max-width: 540px;
       .close-btn-wrapper {
         position: absolute;
-        top: -10%;
+        @include px2rem(top, -100px);
         width: 100%;
         max-width: 540px;
         .close-btn {
@@ -205,44 +207,53 @@
           }
         }
       }
-      .price-wrapper {
-        @include pm2rem(margin, 0px, 30px, 0px, 30px);
-        @include pm2rem(padding, 30px, 10px, 10px, 10px);
-        border-bottom: 1px solid $second-grey;
-        p {
-          @include px2rem(margin-bottom, 30px);
+      .sheet-content {
+        position: absolute;
+        @include px2rem(top, 190px);
+        @include px2rem(bottom, 97px);
+        left: 0;
+        right: 0;
+        max-width: 540px;
+        overflow: auto;
+        .price-wrapper {
+          @include pm2rem(margin, 0px, 30px, 0px, 30px);
+          @include pm2rem(padding, 30px, 10px, 10px, 10px);
+          border-bottom: 1px solid $second-grey;
+          p {
+            @include px2rem(margin-bottom, 30px);
+          }
         }
-      }
-      .number-wrapper {
-        @include pm2rem(margin, 0px, 30px, 0px, 30px);
-        @include pm2rem(padding, 30px, 10px, 30px, 10px);
-        border-bottom: 1px solid $second-grey;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .count-bar {
+        .number-wrapper {
+          @include pm2rem(margin, 0px, 30px, 0px, 30px);
+          @include pm2rem(padding, 30px, 10px, 30px, 10px);
+          border-bottom: 1px solid $second-grey;
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          .count {
-            display: block;
-            @include px2rem(width, 120px);
-            @include font-dpr(14px);
-            color: $second-dark;
-            line-height: 1;
-            text-align: center;
-            input {
-              width: inherit;
-              border: none;
+          .count-bar {
+            display: flex;
+            align-items: center;
+            .count {
+              display: block;
+              @include px2rem(width, 120px);
+              @include font-dpr(14px);
+              color: $second-dark;
+              line-height: 1;
               text-align: center;
+              input {
+                width: inherit;
+                border: none;
+                text-align: center;
+              }
             }
-          }
-          i {
-            color: $second-dark;
-            @include font-dpr(21px);
-            line-height: 1;
-          }
-          .disabled {
-            color: #DADADA;
+            i {
+              color: $second-dark;
+              @include font-dpr(21px);
+              line-height: 1;
+            }
+            .disabled {
+              color: #DADADA;
+            }
           }
         }
       }
@@ -266,7 +277,7 @@
           background-color: $green;
         }
         & :last-child {
-          background-color: #65b39c;
+          background-color: #1db689;
         }
         & a:active {
           opacity: .8;

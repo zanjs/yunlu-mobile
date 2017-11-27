@@ -43,7 +43,7 @@
     name: 'Address',
     data () {
       return {
-        header: '管理收获地址',
+        header: '管理收货地址',
         token: getStore('user') ? getStore('user').authentication_token : '',
         deliveries: [],
         confirmMsg: '是否要删除该地址？',
