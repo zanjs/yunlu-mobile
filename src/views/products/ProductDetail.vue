@@ -53,18 +53,21 @@
           <span v-else class="number font-26">&nbsp;</span>
         </div>
       </div>
-      <div
-        v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-        class="inventory font-13 second-text">
-        库存 ：{{productDetail.prices[0].amount || '定制'}}
-      </div>
-      <div
-        v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-        class="inventory font-13 second-text">库存 ：定制</div>
-      <div
-        v-else
-        class="inventory font-13 second-text">
-        库存 ：0
+      <div class="flex tag-wrapper">
+        <div
+          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+          class="inventory font-13 second-text">
+          库存 ：{{productDetail.prices[0].amount || '定制'}}
+        </div>
+        <div
+          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+          class="inventory font-13 second-text">库存 ：定制</div>
+        <div
+          v-else
+          class="inventory font-13 second-text">
+          库存 ：0
+        </div>
+        <div class="tag font-13 second-text">运费：免运费</div>
       </div>
     </section>
     <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
@@ -1146,8 +1149,16 @@
         animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
       }
     }
+    .tag-wrapper {
+      justify-content: flex-start;
+    }
     .inventory {
       @include pm2rem(padding, 0px, 0px, 22px, 0px);
+      flex: 2;
+    }
+    .tag {
+      @include pm2rem(padding, 0px, 0px, 22px, 0px);
+      flex: 3;
     }
   }
   .price-container {
