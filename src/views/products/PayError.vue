@@ -43,7 +43,7 @@
         }
       },
       viewOrder () {
-        this.$router.replace({name: 'OrderForm'})
+        this.$router.replace({name: 'OrderForm', query: {index: 1}})
       },
       payAgain () {
         this.$store.dispatch('commonAction', {
