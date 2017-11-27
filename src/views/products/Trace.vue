@@ -59,6 +59,11 @@
         </div>
       </div>
     </section>
+    <section class="empty-trace">
+      <img src="../../assets/noTrace.png">
+      <p>暂无物流信息</p>
+      <p>您可以复制运单编号自行查询</p>
+    </section>
   </section>
 </template>
 
@@ -228,6 +233,20 @@
       .first .content:after {
         background-color: $green;
       }
+    }
+  }
+  .empty-trace {
+    @include px2rem(padding-top, 140px);
+    text-align: center;
+    img {
+      @include px2rem(width, 335px);
+      @include px2rem(height, 278px);
+      @include px2rem(margin-bottom, 46px);
+    }
+    p {
+      @include font-dpr(13px);
+      color: $third-dark;
+      line-height: normal;
     }
   }
 </style>
