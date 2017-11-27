@@ -31,7 +31,7 @@
             <div class="flex info">
               <div class="flex money">
                 <span class="font-12">&yen;</span>
-                <span class="font-18 ellipsis">
+                <span class="font-16 ellipsis">
                   {{item.prices.length === 0 ? '定制' : item.prices[0].money}}
                 </span>
               </div>

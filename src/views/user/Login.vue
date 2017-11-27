@@ -258,7 +258,7 @@
               setStore('user', res.data)
               Indicator.open({
                 text: '正在登录...',
-                spinnerType: 'fading-circle'
+                spinnerType: 'snake'
               })
               this.getSignature(res.data.authentication_token, true, provider)
             } else {
