@@ -277,7 +277,7 @@
           background-color: $green;
         }
         & :last-child {
-          background-color: #65b39c;
+          background-color: #1db689;
         }
         & a:active {
           opacity: .8;
