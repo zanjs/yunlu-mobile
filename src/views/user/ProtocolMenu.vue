@@ -10,7 +10,7 @@
           v-for="(item, index) in menus"
           :key="index"
           class="flex item white-bg"
-          @click="goDetail(item.value)">
+          @click="goDetail(item)">
           {{item.name}}
         </li>
       </ul>
@@ -65,7 +65,7 @@
         }
       },
       goDetail (item) {
-        this.$router.push({name: 'Protocol', query: {name: item}})
+        this.$router.push({name: 'Protocol', query: {name: item.value, title: item.name}})
       }
     }
   }
