@@ -36,7 +36,6 @@ const Help = resolve => require(['../views/user/Help'], resolve)
 const HelpDetail = resolve => require(['../views/user/HelpDetail'], resolve)
 const Alumni = resolve => require(['../views/carte/Alumni'], resolve)
 const Class = resolve => require(['../views/carte/Class'], resolve)
-const MallBackUp = resolve => require(['../views/carte/MallBackUp'], resolve)
 const Mall = resolve => require(['../views/carte/Mall'], resolve)
 const AddAddress = resolve => require(['../views/products/AddAddress'], resolve)
 const OrderPaying = resolve => require(['../views/products/OrderPaying'], resolve)
@@ -115,12 +114,6 @@ export default new Router({
       path: '/associations/:id',
       name: 'ComityCarte',
       component: ComityCarte,
-      props: true,
-      meta: { keepAlive: true }
-    }, {
-      path: '/malls_back_up/:id',
-      name: 'MallBackUp',
-      component: MallBackUp,
       props: true,
       meta: { keepAlive: true }
     }, {

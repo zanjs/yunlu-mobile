@@ -8,9 +8,12 @@
       action=""
       target="iframe">
       <slot name="input"></slot>
-      <i
-        class="iconfont icon-sousuo absolute-vertical"
-        @click.stop="handleSearch()"></i>
+      <div v-show="showClear" class="icon-btn close" @click="clearSearch()">
+        <i class="iconfont icon-shanchubiaoqian absolute-vertical"></i>
+      </div>
+      <div class="icon-box search" @click.stop="handleSearch()">
+        <i class="iconfont icon-sousuo absolute-vertical"></i>
+      </div>
       <iframe
         name="iframe"
         style="display: none;">
@@ -36,7 +39,7 @@
 
       }
     },
-    props: ['canClear'],
+    props: ['showClear'],
     methods: {
       goBack () {
         this.$emit('back')
@@ -49,6 +52,9 @@
       },
       handleSearch () {
         this.$emit('search')
+      },
+      clearSearch () {
+        this.$emit('clear')
       }
     }
   }
@@ -90,7 +96,7 @@
         width: 100%;
         @include px2rem(height, 60px);
         @include px2rem(border-radius, 40px);
-        @include pm2rem(padding, 0px, 60px, 0px, 30px);
+        @include pm2rem(padding, 0px, 120px, 0px, 30px);
         color: $second-dark;
         @include font-dpr(14px);
         line-height: normal;
@@ -103,12 +109,30 @@
         line-height: normal;
         border: none;
       }
-      i {
-        @include px2rem(right, 20px);
-        @include px2rem(height, 58px);
-        @include px2rem(padding-top, 8px);
+      .icon-btn {
+        @include px2rem(right, 60px);
+        @include px2rem(width, 50px);
+        @include px2rem(height, 60px);
+        position: absolute;
+        i {
+          @include px2rem(margin-top, -4px);
+          @include font-dpr(20px);
+          color: $eleventh-grey;
+        }
+      }
+      .close {
+        @include px2rem(right, 60px);
+        @include px2rem(height, 60px);
         color: $eleventh-grey;
-        @include px2rem(line-height, 58px);
+        @include font-dpr(20px);
+      }
+      .search {
+        @include px2rem(right, 10px);
+        @include px2rem(width, 50px);
+        @include px2rem(height, 60px);
+        @include font-dpr(16px);
+        position: absolute;
+        color: $eleventh-grey;
       }
     }
     .icon-container {
