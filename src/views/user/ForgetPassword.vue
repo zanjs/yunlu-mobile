@@ -122,7 +122,7 @@
         })
       },
       openProtocol () {
-        this.$router.push({name: 'Protocol'})
+        this.$router.push({name: 'Protocol', query: {name: 'service_protocol.html'}})
       }
     },
     mounted () {

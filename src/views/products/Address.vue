@@ -29,7 +29,7 @@
       @click="handleConfirm">
     </confirm-dialog>
     <footer class="footer full-width">
-      <a @click="goAddAddress()">添加收获地址</a>
+      <a @click="goAddAddress()">添加收货地址</a>
     </footer>
   </section>
 </template>
