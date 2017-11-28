@@ -20,7 +20,7 @@
     name: 'Protocol',
     data () {
       return {
-        header: '使用条款和隐私政策',
+        header: this.$route.query.title || '使用条款和隐私政策',
         html: `https://api.yunlu6.com/${this.$route.query.name || 'service_protocol.html'}`
       }
     },
