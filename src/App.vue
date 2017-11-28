@@ -6,13 +6,13 @@
       </keep-alive>
     </transition>
     <integral-dialog
-      v-show="registModal"
+      :show="registModal"
       @login="goLogin"
       @regist="goRegist"
       @close="closeIntergralDialog">
     </integral-dialog>
     <regist-dialog
-      v-show="registSuccessModal"
+      :show="registSuccessModal"
       :num="num"
       :money="money"
       @help="help"

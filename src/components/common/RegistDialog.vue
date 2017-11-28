@@ -1,37 +1,39 @@
 <template>
-  <section class="container full-width">
-    <div class="dialog-bg full-width"></div>
-    <div class="absolute-horizontal dialog-wrapper">
-      <div class="content">
-        <div class="dialog-body">
-          <img src="../../assets/receiveSuccess.png" class="absolute-horizontal success">
-          <div class="absolute-horizontal tips">
-            <p>{{tips}}</p>
-            <div class="font-15">
-              <span class="third-text">奖励</span>
-              <span class="num">{{num || 600}}</span>
-              <span class="third-text">云积分</span>
+  <transition name="router-fade">
+    <section v-show="show" class="container full-width">
+      <div class="dialog-bg full-width"></div>
+      <div class="absolute-horizontal dialog-wrapper">
+        <div class="content">
+          <div class="dialog-body">
+            <img src="../../assets/receiveSuccess.png" class="absolute-horizontal success">
+            <div class="absolute-horizontal tips">
+              <p>{{tips}}</p>
+              <div class="font-15">
+                <span class="third-text">奖励</span>
+                <span class="num">{{num || 600}}</span>
+                <span class="third-text">云积分</span>
+              </div>
+            </div>
+            <div class="absolute-horizontal num-bg">
+              <div class="text-wrapper">
+                <p>可抵扣购物金额</p>
+                <p>&yen;&nbsp;{{money || 6}}</p>
+              </div>
+            </div>
+            <div class="help">
+              <a @click="help">积分购物？</a>
             </div>
           </div>
-          <div class="absolute-horizontal num-bg">
-            <div class="text-wrapper">
-              <p>可抵扣购物金额</p>
-              <p>&yen;&nbsp;{{money || 6}}</p>
-            </div>
+          <div class="button">
+            <img src="../../assets/integralBtn.png" @click="viewIntegral">
           </div>
-          <div class="help">
-            <a @click="help">积分购物？</a>
+          <div class="close" @click="close">
+            <img src="../../assets/registClose.png">
           </div>
-        </div>
-        <div class="button">
-          <img src="../../assets/integralBtn.png" @click="viewIntegral">
-        </div>
-        <div class="close" @click="close">
-          <img src="../../assets/registClose.png">
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </transition>
 </template>
 
 <script>
@@ -41,7 +43,7 @@
         tips: '注册成功'
       }
     },
-    props: ['num', 'money'],
+    props: ['num', 'money', 'show'],
     methods: {
       close () {
         this.$emit('close')
