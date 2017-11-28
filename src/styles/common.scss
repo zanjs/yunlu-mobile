@@ -228,7 +228,7 @@ input[type=search]::-webkit-search-cancel-button {
 }
 
 
-/** 全局进制input/textarea框获取焦点时的轮廓 **/
+/** 全局禁止input/textarea框获取焦点时的轮廓 **/
 
 input,
 textarea:focus {
