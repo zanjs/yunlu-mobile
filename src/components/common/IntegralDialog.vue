@@ -1,25 +1,27 @@
 <template>
-  <section class="container full-width">
-    <div class="dialog-bg full-width"></div>
-    <div class="absolute-horizontal dialog-wrapper">
-      <div class="content">
-        <div class="dialog-body">
-          <img src="../../assets/gift.png" class="absolute-horizontal gift">
-          <div class="tips font-14 second-text">
-            <p>{{tips}}</p>
-            <p>{{subTips}}</p>
+  <transition name="router-fade">
+    <section v-show="show" class="container full-width">
+      <div class="dialog-bg full-width"></div>
+      <div class="absolute-horizontal dialog-wrapper">
+        <div class="content">
+          <div class="dialog-body">
+            <img src="../../assets/gift.png" class="absolute-horizontal gift">
+            <div class="tips font-14 second-text">
+              <p>{{tips}}</p>
+              <p>{{subTips}}</p>
+            </div>
+            <div class="buttons">
+              <a @click="regist"></a>
+              <a @click="login"></a>
+            </div>
           </div>
-          <div class="buttons">
-            <a @click="regist"></a>
-            <a @click="login"></a>
+          <div class="close" @click="close">
+            <img src="../../assets/registClose.png">
           </div>
-        </div>
-        <div class="close" @click="close">
-          <img src="../../assets/registClose.png">
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </transition>
 </template>
 
 <script>
@@ -30,6 +32,7 @@
         subTips: '赶紧去注册吧！'
       }
     },
+    props: ['show'],
     methods: {
       regist () {
         this.$emit('regist')
