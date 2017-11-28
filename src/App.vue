@@ -31,7 +31,7 @@
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
   export default {
-    name: 'app',
+    name: 'App',
     data () {
       return {
         currentUserDelegate: this.$store.state.userDelegate || null,
@@ -65,7 +65,8 @@
           'MallDetail',
           'JoinIn',
           'PaySuccess',
-          'PayError'
+          'PayError',
+          'Protocol'
         ],
         num: getStore('shortUuid') ? 600 : 1000,
         money: getStore('shortUuid') ? 6 : 10
