@@ -9,7 +9,7 @@
         <li
           v-for="(item, index) in menus"
           :key="index"
-          class="flex item white-bg"
+          class="flex item white-bg font-16 primary-text"
           @click="goDetail(item)">
           {{item.name}}
         </li>
@@ -81,7 +81,6 @@
         @include px2rem(height, 80px);
         @include pm2rem(padding, 0px, 0px, 0px, 30px);
         line-height: normal;
-        @include font-dpr(16px);
         justify-content: flex-start;
         border-bottom: 1px solid $second-grey;
       }
