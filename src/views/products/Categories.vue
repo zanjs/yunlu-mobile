@@ -14,7 +14,7 @@
     </search-header>
     <section class="full-width absolute-horizontal menu-container">
       <section class="menu-left" id="wrapper-menu" ref="wrapperMenu">
-        <ul v-if="loading || menuList.length === 0">
+        <ul v-if="loading && menuList.length === 0">
           <li
             v-for="(item, index) in preLoadLength"
             :key="index"
@@ -38,7 +38,7 @@
         </ul>
       </section>
       <section class="menu-right" ref="productCategories">
-        <ul v-if="loading || menuList.length === 0">
+        <ul v-if="loading && menuList.length === 0">
           <li
             v-for="(item, index) in preLoadLength"
             :key="index">
@@ -82,11 +82,18 @@
     <section
       v-show="hasSearch"
       class="full-width absolute-horizontal search-list">
-      <ul>
+      <ul v-show="searchResultType === 'category'">
         <li
           v-for="(item, index) in searchResults"
           :key="index">
           <a class="flex primary-text font-16" @click="goSingleCategory(item.id)">{{item.name}}</a>
+        </li>
+      </ul>
+      <ul v-show="searchResultType === 'product'">
+        <li
+          v-for="(item, index) in searchProductResults"
+          :key="index">
+          <a class="flex primary-text font-16" @click="goProductDetail(item.id)">{{item.name}}</a>
         </li>
       </ul>
     </section>
@@ -99,6 +106,7 @@
   import { getStore, removeStore } from '../../config/mUtils'
   export default {
     name: 'Categories',
+    props: ['id'],
     data () {
       return {
         queryParams: '',
@@ -112,7 +120,9 @@
         menuIndexChange: false,
         menuScroll: null,
         searchResults: [],
-        hasSearch: false
+        searchProductResults: [],
+        hasSearch: false,
+        searchResultType: 'category'
       }
     },
     components: {
@@ -138,7 +148,9 @@
         this.$store.dispatch('commonAction', {
           url: '/categories/navigation',
           method: 'get',
-          params: {},
+          params: {
+            ...(this.id ? {organization_id: this.id} : {})
+          },
           target: this,
           resolve: (state, res) => {
             this.menuList = res.data.categories
@@ -151,16 +163,27 @@
           }
         })
       },
+      goProductDetail (id) {
+        this.$router.push({name: 'ProductDetail', params: {id: id}})
+      },
       searchCategories (queryParams) {
         this.$store.dispatch('commonAction', {
-          url: '/query',
+          url: '/categories/search',
           method: 'get',
           params: {
+            team_id: this.id,
             q: queryParams
           },
           target: this,
           resolve: (state, res) => {
-            this.searchResults = res.data.categories
+            this.searchResultType = res.data.type
+            if (res.data.type === 'product') {
+              this.searchProductResults = res.data.data
+            } else if (res.data.type === 'category') {
+              this.searchResults = res.data.data
+            } else {
+              console.error('搜索出错！')
+            }
           },
           reject: () => {
           }
@@ -226,11 +249,13 @@
       }
     },
     beforeRouteLeave (to, from, next) {
-      if (to.name !== 'CategoryProducts') {
+      if (to.name !== 'CategoryProducts' && to.name !== 'ProductDetail') {
         this.pageIndex = 1
         this.loading = true
         this.menuIndexChange = false
         this.searchResults = []
+        this.searchProductResults = []
+        this.searchResultType = 'category'
         this.hasSearch = false
         this.productListTop = []
         this.menuScroll = null
@@ -345,7 +370,7 @@
     @include px2rem(padding-top, 88px);
     ul {
       background-color: $white;
-      height: 100%;
+      min-height: 100%;
     }
     a {
       justify-content: flex-start;

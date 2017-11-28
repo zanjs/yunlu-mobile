@@ -254,7 +254,7 @@
             </div>
           </transition>
         </section>
-        <section v-if="activeIndex === 2" key="three">
+        <section v-if="activeIndex === 2" key="three" :class="{'list-icon-hide': hideIcon}">
           <transition name="fade" mode="out-in">
             <div v-if="enterprises.length > 0">
               <enterprise-list
@@ -288,7 +288,7 @@
             </div>
           </transition>
         </section>
-        <section v-if="activeIndex === 3" key="four">
+        <section v-if="activeIndex === 3" key="four" :class="{'list-icon-hide': hideIcon}">
           <template v-if="hasLogin">
             <div v-if="person.length > 0">
               <person-members
@@ -521,7 +521,7 @@
         this.$router.push({name: 'CategoryProducts', params: {id: id}})
       },
       goCategories () {
-        this.$router.push({name: 'Categories'})
+        this.$router.push({name: 'Categories', params: {id: this.id}})
       },
       goReport () {
         this.$router.push({name: 'Report', query: {resourceId: this.teams.enterprise_id, resourceClass: 'product'}})
@@ -1261,6 +1261,9 @@
   }
   .product-icon-hide {
     @include px2rem(margin-top, 190px);
+  }
+  .list-icon-hide {
+    @include px2rem(margin-top, 110px);
   }
   .mall-order {
     z-index: 2;
