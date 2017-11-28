@@ -2,9 +2,11 @@
   <section class="full-width">
     <mall-header
       class="mall-header"
+      :show-clear="hasSearch"
       @back="goBack()"
       @search="handleSearchBtn(queryParams)"
       @click-categories="goCategories()"
+      @clear="clearSearch()"
       @report="goReport()">
       <input
         slot="input"
@@ -401,6 +403,7 @@
         scrollHeight: '15rem',
         showGoTopBtn: false,
         queryParams: '',
+        hasSearch: false,
         placeholder: '请输入关键字',
         token: getStore('user') ? getStore('user').authentication_token : '',
         hasLogin: !!getStore('user'),
@@ -491,9 +494,28 @@
         }
       },
       handleSearchBtn (queryParams) {
-        this.productPageIndex = 1
-        this.getProducts(queryParams, this.selectedArea)
         document.activeElement.blur()
+        switch (this.activeIndex) {
+          case 0:
+            break
+          case 1:
+            this.productPageIndex = 1
+            this.getProducts(queryParams, this.selectedArea)
+            break
+          case 2:
+            this.enterprisePageIndex = 1
+            this.getEnterprises(queryParams)
+            break
+          case 3:
+            if (getStore('user')) {
+              this.personPageIndex = 1
+              this.getPersonMembers(queryParams)
+            }
+            break
+          default:
+            this.productPageIndex = 1
+            this.getProducts(queryParams)
+        }
       },
       goSingleCategory (id) {
         this.$router.push({name: 'CategoryProducts', params: {id: id}})
@@ -735,6 +757,7 @@
       },
       getProducts (q = this.queryParams, zoneCode = '') {
         this.queryParams = q
+        this.hasSearch = q !== ''
         this.productLoading = true
         this.$store.dispatch('commonAction', {
           url: '/products',
@@ -853,41 +876,36 @@
       loadEnterpriseBottom () {
         if (!this.noMoreEnterprises) {
           this.enterprisePageIndex += 1
-          this.getEnterprises()
+          this.getEnterprises(this.queryParams)
         }
       },
       loadPersonBottom () {
         if (!this.noMorePerson) {
           this.personPageIndex += 1
-          this.getPersonMembers()
+          this.getPersonMembers(this.queryParams)
         }
       },
       handleInput (e) {
         if (e.target.value === '') {
-          this.resetSearchBar()
+          this.clearSearch()
+        } else {
+          this.hasSearch = true
         }
         this.productPageIndex = 1
       },
-      resetSearchBar () {
+      clearSearch () {
         this.queryParams = ''
         this.hasSearch = false
-        this.productLoading = true
         this.resetPageIndex()
-        this.throttle(this.getProducts, this)
+        this.handleSearchBtn()
       },
-      // 节流函数
-      throttle (method, context) {
-        clearTimeout(method.tId)
-        method.tId = setTimeout(() => {
-          method.call(context)
-        }, 500)
-      },
-      getEnterprises () {
+      getEnterprises (queryParams = '') {
         this.enterpriseLoading = true
         this.$store.dispatch('commonAction', {
           url: `/mall/${this.id}/org_members`,
           method: 'get',
           params: {
+            ...(queryParams ? {q: queryParams} : {}),
             page: this.enterprisePageIndex,
             per_page: this.enterprisePageSize
           },
@@ -906,12 +924,13 @@
           }
         })
       },
-      getPersonMembers () {
+      getPersonMembers (queryParams = '') {
         this.personLoading = true
         this.$store.dispatch('commonAction', {
           url: `/mall/${this.id}/person_members`,
           method: 'get',
           params: {
+            ...(queryParams ? {q: queryParams} : {}),
             page: this.personPageIndex,
             per_page: this.personPageSize
           },
