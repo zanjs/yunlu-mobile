@@ -41,17 +41,15 @@
         v-if="productDetail && productDetail.name"
         class="name font-17">{{productDetail.name}}</div>
       <div v-else class="name font-17">&nbsp;</div>
-      <div class="flex-between money">
-        <div>
-          <span class="number font-13">&yen;</span>
-          <span
-            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-            class="number font-26">{{currentPrice.money}}</span>
-          <span
-            v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-            class="number font-26">定制</span>
-          <span v-else class="number font-26">&nbsp;</span>
-        </div>
+      <div class="money">
+        <span class="number font-14">&yen;</span>
+        <span
+          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+          class="number font-26">{{currentPrice.money}}</span>
+        <span
+          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+          class="number font-26">定制</span>
+        <span v-else class="number font-26">&nbsp;</span>
       </div>
       <div class="flex tag-wrapper">
         <div
@@ -1133,9 +1131,9 @@
       font-weight: 800;
     }
     .money {
-      align-items: center;
       position: relative;
       @include pm2rem(padding, 0px, 70px, 0px, 0px);
+      @include px2rem(height, 80px);
       .number {
         color: #FF0000;
       }
