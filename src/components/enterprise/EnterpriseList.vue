@@ -38,10 +38,8 @@
             <span class="flex-1">月销{{item.order_form_count}}笔</span>
           </div>
         </div>
-        <div
-          v-if="index < 3"
-          class="flex icon-box">
-          <svg class="icon" aria-hidden="true">
+        <div class="flex icon-box">
+          <svg v-if="index < 3" class="icon" aria-hidden="true">
             <use v-if="index === 0" xlink:href="#icon-jinpai"></use>
             <use v-if="index === 1" xlink:href="#icon-yinpai"></use>
             <use v-if="index === 2" xlink:href="#icon-tongpai"></use>
