@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="tips">
-      <p class="third-text font-14">注意：平台不会以订单异常、系统升级为由，要求您点击任何链接进行退款操作。</p>
+      <p class="third-text font-12">注意：平台不会以订单异常、系统升级为由，要求您点击任何链接进行退款操作。</p>
     </div>
   </section>
 </template>
@@ -54,11 +54,11 @@
   @import "../../styles/mixin";
 
   .success-img {
-    @include pm2rem(padding, 160px, 0px, 80px, 0px);
+    @include pm2rem(padding, 158px, 0px, 80px, 0px);
     background-color: $white;
     text-align: center;
     img {
-      @include px2rem(width, 320px);
+      @include px2rem(width, 290px);
     }
     p {
       @include font-dpr(18px);
@@ -70,11 +70,11 @@
       align-items: center;
       @include px2rem(width, 600px);
       a {
-        @include px2rem(width, 240px);
-        @include px2rem(height, 68px);
+        @include px2rem(width, 246px);
+        @include px2rem(height, 70px);
         @include px2rem(border-radius, 10px);
         line-height: normal;
-        @include font-dpr(14px);
+        @include font-dpr(15px);
       }
       .white-btn {
         color: $primary-dark;
