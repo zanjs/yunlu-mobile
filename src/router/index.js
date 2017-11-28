@@ -303,9 +303,10 @@ export default new Router({
       component: Pay,
       meta: { keepAlive: false }
     }, {
-      path: '/categories',
+      path: '/categories/:id',
       name: 'Categories',
       component: Categories,
+      props: true,
       meta: { keepAlive: true }
     }, {
       path: '/category_products/:id',
