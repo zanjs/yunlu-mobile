@@ -13,6 +13,7 @@ const EnterpriseDetail = resolve => require(['../views/carte/EnterpriseDetail'],
 const Login = resolve => require(['../views/user/Login'], resolve)
 const Register = resolve => require(['../views/user/Register'], resolve)
 const Protocol = resolve => require(['../views/user/Protocol'], resolve)
+const ProtocolMenu = resolve => require(['../views/user/ProtocolMenu'], resolve)
 const Home = resolve => require(['../views/home/Home'], resolve)
 const Download = resolve => require(['../views/download/Download'], resolve)
 const See = resolve => require(['../views/home/See'], resolve)
@@ -141,6 +142,11 @@ export default new Router({
       path: '/protocl',
       name: 'Protocol',
       component: Protocol,
+      meta: { keepAlive: false }
+    }, {
+      path: '/protoclmenu',
+      name: 'ProtocolMenu',
+      component: ProtocolMenu,
       meta: { keepAlive: true }
     }, {
       path: '/',
