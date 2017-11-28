@@ -229,9 +229,6 @@
       viewIntegral () {
         this.closeRegistDialog()
         this.$router.push({name: 'Download'})
-      },
-      updateIntegral () {
-
       }
     },
     updated () {
