@@ -520,7 +520,7 @@
         if (this.$store.state.deliveries.length === 0) {
           this.$router.push({name: 'AddAddress'})
         } else {
-          this.$router.push({name: 'OrderPaying'})
+          this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
         }
       }
     },

@@ -62,7 +62,7 @@
         :class="{'last': index === store.length - 1}">
         <div class="total">
           <span class="third-text">共计{{handleTotoalCount(item.items)}}件商品  合计：</span>
-          <span class="money font-16">￥{{handleTotalMoney(item.items)}}</span>
+          <span class="money font-16">￥{{item.amount}}</span>
         </div>
         <div class="option-bar">
           <a
@@ -113,13 +113,6 @@
           count += parseInt(items[i].quantity + '')
         }
         return count
-      },
-      handleTotalMoney (items) {
-        let money = ''
-        for (let i = 0; i < items.length; i++) {
-          money += parseFloat(items[i].price + '') * parseInt(items[i].quantity + '')
-        }
-        return money
       },
       // 前往企业名片
       handleClick (id) {

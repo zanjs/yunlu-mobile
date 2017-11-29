@@ -10,12 +10,12 @@
           <a
             class="cancel-btn flex"
             @click="handleClick(false)">
-            取消
+            {{cancelText}}
           </a>
           <a
             class="confirm-btn flex"
             @click="handleClick(true)">
-            确定
+            {{okText}}
           </a>
         </div>
       </div>
@@ -35,7 +35,17 @@ export default {
     }
   },
   name: 'ConfirmDialog',
-  props: ['msg'],
+  props: {
+    msg: {
+      reqired: true
+    },
+    okText: {
+      default: '确定'
+    },
+    cancelText: {
+      default: '取消'
+    }
+  },
   methods: {
     handleClick (bool) {
       this.$emit('click', bool)
@@ -78,13 +88,11 @@ export default {
       @include px2rem(top, 400px);
       @include px2rem(width, 562px);
       @include px2rem(border-radius, 14px);
-      @include px2rem(height, 240px);
       z-index: 1004;
       .msg {
-        @include px2rem(height, 94px);
         text-align: center;
-        @include px2rem(padding-top, 56px);
-        line-height: 1;
+        @include pm2rem(padding, 56px, 20px, 56px, 20px);
+        line-height: normal;
         @include font-dpr(15px);
         color: $primary-dark;
       }
@@ -95,7 +103,7 @@ export default {
         border-top: 1px solid $second-grey;
         a {
           flex: 1;
-          line-height: 1;
+          line-height: normal;
           @include  font-dpr(16px);
           color: $second-dark;
           border-right: 1px solid $second-grey;
