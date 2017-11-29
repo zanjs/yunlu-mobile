@@ -89,6 +89,11 @@
           resolve: (state, res) => {
             if (res.data.success) {
               window.location.href = res.data.pay_link + '&redirect_url=' + encodeURIComponent(`${window.location.href}&back=1`)
+            } else if (res.data.result && res.data.result.err_code_des === '201 商户订单号重复') {
+              Toast({
+                message: 'App与网页支付暂不互通，请回原支付端进行支付',
+                duration: '3000'
+              })
             } else {
               Toast({
                 message: res.data.result && res.data.result.err_code_des ? res.data.result.err_code_des : '支付失败，请重试',
