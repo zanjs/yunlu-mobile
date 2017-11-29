@@ -99,7 +99,7 @@
         this.$router.push({name: 'Download'})
       },
       helpCenter () {
-        this.$router.push({name: 'Help'})
+        this.$router.push({name: 'Help', query: {from: 'web'}})
       },
       openProtocol () {
         this.$router.push({name: 'ProtocolMenu'})

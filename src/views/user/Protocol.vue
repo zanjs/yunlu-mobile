@@ -21,7 +21,7 @@
     data () {
       return {
         header: this.$route.query.title || '使用条款和隐私政策',
-        html: `https://api.yunlu6.com/${this.$route.query.name || 'service_protocol.html'}`
+        html: `https://www.yunlu6.com/protocol/${this.$route.query.name || 'service_protocol.html'}`
       }
     },
     components: {
