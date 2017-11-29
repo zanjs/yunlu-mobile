@@ -37,7 +37,7 @@
           </li>
         </ul>
       </section>
-      <section class="menu-right" ref="productCategories">
+      <section class="menu-right" :class="{'white-bg': loading || menuList.length > 0}" ref="productCategories">
         <ul v-if="loading && menuList.length === 0">
           <li
             v-for="(item, index) in preLoadLength"
@@ -78,6 +78,10 @@
           </li>
         </ul>
       </section>
+    </section>
+    <section  v-if="!loading && menuList.length === 0" class="empty-tips">
+      <p class="font-20 third-text">该商城暂无产品分类</p>
+      <p class="font-20 third-text">试试上方搜索产品</p>
     </section>
     <section
       v-show="hasSearch"
@@ -306,7 +310,6 @@
     .menu-right {
       @include px2rem(width, 550px);
       overflow-y: auto;
-      background-color: $white;
       .menu-right-header {
         @include px2rem(height, 80px);
         @include pm2rem(margin, 0px, 40px, 20px, 40px);
@@ -364,6 +367,13 @@
         }
       }
     }
+  }
+  .empty-tips {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    text-align: center;
   }
   .search-list {
     height: 100%;
