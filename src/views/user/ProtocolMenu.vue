@@ -47,7 +47,7 @@
             value: 'user_rule.html'
           }, {
             name: '云庐积分规则',
-            value: 'service_protocol.html'
+            value: 'point_protocol.html'
           }
         ]
       }

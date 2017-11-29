@@ -259,7 +259,7 @@ export default new Router({
       path: '/help',
       name: 'Help',
       component: Help,
-      meta: { keepAlive: false }
+      meta: { keepAlive: true }
     }, {
       path: '/helps/:id',
       name: 'HelpDetail',

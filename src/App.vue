@@ -52,7 +52,6 @@
           'BeforeRegister',
           'Maps',
           'OrderDetail',
-          'Help',
           'HelpDetail',
           'AddAddress',
           'OrderPaying',
@@ -225,7 +224,7 @@
       },
       help () {
         this.closeRegistDialog()
-        this.$router.push({name: 'Help'})
+        this.$router.push({name: 'Protocol', query: {name: 'point_protocol.html', title: '云庐积分规则'}})
       },
       viewIntegral () {
         this.closeRegistDialog()
@@ -263,6 +262,8 @@
     width: 100%;
     max-width: 540px;
     min-height: 100%;
+    position: absolute;
+    top: 0;
   }
   // symbols （iconfont彩色图标）
   .icon {
