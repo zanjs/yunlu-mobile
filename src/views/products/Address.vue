@@ -29,7 +29,7 @@
       @click="handleConfirm">
     </confirm-dialog>
     <footer class="footer full-width">
-      <a @click="goAddAddress()">添加收获地址</a>
+      <a @click="goAddAddress()">添加收货地址</a>
     </footer>
   </section>
 </template>
@@ -43,7 +43,7 @@
     name: 'Address',
     data () {
       return {
-        header: '管理收获地址',
+        header: '管理收货地址',
         token: getStore('user') ? getStore('user').authentication_token : '',
         deliveries: [],
         confirmMsg: '是否要删除该地址？',

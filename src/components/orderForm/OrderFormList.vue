@@ -62,7 +62,7 @@
         :class="{'last': index === store.length - 1}">
         <div class="total">
           <span class="third-text">共计{{handleTotoalCount(item.items)}}件商品  合计：</span>
-          <span class="money font-16">￥{{handleTotalMoney(item.items)}}</span>
+          <span class="money font-16">￥{{item.amount}}</span>
         </div>
         <div class="option-bar">
           <a
@@ -114,13 +114,6 @@
         }
         return count
       },
-      handleTotalMoney (items) {
-        let money = ''
-        for (let i = 0; i < items.length; i++) {
-          money += parseFloat(items[i].price + '') * parseInt(items[i].quantity + '')
-        }
-        return money
-      },
       // 前往企业名片
       handleClick (id) {
         this.$emit('go-enterprise', id)
@@ -163,20 +156,20 @@
             return '等待卖家发货' // 待发货（已提醒）
           case 'paid':
             return '等待卖家发货' // 待发货
-          case 'refunding':
-            return '请求售后'
-          case 'accepted':
-            return '同意售后'
-          case 'rejected':
-            return '拒绝售后'
-          case 'commented':
-            return '评论'
+          case 'delivered':
+            return '已发货'
+          case 'receipted':
+            return '已收货'
           case 'canceled':
-            return '交易关闭'
+            return '交易取消'
           case 'finished':
             return '交易成功'
+          case 'settling':
+            return '交易成功'
+          case 'settlement':
+            return '交易成功'
           default:
-            return '交易关闭'
+            return ''
         }
       }
     }

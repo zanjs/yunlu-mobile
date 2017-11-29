@@ -90,7 +90,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import Card from '../../components/common/Card'
   import { mapGetters } from 'vuex'
-  import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore } from '../../config/mUtils'
   import SpaceFolders from '../../components/common/SpaceFolers'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import PopDialog from '../../components/common/PopDialog'
@@ -275,8 +275,14 @@
         }
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
+      },
+      handleIntegralModal () {
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
+        }
       },
       handleScrollHeight () {
         let appHeight = document.getElementById('app').offsetHeight
@@ -287,6 +293,7 @@
     },
     mounted () {
       this.handleScrollHeight()
+      this.handleIntegralModal()
       this.getData()
     },
     computed: {

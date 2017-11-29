@@ -119,7 +119,7 @@
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
   export default {
     name: 'OrderDetail',
@@ -162,8 +162,9 @@
       deleteOrder (id) {
         this.notOpen()
       },
-      handleLogistics (id) {
-        this.notOpen()
+      handleLogistics (item) {
+        setStore('traceLogo', item.items[0].logo)
+        this.$router.push({path: `/trace/${item.code}`})
       },
       remind (id) {
         this.$store.dispatch('commonAction', {
@@ -197,7 +198,7 @@
         })
       },
       pay (item) {
-        this.notOpen()
+        this.$router.push({name: 'Pay', query: {code: item.code, amount: item.amount}})
       },
       notOpen () {
         Toast({

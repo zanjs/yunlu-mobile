@@ -2,7 +2,7 @@
   <section class="full-width container">
     <common-header
       :title="header"
-      @back="goBack()">
+      @back="openConfirm()">
     </common-header>
     <section
       class="address full-width"
@@ -134,16 +134,24 @@
       <a
         v-else
         class="flex pay-btn white font-17"
-        @click="pay()">
+        @click="checkBeforePay()">
         支付
       </a>
     </section>
+    <confirm-dialog
+      v-if="showConfirm"
+      :msg="confirmMsg"
+      :okText="okText"
+      :cancelText="cancelText"
+      @click="handleConfirm">
+    </confirm-dialog>
   </section>
 </template>
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
+  import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
   export default {
     name: 'OrderPaying',
@@ -152,12 +160,19 @@
         header: '确认订单',
         deliverie: null,
         token: getStore('user') ? getStore('user').authentication_token : '',
+        mobile: getStore('user') ? getStore('user').mobile : '',
         purchaseItems: getStore('buying') ? getStore('buying') : [],
-        message: '希望掌柜快点发货！'
+        message: '希望掌柜快点发货！',
+        showConfirm: false,
+        from: this.$route.query.from || 'productdetail',
+        confirmMsg: this.$route.query.from && this.$route.query.from === 'shoppingcart' ? '便宜不等人，请三思而行' : '确定要离开吗？您可以将商品加入购物车，稍后支付。',
+        okText: this.$route.query.from && this.$route.query.from === 'shoppingcart' ? '去意已决' : '确定',
+        cancelText: this.$route.query.from && this.$route.query.from === 'shoppingcart' ? '我再想想' : '取消'
       }
     },
     components: {
-      CommonHeader
+      CommonHeader,
+      ConfirmDialog
     },
     methods: {
       goBack () {
@@ -321,6 +336,16 @@
         }
         return tmpArr
       },
+      checkBeforePay () {
+        if (!this.mobile) {
+          Toast({
+            message: '未绑定手机号无法进行此操作',
+            duration: 1000
+          })
+        } else {
+          this.pay()
+        }
+      },
       pay () {
         this.$store.dispatch('commonAction', {
           url: '/order_forms',
@@ -354,6 +379,15 @@
           this.$router.push({name: 'Address', query: {from: 'orderpaying'}})
         } else {
           this.$router.push({name: 'AddAddress', query: {from: 'manage'}})
+        }
+      },
+      openConfirm () {
+        this.showConfirm = true
+      },
+      handleConfirm (bool) {
+        this.showConfirm = false
+        if (bool) {
+          this.goBack()
         }
       }
     },

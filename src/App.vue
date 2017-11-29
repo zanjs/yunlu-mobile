@@ -5,21 +5,37 @@
         <router-view :key="$route.path"></router-view>
       </keep-alive>
     </transition>
+    <integral-dialog
+      :show="registModal"
+      @login="goLogin"
+      @regist="goRegist"
+      @close="closeIntergralDialog">
+    </integral-dialog>
+    <regist-dialog
+      :show="registSuccessModal"
+      :num="num"
+      :money="money"
+      @help="help"
+      @view-integral="viewIntegral"
+      @close="closeRegistDialog">
+    </regist-dialog>
   </div>
 </template>
 
 <script>
-  import { getStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
+  import { getStore, setStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
+  import IntegralDialog from './components/common/IntegralDialog'
+  import RegistDialog from './components/common/RegistDialog'
+  import { mapGetters } from 'vuex'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
   import moment from 'moment'
   export default {
-    name: 'app',
+    name: 'App',
     data () {
       return {
         currentUserDelegate: this.$store.state.userDelegate || null,
         currentDeviceDelegate: this.$store.state.deviceDelegate || null,
-        // deviceDelegate: null,
         conversation: null,
         acitve: false,
         showLogoffPopup: false,
@@ -34,10 +50,8 @@
           'SetNewPassword',
           'RegisterNext',
           'BeforeRegister',
-          'SetPassword',
           'Maps',
           'OrderDetail',
-          'Help',
           'HelpDetail',
           'AddAddress',
           'OrderPaying',
@@ -46,9 +60,20 @@
           'Pay',
           'ProductDetail',
           'ShoppingCart',
-          'InformationFolders'
-        ]
+          'InformationFolders',
+          'MallDetail',
+          'JoinIn',
+          'PaySuccess',
+          'PayError',
+          'Protocol'
+        ],
+        num: getStore('shortUuid') ? 600 : 1000,
+        money: getStore('shortUuid') ? 6 : 10
       }
+    },
+    components: {
+      IntegralDialog,
+      RegistDialog
     },
     methods: {
       beforeInit () {
@@ -177,13 +202,43 @@
               user_id: linkId
             }
           })
-          // 打开被关闭的会话后，要更细被关闭的会话列表
+          // 打开被关闭的会话后，要更新被关闭的会话列表
           this.getClosedConversationList()
         }
+      },
+      goLogin () {
+        this.closeIntergralDialog()
+        setStore('beforeLogin', 'true')
+        this.$router.push({name: 'Login'})
+      },
+      goRegist () {
+        this.closeIntergralDialog()
+        setStore('shareRegist', 'true')
+        this.$router.push({name: 'BeforeRegister'})
+      },
+      closeIntergralDialog () {
+        this.$store.dispatch('switchIntegralDialog', {status: false})
+      },
+      closeRegistDialog () {
+        this.$store.dispatch('switchRegistDialog', {status: false})
+      },
+      help () {
+        this.closeRegistDialog()
+        this.$router.push({name: 'Protocol', query: {name: 'point_protocol.html', title: '云庐积分规则'}})
+      },
+      viewIntegral () {
+        this.closeRegistDialog()
+        this.$router.push({name: 'Download'})
       }
     },
     updated () {
       this.beforeInit()
+    },
+    computed: {
+      ...mapGetters([
+        'registModal',
+        'registSuccessModal'
+      ])
     }
   }
 </script>
@@ -207,6 +262,8 @@
     width: 100%;
     max-width: 540px;
     min-height: 100%;
+    position: absolute;
+    top: 0;
   }
   // symbols （iconfont彩色图标）
   .icon {

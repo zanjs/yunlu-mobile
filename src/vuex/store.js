@@ -42,7 +42,9 @@ const state = {
   deliveries: [], // 收货地址
   popState: false,
   fromLogin: false,
-  scrollMap: {} // 页面滚动高度集合
+  scrollMap: {}, // 页面滚动高度集合
+  registModal: false, // 提示注册的对话框
+  registSuccessModal: false // 注册成功奖励积分的对话框
 }
 
 const getters = {
@@ -79,7 +81,9 @@ const getters = {
   deliveries: state => state.deliveries,
   popState: state => state.popState,
   fromLogin: state => state.fromLogin,
-  scrollMap: state => state.scrollMap
+  scrollMap: state => state.scrollMap,
+  registModal: state => state.registModal,
+  registSuccessModal: state => state.registSuccessModal
 }
 
 const actions = {
@@ -130,6 +134,12 @@ const actions = {
   },
   saveScroll ({commit}, params) {
     commit(types.SAVE_SCROLL, {params})
+  },
+  switchIntegralDialog ({commit}, params) {
+    commit(types.SWITCH_INTEGRAL_DIALOG, {params})
+  },
+  switchRegistDialog ({commit}, params) {
+    commit(types.SWITCH_REGIST_DIALOG, {params})
   }
 }
 
@@ -210,7 +220,7 @@ const mutations = {
     let tmpArr = []
     for (let i = 0; i < params.length; i++) {
       // 需要把系统消息过滤掉(流程消息)，只保留用户聊天(单聊、群聊、客服)消息
-      if (params[i].lastMessage.from !== 'system') {
+      if (params[i].lastMessage.from !== 'system' && !params[i].system) {
         tmpArr.push({id: params[i].id})
         state.unReadeMsgs = params
       }
@@ -324,11 +334,19 @@ const mutations = {
 
   [types.ROUTE_CHANGE] (state, {params}) {
     state.popState = !!params.savedPosition
-    state.fromLogin = params.from.name === 'Login'
+    state.fromLogin = params.from.name === 'Login' || params.from.name === 'RegisterNext'
   },
 
   [types.SAVE_SCROLL] (state, {params}) {
     state.scrollMap[params.name] = params.value
+  },
+
+  [types.SWITCH_INTEGRAL_DIALOG] (state, {params}) {
+    state.registModal = params.status
+  },
+
+  [types.SWITCH_REGIST_DIALOG] (state, {params}) {
+    state.registSuccessModal = params.status
   }
 }
 

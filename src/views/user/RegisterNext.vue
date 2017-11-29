@@ -68,8 +68,49 @@
           },
           target: this,
           resolve: (state, res) => {
-            setStore('afterRegistration', 'true')
-            this.$router.replace({name: 'Login'})
+            this.autoLogin()
+          },
+          reject: () => {
+          }
+        })
+      },
+      getSignature (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/im/sign',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            setStore('signature', res.data)
+            setStore('shareIntegral', 'true')
+            this.$router.go(getStore('shareRegist') ? -3 : -4)
+          },
+          reject: () => {
+          }
+        })
+      },
+      autoLogin () {
+        this.$store.dispatch('commonAction', {
+          url: '/login',
+          method: 'post',
+          params: {},
+          data: {
+            login: this.mobile,
+            password: this.password,
+            dev_name: 'web',
+            dev_class: 'web'
+          },
+          target: this,
+          resolve: (state, res) => {
+            // 有两个签名，一个是设备签名，一个是用户签名
+            setStore('device_signature', res.data.sign)
+            // 在App上注册的账号，在网页上登录没有token，需要主控设备授权，通过leancloud返回token给网页
+            if (res.data.authentication_token) {
+              setStore('user', res.data)
+              this.getSignature(res.data.authentication_token)
+            }
           },
           reject: () => {
           }

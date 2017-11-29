@@ -13,6 +13,7 @@ const EnterpriseDetail = resolve => require(['../views/carte/EnterpriseDetail'],
 const Login = resolve => require(['../views/user/Login'], resolve)
 const Register = resolve => require(['../views/user/Register'], resolve)
 const Protocol = resolve => require(['../views/user/Protocol'], resolve)
+const ProtocolMenu = resolve => require(['../views/user/ProtocolMenu'], resolve)
 const Home = resolve => require(['../views/home/Home'], resolve)
 const Download = resolve => require(['../views/download/Download'], resolve)
 const See = resolve => require(['../views/home/See'], resolve)
@@ -26,7 +27,6 @@ const InformationFolders = resolve => require(['../views/carte/InformationFolder
 const EmptyEnterpriseCarte = resolve => require(['../views/carte/EmptyEnterpriseCarte'], resolve)
 const ReportExpired = resolve => require(['../views/report/ReportExpired'], resolve)
 const BeforeRegister = resolve => require(['../views/user/BeforeRegister'], resolve)
-const SetPassword = resolve => require(['../views/user/SetPassword'], resolve)
 const Chat = resolve => require(['../views/chat/Chat'], resolve)
 const Maps = resolve => require(['../views/map/Maps'], resolve)
 const Favorites = resolve => require(['../views/home/Favorites'], resolve)
@@ -45,6 +45,12 @@ const OrderDetail = resolve => require(['../views/home/OrderDetail'], resolve)
 const Trace = resolve => require(['../views/products/Trace'], resolve)
 const Address = resolve => require(['../views/products/Address'], resolve)
 const Pay = resolve => require(['../views/products/Pay'], resolve)
+const Categories = resolve => require(['../views/products/Categories'], resolve)
+const CategoryProducts = resolve => require(['../views/products/CategoryProducts'], resolve)
+const MallDetail = resolve => require(['../views/carte/MallDetail'], resolve)
+const JoinIn = resolve => require(['../views/carte/JoinIn'], resolve)
+const PaySuccess = resolve => require(['../views/products/PaySuccess'], resolve)
+const PayError = resolve => require(['../views/products/PayError'], resolve)
 
 Vue.use(Router)
 
@@ -136,6 +142,11 @@ export default new Router({
       path: '/protocl',
       name: 'Protocol',
       component: Protocol,
+      meta: { keepAlive: false }
+    }, {
+      path: '/protoclmenu',
+      name: 'ProtocolMenu',
+      component: ProtocolMenu,
       meta: { keepAlive: true }
     }, {
       path: '/',
@@ -205,11 +216,6 @@ export default new Router({
       component: BeforeRegister,
       meta: { keepAlive: false }
     }, {
-      path: '/setpassword',
-      name: 'SetPassword',
-      component: SetPassword,
-      meta: { keepAlive: false }
-    }, {
       path: '/chat',
       name: 'Chat',
       component: Chat,
@@ -253,7 +259,7 @@ export default new Router({
       path: '/help',
       name: 'Help',
       component: Help,
-      meta: { keepAlive: false }
+      meta: { keepAlive: true }
     }, {
       path: '/helps/:id',
       name: 'HelpDetail',
@@ -295,6 +301,42 @@ export default new Router({
       path: '/pay',
       name: 'Pay',
       component: Pay,
+      meta: { keepAlive: false }
+    }, {
+      path: '/categories/:id',
+      name: 'Categories',
+      component: Categories,
+      props: true,
+      meta: { keepAlive: true }
+    }, {
+      path: '/category_products/:id',
+      name: 'CategoryProducts',
+      component: CategoryProducts,
+      props: true,
+      meta: { keepAlive: true }
+    }, {
+      path: '/malldetail/:id',
+      name: 'MallDetail',
+      component: MallDetail,
+      props: true,
+      meta: { keepAlive: false }
+    }, {
+      path: '/joinin/:id',
+      name: 'JoinIn',
+      component: JoinIn,
+      props: true,
+      meta: { keepAlive: false }
+    }, {
+      path: '/paysuccess',
+      name: 'PaySuccess',
+      component: PaySuccess,
+      props: true,
+      meta: { keepAlive: false }
+    }, {
+      path: '/payerror/:id',
+      name: 'PayError',
+      component: PayError,
+      props: true,
       meta: { keepAlive: false }
     }
   ],

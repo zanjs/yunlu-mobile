@@ -1,21 +1,30 @@
 <template>
   <section id="informationList">
     <div class="gallery">
-      <div
-        v-for="(item, index) in store"
-        :key="index"
-        @click.stop="handleClick(item)"
-        class="img-box">
-        <img
-          v-lazy="{
-            src: item.thumb_urls[0],
-            error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-            loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-          }">
-        <div class="cover ellipsis">
-          {{item.cnname}}（{{item.count}}）
+      <template v-if="loading && store.length === 0">
+        <div
+          v-for="(item, index) in num"
+          :key="index"
+          class="empty-img-box">
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <div
+          v-for="(item, index) in store"
+          :key="index"
+          @click.stop="handleClick(item)"
+          class="img-box">
+          <img
+            v-lazy="{
+              src: item.thumb_urls[0],
+              error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+              loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+            }">
+          <div class="cover ellipsis">
+            {{item.cnname}}（{{item.count}}）
+          </div>
+        </div>
+      </template>
     </div>
   </section>
 </template>
@@ -27,7 +36,17 @@
 
       }
     },
-    props: ['store'],
+    props: {
+      store: {
+        required: true
+      },
+      num: {
+        default: 10
+      },
+      loading: {
+        default: true
+      }
+    },
     methods: {
       handleClick (item) {
         this.$emit('click', item)
@@ -45,6 +64,13 @@
     @include pm2rem(padding, 16px, 2px, 0px, 30px);
     display: flex;
     flex-wrap: wrap;
+    .empty-img-box {
+      @include px2rem(height, 306px);
+      @include px2rem(width, 330px);
+      @include pm2rem(margin, 0px, 28px, 30px, 0px);
+      position: relative;
+      background-color: $ninth-grey;
+    }
     .img-box {
       @include px2rem(height, 306px);
       @include px2rem(width, 330px);

@@ -41,30 +41,31 @@
         v-if="productDetail && productDetail.name"
         class="name font-17">{{productDetail.name}}</div>
       <div v-else class="name font-17">&nbsp;</div>
-      <div class="flex-between money">
-        <div>
-          <span class="number font-13">&yen;</span>
-          <span
-            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-            class="number font-26">{{currentPrice.money}}</span>
-          <span
-            v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-            class="number font-26">定制</span>
-          <span v-else class="number font-26">&nbsp;</span>
+      <div class="money">
+        <span class="number font-14">&yen;</span>
+        <span
+          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+          class="number font-26">{{currentPrice.money}}</span>
+        <span
+          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+          class="number font-26">定制</span>
+        <span v-else class="number font-26">&nbsp;</span>
+      </div>
+      <div class="flex tag-wrapper">
+        <div
+          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+          class="inventory font-13 second-text">
+          库存 ：{{productDetail.prices[0].amount || '定制'}}
         </div>
-      </div>
-      <div
-        v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-        class="inventory font-13 second-text">
-        库存 ：{{productDetail.prices[0].amount || '定制'}}
-      </div>
-      <div
-        v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-        class="inventory font-13 second-text">库存 ：定制</div>
-      <div
-        v-else
-        class="inventory font-13 second-text">
-        库存 ：0
+        <div
+          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+          class="inventory font-13 second-text">库存 ：定制</div>
+        <div
+          v-else
+          class="inventory font-13 second-text">
+          库存 ：0
+        </div>
+        <div class="tag font-13 second-text">运费：免运费</div>
       </div>
     </section>
     <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
@@ -629,11 +630,33 @@
           resolve: (state, res) => {
             if (productId === this.id) {
               this.productDetailTeam = res.data.teams[0]
+              this.shouldGetDeliveries(this.token)
             } else {
               this.teamLink = res.data.teams[0]
               this.openPopup()
             }
             this.getPurchaseItems()
+          },
+          reject: () => {
+          }
+        })
+      },
+      shouldGetDeliveries (token) {
+        if (this.hasLogin) {
+          this.getDeliveries(token)
+        }
+      },
+      // 获取收获地址
+      getDeliveries (token) {
+        this.$store.dispatch('commonAction', {
+          url: '/deliveries',
+          method: 'get',
+          params: {
+            token: token
+          },
+          target: this,
+          resolve: (state, res) => {
+            this.deliveries = res.data.deliveries
           },
           reject: () => {
           }
@@ -767,8 +790,7 @@
         this.$router.push({name: 'See'})
       },
       goLogin () {
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        this.$store.dispatch('switchIntegralDialog', {status: true})
       },
       addFavorites () {
         if (this.hasLogin && !this.hasAddFavorites) {
@@ -827,9 +849,7 @@
               this.favoratesText = '收藏'
               Toast({
                 message: '你已成功取消收藏',
-                className: 'toast-content',
-                iconClass: 'iconfont icon-caozuochenggong toast-icon-big',
-                duration: 1000
+                duration: 500
               })
             } else {
               Toast({
@@ -850,7 +870,11 @@
         }
       },
       openShoppingCar () {
-        this.$router.push({name: this.hasLogin ? 'ShoppingCart' : 'Login'})
+        if (this.hasLogin) {
+          this.$router.push({name: 'ShoppingCart'})
+        } else {
+          this.goLogin()
+        }
       },
       checkBeforeBuying () {
         if (!this.hasChoosePrice) {
@@ -914,13 +938,42 @@
       },
       buyNow (quantity) {
         if (this.checkBeforeBuying()) {
-          this.closeSku()
-          this.quantity = 1
           if (this.hasLogin) {
-            Toast({
-              message: '暂未开放',
-              duration: 500
-            })
+            this.closeSku()
+            this.quantity = 1
+            setStore('buying', [{
+              team: {
+                company: this.productDetailTeam.company,
+                id: this.productDetailTeam.id,
+                logo: this.productDetailTeam.logo
+              },
+              products: [{
+                id: null, // 进入确认订单页面后，此id为空，更改购买数量时，不需要发请求更改
+                quantity: quantity,
+                price: {
+                  id: this.currentPrice.id,
+                  warehouse: null,
+                  amount: this.currentPrice.amount,
+                  money: this.currentPrice.money,
+                  product: {
+                    id: this.productDetail.id,
+                    name: this.productDetail.name,
+                    state: this.productDetail.state,
+                    organization_id: this.productDetail.organization_id,
+                    file_id: this.productDetailFiles[0].id,
+                    file_url: this.productDetailFiles[0].url,
+                    file_thumb_url: this.productDetailFiles[0].thumb_urls[0]
+                  }
+                },
+                checked: true
+              }]
+            }])
+            if (this.deliveries.length === 0) {
+              removeStore('editAddress')
+              this.$router.push({name: 'AddAddress'})
+            } else {
+              this.$router.push({name: 'OrderPaying'})
+            }
           } else {
             this.goLogin()
           }
@@ -987,9 +1040,17 @@
       },
       goEnterprise () {
         this.$router.push({name: 'EnterpriseCarte', params: {id: this.currentTeamId}})
+      },
+      handleIntegralModal () {
+        if (getStore('shareIntegral')) {
+          this.$store.dispatch('switchRegistDialog', {status: getStore('shareIntegral')})
+          removeStore('shareIntegral')
+          removeStore('shareRegist')
+        }
       }
     },
     mounted () {
+      this.handleIntegralModal()
       this.stopTouchMove()
       this.getProductDetail(this.id)
     }
@@ -1070,9 +1131,9 @@
       font-weight: 800;
     }
     .money {
-      align-items: center;
       position: relative;
       @include pm2rem(padding, 0px, 70px, 0px, 0px);
+      @include px2rem(height, 80px);
       .number {
         color: #FF0000;
       }
@@ -1086,8 +1147,16 @@
         animation:rotateTo0 0.2s ease-in-out 0s 1 normal both;
       }
     }
+    .tag-wrapper {
+      justify-content: flex-start;
+    }
     .inventory {
       @include pm2rem(padding, 0px, 0px, 22px, 0px);
+      flex: 2;
+    }
+    .tag {
+      @include pm2rem(padding, 0px, 0px, 22px, 0px);
+      flex: 3;
     }
   }
   .price-container {
