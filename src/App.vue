@@ -224,7 +224,7 @@
       },
       help () {
         this.closeRegistDialog()
-        this.$router.push({name: 'Protocol', query: {name: 'point_protocol.html', title: '云庐积分规则'}})
+        this.$router.push({name: 'Protocol', query: {name: 'point_protocol.html', title: '云庐积分规则', from: 'web'}})
       },
       viewIntegral () {
         this.closeRegistDialog()
