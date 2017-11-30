@@ -256,10 +256,10 @@
         </section>
         <section v-if="activeIndex === 2" key="three" :class="{'list-icon-hide': hideIcon}">
           <transition name="fade" mode="out-in">
-            <div v-if="enterprises.length > 0">
+            <div v-if="enterpriseLoading || enterprises.length > 0">
               <enterprise-list
                 :store="enterprises"
-                :loading="false"
+                :loading="enterpriseLoading"
                 :num="10"
                 @click="goEnterprise">
               </enterprise-list>
@@ -290,10 +290,10 @@
         </section>
         <section v-if="activeIndex === 3" key="four" :class="{'list-icon-hide': hideIcon}">
           <template v-if="hasLogin">
-            <div v-if="person.length > 0">
+            <div v-if="personLoading || person.length > 0">
               <person-members
                 :store="person"
-                :loading="false"
+                :loading="personLoading"
                 :num="10"
                 @click="goPersonCarte">
               </person-members>
