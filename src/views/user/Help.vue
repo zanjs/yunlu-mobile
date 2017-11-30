@@ -366,6 +366,8 @@
         @include px2rem(height, 8px);
         transition: background-color .2s;
         width: 100%;
+        left: 0;
+        right: 0;
       }
     }
     .active {
