@@ -65,7 +65,7 @@
           class="inventory font-13 second-text">
           库存 ：0
         </div>
-        <div class="tag font-13 second-text">运费：免运费</div>
+        <div class="tag font-13 second-text">免运费</div>
       </div>
     </section>
     <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
