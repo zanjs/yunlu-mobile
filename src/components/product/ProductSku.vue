@@ -83,8 +83,10 @@
           </div>
         </div>
         <div class="btn-wrapper">
-          <a class="shopping-car" @click="addShoppingCar(quantity)">加入购物车</a>
-          <a class="buy" @click="buy(quantity)">立即购买</a>
+          <a v-if="disabled" class="shopping-car disabled">加入购物车</a>
+          <a v-else class="shopping-car "  @click="addShoppingCar(quantity)">加入购物车</a>
+          <a v-if="disabled" class="buy disabled">立即购买</a>
+          <a v-else class="buy" @click="buy(quantity)">立即购买</a>
         </div>
       </div>
     </transition>
@@ -94,7 +96,7 @@
 <script>
   import Tag from './Tag'
   export default {
-    props: ['show', 'store', 'img', 'price', 'choosed', 'quantity'],
+    props: ['show', 'store', 'img', 'price', 'choosed', 'quantity', 'disabled'],
     data () {
       return {
 
@@ -281,6 +283,12 @@
         }
         & a:active {
           opacity: .8;
+        }
+        .disabled {
+          background-color: $eighth-grey;
+        }
+        .disabled:active {
+          opacity: 1;
         }
       }
     }
