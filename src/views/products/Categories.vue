@@ -44,7 +44,6 @@
             :key="index">
             <header class="flex flex-between menu-right-header empty-header">
               <div></div>
-              <div></div>
             </header>
             <section class="categories-list">
               <a
@@ -63,7 +62,6 @@
             :key="index">
             <header class="flex flex-between menu-right-header">
               <span class="primary-text font-16 ellipsis">{{item.name}}</span>
-              <span class="second-text font-12">（{{item.children.length}}个二级分类）</span>
             </header>
             <section class="categories-list">
               <a
