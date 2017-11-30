@@ -1,10 +1,11 @@
 <template>
   <section>
     <common-header
+      v-if="from"
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="menu-list">
+    <div class="menu-list" :class="{'has-header': from}">
       <ul class="content">
         <li
           v-for="(item, index) in menus"
@@ -26,6 +27,7 @@
     data () {
       return {
         header: '使用条款和隐私政策',
+        from: this.$route.query.from || '',
         menus: [
           {
             name: '云庐注册协议',
@@ -65,7 +67,7 @@
         }
       },
       goDetail (item) {
-        this.$router.push({name: 'Protocol', query: {name: item.value, title: item.name}})
+        this.$router.push({name: 'Protocol', query: {name: item.value, title: item.name, from: this.$route.query.from || ''}})
       }
     }
   }
@@ -75,7 +77,6 @@
   @import "../../styles/mixin";
 
   .menu-list {
-    @include px2rem(padding-top, 88px);
     .content {
       .item {
         @include px2rem(height, 80px);
@@ -88,6 +89,9 @@
         background-color: rgba(239, 234, 234, .5);
       }
     }
+  }
+  .has-header {
+    @include px2rem(padding-top, 88px);
   }
 </style>
 
