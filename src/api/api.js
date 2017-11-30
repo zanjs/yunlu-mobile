@@ -15,7 +15,6 @@ export default {
       data: {
         ...(params.data || {})
       },
-      withCredentials: true,
       timeout: REQUEST_TIME_OUT
     }).then(res => resolve(res)).catch(err => reject(err))
   },
