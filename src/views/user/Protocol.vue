@@ -11,7 +11,7 @@
         :src="html">
       </iframe>
     </div>
-    <div v-if="!hasHeader" class="float-btn">
+    <div v-if="!hasHeader && !hideBtn" class="float-btn">
       <a class="flex btn" @click="goBack()">
         <i class="iconfont icon-zuo"></i>
       </a>
@@ -28,6 +28,7 @@
       return {
         header: this.$route.query.title || '使用条款和隐私政策',
         hasHeader: this.$route.query.from || '',
+        hideBtn: this.$route.query.noback || '',
         html: `https://www.yunlu6.com/protocol/${this.$route.query.name || 'service_protocol.html'}`
       }
     },
