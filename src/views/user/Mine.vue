@@ -102,7 +102,7 @@
         this.$router.push({name: 'Help', query: {from: 'web'}})
       },
       openProtocol () {
-        this.$router.push({name: 'ProtocolMenu'})
+        this.$router.push({name: 'ProtocolMenu', query: {from: 'web'}})
       }
     },
     computed: {
