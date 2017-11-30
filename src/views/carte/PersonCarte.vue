@@ -279,7 +279,8 @@
               this.getFirstSpace(this.p ? '/shares/zone' : '/galleries', firstSpace.id, typeof res.data.cards.id === 'number' ? res.data.cards.user_id : res.data.cards.id, this.token, this.p)
             }
           },
-          reject: () => {
+          reject: (state, err) => {
+            console.dir(err)
             this.$router.replace({name: 'ReportExpired'})
           }
         })
