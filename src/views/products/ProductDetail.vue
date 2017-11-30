@@ -334,6 +334,7 @@
         :price="currentPrice"
         :choosed="hasChoosePrice"
         :quantity="quantity"
+        :disabled="currentPrice.money === '定制' || currentPrice.amount === '定制' || currentPrice.money === '赠品'"
         @increase="increase"
         @decrease="decrease"
         @handle-quantity="handleInput"
