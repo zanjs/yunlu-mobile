@@ -79,11 +79,12 @@
   .menu-list {
     .content {
       .item {
-        @include px2rem(height, 80px);
+        @include px2rem(height, 100px);
         @include pm2rem(padding, 0px, 0px, 0px, 30px);
         line-height: normal;
         justify-content: flex-start;
         border-bottom: 1px solid $second-grey;
+        cursor: pointer;
       }
       li:active {
         background-color: rgba(239, 234, 234, .5);
