@@ -89,7 +89,7 @@
             value: 'topic-002.html',
             url: 'recommend'
           }, {
-            name: '3. 自主电商(企业)',
+            name: '3. 自助电商(企业)',
             value: 'topic-003.html',
             url: 'recommend'
           }
