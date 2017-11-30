@@ -348,7 +348,7 @@
             if (arr2[i].id === tmpArr[j].file_id) {
               tmpArr[j].file_url = arr2[i].url
               tmpArr[j].file_thumb_urls = arr2[i].thumb_urls[0]
-              break
+              // 商品封面图可能出现重复的情况，这里不能break
             }
           }
         }
