@@ -732,7 +732,6 @@
           this.hasChoosePrice = true
         }
         this.$store.dispatch('switchSku', {action: true})
-        window.history.pushState({expandMoreprice: true}, '', '')
       },
       closeSku () {
         this.$store.dispatch('switchSku', {action: false})
