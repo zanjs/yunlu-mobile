@@ -44,7 +44,8 @@ const state = {
   fromLogin: false,
   scrollMap: {}, // 页面滚动高度集合
   registModal: false, // 提示注册的对话框
-  registSuccessModal: false // 注册成功奖励积分的对话框
+  registSuccessModal: false, // 注册成功奖励积分的对话框
+  morePrice: false // 商品详情SKU开启状态
 }
 
 const getters = {
@@ -83,7 +84,8 @@ const getters = {
   fromLogin: state => state.fromLogin,
   scrollMap: state => state.scrollMap,
   registModal: state => state.registModal,
-  registSuccessModal: state => state.registSuccessModal
+  registSuccessModal: state => state.registSuccessModal,
+  morePrice: state => state.morePrice
 }
 
 const actions = {
@@ -140,6 +142,9 @@ const actions = {
   },
   switchRegistDialog ({commit}, params) {
     commit(types.SWITCH_REGIST_DIALOG, {params})
+  },
+  switchSku ({commit}, params) {
+    commit(types.SWITCH_SKU, {params})
   }
 }
 
@@ -347,6 +352,10 @@ const mutations = {
 
   [types.SWITCH_REGIST_DIALOG] (state, {params}) {
     state.registSuccessModal = params.status
+  },
+
+  [types.SWITCH_SKU] (state, {params}) {
+    state.morePrice = params.action
   }
 }
 
