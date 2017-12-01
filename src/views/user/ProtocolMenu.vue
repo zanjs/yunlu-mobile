@@ -10,22 +10,22 @@
       :class="{'has-header': from}"
       ref="protocolMenuContainer"
       :style="{height: scrollHeight}">
-      <ul class="content">
-        <li
+      <div class="content">
+        <a
           v-for="(item, index) in menus"
           :key="index"
           class="flex item white-bg font-16 primary-text"
           @click="goDetail(item)">
           {{item.name}}
-        </li>
-      </ul>
+        </a>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, showBack } from '../../config/mUtils'
   export default {
     name: 'ProtocolMenu',
     data () {
@@ -79,10 +79,15 @@
         let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
         this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+      },
+      // 解决iOS设备:active伪类不生效的bug，给元素或其容器添加touchstart的空监听
+      handleActive () {
+        showBack(status => {}, 0, this.$refs.protocolMenuContainer)
       }
     },
     mounted () {
       this.handleScrollHeight()
+      this.handleActive()
     }
   }
 </script>
@@ -102,8 +107,12 @@
         justify-content: flex-start;
         border-bottom: 1px solid $second-grey;
         cursor: pointer;
+        box-sizing: border-box;
       }
-      li:active {
+      & a:first-child {
+        border-top: 1px solid $second-grey;
+      }
+      a:active {
         background-color: rgba(239, 234, 234, .5);
       }
     }
