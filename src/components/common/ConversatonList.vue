@@ -78,6 +78,7 @@
 
   .list-wrapper {
     background-color: $white;
+    box-sizing: border-box;
     .row-item {
       display: flex;
       align-items: center;

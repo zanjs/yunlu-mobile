@@ -1,218 +1,220 @@
 <template>
   <section>
-    <template v-if="!hideDownloadBar">
-      <download-bar
-        @close="closeDownloadBar()"
-        @download="goDownload()">
-      </download-bar>
-    </template>
-    <div style="position: relative; transform-style: preserve-3d;">
-      <product-header
-        @back="goBack()"
-        @open-favorites="openFavorites()"
-        @report="goReport()"
-        @search-near-by="searchNearBy()"
-        @home="goHome()"
-        v-bind:class="{'header': !hideDownloadBar}">
-      </product-header>
-      <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
-        <swiper :options="swiperOption">
-          <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
-            <div
-              v-lazy:background-image="{
-                src: item.url,
-                error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
-                loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
-              }"
-              class="swipe-img"
-              @click="viewFullScreenPic(productDetailFiles)">
-            </div>
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
-        <span
-          v-if="productDetailFiles && productDetailFiles.length"
-          class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
-        <span v-else class="page-nav white font-16">0/0</span>
-      </div>
-    </div>
-    <section class="info-container white-bg">
-      <div
-        v-if="productDetail && productDetail.name"
-        class="name font-17">{{productDetail.name}}</div>
-      <div v-else class="name font-17">&nbsp;</div>
-      <div class="money">
-        <span class="number font-14">&yen;</span>
-        <span
-          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-          class="number font-26">{{currentPrice.money}}</span>
-        <span
-          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-          class="number font-26">定制</span>
-        <span v-else class="number font-26">&nbsp;</span>
-      </div>
-      <div class="flex tag-wrapper">
-        <div
-          v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
-          class="inventory font-13 second-text">
-          库存 ：{{productDetail.prices[0].amount || '定制'}}
+    <div class="container" ref="productDetail" :style="{height: scrollHeight}">
+      <template v-if="!hideDownloadBar">
+        <download-bar
+          @close="closeDownloadBar()"
+          @download="goDownload()">
+        </download-bar>
+      </template>
+      <div style="position: relative; transform-style: preserve-3d;">
+        <product-header
+          @back="goBack()"
+          @open-favorites="openFavorites()"
+          @report="goReport()"
+          @search-near-by="searchNearBy()"
+          @home="goHome()"
+          v-bind:class="{'header': !hideDownloadBar}">
+        </product-header>
+        <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
+          <swiper :options="swiperOption">
+            <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
+              <div
+                v-lazy:background-image="{
+                  src: item.url,
+                  error: 'http://oatl31bw3.bkt.clouddn.com/imgLoadingError.png',
+                  loading: 'http://oatl31bw3.bkt.clouddn.com/imgLoading3.jpg'
+                }"
+                class="swipe-img"
+                @click="viewFullScreenPic(productDetailFiles)">
+              </div>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+          <span
+            v-if="productDetailFiles && productDetailFiles.length"
+            class="page-nav white font-16">{{currentIndex}}/{{productDetailFiles.length}}</span>
+          <span v-else class="page-nav white font-16">0/0</span>
         </div>
-        <div
-          v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
-          class="inventory font-13 second-text">库存 ：定制</div>
-        <div
-          v-else
-          class="inventory font-13 second-text">
-          库存 ：0
-        </div>
-        <div class="tag font-13 second-text">免运费</div>
       </div>
-    </section>
-    <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
-      <a class="flex-between" @click="expandMorePrice()">
-        <span class="font-14 second-text">{{priceText}}</span>
-        <i class="iconfont icon-you primary font-14"></i>
-      </a>
-    </section>
-    <section>
-      <mt-navbar
-        v-model="selected"
-        class="nav-bar">
-        <mt-tab-item id="1">价格参数</mt-tab-item>
-        <mt-tab-item id="2">产品参数</mt-tab-item>
-        <mt-tab-item id="3">关联信息</mt-tab-item>
-      </mt-navbar>
-      <mt-tab-container
-        v-model="selected"
-        class="nav-bar-container">
-        <mt-tab-container-item
-          id="1"
-          class="prodcutdetail-price-item">
-          <template v-if="currentPriceProperties && currentPriceProperties.length > 0">
-            <span
-              v-for="(item, index) in currentPriceProperties"
-              :key="index"
-              class="row-item">{{item.key}} : {{item.value}}</span>
-          </template>
+      <section class="info-container white-bg">
+        <div
+          v-if="productDetail && productDetail.name"
+          class="name font-17">{{productDetail.name}}</div>
+        <div v-else class="name font-17">&nbsp;</div>
+        <div class="money">
+          <span class="number font-14">&yen;</span>
+          <span
+            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+            class="number font-26">{{currentPrice.money}}</span>
+          <span
+            v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+            class="number font-26">定制</span>
+          <span v-else class="number font-26">&nbsp;</span>
+        </div>
+        <div class="flex tag-wrapper">
+          <div
+            v-if="productDetail && productDetail.prices && productDetail.prices.length > 0"
+            class="inventory font-13 second-text">
+            库存 ：{{productDetail.prices[0].amount || '定制'}}
+          </div>
+          <div
+            v-else-if="productDetail && productDetail.prices && productDetail.prices.length === 0"
+            class="inventory font-13 second-text">库存 ：定制</div>
           <div
             v-else
-            class="no-price">该产品暂无价格参数</div>
-        </mt-tab-container-item>
-        <mt-tab-container-item
-          id="2"
-          class="productdetail-product-item">
-          <template v-if="productDetail && productDetail.goods_type === 'Medicament'">
-            <div class="row-item">
-              <div class="title-container">
-                <i class="iconfont icon-circle dot"></i>
-                <span class="title">功能主治 : {{productDetail.indication}}</span>
-              </div>
-            </div>
-          </template>
-          <template v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
-            <div class="row-item">
-              <div class="title-container">
-                <i class="iconfont icon-circle dot"></i>
-                <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
-              </div>
-              <div
-                v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
-                class="title-container">
-                <i class="iconfont icon-circle dot"></i>
-                <div class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</div>
-              </div>
-            </div>
-          </template>
-          <template v-if="productDetail && productDetail.properties && productDetail.properties.length > 0">
+            class="inventory font-13 second-text">
+            库存 ：0
+          </div>
+          <div class="tag font-13 second-text">免运费</div>
+        </div>
+      </section>
+      <section v-if="productDetail && productDetail.price_range && productDetail.price_range.length > 1" class="price-container white-bg">
+        <a class="flex-between" @click="expandMorePrice()">
+          <span class="font-14 second-text">{{priceText}}</span>
+          <i class="iconfont icon-you primary font-14"></i>
+        </a>
+      </section>
+      <section>
+        <mt-navbar
+          v-model="selected"
+          class="nav-bar">
+          <mt-tab-item id="1">价格参数</mt-tab-item>
+          <mt-tab-item id="2">产品参数</mt-tab-item>
+          <mt-tab-item id="3">关联信息</mt-tab-item>
+        </mt-navbar>
+        <mt-tab-container
+          v-model="selected"
+          class="nav-bar-container">
+          <mt-tab-container-item
+            id="1"
+            class="prodcutdetail-price-item">
+            <template v-if="currentPriceProperties && currentPriceProperties.length > 0">
+              <span
+                v-for="(item, index) in currentPriceProperties"
+                :key="index"
+                class="row-item">{{item.key}} : {{item.value}}</span>
+            </template>
             <div
-              v-for="(item, index) in productDetail.properties"
-              :key="index"
-              class="row-item">
-              <div
-                v-for="(i, indexI) in item.children"
-                :key="indexI"
-                class="row-container">
-                <div
-                  v-if="handleChildProperties(i)"
-                  class="sub-row-title">
+              v-else
+              class="no-price">该产品暂无价格参数</div>
+          </mt-tab-container-item>
+          <mt-tab-container-item
+            id="2"
+            class="productdetail-product-item">
+            <template v-if="productDetail && productDetail.goods_type === 'Medicament'">
+              <div class="row-item">
+                <div class="title-container">
                   <i class="iconfont icon-circle dot"></i>
-                  <div class="title">{{i.name}} : {{i.value}}</div>
-                  <i
-                    v-for="(j, indexJ) in i.quotes"
-                    :key="indexJ"
-                    class="iconfont icon-guanlian"
-                    @click="openPopDialog(j)">
-                  </i>
-                </div>
-                <div
-                  v-for="(m, indexM) in i.children"
-                  :key="indexM"
-                  class="sub-item">
-                  <div
-                    v-if="handleChildProperties(m)"
-                    class="title">{{m.name}} : {{m.value}}</div>
-                    <div
-                      v-for="(n, indexN) in m.children"
-                      :key="indexN"
-                      class="third-row-container">
-                      <div class="third-item">
-                        <div
-                          v-if="n.name && n.value"
-                          class="title">{{n.name}} : {{n.value}}</div>
-                      </div>
-                    </div>
+                  <span class="title">功能主治 : {{productDetail.indication}}</span>
                 </div>
               </div>
-            </div>
-          </template>
-          <template v-if="!hasProperties">
-            <div class="no-product-args">
-              该产品暂无产品参数
-            </div>
-          </template>
-        </mt-tab-container-item>
-        <mt-tab-container-item
-          id="3"
-          class="productdetail-product-tags white-bg">
-          <template v-if="archives && archives.length > 0">
+            </template>
+            <template v-if="productDetail && productDetail.goods_type === 'StoneMaterial'">
+              <div class="row-item">
+                <div class="title-container">
+                  <i class="iconfont icon-circle dot"></i>
+                  <span class="title">{{productDetail.taxonomy.name}} /{{productDetail.taxonomy.colour_desc[1]}} /{{productDetail.taxonomy.depth_desc[1]}} /{{productDetail.taxonomy.pattern_desc[1]}}</span>
+                </div>
+                <div
+                  v-if="productDetail.surface && productDetail.surface.name &&  productDetail.surface.product_class && productDetail.surface.product_class.name"
+                  class="title-container">
+                  <i class="iconfont icon-circle dot"></i>
+                  <div class="title">{{productDetail.surface.product_class.name}} /{{productDetail.surface.name}}</div>
+                </div>
+              </div>
+            </template>
+            <template v-if="productDetail && productDetail.properties && productDetail.properties.length > 0">
+              <div
+                v-for="(item, index) in productDetail.properties"
+                :key="index"
+                class="row-item">
+                <div
+                  v-for="(i, indexI) in item.children"
+                  :key="indexI"
+                  class="row-container">
+                  <div
+                    v-if="handleChildProperties(i)"
+                    class="sub-row-title">
+                    <i class="iconfont icon-circle dot"></i>
+                    <div class="title">{{i.name}} : {{i.value}}</div>
+                    <i
+                      v-for="(j, indexJ) in i.quotes"
+                      :key="indexJ"
+                      class="iconfont icon-guanlian"
+                      @click="openPopDialog(j)">
+                    </i>
+                  </div>
+                  <div
+                    v-for="(m, indexM) in i.children"
+                    :key="indexM"
+                    class="sub-item">
+                    <div
+                      v-if="handleChildProperties(m)"
+                      class="title">{{m.name}} : {{m.value}}</div>
+                      <div
+                        v-for="(n, indexN) in m.children"
+                        :key="indexN"
+                        class="third-row-container">
+                        <div class="third-item">
+                          <div
+                            v-if="n.name && n.value"
+                            class="title">{{n.name}} : {{n.value}}</div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-if="!hasProperties">
+              <div class="no-product-args">
+                该产品暂无产品参数
+              </div>
+            </template>
+          </mt-tab-container-item>
+          <mt-tab-container-item
+            id="3"
+            class="productdetail-product-tags white-bg">
+            <template v-if="archives && archives.length > 0">
+              <div
+                v-for="(item, index) in archives"
+                :key="index"
+                @click="viewArchives(item)"
+                class="tag second-text font-14">{{item.name}}</div>
+            </template>
             <div
-              v-for="(item, index) in archives"
-              :key="index"
-              @click="viewArchives(item)"
-              class="tag second-text font-14">{{item.name}}</div>
-          </template>
-          <div
-            v-else
-            class="no-info font-20">该产品暂无关联信息</div>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </section>
-    <section class="company-info white-bg" @click="goEnterprise()">
-      <div class="wraper">
-        <div class="company-img">
-          <img
-            v-if="productDetailTeam && productDetailTeam.logo"
-            :src="productDetailTeam.logo">
-          <div v-else></div>
-        </div>
-        <div class="content-wraper ellipsis">
-          <div class="company-content">
-            <div
-              v-if="productDetailTeam && productDetailTeam.company"
-              class="title ellipsis font-16">
-              {{productDetailTeam.company}}
-            </div>
-            <span v-else class="title ellipsis font-16">&nbsp;</span>
-            <div class="info font-14">
-              <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
-              <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
-              <span v-else>&nbsp;</span>
+              v-else
+              class="no-info font-20">该产品暂无关联信息</div>
+          </mt-tab-container-item>
+        </mt-tab-container>
+      </section>
+      <section class="company-info white-bg" @click="goEnterprise()">
+        <div class="wraper">
+          <div class="company-img">
+            <img
+              v-if="productDetailTeam && productDetailTeam.logo"
+              :src="productDetailTeam.logo">
+            <div v-else></div>
+          </div>
+          <div class="content-wraper ellipsis">
+            <div class="company-content">
+              <div
+                v-if="productDetailTeam && productDetailTeam.company"
+                class="title ellipsis font-16">
+                {{productDetailTeam.company}}
+              </div>
+              <span v-else class="title ellipsis font-16">&nbsp;</span>
+              <div class="info font-14">
+                <span v-if="productDetailTeam && productDetailTeam.service && productDetailTeam.service.name">{{productDetailTeam.service.name}}</span>
+                <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span v-if="productDetailTeam && productDetailTeam.products_count">{{productDetailTeam.products_count}}件商品</span>
+                <span v-else>&nbsp;</span>
+              </div>
             </div>
           </div>
-         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </div>
     <section class="product-tab-bar white-bg full-width">
       <div
         class="btn-box"
@@ -420,7 +422,8 @@
         archives: [],
         teams: null,
         productDetailTeam: [],
-        deliveries: []
+        deliveries: [],
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -1049,9 +1052,16 @@
           removeStore('shareIntegral')
           removeStore('shareRegist')
         }
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
+      this.handleScrollHeight()
       this.handleIntegralModal()
       this.stopTouchMove()
       this.getProductDetail(this.id)
@@ -1067,6 +1077,13 @@
 <style lang="scss" scoped>
   @import '../../styles/mixin';
 
+  .container {
+    position: relative;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1px;
+    box-sizing: border-box;
+  }
   .swipe {
     @include px2rem(height, 634px);
     @include pm2rem(margin, 0px, 0px, 0px, 0px);
@@ -1214,10 +1231,10 @@
     border-bottom: 1px solid $third-grey;
   }
   .company-info {
-    @include pm2rem(margin, 22px, 0px, 0px, 0px);
-    @include pm2rem(padding, 24px, 24px, 124px, 24px);
+    @include pm2rem(margin, 22px, 0px, 97px, 0px);
+    @include pm2rem(padding, 24px, 24px, 24px, 24px);
     border-top: 1px solid $third-grey;
-    line-height: 1;
+    line-height: normal;
     .wraper {
       display: flex;
       align-items: center;

@@ -277,6 +277,7 @@
     min-height: 100%;
     position: absolute;
     top: 0;
+    bottom: 0;
   }
   // symbols （iconfont彩色图标）
   .icon {
