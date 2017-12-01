@@ -6,7 +6,7 @@
       <div
         class="cirlce-btn"
         @click="handleClick()">
-        <span class="flex btn">+</span>
+        <i class="iconfont icon-jia"></i>
       </div>
     </div>
   </section>
@@ -48,17 +48,17 @@
       @include px2rem(border-radius, 50px);
       position: absolute;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       @include px2rem(margin-right, 40px);
       color: $white;
       background-color: rgba(254, 104, 48, 0.8);
-      line-height: 1;
+      line-height: normal;
       z-index: 1004;
+      box-sizing: border-box;
       box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px rgba(0,0,0,.14), 0 1px 18px rgba(0,0,0,.12);
-      .btn {
-        @include font-dpr(36px);
+      i {
+        @include font-dpr(20px);
         line-height: normal;
       }
     }
