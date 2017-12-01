@@ -229,23 +229,10 @@
       viewIntegral () {
         this.closeRegistDialog()
         this.$router.push({name: 'Download'})
-      },
-      // 监听浏览器前进后退事件，用于关闭弹窗、SKU等
-      handlePopState () {
-        window.addEventListener('popstate', (e) => {
-          if (e.state.expandMoreprice) {
-            this.$store.dispatch('switchSku', {action: true})
-          } else {
-            this.$store.dispatch('switchSku', {action: false})
-          }
-        })
       }
     },
     updated () {
       this.beforeInit()
-    },
-    mounted () {
-      this.handlePopState()
     },
     computed: {
       ...mapGetters([
