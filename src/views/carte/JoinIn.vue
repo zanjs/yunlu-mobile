@@ -320,7 +320,7 @@
       background-color: $white;
       border-top: 1px solid $second-grey;
       @include pm2rem(padding, 20px, 0px, 30px, 30px);
-      @include px2rem(min-height, 420px);
+      @include px2rem(min-height, 380px);
       p {
         @include px2rem(height, 60px);
         @include font-dpr(16px);
@@ -336,11 +336,11 @@
 
       }
       .no-constitution-wrapper {
-        @include px2rem(height, 400px);
+        @include px2rem(height, 300px);
         @include px2rem(padding-right, 30px);
         img {
-          @include px2rem(width, 368px);
-          @include px2rem(height, 322px);
+          @include px2rem(width, 184px);
+          @include px2rem(height, 161px);
         }
       }
       .img-container {
