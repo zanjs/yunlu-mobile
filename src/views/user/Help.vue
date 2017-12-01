@@ -27,8 +27,8 @@
       ref="help"
       :style="{height: scrollHeight}">
       <transition name="fade" mode="out-in">
-        <ul v-if="activeIndex === 0" class="menu-list" key="one">
-          <li
+        <div v-if="activeIndex === 0" class="menu-list" key="one">
+          <a
             v-for="(item, index) in recommendMenus"
             :key="index"
             class="item"
@@ -37,10 +37,10 @@
               {{item.name}}
             </span>
             <i class="iconfont icon-you"></i>
-          </li>
-        </ul>
-        <ul v-if="activeIndex === 1" class="menu-list" key="two">
-          <li
+          </a>
+        </div>
+        <div v-if="activeIndex === 1" class="menu-list" key="two">
+          <a
             v-for="(item, index) in docMenus"
             :key="index"
             class="item"
@@ -49,10 +49,10 @@
               {{item.name}}
             </span>
             <i class="iconfont icon-you"></i>
-          </li>
-        </ul>
-        <ul v-if="activeIndex === 2" class="menu-list" key="three">
-          <li
+          </a>
+        </div>
+        <div v-if="activeIndex === 2" class="menu-list" key="three">
+          <a
             v-for="(item, index) in questionMenus"
             :key="index"
             class="item"
@@ -61,8 +61,8 @@
               {{item.name}}
             </span>
             <i class="iconfont icon-you"></i>
-          </li>
-        </ul>
+          </a>
+        </div>
       </transition>
     </section>
   </section>
@@ -70,7 +70,7 @@
 
 <script>
   import CommonHeader from '../../components/header/CommonHeader'
-  import { getStore, removeStore, setScrollTop } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop, showBack } from '../../config/mUtils'
   export default {
     name: 'Help',
     data () {
@@ -310,13 +310,21 @@
       },
       goHomePage () {
         window.location.href = 'https://www.yunlu6.com'
+      },
+      // 解决iOS设备:active伪类不生效的bug，给元素或其容器添加touchstart的空监听
+      handleActive () {
+        showBack(status => {}, 0, this.$refs.help)
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
-      let appHeight = document.getElementById('app').offsetHeight
-      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
-      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
-      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+      this.handleScrollHeight()
+      this.handleActive()
     },
     activated () {
       if (!this.$store.state.popState) {
@@ -391,15 +399,20 @@
     margin-bottom: 1px;
     z-index: 1;
     .menu-list {
+      a:active {
+        background-color: rgba(239, 234, 234, .5);
+      }
       .item {
         @include px2rem(height, 98px);
         background-color: $white;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex: 1;
         @include pm2rem(padding, 0px, 30px, 0px, 30px);
         border-bottom: 1px solid $second-grey;
         cursor: pointer;
+        box-sizing: border-box;
         span {
           @include font-dpr(16px);
           color: $second-dark;
@@ -410,11 +423,8 @@
           color: $third-dark;
         }
       }
-      & :last-child {
-        border-bottom: none;
-      }
-      li:active {
-        background-color: rgba(239, 234, 234, .5);
+      & a:first-child {
+        border-top: 1px solid $second-grey;
       }
     }
   }
