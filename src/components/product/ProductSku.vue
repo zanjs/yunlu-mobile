@@ -1,5 +1,5 @@
 <template>
-  <section class="container full-width">
+  <section class="sku-container full-width">
     <transition
       name="custom-classes-transition"
       enter-active-class="fade-in-active"
@@ -137,7 +137,7 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .container {
+  .sku-container {
     .bg {
       position: fixed;
       background-color: rgba(0, 0, 0, .5);
