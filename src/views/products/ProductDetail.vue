@@ -354,6 +354,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
+  import { mapGetters } from 'vuex'
   export default {
     props: ['id'],
     name: 'ProductDetail',
@@ -377,7 +378,6 @@
         productLink: {},
         productLinkFile: {},
         teamLink: {},
-        morePrice: false,
         currentPrice: {},
         currentPriceProperties: [],
         popUp: false,
@@ -728,10 +728,11 @@
         if (this.productDetail.prices.length === 1) {
           this.hasChoosePrice = true
         }
-        this.morePrice = true
+        this.$store.dispatch('switchSku', {action: true})
+        window.history.pushState({expandMoreprice: true}, '', '')
       },
       closeSku () {
-        this.morePrice = false
+        this.$store.dispatch('switchSku', {action: false})
       },
       changePrice (item) {
         this.currentPrice = item
@@ -1054,6 +1055,11 @@
       this.handleIntegralModal()
       this.stopTouchMove()
       this.getProductDetail(this.id)
+    },
+    computed: {
+      ...mapGetters([
+        'morePrice'
+      ])
     }
   }
 </script>
