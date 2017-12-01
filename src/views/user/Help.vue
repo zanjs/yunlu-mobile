@@ -381,7 +381,7 @@
     }
   }
   .has-header {
-    @include px2rem(padding-top, 88px);
+    @include px2rem(top, 88px);
   }
   .tab-container {
     @include px2rem(padding-top, 112px);

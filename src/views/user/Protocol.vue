@@ -8,6 +8,7 @@
     <div class="content full-width" :class="{'has-header': hasHeader}">
       <iframe
         class="iframe"
+        :style="{height: scrollHeight}"
         :src="html">
       </iframe>
     </div>
@@ -29,7 +30,8 @@
         header: this.$route.query.title || '使用条款和隐私政策',
         hasHeader: this.$route.query.from || '',
         hideBtn: this.$route.query.noback || '',
-        html: `https://www.yunlu6.com/protocol/${this.$route.query.name || 'service_protocol.html'}`
+        html: `https://www.yunlu6.com/protocol/${this.$route.query.name || 'service_protocol.html'}`,
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -43,7 +45,16 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
+    },
+    mounted () {
+      this.handleScrollHeight()
     }
   }
 </script>
@@ -52,17 +63,22 @@
   @import '../../styles/mixin';
 
   .content {
-    position: fixed;
-    top: 0;
-    bottom: 0;
+    position: relative;
+    box-sizing: border-box;
     .iframe {
+      position: absolute;
       width: 100%;
       height: 100%;
+      top: 0;
+      bottom: 0;
       border: none;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1px;
     }
   }
   .has-header {
-    @include px2rem(top, 88px);
+    @include px2rem(padding-top, 88px);
   }
   .float-btn {
     position: fixed;
