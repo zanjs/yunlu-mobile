@@ -1,5 +1,5 @@
 <template>
-  <section class="container full-width">
+  <section class="full-width">
     <common-header
       :title="header"
       :right-text="rightBtnText"
@@ -91,7 +91,7 @@
               </transition>
               <mugen-scroll
                 key="favoriteOrganizations"
-                :handler="loadAOrganizationsBottom"
+                :handler="loadOrganizationsBottom"
                 :handle-on-mount="false"
                 :threshold="0.1"
                 :should-handle="!organizationLoading && !inOperation">
@@ -522,13 +522,12 @@
         this.checkAll = this.hasChecked = !bool
       },
       loadAProductsBottom () {
-        console.log('123')
         if (!this.noMoreProducts) {
           this.productPageIndex += 1
           this.getFavorites(this.searchParams, 1, this.productPageIndex, this.productPageSize, 'Product')
         }
       },
-      loadAOrganizationsBottom () {
+      loadOrganizationsBottom () {
         if (!this.noMoreOrganizations) {
           this.organizationPageIndex += 1
           this.getFavorites(this.searchParams, 2, this.organizationPageIndex, this.organizationPageSize, 'Organization')
@@ -576,7 +575,7 @@
     mounted () {
       let appHeight = document.getElementById('app').offsetHeight
       let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
-      let divHeight = ((appHeight - 133) / parseFloat(rootFontSize + '')).toFixed(2)
+      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
       this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
     },
     activated () {
@@ -617,11 +616,6 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .container {
-    overflow-y: scroll;
-    padding-bottom: 1px;
-    -webkit-overflow-scrolling: touch;
-  }
   .search-bar {
     position: fixed;
     @include px2rem(height, 88px);
@@ -714,7 +708,11 @@
     }
   }
   .nav-bar-container {
+    position: relative;
+    box-sizing: border-box;
     overflow-y: scroll;
+    margin-bottom: 1px;
+    -webkit-overflow-scrolling: touch;
     @include px2rem(padding-top, 266px);
     .loading {
       @include px2rem(height, 120px);
