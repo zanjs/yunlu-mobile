@@ -348,6 +348,7 @@
     background-color: $white;
     box-sizing: border-box;
     border-bottom: 1px solid $tenth-grey;
+    z-index: 2;
     .item {
       position: relative;
       @include px2rem(height, 98px);
@@ -388,6 +389,7 @@
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     margin-bottom: 1px;
+    z-index: 1;
     .menu-list {
       .item {
         @include px2rem(height, 98px);
