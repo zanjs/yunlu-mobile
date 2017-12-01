@@ -34,5 +34,3 @@ export const SAVE_SCROLL = 'SAVE_SCROLL'
 export const SWITCH_INTEGRAL_DIALOG = 'SWITCH_INTEGRAL_DIALOG'
 // 注册成功，领取积分弹窗
 export const SWITCH_REGIST_DIALOG = 'SWITCH_REGIST_DIALOG'
-// 商品详情页，切换SKU展示状态
-export const SWITCH_SKU = 'SWITCH_SKU'
