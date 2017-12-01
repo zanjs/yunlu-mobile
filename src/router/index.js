@@ -139,12 +139,12 @@ export default new Router({
       component: Register,
       meta: { keepAlive: false }
     }, {
-      path: '/protocl',
+      path: '/protocol',
       name: 'Protocol',
       component: Protocol,
       meta: { keepAlive: false }
     }, {
-      path: '/protoclmenu',
+      path: '/protocolmenu',
       name: 'ProtocolMenu',
       component: ProtocolMenu,
       meta: { keepAlive: true }

@@ -5,7 +5,11 @@
       :title="header"
       @back="goBack()">
     </common-header>
-    <div class="menu-list" :class="{'has-header': from}">
+    <div
+      class="menu-list"
+      :class="{'has-header': from}"
+      ref="protocolMenuContainer"
+      :style="{height: scrollHeight}">
       <ul class="content">
         <li
           v-for="(item, index) in menus"
@@ -51,7 +55,8 @@
             name: '云庐积分规则',
             value: 'point_protocol.html'
           }
-        ]
+        ],
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -68,7 +73,16 @@
       },
       goDetail (item) {
         this.$router.push({name: 'Protocol', query: {name: item.value, title: item.name, from: this.$route.query.from || ''}})
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
+    },
+    mounted () {
+      this.handleScrollHeight()
     }
   }
 </script>
@@ -77,6 +91,9 @@
   @import "../../styles/mixin";
 
   .menu-list {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1px;
     .content {
       .item {
         @include px2rem(height, 100px);
