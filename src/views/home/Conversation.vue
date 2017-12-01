@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="full-width">
     <common-header
       :title="header"
       @back="goBack()">
@@ -17,10 +17,9 @@
         <i class="iconfont icon-sousuo"></i>
       </div>
     </div>
-    <section class="list-wrapper" ref="conversation" :style="{height: scrollHeight}">
+    <section class="list-container" ref="conversation" :style="{height: scrollHeight}">
       <template v-if="conversationList && conversationList.length > 0">
         <conversation-list
-          class="list-container"
           :store="conversationList"
           @click="goChat"
           @check="handleItemCheck">
@@ -91,7 +90,7 @@
         conversations: [],
         showConfirm: false,
         confirmMsg: '确定要删除选中的会话吗?',
-        scrollHeight: '14rem'
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -270,13 +269,16 @@
         for (let i = 0; i < ids.length; i++) {
           this.$store.dispatch('markAsRead', ids[i])
         }
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
-      let appHeight = document.getElementById('app').offsetHeight
-      let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
-      let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
-      this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+      this.handleScrollHeight()
     },
     activated () {
       this.getConversationList()
@@ -302,23 +304,6 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .header {
-    background-color: $green;
-    @include px2rem(height, 88px);
-    @include pm2rem(padding, 0px, 30px, 0px, 30px);
-    @include font-dpr(17px);
-    position: fixed;
-    z-index: 1002 !important;
-    h1 {
-      @include font-dpr(17px);
-    }
-    .button-text {
-      @include font-dpr(15px);
-    }
-    i {
-      @include font-dpr(20px);
-    }
-  }
   .search-bar {
     position: fixed;
     @include px2rem(height, 88px);
@@ -365,13 +350,13 @@
       }
     }
   }
-  .list-wrapper {
+  .list-container {
+    position: relative;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 1px;
-  }
-  .list-container {
+    margin-bottom: 1px;
     @include pm2rem(padding, 176px, 0px, 98px, 0px);
+    box-sizing: border-box;
   }
   .option-bar {
     display: flex;
