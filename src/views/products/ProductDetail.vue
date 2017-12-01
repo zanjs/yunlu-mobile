@@ -328,7 +328,7 @@
         </swiper-slide>
       </swiper>
     </div>
-    <div v-if="productDetail && productDetail.prices && productDetail.prices.length >= 1">
+    <template v-if="productDetail && productDetail.prices && productDetail.prices.length >= 1">
       <product-sku
         :show="morePrice"
         :store="productDetail"
@@ -345,7 +345,7 @@
         @add-shopping-cart="addShoppingCar"
         @buy-now="buyNow">
       </product-sku>
-    </div>
+    </template>
   </section>
 </template>
 
@@ -1231,7 +1231,7 @@
     border-bottom: 1px solid $third-grey;
   }
   .company-info {
-    @include pm2rem(margin, 22px, 0px, 97px, 0px);
+    @include pm2rem(margin, 22px, 0px, 98px, 0px);
     @include pm2rem(padding, 24px, 24px, 24px, 24px);
     border-top: 1px solid $third-grey;
     line-height: normal;
