@@ -766,6 +766,7 @@
             team_id: this.id,
             page: this.productPageIndex,
             per_page: this.productPageSize,
+            thumbs: 'general',
             ...(this.sortType === 2 ? {sort: this.orderUp ? 1 : -1} : {}),
             ...(q === '' ? {} : {q: q}),
             ...(zoneCode === '' ? {} : {zone_code: zoneCode}),
@@ -907,7 +908,8 @@
           params: {
             ...(queryParams ? {q: queryParams} : {}),
             page: this.enterprisePageIndex,
-            per_page: this.enterprisePageSize
+            per_page: this.enterprisePageSize,
+            thumbs: 'thumb'
           },
           target: this,
           resolve: (state, res) => {
@@ -932,7 +934,8 @@
           params: {
             ...(queryParams ? {q: queryParams} : {}),
             page: this.personPageIndex,
-            per_page: this.personPageSize
+            per_page: this.personPageSize,
+            thumbs: 'thumb'
           },
           target: this,
           resolve: (state, res) => {
