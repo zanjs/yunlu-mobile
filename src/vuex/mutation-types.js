@@ -11,7 +11,7 @@ export const SET_USER_DELEGATE = 'SET_USER_DELEGATE'
 // 设置设备全局代理
 export const SET_DEVICE_DELEGATE = 'SET_DEVICE_DELEGATE'
 // 更新会话记录(来自leancloud)
-export const UPDATE_LEAN_CLOUD_CONVERSATIONS = 'UPDATE_CONVERSATIONS'
+export const UPDATE_LEAN_CLOUD_CONVERSATIONS = 'UPDATE_LEAN_CLOUD_CONVERSATIONS'
 // 收到新消息(在非聊天页面)
 export const RECEIVE_NEW_MESSAGE = 'RECEIVE_NEW_MESSAGE'
 // 更新未读消息
@@ -34,3 +34,5 @@ export const SAVE_SCROLL = 'SAVE_SCROLL'
 export const SWITCH_INTEGRAL_DIALOG = 'SWITCH_INTEGRAL_DIALOG'
 // 注册成功，领取积分弹窗
 export const SWITCH_REGIST_DIALOG = 'SWITCH_REGIST_DIALOG'
+// 登录成功或者注销成功，切换leancloud服务状态
+export const SWITCH_LEANCLOUD_STATUS = 'SWITCH_LEANCLOUD_STATUS'

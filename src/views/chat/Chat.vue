@@ -22,21 +22,18 @@
     </section>
     <section
       class="container"
+      ref="chat"
+      id="chat"
+      :style="{height: scrollHeight}"
       v-bind:class="{'product-container': type === 'Product'}">
-      <div
-        class="chat-content"
-        ref="chatContent"
-        id="chatContent"
-        onresize="resizeHeight">
-        <message
-          v-for="(item, index) in msgs"
-          :key="index"
-          :date="item.date"
-          :is-self="item.isSelf"
-          :content="item.content"
-          :avatar="item.avatar">
-        </message>
-      </div>
+      <message
+        v-for="(item, index) in msgs"
+        :key="index"
+        :date="item.date"
+        :is-self="item.isSelf"
+        :content="item.content"
+        :avatar="item.avatar">
+      </message>
       <chat-input @send="send">
       </chat-input>
     </section>
@@ -48,7 +45,7 @@
   import Message from '../../components/chat/Message'
   import ChatInput from '../../components/chat/ChatInput'
   import { TextMessage } from 'leancloud-realtime'
-  import { getStore, removeStore } from '../../config/mUtils'
+  import { getStore, removeStore, setScrollTop } from '../../config/mUtils'
   import moment from 'moment'
   export default {
     name: 'Chat',
@@ -70,7 +67,8 @@
         title: '',
         msg: null,
         msgs: [],
-        hasDestory: false
+        hasDestory: false,
+        scrollHeight: '15rem'
       }
     },
     components: {
@@ -197,7 +195,7 @@
         }
         this.msgs.push(tmpObj)
         this.$nextTick(() => {
-          document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
+          setScrollTop(this.$refs.chat.scrollHeight, this.$refs.chat)
         })
       },
       async init () {
@@ -254,7 +252,7 @@
             }
             this.msgs.push(tmpObj)
             this.$nextTick(() => {
-              document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
+              setScrollTop(this.$refs.chat.scrollHeight, this.$refs.chat)
             })
           } else {
             // 非当前会话，不做处理
@@ -295,7 +293,7 @@
           }
         }
         this.$nextTick(() => {
-          document.documentElement.scrollTop = document.body.scrollTop = document.documentElement.scrollHeight || document.body.scrollHeight
+          setScrollTop(this.$refs.chat.scrollHeight, this.$refs.chat)
         })
       },
       goBack () {
@@ -308,9 +306,16 @@
       },
       destroyConverastion () {
         this.hasDestory = true
+      },
+      handleScrollHeight () {
+        let appHeight = document.getElementById('app').offsetHeight
+        let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
+        let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
+        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
+      this.handleScrollHeight()
       this.beforeGetConferences()
     },
     beforeDestroy () {
@@ -354,7 +359,12 @@
     }
   }
   .container {
-    @include pm2rem(padding, 128px, 0px, 240px, 0px);
+    position: relative;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    margin-bottom: 1px;
+    -webkit-overflow-scrolling: touch;
+    @include pm2rem(padding, 88px, 0px, 248px, 0px);
   }
   .product-container {
     @include px2rem(padding-top, 248px);
