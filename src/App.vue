@@ -44,6 +44,7 @@
           'See',
           'Chat',
           'Report',
+          'Login',
           'Register',
           'ChangePassword',
           'ForgetPassword',
@@ -78,7 +79,7 @@
     methods: {
       beforeInit () {
         // 登录后getStore('user')会发生变化，不能直接从data中取数据，data中的数据不是响应式的。
-        if (getStore('user') && getStore('user').authentication_token && !this.acitve) {
+        if (getStore('user') && getStore('user').authentication_token && !this.$store.state.leanCloudActive) {
           this.getClosedConversationList()
           this.init()
         } else {
@@ -165,7 +166,7 @@
           console.log('聊天未读消息记录', unreadMessagesCount)
           this.$store.dispatch('updateUnReadMsgCount', unreadMessagesCount)
         })
-        this.acitve = true
+        this.$store.dispatch('switchLeanCloudStatus', {active: true})
       },
       async getClosedConversationList () {
         if (this.$store.state.closedConversationList.length === 0) {
@@ -237,7 +238,8 @@
     computed: {
       ...mapGetters([
         'registModal',
-        'registSuccessModal'
+        'registSuccessModal',
+        'leanCloudActive'
       ])
     }
   }

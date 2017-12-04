@@ -44,7 +44,8 @@ const state = {
   fromLogin: false,
   scrollMap: {}, // 页面滚动高度集合
   registModal: false, // 提示注册的对话框
-  registSuccessModal: false // 注册成功奖励积分的对话框
+  registSuccessModal: false, // 注册成功奖励积分的对话框
+  leanCloudActive: false // leancloud服务激活状态，注销后变为false，登录成功后变为true
 }
 
 const getters = {
@@ -83,7 +84,8 @@ const getters = {
   fromLogin: state => state.fromLogin,
   scrollMap: state => state.scrollMap,
   registModal: state => state.registModal,
-  registSuccessModal: state => state.registSuccessModal
+  registSuccessModal: state => state.registSuccessModal,
+  leanCloudActive: state => state.leanCloudActive
 }
 
 const actions = {
@@ -140,6 +142,9 @@ const actions = {
   },
   switchRegistDialog ({commit}, params) {
     commit(types.SWITCH_REGIST_DIALOG, {params})
+  },
+  switchLeanCloudStatus ({commit}, params) {
+    commit(types.SWITCH_LEANCLOUD_STATUS, {params})
   }
 }
 
@@ -347,6 +352,10 @@ const mutations = {
 
   [types.SWITCH_REGIST_DIALOG] (state, {params}) {
     state.registSuccessModal = params.status
+  },
+
+  [types.SWITCH_LEANCLOUD_STATUS] (state, {params}) {
+    state.leanCloudActive = params.active
   }
 }
 
