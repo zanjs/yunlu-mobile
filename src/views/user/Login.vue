@@ -298,10 +298,6 @@
     },
     mounted () {
       this.autoGoBack()
-    },
-    activated () {
-      this.mobile = ''
-      this.password = ''
     }
   }
 </script>

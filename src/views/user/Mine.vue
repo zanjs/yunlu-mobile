@@ -90,6 +90,7 @@
       logOut () {
         removeAllStore()
         removeLocalStore()
+        this.$store.dispatch('switchLeanCloudStatus', {active: false})
         if (mobileClient() === 'weixin') {
           setLocalStore('weixinLogin', true)
         }

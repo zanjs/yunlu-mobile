@@ -25,6 +25,14 @@
           @check="handleItemCheck">
         </conversation-list>
       </template>
+      <template v-if="conversationList && conversationList.length === 0">
+        <div class="empty-container">
+          <div class="img-container">
+            <img src="../../assets/noConversation.png">
+          </div>
+          <p>您还没发起任何会话呦~</p>
+        </div>
+      </template>
     </section>
     <template v-if="conversationList && conversationList.length > 0">
       <div class="option-bar full-width">
@@ -58,14 +66,6 @@
         @click="deleteItem">
       </confirm-dialog>
     </template>
-    <template v-if="conversationList && conversationList.length === 0">
-      <div class="empty-container">
-        <div class="img-container">
-          <img src="../../assets/noConversation.png">
-        </div>
-        <p>您还没发起任何会话呦~</p>
-      </div>
-    </template>
   </section>
 </template>
 
@@ -76,6 +76,7 @@
   import ConversationList from '../../components/common/ConversatonList'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { mapGetters } from 'vuex'
+  import moment from 'moment'
   import { Toast } from 'mint-ui'
   export default {
     name: 'Conversation',
@@ -135,9 +136,9 @@
           target: this,
           resolve: (state, res) => {
             state.yunLuConversations = res.data.conferences
-            state.originConversationList = this.handleConversations(res.data.conferences, getStore('leanCloudConversations'), getStore('unReadMsgs') || [])
+            state.originConversationList = this.handleConversations(res.data.conferences, state.leanCloudConversations || [], getStore('unReadMsgs') || [])
             state.originConversationList.sort((a, b) => {
-              return Date.parse(b.timestamp) - Date.parse(a.timestamp)
+              return moment(b.timestamp).isAfter(a.timestamp) ? 1 : -1
             })
             state.conversationList = [...state.originConversationList]
           },
@@ -281,8 +282,10 @@
       this.handleScrollHeight()
     },
     activated () {
-      this.getConversationList()
       if (!this.$store.state.popState) {
+        this.uuid = getStore('user') ? getStore('user').id : ''
+        this.token = getStore('user') ? getStore('user').authentication_token : null
+        this.getConversationList()
         setScrollTop(0, this.$refs.conversation)
       } else {
         setScrollTop(this.$store.state.scrollMap.Conversation || 0, this.$refs.conversation)
@@ -404,7 +407,6 @@
     }
   }
   .empty-container {
-    @include pm2rem(padding, 176px, 0px, 0px, 0px);
     .img-container {
       @include pm2rem(padding, 90px, 0px, 40px, 0px);
       text-align: center;
