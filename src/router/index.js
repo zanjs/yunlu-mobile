@@ -132,7 +132,7 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-      meta: { keepAlive: true }
+      meta: { keepAlive: false }
     }, {
       path: '/register',
       name: 'Register',
