@@ -36,3 +36,11 @@ export const SWITCH_INTEGRAL_DIALOG = 'SWITCH_INTEGRAL_DIALOG'
 export const SWITCH_REGIST_DIALOG = 'SWITCH_REGIST_DIALOG'
 // 登录成功或者注销成功，切换leancloud服务状态
 export const SWITCH_LEANCLOUD_STATUS = 'SWITCH_LEANCLOUD_STATUS'
+// 点击下载条“去制作”按钮、切换制作名片提示
+export const SWITCH_MAKE_CARD_DIALOG = 'SWITCH_MAKE_CARD_DIALOG'
+// 切换下载条显示状态
+export const SWITCH_DOWNLOAD_BAR_STATUS = 'SWITCH_DOWNLOAD_BAR_STATUS'
+// 手动关闭下载条
+export const CLOSE_DOWNLOAD_BAR = 'CLOSE_DOWNLOAD_BAR'
+// 手动关闭需要注册或登录的对话框
+export const CLOSE_INTEGRAL_DIALOG = 'CLOSE_INTEGRAL_DIALOG'

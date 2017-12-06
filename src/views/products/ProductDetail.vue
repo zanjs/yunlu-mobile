@@ -1,22 +1,15 @@
 <template>
   <section>
     <div class="container" ref="productDetail" :style="{height: scrollHeight}">
-      <template v-if="!hideDownloadBar">
-        <download-bar
-          @close="closeDownloadBar()"
-          @download="goDownload()">
-        </download-bar>
-      </template>
       <div style="position: relative; transform-style: preserve-3d;">
         <product-header
           @back="goBack()"
           @open-favorites="openFavorites()"
           @report="goReport()"
           @search-near-by="searchNearBy()"
-          @home="goHome()"
-          v-bind:class="{'header': !hideDownloadBar}">
+          @home="goHome()">
         </product-header>
-        <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
+        <div class="swipe">
           <swiper :options="swiperOption">
             <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
               <div
@@ -352,7 +345,6 @@
 <script>
   import ProductHeader from '../../components/header/Head'
   import ProductSku from '../../components/product/ProductSku'
-  import DownloadBar from '../../components/common/DownloadBar'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
@@ -415,7 +407,6 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        hideDownloadBar: getStore('hideDownloadBar'),
         productDetail: null,
         productDetailFiles: [],
         allPriceProperties: [],
@@ -429,18 +420,10 @@
     components: {
       ProductHeader,
       ProductSku,
-      DownloadBar,
       swiper,
       swiperSlide
     },
     methods: {
-      closeDownloadBar () {
-        this.hideDownloadBar = true
-        setStore('hideDownloadBar', 'true')
-      },
-      goDownload () {
-        this.$router.push({name: 'Download'})
-      },
       getProductDetail (productId = this.id) {
         this.$store.dispatch('commonAction', {
           url: `/products/${productId}`,
@@ -1038,8 +1021,9 @@
       goLinkProductDetail (item) {
         if (item.state === 'approved') {
           this.closePopup()
-          this.$router.push({name: 'ProductDetail', params: {id: item.id}})
-          window.location.reload()
+          // this.$router.push({name: 'ProductDetail', params: {id: item.id}})
+          this.$router.push({path: `/products/${item.id}`})
+          // window.location.reload()
         }
       },
       goEnterprise () {
