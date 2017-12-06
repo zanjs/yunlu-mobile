@@ -21,40 +21,24 @@
       :class="{'nav-show': hideIcon}">
       <div class="flex nav-bars">
         <a class="bar" :class="{'selected': activeIndex === 0}" @click="selectTab(0)">
-          <div class="icon-box nav-icon">
-            <i class="iconfont icon-shangjia"></i>
-            <span>商城首页</span>
-          </div>
           <div class="icon-box nav-text">
             <span>商城首页</span>
           </div>
           <div class="border"></div>
         </a>
         <a class="bar" :class="{'selected': activeIndex === 1}" @click="selectTab(1)">
-          <div class="icon-box nav-icon">
-            <i class="iconfont icon-shangjia"></i>
-            <span>全部产品</span>
-          </div>
           <div class="icon-box nav-text">
             <span>全部产品</span>
           </div>
           <div class="border"></div>
         </a>
         <a class="bar" :class="{'selected': activeIndex === 2}" @click="selectTab(2)">
-          <div class="icon-box nav-icon">
-            <i class="iconfont icon-shangjia"></i>
-            <span>企业会员</span>
-          </div>
           <div class="icon-box nav-text">
             <span>企业会员</span>
           </div>
           <div class="border"></div>
         </a>
         <a class="bar" :class="{'selected': activeIndex === 3}" @click="selectTab(3)">
-          <div class="icon-box nav-icon">
-            <i class="iconfont icon-shangjia"></i>
-            <span>个人会员</span>
-          </div>
           <div class="icon-box nav-text">
             <span>个人会员</span>
           </div>
@@ -84,40 +68,24 @@
       <div class="nav-container" :class="{'full-width nav-hide': hideIcon, 'noshadow': activeIndex === 1}">
         <div class="flex nav-bars">
           <a class="bar" :class="{'selected': activeIndex === 0}" @click="selectTab(0)">
-            <div class="icon-box nav-icon">
-              <i class="iconfont icon-shangjia"></i>
-              <span>商城首页</span>
-            </div>
             <div class="icon-box nav-text">
               <span>商城首页</span>
             </div>
             <div class="border"></div>
           </a>
           <a class="bar" :class="{'selected': activeIndex === 1}" @click="selectTab(1)">
-            <div class="icon-box nav-icon">
-              <p>{{allProductsLength | lengthFilter}}</p>
-              <span>全部产品</span>
-            </div>
             <div class="icon-box nav-text">
               <span>全部产品</span>
             </div>
             <div class="border"></div>
           </a>
           <a class="bar" :class="{'selected': activeIndex === 2}" @click="selectTab(2)">
-            <div class="icon-box nav-icon">
-              <p>{{enterprisesLength | lengthFilter}}</p>
-              <span>企业会员</span>
-            </div>
             <div class="icon-box nav-text">
               <span>企业会员</span>
             </div>
             <div class="border"></div>
           </a>
           <a class="bar" :class="{'selected': activeIndex === 3}" @click="selectTab(3)">
-            <div class="icon-box nav-icon">
-              <p>{{personLength | lengthFilter}}</p>
-              <span>个人会员</span>
-            </div>
             <div class="icon-box nav-text">
               <span>个人会员</span>
             </div>
@@ -397,7 +365,7 @@
     data () {
       return {
         activeIndex: 0,
-        height: 65,
+        height: 50,
         scrollActive: false,
         hideIcon: false,
         scrollHeight: '15rem',
@@ -480,7 +448,7 @@
         let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
         this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
-        this.height = rootFontSize * 130 / 75
+        this.height = rootFontSize * 100 / 75
       },
       goScroll (scroll) {
         setScrollTop(scroll, this.$refs.newMallContainer)
@@ -1037,11 +1005,12 @@
   }
   .mall-header {
     z-index: 3;
+    box-sizing: border-box;
   }
   .fixed-nav-bar {
     position: fixed;
-    @include px2rem(top, 70px);
-    @include px2rem(height, 110px);
+    @include px2rem(top, 100px);
+    @include px2rem(height, 80px);
     overflow: hidden;
     z-index: 2;
     display: none;
@@ -1107,7 +1076,7 @@
   }
   .nav-container {
     overflow: hidden;
-    @include px2rem(height, 110px);
+    @include px2rem(height, 80px);
     position: relative;
     z-index: 2;
     box-shadow: 0px 4px 4px -2px rgba(199, 194, 194, .4);
@@ -1118,30 +1087,15 @@
   }
   .nav-hide {
     position: fixed;
-    @include px2rem(top, 70px);
+    @include px2rem(top, 100px);
     z-index: 1;
-    .nav-bars {
-      transform: translateY(-100%);
-    }
-    .nav-icon {
-      transform: translateY(-100%);
-    }
-    .nav-text {
-      transform: translateY(-100%);
-    }
   }
   .nav-show {
     display: block;
-    .nav-icon {
-      transform: translateY(-100%);
-    }
-    .nav-text {
-      transform: translateY(-100%);
-    }
   }
   .nav-bars {
     background-color: $white;
-    @include px2rem(height, 110px);
+    @include px2rem(height, 80px);
     .bar {
       flex: 1;
       position: relative;
@@ -1149,20 +1103,12 @@
       .icon-box {
         flex: 1;
         height: inherit;
-        transition: transform .3s;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        p {
-          @include font-dpr(16px);
-          @include line-height(27px);
-        }
-        i {
-          @include font-dpr(18px);
-        }
         span {
-          @include font-dpr(12px);
+          font-size: .34rem;
         }
       }
       .nav-text {
@@ -1170,9 +1116,8 @@
         span {
           display: block;
           height: inherit;
-          @include px2rem(padding-top, 30px);
           @include px2rem(line-height, 80px);
-          @include font-dpr(12px);
+          font-size: .34rem;
           box-sizing: border-box;
         }
       }
@@ -1253,7 +1198,7 @@
     }
   }
   .icon-hide {
-    @include px2rem(margin-top, 130px);
+    @include px2rem(margin-top, 100px);
   }
   .order {
     @include px2rem(top, 320px);
@@ -1263,10 +1208,10 @@
     @include px2rem(top, 180px);
   }
   .product-icon-hide {
-    @include px2rem(margin-top, 190px);
+    @include px2rem(margin-top, 160px);
   }
   .list-icon-hide {
-    @include px2rem(margin-top, 110px);
+    @include px2rem(margin-top, 80px);
   }
   .mall-order {
     z-index: 2;
