@@ -11,6 +11,28 @@ import { getStore, setStore, mobileClient, setLocalStore, getLocalStore, removeL
 import realtime from './config/leancloud'
 
 router.beforeEach((to, from, next) => {
+  const downloadBarRoutes = [
+    'Mall',
+    'EnterpriseCarte',
+    'PersonCarte',
+    'ProductDetail',
+    'associations',
+    'ComityCarte',
+    'Class',
+    'Card',
+    'Zone'
+  ]
+  const handleDownloadBar = () => {
+    let flag = false
+    for (let i = 0; i < downloadBarRoutes.length; i++) {
+      if (downloadBarRoutes[i] === to.name) {
+        flag = true
+        break
+      }
+    }
+    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').authentication_token)})
+    store.dispatch('switchDownloadBar', {status: flag && !store.getters.hasCloseDownloadBar})
+  }
   const handleUrlQuery = () => {
     let query = {
       tmpToken: '',
@@ -112,6 +134,7 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
+  handleDownloadBar()
   saveUuid()
   autoLogin()
 })

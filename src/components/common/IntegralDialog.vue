@@ -7,7 +7,11 @@
           <div class="dialog-body">
             <img src="../../assets/gift.png" class="absolute-horizontal gift">
             <div class="tips font-14 second-text">
-              <p>{{tips}}</p>
+              <p>
+                <span>{{tipsA}}</span>
+                <span class="red">{{num}}</span>
+                <span>{{tipsB}}</span>
+              </p>
               <p>{{subTips}}</p>
             </div>
             <div class="buttons">
@@ -28,7 +32,9 @@
   export default {
     data () {
       return {
-        tips: '新用户注册即可获取积分奖励',
+        num: 1000,
+        tipsA: '手机注册最高可领取',
+        tipsB: '积分',
         subTips: '赶紧去注册吧！'
       }
     },
@@ -77,6 +83,9 @@
         .tips {
           text-align: center;
           @include pm2rem(padding, 250px, 0px, 20px, 0px);
+          .red {
+            color: #F75544;
+          }
         }
         .buttons {
           a {
