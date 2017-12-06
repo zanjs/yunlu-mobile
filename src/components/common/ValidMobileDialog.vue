@@ -5,13 +5,12 @@
       <div class="absolute-horizontal dialog-wrapper">
         <div class="content">
           <div class="dialog-body">
-            <img src="../../assets/makeCard.png" class="gift">
+            <img src="../../assets/validPhone.png" class="gift">
             <div class="tips">
-              <p class="primary-text main">{{tips}}</p>
-              <p class="second-text sub">{{subTips}}</p>
+              <p class="second-text main">{{tips}}</p>
             </div>
             <a class="flex btn" @click="makeCard()">
-              知道了，马上去制作
+              去验证
             </a>
           </div>
           <div class="close" @click="close()">
@@ -25,7 +24,7 @@
 
 <script>
   export default {
-    name: 'MakeCard',
+    name: 'ValidMobileDialog',
     props: {
       show: {
         default: false
@@ -33,8 +32,7 @@
     },
     data () {
       return {
-        tips: '请下载云庐App注册，我们精心为你准备好个人专属名片，分享给朋友吧！',
-        subTips: '(小秘密，手机注册最高可奖励10元云积分，可换购商品哦。)'
+        tips: '为了您的额购物安全，购物前请先完成手机号的验证'
       }
     },
     methods: {
@@ -67,39 +65,39 @@
       .dialog-body {
         position: relative;
         @include px2rem(width, 562px);
-        @include px2rem(height, 685px);
+        @include px2rem(height, 542px);
         background-color: $white;
         @include px2rem(border-radius, 10px);
-        @include pm2rem(padding, 48px, 30px, 0px, 30px);
+        @include pm2rem(padding, 32px, 30px, 0px, 30px);
         box-sizing: border-box;
         .gift {
           margin: 0 auto;
-          @include px2rem(margin-bottom, 36px);
-          @include px2rem(width, 407px);
-          @include px2rem(height, 282px);
+          @include px2rem(margin-bottom, 46px);
+          @include px2rem(width, 198px);
+          @include px2rem(height, 198px);
           display: block;
         }
         .tips {
           line-height: normal;
           .main {
-            font-size: .36rem;
-          }
-          .sub {
-            @include px2rem(margin-top, 20px);
-            font-size: .32rem;
-            color: #F75544;
+            font-size: .37rem;
           }
         }
         .btn {
           margin: 0 auto;
-          @include px2rem(margin-top, 36px);
-          @include px2rem(height, 80px);
+          @include px2rem(margin-top, 50px);
+          @include px2rem(height, 88px);
           @include px2rem(width, 420px);
-          @include px2rem(border-radius, 40px);
-          background-color: $green;
-          color: $white;
-          font-size: .4rem;
+          @include px2rem(border-radius, 44px);
+          background-color: #FFD63F;
+          color: #FF6000;
+          font-size: .42rem;
           line-height: normal;
+          box-shadow: 0px 0px 20px -2px #F3BC2B;
+          cursor: pointer;
+        }
+        a:active {
+          opacity: .8;
         }
       }
       .close {
