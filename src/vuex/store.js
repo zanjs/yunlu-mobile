@@ -44,8 +44,12 @@ const state = {
   fromLogin: false,
   scrollMap: {}, // 页面滚动高度集合
   registModal: false, // 提示注册的对话框
+  hasCloseRegistModal: false, // 是否手动关闭了下载条
   registSuccessModal: false, // 注册成功奖励积分的对话框
-  leanCloudActive: false // leancloud服务激活状态，注销后变为false，登录成功后变为true
+  leanCloudActive: false, // leancloud服务激活状态，注销后变为false，登录成功后变为true
+  makeCardModal: false, // 制作名片提示模态窗
+  showDownloadBar: true, // 默认显示下载条
+  hasCloseDownloadBar: false // 是否手动关闭了下载条
 }
 
 const getters = {
@@ -84,8 +88,12 @@ const getters = {
   fromLogin: state => state.fromLogin,
   scrollMap: state => state.scrollMap,
   registModal: state => state.registModal,
+  hasCloseRegistModal: state => state.hasCloseRegistModal,
   registSuccessModal: state => state.registSuccessModal,
-  leanCloudActive: state => state.leanCloudActive
+  leanCloudActive: state => state.leanCloudActive,
+  makeCardModal: state => state.makeCardModal,
+  showDownloadBar: state => state.showDownloadBar,
+  hasCloseDownloadBar: state => state.hasCloseDownloadBar
 }
 
 const actions = {
@@ -145,6 +153,18 @@ const actions = {
   },
   switchLeanCloudStatus ({commit}, params) {
     commit(types.SWITCH_LEANCLOUD_STATUS, {params})
+  },
+  switchMakeCardDialog ({commit}, params) {
+    commit(types.SWITCH_MAKE_CARD_DIALOG, {params})
+  },
+  switchDownloadBar ({commit}, params) {
+    commit(types.SWITCH_DOWNLOAD_BAR_STATUS, {params})
+  },
+  closeDownloadBar ({commit}, params) {
+    commit(types.CLOSE_DOWNLOAD_BAR, {params})
+  },
+  closeIntegralDialog ({commit}, params) {
+    commit(types.CLOSE_INTEGRAL_DIALOG, {params})
   }
 }
 
@@ -356,6 +376,24 @@ const mutations = {
 
   [types.SWITCH_LEANCLOUD_STATUS] (state, {params}) {
     state.leanCloudActive = params.active
+  },
+
+  [types.SWITCH_MAKE_CARD_DIALOG] (state, {params}) {
+    state.makeCardModal = params.status
+  },
+
+  [types.SWITCH_DOWNLOAD_BAR_STATUS] (state, {params}) {
+    state.showDownloadBar = params.status
+  },
+
+  [types.CLOSE_DOWNLOAD_BAR] (state, {params}) {
+    state.hasCloseDownloadBar = params.status
+    state.showDownloadBar = !params.status
+  },
+
+  [types.CLOSE_INTEGRAL_DIALOG] (state, {params}) {
+    state.registModal = !params.status
+    state.hasCloseRegistModal = params.status
   }
 }
 
