@@ -100,6 +100,10 @@
           color: $white;
           font-size: .4rem;
           line-height: normal;
+          box-shadow: 0px 0px 18px 2px rgba(88, 201, 167, .5);
+        }
+        & a:active {
+          opacity: .8;
         }
       }
       .close {
