@@ -19,6 +19,16 @@
       @view-integral="viewIntegral"
       @close="closeRegistDialog">
     </regist-dialog>
+    <make-card
+      :show="makeCardModal"
+      @click="goDownload()"
+      @close="closeMakeCardDialog()">
+    </make-card>
+    <download-bar
+      :show="showDownloadBar"
+      @close="closeDownloadBar()"
+      @download="makeCard()">
+    </download-bar>
   </div>
 </template>
 
@@ -26,6 +36,8 @@
   import { getStore, setStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
   import IntegralDialog from './components/common/IntegralDialog'
   import RegistDialog from './components/common/RegistDialog'
+  import MakeCard from './components/common/MakeCard'
+  import DownloadBar from './components/footer/DownloadBar'
   import { mapGetters } from 'vuex'
   import { requestFn } from './config/request'
   import { MessageBox } from 'mint-ui'
@@ -74,7 +86,9 @@
     },
     components: {
       IntegralDialog,
-      RegistDialog
+      RegistDialog,
+      MakeCard,
+      DownloadBar
     },
     methods: {
       beforeInit () {
@@ -218,7 +232,7 @@
         this.$router.push({name: 'BeforeRegister'})
       },
       closeIntergralDialog () {
-        this.$store.dispatch('switchIntegralDialog', {status: false})
+        this.$store.dispatch('closeIntegralDialog', {status: true})
       },
       closeRegistDialog () {
         this.$store.dispatch('switchRegistDialog', {status: false})
@@ -230,6 +244,19 @@
       viewIntegral () {
         this.closeRegistDialog()
         this.$router.push({name: 'Download'})
+      },
+      goDownload () {
+        this.closeMakeCardDialog()
+        this.$router.push({name: 'Download'})
+      },
+      closeMakeCardDialog () {
+        this.$store.dispatch('switchMakeCardDialog', {status: false})
+      },
+      closeDownloadBar () {
+        this.$store.dispatch('closeDownloadBar', {status: true})
+      },
+      makeCard () {
+        this.$store.dispatch('switchMakeCardDialog', {status: true})
       }
     },
     updated () {
@@ -239,7 +266,9 @@
       ...mapGetters([
         'registModal',
         'registSuccessModal',
-        'leanCloudActive'
+        'leanCloudActive',
+        'makeCardModal',
+        'showDownloadBar'
       ])
     }
   }
