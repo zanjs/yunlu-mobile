@@ -339,12 +339,18 @@
         @buy-now="buyNow">
       </product-sku>
     </template>
+    <valid-mobile-dialog
+      :show="hasLogin && !mobile && validMobileDialogModal"
+      @click="goRegist()"
+      @close="closeValidMobileDialog()">
+    </valid-mobile-dialog>
   </section>
 </template>
 
 <script>
   import ProductHeader from '../../components/header/Head'
   import ProductSku from '../../components/product/ProductSku'
+  import ValidMobileDialog from '../../components/common/ValidMobileDialog'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
@@ -356,6 +362,8 @@
         selected: '1',
         currentIndex: 1,
         token: getStore('user') ? getStore('user').authentication_token : '',
+        mobile: getStore('user') ? getStore('user').mobile : '',
+        validMobileDialogModal: false,
         currentTeamId: '',
         productId: this.$route.params.id,
         hasLogin: !!getStore('user'),
@@ -420,6 +428,7 @@
     components: {
       ProductHeader,
       ProductSku,
+      ValidMobileDialog,
       swiper,
       swiperSlide
     },
@@ -925,7 +934,7 @@
       },
       buyNow (quantity) {
         if (this.checkBeforeBuying()) {
-          if (this.hasLogin) {
+          if (this.hasLogin && this.mobile) {
             this.closeSku()
             this.quantity = 1
             setStore('buying', [{
@@ -961,6 +970,8 @@
             } else {
               this.$router.push({name: 'OrderPaying'})
             }
+          } else if (this.hasLogin && !this.mobile) {
+            this.validMobileDialogModal = true
           } else {
             this.goLogin()
           }
@@ -1041,6 +1052,13 @@
         let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
         this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+      },
+      goRegist () {
+        setStore('shareRegist', 'true')
+        this.$router.push({name: 'BeforeRegister'})
+      },
+      closeValidMobileDialog () {
+        this.validMobileDialogModal = false
       }
     },
     mounted () {
