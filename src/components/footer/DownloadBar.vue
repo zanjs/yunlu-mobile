@@ -38,12 +38,6 @@
 <style lang="scss" scoped>
   @import "../../styles/mixin";
 
-  .slide-right-enter-active, .slide-right-leave-active {
-    transition: transform .1s;
-	}
-	.slide-right-leave-active {
-    transform: translateX(100%);
-	}
   .download-bar-container {
     position: fixed;
     bottom: 0;
