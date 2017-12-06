@@ -101,7 +101,8 @@ router.beforeEach((to, from, next) => {
         // 调用next()前需要将url中的tmp_token和provider去掉，避免在微信中使用其他浏览器打开时，url带有上面两个参数，而这两个参数已经使用过了，所以在第三方浏览器打开会报错。
         let url = cleanUrl()
         console.log(url)
-        next({path: url})
+        // next({path: url})
+        next()
       },
       reject: () => {
       }
