@@ -53,14 +53,14 @@ router.beforeEach((to, from, next) => {
       return query
     }
   }
-  const cleanUrl = () => {
+  /* const cleanUrl = () => {
     let tmpSearchUrl = ''
     if (window.location.search.indexOf('&provider=wechat&tmp_token=') > -1) {
       let url = window.location.search.split('provider')[0]
       tmpSearchUrl = url.substring(0, url.length - 1)
     }
     return window.location.pathname + tmpSearchUrl
-  }
+  } */
   const weixinAuth = (token) => {
     store.dispatch('commonAction', {
       url: '/login_info',
@@ -98,8 +98,10 @@ router.beforeEach((to, from, next) => {
       resolve: (state, res) => {
         setStore('signature', res.data)
         // 调用next()前需要将url中的tmp_token和provider去掉，避免在微信中使用其他浏览器打开时，url带有上面两个参数，而这两个参数已经使用过了，所以在第三方浏览器打开会报错。
-        let url = cleanUrl()
-        next({path: url})
+        // let url = cleanUrl()
+        // next({path: url})
+        handleDownloadBar()
+        next()
       },
       reject: () => {
       }
@@ -121,11 +123,13 @@ router.beforeEach((to, from, next) => {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信授权登录失败')
+      handleDownloadBar()
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
       setLocalStore('weixinLogin', true)
       window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.search}${window.location.search.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
+      handleDownloadBar()
       next()
     }
   }
@@ -134,7 +138,6 @@ router.beforeEach((to, from, next) => {
   if (!getStore('fromName') || getStore('fromName').name === 'false') {
     setStore(`${to.name}_goHome`, 'true')
   }
-  handleDownloadBar()
   saveUuid()
   autoLogin()
 })
