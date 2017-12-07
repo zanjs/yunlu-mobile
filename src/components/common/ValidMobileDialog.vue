@@ -93,7 +93,7 @@
           color: #FF6000;
           font-size: .42rem;
           line-height: normal;
-          box-shadow: 0px 0px 20px -2px #F3BC2B;
+          box-shadow: 0px 4px 12px -2px #F3BC2B;
           cursor: pointer;
         }
         a:active {
