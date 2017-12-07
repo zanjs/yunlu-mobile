@@ -1,22 +1,15 @@
 <template>
   <section>
     <div class="container" ref="productDetail" :style="{height: scrollHeight}">
-      <template v-if="!hideDownloadBar">
-        <download-bar
-          @close="closeDownloadBar()"
-          @download="goDownload()">
-        </download-bar>
-      </template>
       <div style="position: relative; transform-style: preserve-3d;">
         <product-header
           @back="goBack()"
           @open-favorites="openFavorites()"
           @report="goReport()"
           @search-near-by="searchNearBy()"
-          @home="goHome()"
-          v-bind:class="{'header': !hideDownloadBar}">
+          @home="goHome()">
         </product-header>
-        <div class="swipe" v-bind:class="{'header': !hideDownloadBar}">
+        <div class="swipe">
           <swiper :options="swiperOption">
             <swiper-slide v-for="(item, index) in productDetailFiles" :key="index">
               <div
@@ -346,13 +339,18 @@
         @buy-now="buyNow">
       </product-sku>
     </template>
+    <valid-mobile-dialog
+      :show="hasLogin && !mobile && validMobileDialogModal"
+      @click="goRegist()"
+      @close="closeValidMobileDialog()">
+    </valid-mobile-dialog>
   </section>
 </template>
 
 <script>
   import ProductHeader from '../../components/header/Head'
   import ProductSku from '../../components/product/ProductSku'
-  import DownloadBar from '../../components/common/DownloadBar'
+  import ValidMobileDialog from '../../components/common/ValidMobileDialog'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import { Toast } from 'mint-ui'
@@ -364,6 +362,8 @@
         selected: '1',
         currentIndex: 1,
         token: getStore('user') ? getStore('user').authentication_token : '',
+        mobile: getStore('user') ? getStore('user').mobile : '',
+        validMobileDialogModal: false,
         currentTeamId: '',
         productId: this.$route.params.id,
         hasLogin: !!getStore('user'),
@@ -415,7 +415,6 @@
             this.currentIndex = swiper.activeIndex + 1
           }
         },
-        hideDownloadBar: getStore('hideDownloadBar'),
         productDetail: null,
         productDetailFiles: [],
         allPriceProperties: [],
@@ -429,18 +428,11 @@
     components: {
       ProductHeader,
       ProductSku,
-      DownloadBar,
+      ValidMobileDialog,
       swiper,
       swiperSlide
     },
     methods: {
-      closeDownloadBar () {
-        this.hideDownloadBar = true
-        setStore('hideDownloadBar', 'true')
-      },
-      goDownload () {
-        this.$router.push({name: 'Download'})
-      },
       getProductDetail (productId = this.id) {
         this.$store.dispatch('commonAction', {
           url: `/products/${productId}`,
@@ -942,7 +934,7 @@
       },
       buyNow (quantity) {
         if (this.checkBeforeBuying()) {
-          if (this.hasLogin) {
+          if (this.hasLogin && this.mobile) {
             this.closeSku()
             this.quantity = 1
             setStore('buying', [{
@@ -978,6 +970,8 @@
             } else {
               this.$router.push({name: 'OrderPaying'})
             }
+          } else if (this.hasLogin && !this.mobile) {
+            this.validMobileDialogModal = true
           } else {
             this.goLogin()
           }
@@ -1038,8 +1032,9 @@
       goLinkProductDetail (item) {
         if (item.state === 'approved') {
           this.closePopup()
-          this.$router.push({name: 'ProductDetail', params: {id: item.id}})
-          window.location.reload()
+          // this.$router.push({name: 'ProductDetail', params: {id: item.id}})
+          this.$router.push({path: `/products/${item.id}`})
+          // window.location.reload()
         }
       },
       goEnterprise () {
@@ -1057,6 +1052,13 @@
         let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
         this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+      },
+      goRegist () {
+        setStore('shareRegist', 'true')
+        this.$router.push({name: 'BeforeRegister'})
+      },
+      closeValidMobileDialog () {
+        this.validMobileDialogModal = false
       }
     },
     mounted () {

@@ -57,6 +57,11 @@
         <p class="font-16 third-text">您的购物车还没有宝贝呦~</p>
       </div>
     </template>
+    <valid-mobile-dialog
+      :show="!mobile && validMobileDialogModal"
+      @click="goRegist()"
+      @close="closeValidMobileDialog()">
+    </valid-mobile-dialog>
   </section>
 </template>
 
@@ -64,6 +69,7 @@
   import CommonHeader from '../../components/header/CommonHeader'
   import { getStore, setStore, removeStore } from '../../config/mUtils'
   import ShoppingCartList from '../../components/product/ShoppingCartList'
+  import ValidMobileDialog from '../../components/common/ValidMobileDialog'
   import ConfirmDialog from '../../components/common/ConfirmDialog'
   import { Toast } from 'mint-ui'
   export default {
@@ -72,18 +78,21 @@
       return {
         header: '购物车',
         token: getStore('user') ? getStore('user').authentication_token : null,
+        mobile: getStore('user') ? getStore('user').mobile : '',
         purchaseItems: [],
         totalMoney: 0.00,
         checkAll: false,
         showConfirm: false,
         confirmMsg: '确定要删除选中的商品吗?',
         hasCheckItems: false,
-        hasOnFocus: true
+        hasOnFocus: true,
+        validMobileDialogModal: false
       }
     },
     components: {
       CommonHeader,
       ShoppingCartList,
+      ValidMobileDialog,
       ConfirmDialog
     },
     methods: {
@@ -515,13 +524,24 @@
         })
       },
       pay () {
-        let arr = this.handleCheckedProducts()
-        setStore('buying', arr)
-        if (this.$store.state.deliveries.length === 0) {
-          this.$router.push({name: 'AddAddress'})
+        if (this.mobile) {
+          let arr = this.handleCheckedProducts()
+          setStore('buying', arr)
+          if (this.$store.state.deliveries.length === 0) {
+            this.$router.push({name: 'AddAddress'})
+          } else {
+            this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
+          }
         } else {
-          this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
+          this.validMobileDialogModal = true
         }
+      },
+      goRegist () {
+        setStore('shareRegist', 'true')
+        this.$router.push({name: 'BeforeRegister'})
+      },
+      closeValidMobileDialog () {
+        this.validMobileDialogModal = false
       }
     },
     mounted () {

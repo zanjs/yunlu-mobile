@@ -11,6 +11,28 @@ import { getStore, setStore, mobileClient, setLocalStore, getLocalStore, removeL
 import realtime from './config/leancloud'
 
 router.beforeEach((to, from, next) => {
+  const downloadBarRoutes = [
+    'Mall',
+    'EnterpriseCarte',
+    'PersonCarte',
+    'ProductDetail',
+    'associations',
+    'ComityCarte',
+    'Class',
+    'Card',
+    'Zone'
+  ]
+  const handleDownloadBar = () => {
+    let flag = false
+    for (let i = 0; i < downloadBarRoutes.length; i++) {
+      if (downloadBarRoutes[i] === to.name) {
+        flag = true
+        break
+      }
+    }
+    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').authentication_token)})
+    store.dispatch('switchDownloadBar', {status: flag && !store.getters.hasCloseDownloadBar})
+  }
   const handleUrlQuery = () => {
     let query = {
       tmpToken: '',
@@ -30,14 +52,6 @@ router.beforeEach((to, from, next) => {
       }
       return query
     }
-  }
-  const cleanUrl = () => {
-    let tmpSearchUrl = ''
-    if (window.location.search.indexOf('&provider=wechat&tmp_token=') > -1) {
-      let url = window.location.search.split('provider')[0]
-      tmpSearchUrl = url.substring(0, url.length - 1)
-    }
-    return window.location.pathname + tmpSearchUrl
   }
   const weixinAuth = (token) => {
     store.dispatch('commonAction', {
@@ -75,9 +89,8 @@ router.beforeEach((to, from, next) => {
       target: this,
       resolve: (state, res) => {
         setStore('signature', res.data)
-        // 调用next()前需要将url中的tmp_token和provider去掉，避免在微信中使用其他浏览器打开时，url带有上面两个参数，而这两个参数已经使用过了，所以在第三方浏览器打开会报错。
-        let url = cleanUrl()
-        next({path: url})
+        handleDownloadBar()
+        next()
       },
       reject: () => {
       }
@@ -99,11 +112,13 @@ router.beforeEach((to, from, next) => {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信授权登录失败')
+      handleDownloadBar()
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
       setLocalStore('weixinLogin', true)
       window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.search}${window.location.search.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
+      handleDownloadBar()
       next()
     }
   }
