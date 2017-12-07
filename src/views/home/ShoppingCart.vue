@@ -58,7 +58,7 @@
       </div>
     </template>
     <valid-mobile-dialog
-      :show="hasLogin && !mobile && validMobileDialogModal"
+      :show="!mobile && validMobileDialogModal"
       @click="goRegist()"
       @close="closeValidMobileDialog()">
     </valid-mobile-dialog>
