@@ -101,13 +101,13 @@
             background: url("../../assets/newRegistBtn.png") no-repeat;
             background-size: cover;
             @include px2rem(margin-bottom, 25px);
-            box-shadow: 0px 0px 18px 2px rgba(254, 213, 79, 0.7);
+            box-shadow: 0px 4px 12px -2px rgba(254, 213, 79, 0.7);
             @include px2rem(border-radius, 50px);
           }
           & a:last-child {
             background: url("../../assets/oldLoginBtn.png") no-repeat;
             background-size: cover;
-            box-shadow: 0px 0px 18px 2px rgba(88, 201, 167, .5);
+            box-shadow: 0px 4px 12px -2px rgba(88, 201, 167, .5);
             @include px2rem(border-radius, 50px);
           }
         }
