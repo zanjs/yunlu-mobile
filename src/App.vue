@@ -247,7 +247,7 @@
       },
       goDownload () {
         this.closeMakeCardDialog()
-        this.$router.push({name: 'Download'})
+        window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yunlu6.yunlu'
       },
       closeMakeCardDialog () {
         this.$store.dispatch('switchMakeCardDialog', {status: false})
