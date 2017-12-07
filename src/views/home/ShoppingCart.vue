@@ -524,12 +524,16 @@
         })
       },
       pay () {
-        let arr = this.handleCheckedProducts()
-        setStore('buying', arr)
-        if (this.$store.state.deliveries.length === 0) {
-          this.$router.push({name: 'AddAddress'})
+        if (this.mobile) {
+          let arr = this.handleCheckedProducts()
+          setStore('buying', arr)
+          if (this.$store.state.deliveries.length === 0) {
+            this.$router.push({name: 'AddAddress'})
+          } else {
+            this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
+          }
         } else {
-          this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
+          this.validMobileDialogModal = true
         }
       },
       goRegist () {
