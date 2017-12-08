@@ -971,7 +971,7 @@
               this.$router.push({name: 'OrderPaying'})
             }
           } else if (this.hasLogin && !this.mobile) {
-            this.validMobileDialogModal = true
+            this.$store.dispatch('switchIntegralDialog', {status: true})
           } else {
             this.goLogin()
           }

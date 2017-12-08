@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
         break
       }
     }
-    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').authentication_token)})
+    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').mobile)})
     store.dispatch('switchDownloadBar', {status: flag && !store.getters.hasCloseDownloadBar})
   }
   const handleUrlQuery = () => {
@@ -71,10 +71,12 @@ router.beforeEach((to, from, next) => {
           setStore('user', res.data)
           getSignature(res.data.authentication_token)
         } else {
+          setLocalStore('weixinLogin', 'true')
           console.log('授权登录出错')
         }
       },
       reject: () => {
+        setLocalStore('weixinLogin', 'true')
         console.log('授权登录出错')
       }
     })
@@ -108,14 +110,14 @@ router.beforeEach((to, from, next) => {
     }
   }
   const autoLogin = () => {
-    if (mobileClient() === 'weixin' && handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
+    if (!getLocalStore('weixinLogin') && mobileClient() === 'weixin' && handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信授权登录失败')
       handleDownloadBar()
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
-      setLocalStore('weixinLogin', true)
+      // setLocalStore('weixinLogin', 'true')
       window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.search}${window.location.search.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
       handleDownloadBar()
