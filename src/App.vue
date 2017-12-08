@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, removeAllStore, removeAllLocalStore } from './config/mUtils'
+  import { getStore, setStore, setLocalStore, removeAllStore, removeLocalStore, mobileClient, removeAllLocalStore } from './config/mUtils'
   import IntegralDialog from './components/common/IntegralDialog'
   import RegistDialog from './components/common/RegistDialog'
   import MakeCard from './components/common/MakeCard'
@@ -223,6 +223,13 @@
       },
       goLogin () {
         this.closeIntergralDialog()
+        removeAllStore()
+        removeLocalStore()
+        this.$store.dispatch('switchLeanCloudStatus', {active: false})
+        if (mobileClient() === 'weixin') {
+          setLocalStore('weixinLogin', true)
+        }
+        this.$store.dispatch('clearUnReadMsgCount', {})
         setStore('beforeLogin', 'true')
         this.$router.push({name: 'Login'})
       },
