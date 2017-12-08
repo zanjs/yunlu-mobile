@@ -53,6 +53,14 @@ router.beforeEach((to, from, next) => {
       return query
     }
   }
+  const cleanUrl = () => {
+    let tmpSearchUrl = ''
+    if (window.location.search.indexOf('&provider=wechat&tmp_token=') > -1) {
+      let url = window.location.search.split('provider')[0]
+      tmpSearchUrl = url.substring(0, url.length - 1)
+    }
+    return window.location.pathname + tmpSearchUrl
+  }
   const weixinAuth = (token) => {
     store.dispatch('commonAction', {
       url: '/login_info',
@@ -90,7 +98,8 @@ router.beforeEach((to, from, next) => {
       resolve: (state, res) => {
         setStore('signature', res.data)
         handleDownloadBar()
-        next()
+        let url = cleanUrl()
+        next({path: url})
       },
       reject: () => {
       }
