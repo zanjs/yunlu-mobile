@@ -94,6 +94,7 @@
         if (mobileClient() === 'weixin') {
           setLocalStore('weixinLogin', true)
         }
+        this.$store.dispatch('clearUnReadMsgCount', {})
         this.$router.replace({name: 'See'})
       },
       contactUs () {

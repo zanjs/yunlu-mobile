@@ -16,6 +16,8 @@ export const UPDATE_LEAN_CLOUD_CONVERSATIONS = 'UPDATE_LEAN_CLOUD_CONVERSATIONS'
 export const RECEIVE_NEW_MESSAGE = 'RECEIVE_NEW_MESSAGE'
 // 更新未读消息
 export const UPDATE_UN_READ_MSG_COUNT = 'UPDATE_UN_READ_MSG_COUNT'
+// 注销时，清空未读消息
+export const CLEAR_UN_READ_MSG_COUNT = 'CLEAR_UN_READ_MSG_COUNT'
 // 将某一条会话标为已读
 export const MARK_AS_READ = 'MARK_AS_READ'
 // 搜索会话(暂时只支持本地搜索)
