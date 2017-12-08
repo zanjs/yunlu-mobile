@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
         break
       }
     }
-    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').authentication_token)})
+    store.dispatch('switchIntegralDialog', {status: flag && !store.getters.hasCloseRegistModal && !(getStore('user') && getStore('user').mobile)})
     store.dispatch('switchDownloadBar', {status: flag && !store.getters.hasCloseDownloadBar})
   }
   const handleUrlQuery = () => {
