@@ -223,7 +223,7 @@
           this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
           if (this.conversation && this.active) {
             await this.conversation.read()
-            this.$store.dispatch('markAsRead', this.conversation)
+            this.$store.dispatch('markAsRead', {type: 'chat', data: this.conversation})
             console.log('进入聊天页面，将该会话相关的未读消息变为已读。')
             let msgHistory = await this.conversation.queryMessages({limit: 1000})
             if (msgHistory) {
@@ -245,7 +245,7 @@
             if (this.conversation) {
               this.conversation.read().then(conversation => {
                 if (this.active) {
-                  this.$store.dispatch('markAsRead', this.conversation)
+                  this.$store.dispatch('markAsRead', {type: 'chat', data: this.conversation})
                   console.log('在聊天界面接收新消息，并将接收到的消息标为已读')
                 }
               }).catch(console.error.bind(console))
