@@ -236,7 +236,7 @@
       clearUserData () {
         // 如果是第三方账号登录且没有绑定手机号，点击新用户注册，会注销当前登录的第三方账号。如果是从购物车前往注册页面，则需要保存来自购物车的标记，用户取消注册时，返回会回到云视首页而不是购物车。
         removeLocalStore()
-        // 这里不能清除所有的会话缓存，返回标记要保留（例如Mall_goHome），不然初始页面无法正常返回。
+        // 这里不能清除所有的会话缓存，shortUuid(新用户注册时，给分享者加积分)及返回标记（例如Mall_goHome）要保留，不然初始页面无法正常返回。
         removeStore('user')
         removeStore('unReadMsgs')
         removeStore('signature')
