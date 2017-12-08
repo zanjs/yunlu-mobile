@@ -56,7 +56,10 @@
     },
     methods: {
       goBack () {
-        if (getStore('BeforeRegister_goHome')) {
+        if (getStore('fromShoppingCart')) {
+          removeStore('fromShoppingCart')
+          this.$router.replace({name: 'See'})
+        } else if (getStore('BeforeRegister_goHome')) {
           removeStore('BeforeRegister_goHome')
           this.$router.push({name: 'See'})
         } else {
