@@ -533,7 +533,7 @@
             this.$router.push({name: 'OrderPaying', query: {from: 'shoppingcart'}})
           }
         } else {
-          this.validMobileDialogModal = true
+          this.$store.dispatch('switchIntegralDialog', {status: true})
         }
       },
       goRegist () {
