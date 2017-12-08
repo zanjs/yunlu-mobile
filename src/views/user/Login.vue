@@ -33,7 +33,7 @@
       <span class="third-text font-13">点击登录代表您已同意</span>
       <a class="primary font-13" @click="openProtocol()">《云庐平台服务协议》</a>
     </div>
-    <div class="social-login">
+    <div v-if="!hideSocial" class="social-login">
       <p class="third-text font-13">更多登录方式</p>
       <div class="icons">
         <a
@@ -85,6 +85,7 @@
     data () {
       return {
         header: '登录',
+        hideSocial: this.$route.query.onlyMobile || '',
         rightBtnText: '注册账号',
         mobile: '',
         password: '',
@@ -106,7 +107,11 @@
     },
     methods: {
       goBack (social = false, provider = '') {
-        if (getStore('beforeLogin')) {
+        if (getStore('fromShoppingCart')) {
+          // 如果是第三放账号登录且没有绑定手机号，从购物车页面点击老用户登录，进入登录页，这时用户不登录，直接返回，应该回到云视首页。
+          removeStore('fromShoppingCart')
+          this.$router.replace({name: 'See'})
+        } else if (getStore('beforeLogin')) {
           removeStore('beforeLogin')
           this.$router.go(social ? (provider === 'qq' ? -3 : -2) : -1) // beforeLogin优先级较高
         } else if (getStore('Login_goHome')) {
@@ -158,6 +163,8 @@
           resolve: (state, res) => {
             setStore('signature', res.data)
             Indicator.close()
+            // 如果从购物车进入登录页，登录成功，在返回之前要清除来自购物车的标记，以便顺利返回购物车页面。
+            removeStore('fromShoppingCart')
             this.goBack(social, provider)
           },
           reject: () => {
@@ -274,10 +281,10 @@
         if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (getLocalStore('weixinLogin')) {
-          Toast({
+          /* Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
-          })
+          }) */
           return false
         } else if (mobileClient() === 'weixin' && !getLocalStore('weixinLogin')) {
           setLocalStore('weixinLogin', 'true')

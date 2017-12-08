@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { getStore, setStore, setLocalStore, removeAllStore, removeLocalStore, mobileClient, removeAllLocalStore } from './config/mUtils'
+  import { getStore, setStore, setLocalStore, removeAllStore, removeStore, removeLocalStore, mobileClient, removeAllLocalStore } from './config/mUtils'
   import IntegralDialog from './components/common/IntegralDialog'
   import RegistDialog from './components/common/RegistDialog'
   import MakeCard from './components/common/MakeCard'
@@ -222,21 +222,32 @@
         }
       },
       goLogin () {
+        this.clearUserData()
         this.closeIntergralDialog()
-        removeAllStore()
-        removeLocalStore()
-        this.$store.dispatch('switchLeanCloudStatus', {active: false})
-        if (mobileClient() === 'weixin') {
-          setLocalStore('weixinLogin', true)
-        }
-        this.$store.dispatch('clearUnReadMsgCount', {})
-        setStore('beforeLogin', 'true')
-        this.$router.push({name: 'Login'})
+        setStore(this.$route.name === 'ShoppingCart' ? 'fromShoppingCart' : 'beforeLogin', 'true')
+        this.$router.push({name: 'Login', query: {onlyMobile: 'yes'}})
       },
       goRegist () {
+        this.clearUserData()
         this.closeIntergralDialog()
-        setStore('shareRegist', 'true')
+        setStore(this.$route.name === 'ShoppingCart' ? 'fromShoppingCart' : 'shareRegist', 'true')
         this.$router.push({name: 'BeforeRegister'})
+      },
+      clearUserData () {
+        // 如果是第三方账号登录且没有绑定手机号，点击新用户注册，会注销当前登录的第三方账号。如果是从购物车前往注册页面，则需要保存来自购物车的标记，用户取消注册时，返回会回到云视首页而不是购物车。
+        removeLocalStore()
+        // 这里不能清除所有的会话缓存，shortUuid(新用户注册时，给分享者加积分)及返回标记（例如Mall_goHome）要保留，不然初始页面无法正常返回。
+        removeStore('user')
+        removeStore('unReadMsgs')
+        removeStore('signature')
+        removeStore('leanCloudConversations')
+        removeStore('device_signature')
+        removeStore('fromName')
+        this.$store.dispatch('switchLeanCloudStatus', {active: false})
+        if (mobileClient() === 'weixin') {
+          setLocalStore('weixinLogin', 'true')
+        }
+        this.$store.dispatch('clearUnReadMsgCount', {})
       },
       closeIntergralDialog () {
         this.$store.dispatch('closeIntegralDialog', {status: true})

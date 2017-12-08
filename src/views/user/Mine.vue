@@ -92,7 +92,7 @@
         removeLocalStore()
         this.$store.dispatch('switchLeanCloudStatus', {active: false})
         if (mobileClient() === 'weixin') {
-          setLocalStore('weixinLogin', true)
+          setLocalStore('weixinLogin', 'true')
         }
         this.$store.dispatch('clearUnReadMsgCount', {})
         this.$router.replace({name: 'See'})
