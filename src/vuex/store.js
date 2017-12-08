@@ -117,6 +117,9 @@ const actions = {
   updateUnReadMsgCount ({commit}, params) {
     commit(types.UPDATE_UN_READ_MSG_COUNT, {params})
   },
+  clearUnReadMsgCount ({commit}, params) {
+    commit(types.CLEAR_UN_READ_MSG_COUNT, {params})
+  },
   searchConversation ({commit}, params) {
     commit(types.SEARCH_CONVERSATION, {params})
   },
@@ -230,7 +233,7 @@ const mutations = {
         id: params[i].lastMessage && params[i].lastMessage.id ? params[i].lastMessage.id : '',
         fromLogo: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.fromLogo ? params[i].lastMessage._lcattrs.fromLogo : '',
         fromName: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.fromName ? params[i].lastMessage._lcattrs.fromName : '',
-        timestamp: moment(params[i]._updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+        timestamp: moment(params[i]._updatedAt).format('YYYY-MM-DD HH:mm:ss'), // leancloud 返回的消息时间里的_lastmessageAt 部分数据为null，故这里用_updatedAt 代替，有误差
         clazz: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.clazz ? params[i].lastMessage._lcattrs.clazz : 'user',
         lastMessage: params[i].lastMessage && params[i].lastMessage._lctext ? params[i].lastMessage._lctext : '点击查看聊天记录',
         isSelf: params[i].lastMessage && params[i].lastMessage._lcattrs && params[i].lastMessage._lcattrs.from ? params[i].lastMessage._lcattrs.from === state.uuid : false,
@@ -251,6 +254,11 @@ const mutations = {
       }
     }
     setStore('unReadMsgs', tmpArr)
+  },
+
+  [types.CLEAR_UN_READ_MSG_COUNT] (state, {params}) {
+    state.unReadeMsgs = []
+    setStore('unReadMsgs', [])
   },
 
   [types.SEARCH_CONVERSATION] (state, {params}) {
@@ -296,21 +304,24 @@ const mutations = {
   },
 
   [types.HANDLE_DELETE_CONVERSATIONS] (state, {params}) {
-    let tmpArr = []
+    let ids = []
     for (let i = 0; i < state.conversationList.length; i++) {
       if (state.conversationList[i].checked) {
-        tmpArr.push(state.conversationList[i].conversationId)
+        ids.push(state.conversationList[i].conversationId)
       }
     }
-    params.resolve(tmpArr)
+    params.resolve(ids)
   },
 
   [types.MARK_AS_READ] (state, {params}) {
     let index = 0
     let tmpArr = []
     for (let i = 0; i < state.originConversationList.length; i++) {
-      if (params.id === state.originConversationList[i].id) {
+      if (params.data.id === state.originConversationList[i].id) {
         state.originConversationList[i].hasRead = true
+        if (params.type === 'chat') {
+          state.originConversationList[i].timestamp = moment(params.data._lastMessageAt).format('YYYY-MM-DD HH:mm:ss')
+        }
       }
     }
     state.conversationList = [...state.originConversationList]
@@ -352,7 +363,7 @@ const mutations = {
       state.conversationList.push(params)
     }
     state.conversationList.sort((a, b) => {
-      return moment(b.timestamp).isAfter(a.timestamp)
+      return moment(b.timestamp).isAfter(a.timestamp) ? 1 : -1
     })
     state.originConversationList = [...state.conversationList]
   },
