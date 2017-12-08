@@ -53,14 +53,6 @@ router.beforeEach((to, from, next) => {
       return query
     }
   }
-  const cleanUrl = () => {
-    let tmpSearchUrl = ''
-    if (window.location.search.indexOf('&provider=wechat&tmp_token=') > -1) {
-      let url = window.location.search.split('provider')[0]
-      tmpSearchUrl = url.substring(0, url.length - 1)
-    }
-    return window.location.pathname + tmpSearchUrl
-  }
   const weixinAuth = (token) => {
     store.dispatch('commonAction', {
       url: '/login_info',
@@ -98,8 +90,7 @@ router.beforeEach((to, from, next) => {
       resolve: (state, res) => {
         setStore('signature', res.data)
         handleDownloadBar()
-        let url = cleanUrl()
-        next({path: url})
+        next()
       },
       reject: () => {
       }
@@ -117,7 +108,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   const autoLogin = () => {
-    if (mobileClient() === 'weixin' && handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
+    if (!getLocalStore('weixinLogin') && mobileClient() === 'weixin' && handleUrlQuery().provider === 'wechat' && handleUrlQuery().tmpToken && (!getStore('user') || !getStore('user').authentication_token)) {
       weixinAuth(handleUrlQuery().tmpToken)
     } else if (getLocalStore('weixinLogin') && (!getStore('user') || !getStore('user').authentication_token)) {
       console.log('微信授权登录失败')
