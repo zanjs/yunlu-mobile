@@ -88,7 +88,6 @@
         uuid: getStore('user') ? getStore('user').id : '',
         hasChecked: false,
         checkAll: false,
-        conversations: [],
         showConfirm: false,
         confirmMsg: '确定要删除选中的会话吗?',
         scrollHeight: '15rem'
@@ -184,8 +183,6 @@
         return tmpArr
       },
       goChat (item) {
-        // 不管改会话是不是已读，统一将全局状态标为已读。(leanCloud返回的会话列表是无状态的，不知道是否已读)
-        // this.$store.dispatch('markAsRead', item)
         if (item.linkType === 'Product') {
           this.$router.push({name: 'Chat', query: {type: 'Product', productId: item.linkId}})
         } else if (item.linkType !== 'Product') {
@@ -220,21 +217,12 @@
       deleteItem (bool) {
         this.showConfirm = false
         if (bool) {
-          this.handleDeleteConversations(this.conversations)
+          this.$store.dispatch('handleDeleteConversations', {
+            resolve: ids => {
+              this.removeConversation(ids)
+            }
+          })
         }
-      },
-      handleDeleteConversations (arr) {
-        let tmpArr = []
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].checked) {
-            tmpArr.push(arr[i].conversationId)
-          }
-        }
-        this.$store.dispatch('handleDeleteConversations', {
-          resolve: arr => {
-            this.removeConversation(arr)
-          }
-        })
       },
       removeConversation (ids) {
         this.$store.dispatch('commonAction', {
@@ -248,7 +236,7 @@
           target: this,
           resolve: (state, res) => {
             if (res.data.success) {
-              this.markAsRead(ids)
+              this.markRead(ids)
               this.getConversationList()
               this.getClosedConversationList()
               Toast({
@@ -266,9 +254,9 @@
         })
       },
       // 若删除的是未读消息，需要把被删除的未读消息，变为已读
-      markAsRead (ids) {
-        for (let i = 0; i < ids.length; i++) {
-          this.$store.dispatch('markAsRead', ids[i])
+      markRead (arr) {
+        for (let i = 0; i < arr.length; i++) {
+          this.$store.dispatch('markAsRead', {type: 'delete', data: {id: arr[i]}})
         }
       },
       handleScrollHeight () {
@@ -282,10 +270,10 @@
       this.handleScrollHeight()
     },
     activated () {
+      this.getConversationList() // 不管是进如会话列表页面还是返回到会话列表页面，统一获取最新数据(更新未读状态及列表顺序)。列表顺序可能有误差。（因为leancloud中的_lastmessageAt部分数据为空，用_updatedAt代替，而_updatedAt并不是会话最新时间。）
       if (!this.$store.state.popState) {
         this.uuid = getStore('user') ? getStore('user').id : ''
         this.token = getStore('user') ? getStore('user').authentication_token : null
-        this.getConversationList()
         setScrollTop(0, this.$refs.conversation)
       } else {
         setScrollTop(this.$store.state.scrollMap.Conversation || 0, this.$refs.conversation)
