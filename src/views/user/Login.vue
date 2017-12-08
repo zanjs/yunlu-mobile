@@ -281,10 +281,10 @@
         if (this.$route.query.tmp_token) {
           this.authLogin(this.$route.query.tmp_token, this.$route.query.provider)
         } else if (getLocalStore('weixinLogin')) {
-          Toast({
+          /* Toast({
             message: '自动登录失败，请手动登录',
             duration: 1000
-          })
+          }) */
           return false
         } else if (mobileClient() === 'weixin' && !getLocalStore('weixinLogin')) {
           setLocalStore('weixinLogin', 'true')
