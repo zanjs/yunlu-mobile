@@ -24,7 +24,7 @@
       class="container"
       ref="chat"
       id="chat"
-      :style="{height: scrollHeight}"
+      :style="{height: wrapperHeight}"
       v-bind:class="{'product-container': type === 'Product'}">
       <message
         v-for="(item, index) in msgs"
@@ -67,8 +67,8 @@
         title: '',
         msg: null,
         msgs: [],
-        hasDestory: false,
-        scrollHeight: '15rem'
+        active: true,
+        wrapperHeight: '15rem'
       }
     },
     components: {
@@ -221,7 +221,7 @@
         })
         if (this.conferences && this.conferences.conversation_id) {
           this.conversation = await this.currentUserDelegate.getConversation(this.conferences.conversation_id)
-          if (this.conversation && !this.hasDestory) {
+          if (this.conversation && this.active) {
             await this.conversation.read()
             this.$store.dispatch('markAsRead', this.conversation)
             console.log('进入聊天页面，将该会话相关的未读消息变为已读。')
@@ -244,16 +244,18 @@
             }
             if (this.conversation) {
               this.conversation.read().then(conversation => {
-                if (!this.hasDestory) {
+                if (this.active) {
                   this.$store.dispatch('markAsRead', this.conversation)
                   console.log('在聊天界面接收新消息，并将接收到的消息标为已读')
                 }
               }).catch(console.error.bind(console))
             }
             this.msgs.push(tmpObj)
-            this.$nextTick(() => {
-              setScrollTop(this.$refs.chat.scrollHeight, this.$refs.chat)
-            })
+            if (this.active) {
+              this.$nextTick(() => {
+                setScrollTop(this.$refs.chat.scrollHeight, this.$refs.chat)
+              })
+            }
           } else {
             // 非当前会话，不做处理
           }
@@ -305,13 +307,13 @@
         }
       },
       destroyConverastion () {
-        this.hasDestory = true
+        this.active = false
       },
       handleScrollHeight () {
         let appHeight = document.getElementById('app').offsetHeight
         let rootFontSize = document.documentElement.style.fontSize.split('p')[0]
         let divHeight = (appHeight / parseFloat(rootFontSize + '')).toFixed(2)
-        this.scrollHeight = `${Math.round(divHeight * 100) / 100}rem`
+        this.wrapperHeight = `${Math.round(divHeight * 100) / 100}rem`
       }
     },
     mounted () {
