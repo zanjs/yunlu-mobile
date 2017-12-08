@@ -71,10 +71,12 @@ router.beforeEach((to, from, next) => {
           setStore('user', res.data)
           getSignature(res.data.authentication_token)
         } else {
+          setLocalStore('weixinLogin', 'true')
           console.log('授权登录出错')
         }
       },
       reject: () => {
+        setLocalStore('weixinLogin', 'true')
         console.log('授权登录出错')
       }
     })
@@ -115,7 +117,7 @@ router.beforeEach((to, from, next) => {
       handleDownloadBar()
       next()
     } else if (mobileClient() === 'weixin' && (!getStore('user') || !getStore('user').authentication_token) && !getLocalStore('weixinLogin')) {
-      setLocalStore('weixinLogin', true)
+      // setLocalStore('weixinLogin', 'true')
       window.location.href = `${AUTH_URL}/member/auth/wechat?url=${encodeURIComponent(`${window.location.pathname}${window.location.search}${window.location.search.indexOf('?') > -1 ? '&' : '?'}provider=wechat&tmp_token=`)}`
     } else {
       handleDownloadBar()
