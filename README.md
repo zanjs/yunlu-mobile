@@ -1,5 +1,7 @@
 # yunlu-mobile
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/zanjs/yunlu-mobile.svg)](https://greenkeeper.io/)
+
 > A Vue.js project for yunlu mobile.
 
 ## Build Setup
